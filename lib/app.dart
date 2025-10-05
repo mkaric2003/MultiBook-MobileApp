@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/introduction/presentation/views/introduction_view.dart';
+import 'package:aquabook/src/features/signup/presentation/views/signup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

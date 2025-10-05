@@ -4,5 +4,5 @@ part of '../../../app.dart';
 
 class AppRoutes {
   static const HOME = '/';
-  static const INTRODUCTION = '/introduction';
+  static const SIGNUP = '/sign-up';
 }

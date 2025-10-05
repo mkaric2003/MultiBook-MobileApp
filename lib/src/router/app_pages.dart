@@ -1,12 +1,12 @@
 part of '../../../app.dart';
 
 final router = GoRouter(
-  initialLocation: AppRoutes.INTRODUCTION,
+  initialLocation: AppRoutes.SIGNUP,
   routes: [
     GoRoute(
-      path: AppRoutes.INTRODUCTION,
-      name: AppRoutes.INTRODUCTION,
-      builder: (context, state) => IntroductionView(),
+      path: AppRoutes.SIGNUP,
+      name: AppRoutes.SIGNUP,
+      builder: (context, state) => SignupView(),
     ),
   ],
 );
