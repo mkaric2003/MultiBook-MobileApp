@@ -14,11 +14,17 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/apple.svg
+  String get apple => 'assets/icons/apple.svg';
+
+  /// File path: assets/icons/google.svg
+  String get google => 'assets/icons/google.svg';
+
   /// File path: assets/icons/logo.ico
   String get logo => 'assets/icons/logo.ico';
 
   /// List of all assets
-  List<String> get values => [logo];
+  List<String> get values => [apple, google, logo];
 }
 
 class $AssetsImagesGen {
