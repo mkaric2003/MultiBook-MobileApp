@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -12,6 +12,33 @@
 import 'package:aquabook/src/core/modules/firebase_module.dart' as _i211;
 import 'package:aquabook/src/core/modules/shared_preferences_module.dart'
     as _i144;
+import 'package:aquabook/src/data/data_sources/authentication_data_source.dart'
+    as _i137;
+import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart'
+    as _i83;
+import 'package:aquabook/src/data/data_sources/firestore_data_source.dart'
+    as _i151;
+import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart'
+    as _i1069;
+import 'package:aquabook/src/data/repositories/authentication_repository.dart'
+    as _i472;
+import 'package:aquabook/src/data/repositories/business_repository.dart'
+    as _i1065;
+import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
+import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart'
+    as _i567;
+import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart'
+    as _i1028;
+import 'package:aquabook/src/features/business-side/home/bloc/client_entry_cubit.dart'
+    as _i867;
+import 'package:aquabook/src/features/business-side/home/bloc/home_bloc.dart'
+    as _i846;
+import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_cubit.dart'
+    as _i976;
+import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart'
+    as _i44;
+import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart'
+    as _i1028;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:firebase_core/firebase_core.dart' as _i982;
@@ -37,6 +64,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => sharedPrefsModule.prefs,
       preResolve: true,
     );
+    gh.lazySingleton<_i1069.ImagePickerDataSource>(
+      () => _i1069.ImagePickerDataSourceImpl(),
+    );
     gh.singleton<_i59.FirebaseAuth>(
       () => firebaseModule.firebaseAuth(gh<_i982.FirebaseApp>()),
     );
@@ -45,6 +75,66 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i974.FirebaseFirestore>(
       () => firebaseModule.firebaseFirestore(gh<_i982.FirebaseApp>()),
+    );
+    gh.lazySingleton<_i151.FirestoreDataSource>(
+      () => _i151.FirestoreDataSourceImpl(gh<_i974.FirebaseFirestore>()),
+    );
+    gh.lazySingleton<_i83.FirebaseStorageDataSource>(
+      () => _i83.FirebaseStorageDataSourceImpl(gh<_i457.FirebaseStorage>()),
+    );
+    gh.lazySingleton<_i137.AuthenticationDataSource>(
+      () => _i137.AuthenticationDataSourceImpl(gh<_i59.FirebaseAuth>()),
+    );
+    gh.lazySingleton<_i747.UserRepository>(
+      () => _i747.UserRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i472.AuthenticationRepository>(
+      () => _i472.AuthenticationRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i1065.BusinessRepository>(
+      () => _i1065.BusinessRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i83.FirebaseStorageDataSource>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i846.HomeBloc>(
+      () => _i846.HomeBloc(gh<_i472.AuthenticationRepository>()),
+    );
+    gh.factory<_i44.SigninCubit>(
+      () => _i44.SigninCubit(gh<_i472.AuthenticationRepository>()),
+    );
+    gh.factory<_i1028.SignupCubit>(
+      () => _i1028.SignupCubit(gh<_i472.AuthenticationRepository>()),
+    );
+    gh.factory<_i1028.DashboardCubit>(
+      () => _i1028.DashboardCubit(
+        gh<_i747.UserRepository>(),
+        gh<_i1065.BusinessRepository>(),
+      ),
+    );
+    gh.factory<_i867.ClientEntryCubit>(
+      () => _i867.ClientEntryCubit(gh<_i1065.BusinessRepository>()),
+    );
+    gh.factory<_i976.MyBusinessesCubit>(
+      () => _i976.MyBusinessesCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i567.AddBusinessBloc>(
+      () => _i567.AddBusinessBloc(
+        gh<_i1069.ImagePickerDataSource>(),
+        gh<_i460.SharedPreferences>(),
+        gh<_i1065.BusinessRepository>(),
+      ),
     );
     return this;
   }

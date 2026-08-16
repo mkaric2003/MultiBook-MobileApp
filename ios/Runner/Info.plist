@@ -24,6 +24,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>MultiBook needs camera access so you can take business images.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>MultiBook needs photo library access so you can upload business images.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

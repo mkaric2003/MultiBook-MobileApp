@@ -1,1 +1,37 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"aquabook-dev-cdd4f","appId":"1:113851119343:android:5120317d666115fadd0d1a","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"aquabook-dev-cdd4f","appId":"1:113851119343:ios:4761d82a07d4cde2dd0d1a","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"aquabook-dev-cdd4f","configurations":{"android":"1:113851119343:android:5120317d666115fadd0d1a","ios":"1:113851119343:ios:4761d82a07d4cde2dd0d1a"}}}}}}
+{
+  "$schema": "https://raw.githubusercontent.com/firebase/firebase-tools/master/schema/firebase-config.json",
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "aquabook-dev-cdd4f",
+          "appId": "1:113851119343:android:5120317d666115fadd0a",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "aquabook-dev-cdd4f",
+          "appId": "1:113851119343:ios:4761d82a07d4cde2dd0d1a",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "aquabook-dev-cdd4f",
+          "configurations": {
+            "android": "1:113851119343:android:5120317d666115fadd0a",
+            "ios": "1:113851119343:ios:4761d82a07d4cde2dd0d1a"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}
