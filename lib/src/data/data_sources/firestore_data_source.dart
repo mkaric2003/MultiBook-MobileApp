@@ -31,6 +31,14 @@ abstract class FirestoreDataSource {
     required Object value,
   });
 
+  Future<List<Map<String, dynamic>>> getDocumentsWherePrefix({
+    required String collection,
+    required String equalityField,
+    required Object equalityValue,
+    required String prefixField,
+    required String prefix,
+  });
+
   DataCursor<T> createCursorWhere<T>({
     required String collection,
     required String field,
@@ -127,6 +135,24 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
     final query = await _firestore
         .collection(collection)
         .where(field, arrayContains: value)
+        .get();
+    return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getDocumentsWherePrefix({
+    required String collection,
+    required String equalityField,
+    required Object equalityValue,
+    required String prefixField,
+    required String prefix,
+  }) async {
+    final query = await _firestore
+        .collection(collection)
+        .where(equalityField, isEqualTo: equalityValue)
+        .orderBy(prefixField)
+        .startAt([prefix])
+        .endAt(['$prefix\uf8ff'])
         .get();
     return query.docs.map((document) => document.data()).toList();
   }

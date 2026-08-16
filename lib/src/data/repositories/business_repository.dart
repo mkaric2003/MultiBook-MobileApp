@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_cursor.dart';
+import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
@@ -226,26 +226,39 @@ class BusinessRepository {
     }
 
     try {
-      final indexedResults = await _firestoreDataSource
-          .getDocumentsWhereArrayContains(
-            collection: _businessesCollection,
-            field: 'searchKeywords',
-            value: normalizedQuery,
-          );
-      final stays = indexedResults
+      final results = await Future.wait([
+        _firestoreDataSource.getDocumentsWherePrefix(
+          collection: _businessesCollection,
+          equalityField: 'type',
+          equalityValue: BusinessType.stays.name,
+          prefixField: 'nameLowercase',
+          prefix: normalizedQuery,
+        ),
+        _firestoreDataSource.getDocumentsWherePrefix(
+          collection: _businessesCollection,
+          equalityField: 'type',
+          equalityValue: BusinessType.stays.name,
+          prefixField: 'location.cityLowercase',
+          prefix: normalizedQuery,
+        ),
+      ]);
+      final stays = results
+          .expand((documents) => documents)
           .map(_businessFromData)
-          .where(
-            (business) =>
-                business.type == BusinessType.stays && business.isActive,
-          )
+          .where((business) => business.isActive)
           .toList();
+      if (stays.isNotEmpty) {
+        return {for (final stay in stays) stay.id: stay}.values.toList();
+      }
 
+      // Existing documents created before the normalized fields were added are
+      // kept searchable until their data is migrated.
       final legacyStays = await _firestoreDataSource.getDocumentsWhere(
         collection: _businessesCollection,
         field: 'type',
         value: BusinessType.stays.name,
       );
-      final legacyMatches = legacyStays
+      return legacyStays
           .map(_businessFromData)
           .where(
             (business) =>
@@ -255,12 +268,9 @@ class BusinessRepository {
                     ).contains(normalizedQuery) ||
                     _normalizeSearchValue(
                       business.location.city,
-                    ).contains(normalizedQuery)),
+                    ).startsWith(normalizedQuery)),
           )
           .toList();
-      return {
-        for (final stay in [...stays, ...legacyMatches]) stay.id: stay,
-      }.values.toList();
     } on FirebaseException catch (error, stackTrace) {
       log(
         'Could not search stays: ${error.code}',
@@ -332,9 +342,11 @@ class BusinessRepository {
             'type': BusinessType.stays.name,
             'name': _demoStayNames[index],
             'categoryId': categoryId,
+            'nameLowercase': _normalizeSearchValue(_demoStayNames[index]),
             'location': {
               'address': '${index + 1} Demo Street, $city',
               'city': city,
+              'cityLowercase': _normalizeSearchValue(city),
               'latitude': 43.8563 + (index * 0.002),
               'longitude': 18.4131 + (index * 0.002),
             },
@@ -350,10 +362,6 @@ class BusinessRepository {
               'amenities': amenities,
               'rooms': rooms,
             },
-            'searchKeywords': _buildSearchKeywords(
-              name: _demoStayNames[index],
-              city: city,
-            ),
             'createdAt': _firestoreDataSource.serverTimestamp,
             'updatedAt': _firestoreDataSource.serverTimestamp,
           },
@@ -485,9 +493,11 @@ class BusinessRepository {
           'ownerId': business.ownerId,
           'type': business.type.name,
           'name': business.name,
+          'nameLowercase': _normalizeSearchValue(business.name),
           'categoryId': business.categoryId,
           'location': {
             'city': business.location.city,
+            'cityLowercase': _normalizeSearchValue(business.location.city),
             'address': business.location.address,
             'latitude': business.location.latitude,
             'longitude': business.location.longitude,
@@ -517,10 +527,6 @@ class BusinessRepository {
                       )
                       .toList(),
                 },
-          'searchKeywords': _buildSearchKeywords(
-            name: business.name,
-            city: business.location.city,
-          ),
           'createdAt': _firestoreDataSource.serverTimestamp,
           'updatedAt': _firestoreDataSource.serverTimestamp,
         },
@@ -627,25 +633,6 @@ class BusinessRepository {
         stackTrace: stackTrace,
       );
     }
-  }
-
-  List<String> _buildSearchKeywords({
-    required String name,
-    required String city,
-  }) {
-    final keywords = <String>{};
-    for (final value in [name, city]) {
-      final normalizedValue = _normalizeSearchValue(value);
-      for (var index = 1; index <= normalizedValue.length; index++) {
-        keywords.add(normalizedValue.substring(0, index));
-      }
-      for (final word in normalizedValue.split(' ')) {
-        for (var index = 1; index <= word.length; index++) {
-          keywords.add(word.substring(0, index));
-        }
-      }
-    }
-    return keywords.toList();
   }
 
   String _normalizeSearchValue(String value) {
