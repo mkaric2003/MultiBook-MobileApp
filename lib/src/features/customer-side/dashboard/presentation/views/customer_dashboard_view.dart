@@ -1,3 +1,4 @@
+import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
@@ -9,6 +10,7 @@ import 'package:aquabook/src/features/customer-side/dashboard/presentation/widge
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stays_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomerDashboardView extends StatelessWidget {
   const CustomerDashboardView({super.key});
@@ -51,7 +53,9 @@ class CustomerDashboardView extends StatelessWidget {
                     children: [
                       const CustomerHomeTopBar(),
                       const SizedBox(height: 28),
-                      const DestinationSearchField(),
+                      DestinationSearchField(
+                        onTap: () => context.push(AppRoutes.CUSTOMER_SEARCH),
+                      ),
                       const SizedBox(height: 16),
                       CustomerHomeTabSelector(
                         selectedTab: state.selectedTab,

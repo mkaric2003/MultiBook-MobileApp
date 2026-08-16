@@ -5,9 +5,11 @@ import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/models/business_location_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/models/stay_details_model.dart';
+import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/utils/image_utils.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -217,6 +219,59 @@ class BusinessRepository {
     }
   }
 
+  Future<List<BusinessModel>> searchStays(String query) async {
+    final normalizedQuery = _normalizeSearchValue(query);
+    if (normalizedQuery.isEmpty) {
+      return const [];
+    }
+
+    try {
+      final indexedResults = await _firestoreDataSource
+          .getDocumentsWhereArrayContains(
+            collection: _businessesCollection,
+            field: 'searchKeywords',
+            value: normalizedQuery,
+          );
+      final stays = indexedResults
+          .map(_businessFromData)
+          .where(
+            (business) =>
+                business.type == BusinessType.stays && business.isActive,
+          )
+          .toList();
+
+      final legacyStays = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.stays.name,
+      );
+      final legacyMatches = legacyStays
+          .map(_businessFromData)
+          .where(
+            (business) =>
+                business.isActive &&
+                (_normalizeSearchValue(
+                      business.name,
+                    ).contains(normalizedQuery) ||
+                    _normalizeSearchValue(
+                      business.location.city,
+                    ).contains(normalizedQuery)),
+          )
+          .toList();
+      return {
+        for (final stay in [...stays, ...legacyMatches]) stay.id: stay,
+      }.values.toList();
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not search stays: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
   DataCursor<BusinessModel> getStaysCursor({int pageSize = 6}) {
     return _firestoreDataSource.createCursorWhere<BusinessModel>(
       collection: _businessesCollection,
@@ -246,6 +301,27 @@ class BusinessRepository {
         final rating = index.isEven ? 4.1 + ((index % 5) * 0.18) : 0.0;
         final imageUrl = _demoStayImageUrls[index % _demoStayImageUrls.length];
         final city = _demoStayCities[index % _demoStayCities.length];
+        final categoryId = ['hotel', 'apartment', 'cabin'][index % 3];
+        final amenities = StayAmenity.values
+            .take(2 + (index % 5))
+            .map((amenity) => amenity.name)
+            .toList();
+        final rooms = categoryId == 'hotel'
+            ? [
+                {
+                  'name': 'Deluxe Room',
+                  'maxGuests': 2,
+                  'sizeSquareMeters': 32,
+                  'pricePerNight': pricePerNight,
+                },
+                {
+                  'name': 'Executive Suite',
+                  'maxGuests': 4,
+                  'sizeSquareMeters': 55,
+                  'pricePerNight': pricePerNight + 90,
+                },
+              ]
+            : const <Map<String, Object>>[];
 
         await _firestoreDataSource.setDocument(
           collection: _businessesCollection,
@@ -255,7 +331,7 @@ class BusinessRepository {
             'ownerId': ownerId,
             'type': BusinessType.stays.name,
             'name': _demoStayNames[index],
-            'categoryId': ['hotel', 'apartment', 'cabin'][index % 3],
+            'categoryId': categoryId,
             'location': {
               'address': '${index + 1} Demo Street, $city',
               'city': city,
@@ -269,7 +345,15 @@ class BusinessRepository {
             'isActive': true,
             'averageRating': rating,
             'reviewCount': rating > 0 ? 40 + (index * 11) : 0,
-            'stayDetails': {'pricePerNight': pricePerNight},
+            'stayDetails': {
+              'pricePerNight': pricePerNight,
+              'amenities': amenities,
+              'rooms': rooms,
+            },
+            'searchKeywords': _buildSearchKeywords(
+              name: _demoStayNames[index],
+              city: city,
+            ),
             'createdAt': _firestoreDataSource.serverTimestamp,
             'updatedAt': _firestoreDataSource.serverTimestamp,
           },
@@ -330,6 +414,8 @@ class BusinessRepository {
     required String address,
     required String shortDescription,
     int? pricePerNight,
+    List<StayAmenity> amenities = const [],
+    List<StayRoomModel> rooms = const [],
     String? logoPath,
     String? coverPhotoPath,
   }) async {
@@ -383,7 +469,11 @@ class BusinessRepository {
         logoUrl: logoUrl,
         coverPhotoUrl: coverPhotoUrl,
         stayDetails: type == BusinessType.stays
-            ? StayDetailsModel(pricePerNight: pricePerNight)
+            ? StayDetailsModel(
+                pricePerNight: pricePerNight,
+                amenities: amenities,
+                rooms: rooms,
+              )
             : null,
       );
 
@@ -411,7 +501,26 @@ class BusinessRepository {
           'reviewCount': business.reviewCount,
           'stayDetails': business.stayDetails == null
               ? null
-              : {'pricePerNight': business.stayDetails!.pricePerNight},
+              : {
+                  'pricePerNight': business.stayDetails!.pricePerNight,
+                  'amenities': business.stayDetails!.amenities
+                      .map((amenity) => amenity.name)
+                      .toList(),
+                  'rooms': business.stayDetails!.rooms
+                      .map(
+                        (room) => {
+                          'name': room.name,
+                          'maxGuests': room.maxGuests,
+                          'sizeSquareMeters': room.sizeSquareMeters,
+                          'pricePerNight': room.pricePerNight,
+                        },
+                      )
+                      .toList(),
+                },
+          'searchKeywords': _buildSearchKeywords(
+            name: business.name,
+            city: business.location.city,
+          ),
           'createdAt': _firestoreDataSource.serverTimestamp,
           'updatedAt': _firestoreDataSource.serverTimestamp,
         },
@@ -480,6 +589,28 @@ class BusinessRepository {
           ? StayDetailsModel(
               pricePerNight: (stayDetailsData['pricePerNight'] as num?)
                   ?.toInt(),
+              amenities: (stayDetailsData['amenities'] as List? ?? const [])
+                  .map(
+                    (name) => StayAmenity.values.where(
+                      (amenity) => amenity.name == name,
+                    ),
+                  )
+                  .where((matches) => matches.isNotEmpty)
+                  .map((matches) => matches.first)
+                  .toList(),
+              rooms: (stayDetailsData['rooms'] as List? ?? const [])
+                  .whereType<Map>()
+                  .map(
+                    (room) => StayRoomModel(
+                      name: room['name'] as String? ?? '',
+                      maxGuests: (room['maxGuests'] as num?)?.toInt() ?? 1,
+                      sizeSquareMeters:
+                          (room['sizeSquareMeters'] as num?)?.toInt() ?? 0,
+                      pricePerNight:
+                          (room['pricePerNight'] as num?)?.toInt() ?? 0,
+                    ),
+                  )
+                  .toList(),
             )
           : null,
     );
@@ -496,6 +627,37 @@ class BusinessRepository {
         stackTrace: stackTrace,
       );
     }
+  }
+
+  List<String> _buildSearchKeywords({
+    required String name,
+    required String city,
+  }) {
+    final keywords = <String>{};
+    for (final value in [name, city]) {
+      final normalizedValue = _normalizeSearchValue(value);
+      for (var index = 1; index <= normalizedValue.length; index++) {
+        keywords.add(normalizedValue.substring(0, index));
+      }
+      for (final word in normalizedValue.split(' ')) {
+        for (var index = 1; index <= word.length; index++) {
+          keywords.add(word.substring(0, index));
+        }
+      }
+    }
+    return keywords.toList();
+  }
+
+  String _normalizeSearchValue(String value) {
+    return value
+        .trim()
+        .toLowerCase()
+        .replaceAll('č', 'c')
+        .replaceAll('ć', 'c')
+        .replaceAll('š', 's')
+        .replaceAll('ž', 'z')
+        .replaceAll(RegExp(r'[^a-z0-9 ]'), '')
+        .replaceAll(RegExp(r'\s+'), ' ');
   }
 
   Future<String?> _uploadImage({

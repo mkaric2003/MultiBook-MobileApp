@@ -56,6 +56,17 @@ final router = GoRouter(
       builder: (context, state) => const CustomerHomeView(),
     ),
     GoRoute(
+      path: AppRoutes.CUSTOMER_SEARCH,
+      name: AppRoutes.CUSTOMER_SEARCH,
+      builder: (context, state) => const CustomerSearchView(),
+    ),
+    GoRoute(
+      path: AppRoutes.STAY_DETAIL,
+      name: AppRoutes.STAY_DETAIL,
+      builder: (context, state) =>
+          StayDetailView(stay: state.extra! as StayListing),
+    ),
+    GoRoute(
       path: AppRoutes.ADD_BUSINESS,
       name: AppRoutes.ADD_BUSINESS,
       builder: (context, state) => const AddBusinessView(),

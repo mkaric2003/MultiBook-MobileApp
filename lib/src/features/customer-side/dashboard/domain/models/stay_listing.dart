@@ -9,6 +9,7 @@ class StayListing {
     required this.rating,
     required this.reviewCount,
     required this.imageUrl,
+    this.imageUrls = const [],
     this.isFeatured = false,
   });
 
@@ -19,6 +20,7 @@ class StayListing {
   final double rating;
   final int reviewCount;
   final String imageUrl;
+  final List<String> imageUrls;
   final bool isFeatured;
 
   factory StayListing.fromBusiness(BusinessModel business) {
@@ -32,6 +34,11 @@ class StayListing {
       rating: business.averageRating,
       reviewCount: business.reviewCount,
       imageUrl: business.coverPhotoUrl ?? business.logoUrl ?? '',
+      imageUrls: {
+        if (business.coverPhotoUrl != null) business.coverPhotoUrl!,
+        if (business.logoUrl != null) business.logoUrl!,
+        ...business.photoUrls,
+      }.toList(),
     );
   }
 }

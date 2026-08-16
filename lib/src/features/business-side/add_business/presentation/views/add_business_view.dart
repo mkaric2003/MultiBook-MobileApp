@@ -2,16 +2,19 @@ import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_event.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_state.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/models/add_business_categories.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_location_placeholder.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/amenities_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_media_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_type_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/image_source_picker_sheet.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/hotel_room_form.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
@@ -33,11 +36,19 @@ class AddBusinessView extends HookWidget {
     final addressController = useTextEditingController();
     final descriptionController = useTextEditingController();
     final priceController = useTextEditingController();
+    final roomNameController = useTextEditingController();
+    final roomGuestsController = useTextEditingController();
+    final roomSizeController = useTextEditingController();
+    final roomPriceController = useTextEditingController();
 
     useListenable(nameController);
     useListenable(cityController);
     useListenable(addressController);
     useListenable(priceController);
+    useListenable(roomNameController);
+    useListenable(roomGuestsController);
+    useListenable(roomSizeController);
+    useListenable(roomPriceController);
 
     return BlocProvider(
       create: (_) => getIt<AddBusinessBloc>(),
@@ -69,7 +80,12 @@ class AddBusinessView extends HookWidget {
               addressController.text.trim().isNotEmpty &&
               state.categoryId != null &&
               (state.businessType != BusinessType.stays ||
-                  (int.tryParse(priceController.text) ?? 0) > 0);
+                  (int.tryParse(priceController.text) ?? 0) > 0) &&
+              (state.categoryId != 'hotel' ||
+                  (roomNameController.text.trim().isNotEmpty &&
+                      (int.tryParse(roomGuestsController.text) ?? 0) > 0 &&
+                      (int.tryParse(roomSizeController.text) ?? 0) > 0 &&
+                      (int.tryParse(roomPriceController.text) ?? 0) > 0));
 
           void selectImage(BusinessImageType imageType) {
             showModalBottomSheet<void>(
@@ -179,6 +195,26 @@ class AddBusinessView extends HookWidget {
                               ],
                             ),
                             const SizedBox(height: 26),
+                            const FormFieldLabel('Amenities'),
+                            const SizedBox(height: 10),
+                            AmenitiesSelector(
+                              selectedAmenities: state.selectedAmenities,
+                              onChanged: (amenity) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(BusinessAmenityToggled(amenity)),
+                            ),
+                            const SizedBox(height: 28),
+                            if (state.categoryId == 'hotel') ...[
+                              const FormFieldLabel('Rooms'),
+                              const SizedBox(height: 10),
+                              HotelRoomForm(
+                                nameController: roomNameController,
+                                guestsController: roomGuestsController,
+                                sizeController: roomSizeController,
+                                priceController: roomPriceController,
+                              ),
+                              const SizedBox(height: 28),
+                            ],
                           ],
                           const FormFieldLabel('City*'),
                           const SizedBox(height: 10),
@@ -244,6 +280,24 @@ class AddBusinessView extends HookWidget {
                                               BusinessType.stays
                                           ? int.tryParse(priceController.text)
                                           : null,
+                                      amenities: state.selectedAmenities,
+                                      rooms: state.categoryId == 'hotel'
+                                          ? [
+                                              StayRoomModel(
+                                                name: roomNameController.text
+                                                    .trim(),
+                                                maxGuests: int.parse(
+                                                  roomGuestsController.text,
+                                                ),
+                                                sizeSquareMeters: int.parse(
+                                                  roomSizeController.text,
+                                                ),
+                                                pricePerNight: int.parse(
+                                                  roomPriceController.text,
+                                                ),
+                                              ),
+                                            ]
+                                          : const [],
                                     ),
                                   )
                                 : null,
