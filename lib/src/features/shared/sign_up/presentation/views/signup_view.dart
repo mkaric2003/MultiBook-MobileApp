@@ -31,7 +31,11 @@ class SignupView extends HookWidget {
       child: BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) {
           if (state.isSuccess) {
-            context.go(AppRoutes.HOME);
+            context.go(
+              state.requiresUserTypeSelection
+                  ? AppRoutes.USER_TYPE_CHECKER
+                  : AppRoutes.HOME,
+            );
           }
 
           if (state.errorMessage != null) {

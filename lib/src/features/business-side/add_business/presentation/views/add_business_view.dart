@@ -51,7 +51,7 @@ class AddBusinessView extends HookWidget {
           }
 
           if (state.isSuccess) {
-            context.go(AppRoutes.HOME);
+            context.go(AppRoutes.BUSINESS_HOME);
           }
         },
         builder: (context, state) {

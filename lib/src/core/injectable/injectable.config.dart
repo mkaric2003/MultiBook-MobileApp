@@ -24,21 +24,27 @@ import 'package:aquabook/src/data/repositories/authentication_repository.dart'
     as _i472;
 import 'package:aquabook/src/data/repositories/business_repository.dart'
     as _i1065;
+import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
+    as _i366;
 import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart'
-    as _i567;
+    as _i458;
 import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart'
-    as _i1028;
+    as _i758;
 import 'package:aquabook/src/features/business-side/home/bloc/client_entry_cubit.dart'
-    as _i867;
+    as _i1018;
 import 'package:aquabook/src/features/business-side/home/bloc/home_bloc.dart'
-    as _i846;
+    as _i952;
 import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_cubit.dart'
-    as _i976;
+    as _i908;
+import 'package:aquabook/src/features/shared/onboarding/cubit/onboarding_cubit.dart'
+    as _i680;
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart'
     as _i44;
 import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart'
     as _i1028;
+import 'package:aquabook/src/features/shared/user_type_checker/cubit/user_type_checker_cubit.dart'
+    as _i30;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:firebase_core/firebase_core.dart' as _i982;
@@ -67,6 +73,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i1069.ImagePickerDataSource>(
       () => _i1069.ImagePickerDataSourceImpl(),
     );
+    gh.lazySingleton<_i366.OnboardingRepository>(
+      () => _i366.OnboardingRepository(gh<_i460.SharedPreferences>()),
+    );
     gh.singleton<_i59.FirebaseAuth>(
       () => firebaseModule.firebaseAuth(gh<_i982.FirebaseApp>()),
     );
@@ -75,6 +84,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i974.FirebaseFirestore>(
       () => firebaseModule.firebaseFirestore(gh<_i982.FirebaseApp>()),
+    );
+    gh.factory<_i680.OnboardingCubit>(
+      () => _i680.OnboardingCubit(gh<_i366.OnboardingRepository>()),
     );
     gh.lazySingleton<_i151.FirestoreDataSource>(
       () => _i151.FirestoreDataSourceImpl(gh<_i974.FirebaseFirestore>()),
@@ -105,32 +117,38 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
       ),
     );
-    gh.factory<_i846.HomeBloc>(
-      () => _i846.HomeBloc(gh<_i472.AuthenticationRepository>()),
-    );
     gh.factory<_i44.SigninCubit>(
       () => _i44.SigninCubit(gh<_i472.AuthenticationRepository>()),
     );
     gh.factory<_i1028.SignupCubit>(
       () => _i1028.SignupCubit(gh<_i472.AuthenticationRepository>()),
     );
-    gh.factory<_i1028.DashboardCubit>(
-      () => _i1028.DashboardCubit(
+    gh.factory<_i952.HomeBloc>(
+      () => _i952.HomeBloc(gh<_i472.AuthenticationRepository>()),
+    );
+    gh.factory<_i758.DashboardCubit>(
+      () => _i758.DashboardCubit(
         gh<_i747.UserRepository>(),
         gh<_i1065.BusinessRepository>(),
       ),
     );
-    gh.factory<_i867.ClientEntryCubit>(
-      () => _i867.ClientEntryCubit(gh<_i1065.BusinessRepository>()),
+    gh.factory<_i30.UserTypeCheckerCubit>(
+      () => _i30.UserTypeCheckerCubit(gh<_i747.UserRepository>()),
     );
-    gh.factory<_i976.MyBusinessesCubit>(
-      () => _i976.MyBusinessesCubit(
+    gh.factory<_i1018.ClientEntryCubit>(
+      () => _i1018.ClientEntryCubit(
         gh<_i1065.BusinessRepository>(),
         gh<_i747.UserRepository>(),
       ),
     );
-    gh.factory<_i567.AddBusinessBloc>(
-      () => _i567.AddBusinessBloc(
+    gh.factory<_i908.MyBusinessesCubit>(
+      () => _i908.MyBusinessesCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i458.AddBusinessBloc>(
+      () => _i458.AddBusinessBloc(
         gh<_i1069.ImagePickerDataSource>(),
         gh<_i460.SharedPreferences>(),
         gh<_i1065.BusinessRepository>(),

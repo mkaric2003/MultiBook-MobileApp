@@ -59,4 +59,20 @@ class UserRepository {
       },
     );
   }
+
+  Future<void> setUserType({required UserType type}) async {
+    final userId = _authenticationDataSource.currentUser?.uid;
+    if (userId == null) {
+      return;
+    }
+
+    await _firestoreDataSource.updateDocument(
+      collection: _usersCollection,
+      documentId: userId,
+      data: {
+        'type': type.name,
+        'updatedAt': _firestoreDataSource.serverTimestamp,
+      },
+    );
+  }
 }

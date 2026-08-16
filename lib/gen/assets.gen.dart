@@ -34,8 +34,32 @@ class $AssetsImagesGen {
   AssetGenImage get aquabookLogo =>
       const AssetGenImage('assets/images/aquabook_logo.png');
 
+  /// File path: assets/images/first-intro-images.svg
+  String get firstIntroImages => 'assets/images/first-intro-images.svg';
+
+  /// File path: assets/images/first-intro.png
+  AssetGenImage get firstIntro =>
+      const AssetGenImage('assets/images/first-intro.png');
+
+  /// File path: assets/images/second-intro.png
+  AssetGenImage get secondIntroPng =>
+      const AssetGenImage('assets/images/second-intro.png');
+
+  /// File path: assets/images/second-intro.svg
+  String get secondIntroSvg => 'assets/images/second-intro.svg';
+
+  /// File path: assets/images/third-intro-image.svg
+  String get thirdIntroImage => 'assets/images/third-intro-image.svg';
+
   /// List of all assets
-  List<AssetGenImage> get values => [aquabookLogo];
+  List<dynamic> get values => [
+    aquabookLogo,
+    firstIntroImages,
+    firstIntro,
+    secondIntroPng,
+    secondIntroSvg,
+    thirdIntroImage,
+  ];
 }
 
 class Assets {

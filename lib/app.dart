@@ -1,11 +1,15 @@
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_theme.dart';
 import 'package:aquabook/src/data/repositories/authentication_repository.dart';
+import 'package:aquabook/src/data/repositories/onboarding_repository.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
 import 'package:aquabook/src/features/business-side/home/presentation/views/client_entry_view.dart';
+import 'package:aquabook/src/features/business-side/home/presentation/views/home_view.dart';
 import 'package:aquabook/src/features/business-side/my_businesses/presentation/views/my_businesses_view.dart';
+import 'package:aquabook/src/features/shared/onboarding/presentation/views/onboarding_view.dart';
 import 'package:aquabook/src/features/shared/sign_in/presentation/views/signin_view.dart';
 import 'package:aquabook/src/features/shared/sign_up/presentation/views/signup_view.dart';
+import 'package:aquabook/src/features/shared/user_type_checker/presentation/views/user_type_checker_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

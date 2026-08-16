@@ -35,6 +35,14 @@ class SignupStateMapper extends ClassMapperBase<SignupState> {
     opt: true,
     def: false,
   );
+  static bool _$requiresUserTypeSelection(SignupState v) =>
+      v.requiresUserTypeSelection;
+  static const Field<SignupState, bool> _f$requiresUserTypeSelection = Field(
+    'requiresUserTypeSelection',
+    _$requiresUserTypeSelection,
+    opt: true,
+    def: false,
+  );
   static String? _$errorMessage(SignupState v) => v.errorMessage;
   static const Field<SignupState, String> _f$errorMessage = Field(
     'errorMessage',
@@ -46,6 +54,7 @@ class SignupStateMapper extends ClassMapperBase<SignupState> {
   final MappableFields<SignupState> fields = const {
     #isLoading: _f$isLoading,
     #isSuccess: _f$isSuccess,
+    #requiresUserTypeSelection: _f$requiresUserTypeSelection,
     #errorMessage: _f$errorMessage,
   };
 
@@ -53,6 +62,7 @@ class SignupStateMapper extends ClassMapperBase<SignupState> {
     return SignupState(
       isLoading: data.dec(_f$isLoading),
       isSuccess: data.dec(_f$isSuccess),
+      requiresUserTypeSelection: data.dec(_f$requiresUserTypeSelection),
       errorMessage: data.dec(_f$errorMessage),
     );
   }
@@ -117,7 +127,12 @@ extension SignupStateValueCopy<$R, $Out>
 
 abstract class SignupStateCopyWith<$R, $In extends SignupState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({bool? isLoading, bool? isSuccess, String? errorMessage});
+  $R call({
+    bool? isLoading,
+    bool? isSuccess,
+    bool? requiresUserTypeSelection,
+    String? errorMessage,
+  });
   SignupStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -130,18 +145,28 @@ class _SignupStateCopyWithImpl<$R, $Out>
   late final ClassMapperBase<SignupState> $mapper =
       SignupStateMapper.ensureInitialized();
   @override
-  $R call({bool? isLoading, bool? isSuccess, Object? errorMessage = $none}) =>
-      $apply(
-        FieldCopyWithData({
-          if (isLoading != null) #isLoading: isLoading,
-          if (isSuccess != null) #isSuccess: isSuccess,
-          if (errorMessage != $none) #errorMessage: errorMessage,
-        }),
-      );
+  $R call({
+    bool? isLoading,
+    bool? isSuccess,
+    bool? requiresUserTypeSelection,
+    Object? errorMessage = $none,
+  }) => $apply(
+    FieldCopyWithData({
+      if (isLoading != null) #isLoading: isLoading,
+      if (isSuccess != null) #isSuccess: isSuccess,
+      if (requiresUserTypeSelection != null)
+        #requiresUserTypeSelection: requiresUserTypeSelection,
+      if (errorMessage != $none) #errorMessage: errorMessage,
+    }),
+  );
   @override
   SignupState $make(CopyWithData data) => SignupState(
     isLoading: data.get(#isLoading, or: $value.isLoading),
     isSuccess: data.get(#isSuccess, or: $value.isSuccess),
+    requiresUserTypeSelection: data.get(
+      #requiresUserTypeSelection,
+      or: $value.requiresUserTypeSelection,
+    ),
     errorMessage: data.get(#errorMessage, or: $value.errorMessage),
   );
 
