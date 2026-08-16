@@ -36,6 +36,10 @@ class ExistingBusinessesLoadRequested extends AddBusinessEvent {
   const ExistingBusinessesLoadRequested();
 }
 
+class DemoStaysSeedRequested extends AddBusinessEvent {
+  const DemoStaysSeedRequested();
+}
+
 class BusinessCreationRequested extends AddBusinessEvent {
   const BusinessCreationRequested({
     required this.name,

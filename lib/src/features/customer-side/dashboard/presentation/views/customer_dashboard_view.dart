@@ -15,6 +15,7 @@ class CustomerDashboardView extends StatelessWidget {
 
   static const _nearbyStays = [
     StayListing(
+      id: 'city-center-hotel',
       name: 'City Center Hotel',
       rating: 4.8,
       reviewCount: 124,
@@ -24,6 +25,7 @@ class CustomerDashboardView extends StatelessWidget {
           'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=700&q=85',
     ),
     StayListing(
+      id: 'downtown-loft',
       name: 'Downtown Loft',
       rating: 4.6,
       reviewCount: 89,
@@ -67,6 +69,12 @@ class CustomerDashboardView extends StatelessWidget {
                           recommendedStays: state.recommendedStays,
                           isRecommendedStaysLoading:
                               state.isRecommendedStaysLoading,
+                          otherStays: state.otherStays,
+                          isOtherStaysLoading: state.isOtherStaysLoading,
+                          hasMoreOtherStays: state.hasMoreOtherStays,
+                          onLoadMoreStays: context
+                              .read<CustomerDashboardCubit>()
+                              .loadMoreStays,
                         )
                       : const Center(child: Text('Services coming soon')),
                 ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
+import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
@@ -29,6 +30,35 @@ class BusinessRepository {
   );
 
   static const _businessesCollection = 'businesses';
+  static const _demoStayNames = [
+    'Oceanview Resort',
+    'Mountain Cabin Retreat',
+    'City Center Hotel',
+    'Sunset Beach Villa',
+    'Old Town Apartment',
+    'Pinewood Lodge',
+    'Riverside Guesthouse',
+    'Azure Bay Hotel',
+    'Golden Peak Chalet',
+    'Harbor View Suites',
+    'Lakehouse Escape',
+    'Downtown Loft',
+    'Seaside Boutique Hotel',
+    'Forest Edge Cabin',
+    'Skyline Residence',
+    'Meadowbrook Villa',
+    'Coastal Breeze Apartment',
+    'Alpine Hideaway',
+    'The Grand Terrace',
+    'Palm Grove Resort',
+  ];
+  static const _demoStayImageUrls = [
+    'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=85',
+  ];
 
   final AuthenticationDataSource _authenticationDataSource;
   final FirestoreDataSource _firestoreDataSource;
@@ -162,6 +192,81 @@ class BusinessRepository {
         stackTrace: stackTrace,
       );
       return const [];
+    }
+  }
+
+  DataCursor<BusinessModel> getStaysCursor({int pageSize = 6}) {
+    return _firestoreDataSource.createCursorWhere<BusinessModel>(
+      collection: _businessesCollection,
+      field: 'type',
+      value: BusinessType.stays.name,
+      pageSize: pageSize,
+      listSerializer: (documents) => documents.map(_businessFromData).toList(),
+    );
+  }
+
+  Future<int> seedDemoStays() async {
+    final ownerId = _authenticationDataSource.currentUser?.uid;
+    if (ownerId == null) {
+      throw const BusinessException(
+        'You need to sign in before creating demo stays.',
+      );
+    }
+
+    String? firstBusinessId;
+    try {
+      for (var index = 0; index < _demoStayNames.length; index++) {
+        final businessId = _firestoreDataSource.createDocumentId(
+          collection: _businessesCollection,
+        );
+        firstBusinessId ??= businessId;
+        final pricePerNight = 80 + (index * 15);
+        final rating = index.isEven ? 4.1 + ((index % 5) * 0.18) : 0.0;
+        final imageUrl = _demoStayImageUrls[index % _demoStayImageUrls.length];
+
+        await _firestoreDataSource.setDocument(
+          collection: _businessesCollection,
+          documentId: businessId,
+          data: {
+            'id': businessId,
+            'ownerId': ownerId,
+            'type': BusinessType.stays.name,
+            'name': _demoStayNames[index],
+            'categoryId': ['hotel', 'apartment', 'cabin'][index % 3],
+            'location': {
+              'address': '${index + 1} Demo Street, Sarajevo',
+              'latitude': 43.8563 + (index * 0.002),
+              'longitude': 18.4131 + (index * 0.002),
+            },
+            'shortDescription': 'A comfortable stay for your next trip.',
+            'logoUrl': imageUrl,
+            'coverPhotoUrl': imageUrl,
+            'photoUrls': [imageUrl],
+            'isActive': true,
+            'averageRating': rating,
+            'reviewCount': rating > 0 ? 40 + (index * 11) : 0,
+            'stayDetails': {'pricePerNight': pricePerNight},
+            'createdAt': _firestoreDataSource.serverTimestamp,
+            'updatedAt': _firestoreDataSource.serverTimestamp,
+          },
+        );
+      }
+      if (firstBusinessId != null) {
+        await _setSelectedBusiness(firstBusinessId);
+      }
+      log(
+        'Created ${_demoStayNames.length} demo stays.',
+        name: 'BusinessRepository',
+      );
+      return _demoStayNames.length;
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not seed demo stays: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const BusinessException('We could not create the demo stays.');
     }
   }
 

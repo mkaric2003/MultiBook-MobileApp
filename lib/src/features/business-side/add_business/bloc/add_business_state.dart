@@ -13,6 +13,7 @@ class AddBusinessState with AddBusinessStateMappable {
     this.isLoading = false,
     this.isSuccess = false,
     this.errorMessage,
+    this.successMessage,
     this.hasExistingBusiness = false,
   });
 
@@ -23,5 +24,6 @@ class AddBusinessState with AddBusinessStateMappable {
   final bool isLoading;
   final bool isSuccess;
   final String? errorMessage;
+  final String? successMessage;
   final bool hasExistingBusiness;
 }

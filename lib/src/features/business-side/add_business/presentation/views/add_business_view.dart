@@ -42,10 +42,12 @@ class AddBusinessView extends HookWidget {
       child: BlocConsumer<AddBusinessBloc, AddBusinessState>(
         listenWhen: (previous, current) =>
             previous.errorMessage != current.errorMessage ||
+            previous.successMessage != current.successMessage ||
             previous.isSuccess != current.isSuccess,
         listener: (context, state) {
           final message =
               state.errorMessage ??
+              state.successMessage ??
               (state.isSuccess ? 'Business created successfully.' : null);
           if (message != null) {
             ScaffoldMessenger.of(
@@ -204,6 +206,19 @@ class AddBusinessView extends HookWidget {
                                 selectImage(BusinessImageType.coverPhoto),
                           ),
                           const SizedBox(height: 30),
+                          CustomButton(
+                            buttonName: 'Seed 20 demo stays',
+                            color: AppColors.surface,
+                            textColor: AppColors.primary,
+                            borderColor: AppColors.primary,
+                            onPressed: state.isLoading
+                                ? null
+                                : () => context.read<AddBusinessBloc>().add(
+                                    const DemoStaysSeedRequested(),
+                                  ),
+                            enabled: !state.isLoading,
+                          ),
+                          const SizedBox(height: 14),
                           CustomButton(
                             buttonName: 'Create business',
                             onPressed: canCreate && !state.isLoading

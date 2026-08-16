@@ -19,6 +19,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     on<BusinessImagePickRequested>(_onBusinessImagePickRequested);
     on<LostBusinessImageRestoreRequested>(_onLostBusinessImageRestoreRequested);
     on<ExistingBusinessesLoadRequested>(_onExistingBusinessesLoadRequested);
+    on<DemoStaysSeedRequested>(_onDemoStaysSeedRequested);
     on<BusinessCreationRequested>(_onBusinessCreationRequested);
 
     add(const LostBusinessImageRestoreRequested());
@@ -116,7 +117,14 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       return;
     }
 
-    emit(state.copyWith(isLoading: true, isSuccess: false, errorMessage: null));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        isSuccess: false,
+        errorMessage: null,
+        successMessage: null,
+      ),
+    );
     try {
       await _businessRepository.createBusiness(
         type: state.businessType,
@@ -133,6 +141,31 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
           isLoading: false,
           isSuccess: true,
           hasExistingBusiness: true,
+        ),
+      );
+    } on BusinessException catch (error) {
+      emit(state.copyWith(isLoading: false, errorMessage: error.message));
+    }
+  }
+
+  Future<void> _onDemoStaysSeedRequested(
+    DemoStaysSeedRequested event,
+    Emitter<AddBusinessState> emit,
+  ) async {
+    if (state.isLoading) {
+      return;
+    }
+
+    emit(
+      state.copyWith(isLoading: true, errorMessage: null, successMessage: null),
+    );
+    try {
+      final seededCount = await _businessRepository.seedDemoStays();
+      emit(
+        state.copyWith(
+          isLoading: false,
+          hasExistingBusiness: seededCount > 0 || state.hasExistingBusiness,
+          successMessage: '$seededCount demo stays created.',
         ),
       );
     } on BusinessException catch (error) {

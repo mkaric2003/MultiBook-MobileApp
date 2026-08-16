@@ -67,6 +67,12 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     _$errorMessage,
     opt: true,
   );
+  static String? _$successMessage(AddBusinessState v) => v.successMessage;
+  static const Field<AddBusinessState, String> _f$successMessage = Field(
+    'successMessage',
+    _$successMessage,
+    opt: true,
+  );
   static bool _$hasExistingBusiness(AddBusinessState v) =>
       v.hasExistingBusiness;
   static const Field<AddBusinessState, bool> _f$hasExistingBusiness = Field(
@@ -85,6 +91,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #isLoading: _f$isLoading,
     #isSuccess: _f$isSuccess,
     #errorMessage: _f$errorMessage,
+    #successMessage: _f$successMessage,
     #hasExistingBusiness: _f$hasExistingBusiness,
   };
 
@@ -97,6 +104,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       isLoading: data.dec(_f$isLoading),
       isSuccess: data.dec(_f$isSuccess),
       errorMessage: data.dec(_f$errorMessage),
+      successMessage: data.dec(_f$successMessage),
       hasExistingBusiness: data.dec(_f$hasExistingBusiness),
     );
   }
@@ -171,6 +179,7 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     bool? isLoading,
     bool? isSuccess,
     String? errorMessage,
+    String? successMessage,
     bool? hasExistingBusiness,
   });
   AddBusinessStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -195,6 +204,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     bool? isLoading,
     bool? isSuccess,
     Object? errorMessage = $none,
+    Object? successMessage = $none,
     bool? hasExistingBusiness,
   }) => $apply(
     FieldCopyWithData({
@@ -205,6 +215,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       if (isLoading != null) #isLoading: isLoading,
       if (isSuccess != null) #isSuccess: isSuccess,
       if (errorMessage != $none) #errorMessage: errorMessage,
+      if (successMessage != $none) #successMessage: successMessage,
       if (hasExistingBusiness != null)
         #hasExistingBusiness: hasExistingBusiness,
     }),
@@ -218,6 +229,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     isLoading: data.get(#isLoading, or: $value.isLoading),
     isSuccess: data.get(#isSuccess, or: $value.isSuccess),
     errorMessage: data.get(#errorMessage, or: $value.errorMessage),
+    successMessage: data.get(#successMessage, or: $value.successMessage),
     hasExistingBusiness: data.get(
       #hasExistingBusiness,
       or: $value.hasExistingBusiness,

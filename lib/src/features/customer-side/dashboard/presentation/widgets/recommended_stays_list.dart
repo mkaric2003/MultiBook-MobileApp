@@ -41,7 +41,7 @@ class RecommendedStaysList extends HookWidget {
     return Column(
       children: [
         SizedBox(
-          height: 285,
+          height: 310,
           child: PageView.builder(
             controller: pageController,
             itemCount: stays.length,

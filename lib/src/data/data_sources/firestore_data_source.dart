@@ -1,3 +1,4 @@
+import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
@@ -22,6 +23,15 @@ abstract class FirestoreDataSource {
     required String collection,
     required String field,
     required Object value,
+  });
+
+  DataCursor<T> createCursorWhere<T>({
+    required String collection,
+    required String field,
+    required Object value,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
   });
 
   Future<Map<String, dynamic>?> getDocument({
@@ -100,6 +110,22 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
         .where(field, isEqualTo: value)
         .get();
     return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  DataCursor<T> createCursorWhere<T>({
+    required String collection,
+    required String field,
+    required Object value,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
+  }) {
+    final query = _firestore
+        .collection(collection)
+        .where(field, isEqualTo: value)
+        .limit(pageSize);
+    return DataCursor<T>(query, listSerializer);
   }
 
   @override
