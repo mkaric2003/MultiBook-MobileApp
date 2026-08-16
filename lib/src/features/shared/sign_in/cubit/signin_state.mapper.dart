@@ -14,6 +14,7 @@ class SigninStateMapper extends ClassMapperBase<SigninState> {
   static SigninStateMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = SigninStateMapper._());
+      UserTypeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -35,6 +36,20 @@ class SigninStateMapper extends ClassMapperBase<SigninState> {
     opt: true,
     def: false,
   );
+  static bool _$requiresUserTypeSelection(SigninState v) =>
+      v.requiresUserTypeSelection;
+  static const Field<SigninState, bool> _f$requiresUserTypeSelection = Field(
+    'requiresUserTypeSelection',
+    _$requiresUserTypeSelection,
+    opt: true,
+    def: false,
+  );
+  static UserType? _$userType(SigninState v) => v.userType;
+  static const Field<SigninState, UserType> _f$userType = Field(
+    'userType',
+    _$userType,
+    opt: true,
+  );
   static String? _$errorMessage(SigninState v) => v.errorMessage;
   static const Field<SigninState, String> _f$errorMessage = Field(
     'errorMessage',
@@ -52,6 +67,8 @@ class SigninStateMapper extends ClassMapperBase<SigninState> {
   final MappableFields<SigninState> fields = const {
     #isLoading: _f$isLoading,
     #isSuccess: _f$isSuccess,
+    #requiresUserTypeSelection: _f$requiresUserTypeSelection,
+    #userType: _f$userType,
     #errorMessage: _f$errorMessage,
     #successMessage: _f$successMessage,
   };
@@ -60,6 +77,8 @@ class SigninStateMapper extends ClassMapperBase<SigninState> {
     return SigninState(
       isLoading: data.dec(_f$isLoading),
       isSuccess: data.dec(_f$isSuccess),
+      requiresUserTypeSelection: data.dec(_f$requiresUserTypeSelection),
+      userType: data.dec(_f$userType),
       errorMessage: data.dec(_f$errorMessage),
       successMessage: data.dec(_f$successMessage),
     );
@@ -128,6 +147,8 @@ abstract class SigninStateCopyWith<$R, $In extends SigninState, $Out>
   $R call({
     bool? isLoading,
     bool? isSuccess,
+    bool? requiresUserTypeSelection,
+    UserType? userType,
     String? errorMessage,
     String? successMessage,
   });
@@ -146,12 +167,17 @@ class _SigninStateCopyWithImpl<$R, $Out>
   $R call({
     bool? isLoading,
     bool? isSuccess,
+    bool? requiresUserTypeSelection,
+    Object? userType = $none,
     Object? errorMessage = $none,
     Object? successMessage = $none,
   }) => $apply(
     FieldCopyWithData({
       if (isLoading != null) #isLoading: isLoading,
       if (isSuccess != null) #isSuccess: isSuccess,
+      if (requiresUserTypeSelection != null)
+        #requiresUserTypeSelection: requiresUserTypeSelection,
+      if (userType != $none) #userType: userType,
       if (errorMessage != $none) #errorMessage: errorMessage,
       if (successMessage != $none) #successMessage: successMessage,
     }),
@@ -160,6 +186,11 @@ class _SigninStateCopyWithImpl<$R, $Out>
   SigninState $make(CopyWithData data) => SigninState(
     isLoading: data.get(#isLoading, or: $value.isLoading),
     isSuccess: data.get(#isSuccess, or: $value.isSuccess),
+    requiresUserTypeSelection: data.get(
+      #requiresUserTypeSelection,
+      or: $value.requiresUserTypeSelection,
+    ),
+    userType: data.get(#userType, or: $value.userType),
     errorMessage: data.get(#errorMessage, or: $value.errorMessage),
     successMessage: data.get(#successMessage, or: $value.successMessage),
   );

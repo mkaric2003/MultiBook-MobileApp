@@ -1,3 +1,4 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/shared/sign_up/presentation/widgets/password_requirement_item.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,7 @@ class SignUpForm extends HookWidget {
     double strengthValue;
     if (pwd.isEmpty) {
       strengthText = '';
-      strengthColor = const Color(0xFF9CA3AF);
+      strengthColor = AppColors.muted;
       strengthValue = 0.0;
     } else if (score <= 1) {
       strengthText = 'Weak';
@@ -180,10 +181,7 @@ class SignUpForm extends HookWidget {
           children: [
             Text(
               'Password strength',
-              style: GoogleFonts.inter(
-                fontSize: 14,
-                color: const Color(0xFF9CA3AF),
-              ),
+              style: GoogleFonts.inter(fontSize: 14, color: AppColors.muted),
             ),
             Text(
               strengthText.isEmpty ? ' ' : strengthText,

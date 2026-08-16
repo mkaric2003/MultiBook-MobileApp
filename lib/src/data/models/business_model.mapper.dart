@@ -16,6 +16,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       MapperContainer.globals.use(_instance = BusinessModelMapper._());
       BusinessTypeMapper.ensureInitialized();
       BusinessLocationModelMapper.ensureInitialized();
+      StayDetailsModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -79,6 +80,26 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     opt: true,
     def: true,
   );
+  static double _$averageRating(BusinessModel v) => v.averageRating;
+  static const Field<BusinessModel, double> _f$averageRating = Field(
+    'averageRating',
+    _$averageRating,
+    opt: true,
+    def: 0,
+  );
+  static int _$reviewCount(BusinessModel v) => v.reviewCount;
+  static const Field<BusinessModel, int> _f$reviewCount = Field(
+    'reviewCount',
+    _$reviewCount,
+    opt: true,
+    def: 0,
+  );
+  static StayDetailsModel? _$stayDetails(BusinessModel v) => v.stayDetails;
+  static const Field<BusinessModel, StayDetailsModel> _f$stayDetails = Field(
+    'stayDetails',
+    _$stayDetails,
+    opt: true,
+  );
   static DateTime? _$createdAt(BusinessModel v) => v.createdAt;
   static const Field<BusinessModel, DateTime> _f$createdAt = Field(
     'createdAt',
@@ -105,6 +126,9 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     #coverPhotoUrl: _f$coverPhotoUrl,
     #photoUrls: _f$photoUrls,
     #isActive: _f$isActive,
+    #averageRating: _f$averageRating,
+    #reviewCount: _f$reviewCount,
+    #stayDetails: _f$stayDetails,
     #createdAt: _f$createdAt,
     #updatedAt: _f$updatedAt,
   };
@@ -122,6 +146,9 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       coverPhotoUrl: data.dec(_f$coverPhotoUrl),
       photoUrls: data.dec(_f$photoUrls),
       isActive: data.dec(_f$isActive),
+      averageRating: data.dec(_f$averageRating),
+      reviewCount: data.dec(_f$reviewCount),
+      stayDetails: data.dec(_f$stayDetails),
       createdAt: data.dec(_f$createdAt),
       updatedAt: data.dec(_f$updatedAt),
     );
@@ -196,6 +223,8 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
   >
   get location;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get photoUrls;
+  StayDetailsModelCopyWith<$R, StayDetailsModel, StayDetailsModel>?
+  get stayDetails;
   $R call({
     String? id,
     String? ownerId,
@@ -208,6 +237,9 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
     String? coverPhotoUrl,
     List<String>? photoUrls,
     bool? isActive,
+    double? averageRating,
+    int? reviewCount,
+    StayDetailsModel? stayDetails,
     DateTime? createdAt,
     DateTime? updatedAt,
   });
@@ -237,6 +269,10 @@ class _BusinessModelCopyWithImpl<$R, $Out>
         (v) => call(photoUrls: v),
       );
   @override
+  StayDetailsModelCopyWith<$R, StayDetailsModel, StayDetailsModel>?
+  get stayDetails =>
+      $value.stayDetails?.copyWith.$chain((v) => call(stayDetails: v));
+  @override
   $R call({
     String? id,
     String? ownerId,
@@ -249,6 +285,9 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     Object? coverPhotoUrl = $none,
     List<String>? photoUrls,
     bool? isActive,
+    double? averageRating,
+    int? reviewCount,
+    Object? stayDetails = $none,
     Object? createdAt = $none,
     Object? updatedAt = $none,
   }) => $apply(
@@ -264,6 +303,9 @@ class _BusinessModelCopyWithImpl<$R, $Out>
       if (coverPhotoUrl != $none) #coverPhotoUrl: coverPhotoUrl,
       if (photoUrls != null) #photoUrls: photoUrls,
       if (isActive != null) #isActive: isActive,
+      if (averageRating != null) #averageRating: averageRating,
+      if (reviewCount != null) #reviewCount: reviewCount,
+      if (stayDetails != $none) #stayDetails: stayDetails,
       if (createdAt != $none) #createdAt: createdAt,
       if (updatedAt != $none) #updatedAt: updatedAt,
     }),
@@ -281,6 +323,9 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     coverPhotoUrl: data.get(#coverPhotoUrl, or: $value.coverPhotoUrl),
     photoUrls: data.get(#photoUrls, or: $value.photoUrls),
     isActive: data.get(#isActive, or: $value.isActive),
+    averageRating: data.get(#averageRating, or: $value.averageRating),
+    reviewCount: data.get(#reviewCount, or: $value.reviewCount),
+    stayDetails: data.get(#stayDetails, or: $value.stayDetails),
     createdAt: data.get(#createdAt, or: $value.createdAt),
     updatedAt: data.get(#updatedAt, or: $value.updatedAt),
   );

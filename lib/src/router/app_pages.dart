@@ -51,6 +51,11 @@ final router = GoRouter(
       builder: (context, state) => const HomeView(),
     ),
     GoRoute(
+      path: AppRoutes.CUSTOMER_HOME,
+      name: AppRoutes.CUSTOMER_HOME,
+      builder: (context, state) => const CustomerHomeView(),
+    ),
+    GoRoute(
       path: AppRoutes.ADD_BUSINESS,
       name: AppRoutes.ADD_BUSINESS,
       builder: (context, state) => const AddBusinessView(),

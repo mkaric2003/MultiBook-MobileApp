@@ -124,6 +124,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         categoryId: state.categoryId!,
         address: event.address,
         shortDescription: event.shortDescription,
+        pricePerNight: event.pricePerNight,
         logoPath: state.logoPath,
         coverPhotoPath: state.coverPhotoPath,
       );

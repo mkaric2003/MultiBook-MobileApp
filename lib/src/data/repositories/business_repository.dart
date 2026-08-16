@@ -6,6 +6,7 @@ import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/models/business_location_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/data/models/stay_details_model.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/utils/image_utils.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -123,6 +124,47 @@ class BusinessRepository {
     }
   }
 
+  Future<List<BusinessModel>> getRecommendedStays({int limit = 3}) async {
+    try {
+      final businessesData = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.stays.name,
+      );
+      final stays = businessesData
+          .map(_businessFromData)
+          .where((business) => business.isActive)
+          .toList();
+      final ratedStays =
+          stays.where((business) => business.averageRating > 0).toList()
+            ..sort((first, second) {
+              final ratingComparison = second.averageRating.compareTo(
+                first.averageRating,
+              );
+              return ratingComparison != 0
+                  ? ratingComparison
+                  : second.reviewCount.compareTo(first.reviewCount);
+            });
+
+      if (ratedStays.isEmpty) {
+        return stays.take(limit).toList();
+      }
+
+      final unratedStays = stays
+          .where((business) => business.averageRating <= 0)
+          .toList();
+      return [...ratedStays, ...unratedStays].take(limit).toList();
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not load recommended stays: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
   Future<void> deleteBusiness(BusinessModel business) async {
     final ownerId = _authenticationDataSource.currentUser?.uid;
     if (ownerId == null || business.ownerId != ownerId) {
@@ -157,6 +199,7 @@ class BusinessRepository {
     required String categoryId,
     required String address,
     required String shortDescription,
+    int? pricePerNight,
     String? logoPath,
     String? coverPhotoPath,
   }) async {
@@ -165,6 +208,10 @@ class BusinessRepository {
       throw const BusinessException(
         'You need to sign in before creating a business.',
       );
+    }
+    if (type == BusinessType.stays &&
+        (pricePerNight == null || pricePerNight <= 0)) {
+      throw const BusinessException('Please enter a valid price per night.');
     }
 
     final businessId = _firestoreDataSource.createDocumentId(
@@ -204,6 +251,9 @@ class BusinessRepository {
             : shortDescription.trim(),
         logoUrl: logoUrl,
         coverPhotoUrl: coverPhotoUrl,
+        stayDetails: type == BusinessType.stays
+            ? StayDetailsModel(pricePerNight: pricePerNight)
+            : null,
       );
 
       await _firestoreDataSource.setDocument(
@@ -225,6 +275,11 @@ class BusinessRepository {
           'coverPhotoUrl': business.coverPhotoUrl,
           'photoUrls': business.photoUrls,
           'isActive': business.isActive,
+          'averageRating': business.averageRating,
+          'reviewCount': business.reviewCount,
+          'stayDetails': business.stayDetails == null
+              ? null
+              : {'pricePerNight': business.stayDetails!.pricePerNight},
           'createdAt': _firestoreDataSource.serverTimestamp,
           'updatedAt': _firestoreDataSource.serverTimestamp,
         },
@@ -265,6 +320,7 @@ class BusinessRepository {
       data['location'] as Map<String, dynamic>,
     );
     final typeName = data['type'] as String?;
+    final stayDetailsData = data['stayDetails'];
     final businessType = BusinessType.values.where(
       (type) => type.name == typeName,
     );
@@ -285,6 +341,14 @@ class BusinessRepository {
       coverPhotoUrl: data['coverPhotoUrl'] as String?,
       photoUrls: List<String>.from(data['photoUrls'] as List? ?? const []),
       isActive: data['isActive'] as bool? ?? true,
+      averageRating: (data['averageRating'] as num?)?.toDouble() ?? 0,
+      reviewCount: (data['reviewCount'] as num?)?.toInt() ?? 0,
+      stayDetails: stayDetailsData is Map
+          ? StayDetailsModel(
+              pricePerNight: (stayDetailsData['pricePerNight'] as num?)
+                  ?.toInt(),
+            )
+          : null,
     );
   }
 

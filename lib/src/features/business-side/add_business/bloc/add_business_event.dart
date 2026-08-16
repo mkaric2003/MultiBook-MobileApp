@@ -41,9 +41,11 @@ class BusinessCreationRequested extends AddBusinessEvent {
     required this.name,
     required this.address,
     required this.shortDescription,
+    this.pricePerNight,
   });
 
   final String name;
   final String address;
   final String shortDescription;
+  final int? pricePerNight;
 }

@@ -1,0 +1,1 @@
+enum CustomerHomeTab { stays, services }

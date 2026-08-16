@@ -16,6 +16,7 @@ import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -30,9 +31,11 @@ class AddBusinessView extends HookWidget {
     final nameController = useTextEditingController();
     final addressController = useTextEditingController();
     final descriptionController = useTextEditingController();
+    final priceController = useTextEditingController();
 
     useListenable(nameController);
     useListenable(addressController);
+    useListenable(priceController);
 
     return BlocProvider(
       create: (_) => getIt<AddBusinessBloc>(),
@@ -59,7 +62,9 @@ class AddBusinessView extends HookWidget {
           final canCreate =
               nameController.text.trim().isNotEmpty &&
               addressController.text.trim().isNotEmpty &&
-              state.categoryId != null;
+              state.categoryId != null &&
+              (state.businessType != BusinessType.stays ||
+                  (int.tryParse(priceController.text) ?? 0) > 0);
 
           void selectImage(BusinessImageType imageType) {
             showModalBottomSheet<void>(
@@ -157,6 +162,19 @@ class AddBusinessView extends HookWidget {
                                 .add(BusinessCategoryChanged(categoryId)),
                           ),
                           const SizedBox(height: 26),
+                          if (state.businessType == BusinessType.stays) ...[
+                            const FormFieldLabel('Price per night*'),
+                            const SizedBox(height: 10),
+                            CustomTextField(
+                              hintText: 'Enter price per night',
+                              controller: priceController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                            ),
+                            const SizedBox(height: 26),
+                          ],
                           const FormFieldLabel('Address*'),
                           const SizedBox(height: 10),
                           CustomTextField(
@@ -195,6 +213,11 @@ class AddBusinessView extends HookWidget {
                                       address: addressController.text,
                                       shortDescription:
                                           descriptionController.text,
+                                      pricePerNight:
+                                          state.businessType ==
+                                              BusinessType.stays
+                                          ? int.tryParse(priceController.text)
+                                          : null,
                                     ),
                                   )
                                 : null,
