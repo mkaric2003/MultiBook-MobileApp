@@ -43,12 +43,14 @@ class DemoStaysSeedRequested extends AddBusinessEvent {
 class BusinessCreationRequested extends AddBusinessEvent {
   const BusinessCreationRequested({
     required this.name,
+    required this.city,
     required this.address,
     required this.shortDescription,
     this.pricePerNight,
   });
 
   final String name;
+  final String city;
   final String address;
   final String shortDescription;
   final int? pricePerNight;

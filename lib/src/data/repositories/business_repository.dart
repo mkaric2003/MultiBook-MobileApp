@@ -59,6 +59,28 @@ class BusinessRepository {
     'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=85',
     'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=85',
   ];
+  static const _demoStayCities = [
+    'Sarajevo',
+    'Mostar',
+    'Banja Luka',
+    'Tuzla',
+    'Zenica',
+    'Bihać',
+    'Trebinje',
+    'Neum',
+    'Jajce',
+    'Travnik',
+    'Konjic',
+    'Visoko',
+    'Prijedor',
+    'Brčko',
+    'Bijeljina',
+    'Goražde',
+    'Livno',
+    'Foča',
+    'Jahorina',
+    'Srebrenik',
+  ];
 
   final AuthenticationDataSource _authenticationDataSource;
   final FirestoreDataSource _firestoreDataSource;
@@ -223,6 +245,7 @@ class BusinessRepository {
         final pricePerNight = 80 + (index * 15);
         final rating = index.isEven ? 4.1 + ((index % 5) * 0.18) : 0.0;
         final imageUrl = _demoStayImageUrls[index % _demoStayImageUrls.length];
+        final city = _demoStayCities[index % _demoStayCities.length];
 
         await _firestoreDataSource.setDocument(
           collection: _businessesCollection,
@@ -234,7 +257,8 @@ class BusinessRepository {
             'name': _demoStayNames[index],
             'categoryId': ['hotel', 'apartment', 'cabin'][index % 3],
             'location': {
-              'address': '${index + 1} Demo Street, Sarajevo',
+              'address': '${index + 1} Demo Street, $city',
+              'city': city,
               'latitude': 43.8563 + (index * 0.002),
               'longitude': 18.4131 + (index * 0.002),
             },
@@ -302,6 +326,7 @@ class BusinessRepository {
     required BusinessType type,
     required String name,
     required String categoryId,
+    required String city,
     required String address,
     required String shortDescription,
     int? pricePerNight,
@@ -347,6 +372,7 @@ class BusinessRepository {
         name: name.trim(),
         categoryId: categoryId,
         location: BusinessLocationModel(
+          city: city.trim(),
           address: address.trim(),
           latitude: 0,
           longitude: 0,
@@ -371,6 +397,7 @@ class BusinessRepository {
           'name': business.name,
           'categoryId': business.categoryId,
           'location': {
+            'city': business.location.city,
             'address': business.location.address,
             'latitude': business.location.latitude,
             'longitude': business.location.longitude,
@@ -437,6 +464,7 @@ class BusinessRepository {
       name: data['name'] as String,
       categoryId: data['categoryId'] as String,
       location: BusinessLocationModel(
+        city: locationData['city'] as String? ?? '',
         address: locationData['address'] as String,
         latitude: (locationData['latitude'] as num).toDouble(),
         longitude: (locationData['longitude'] as num).toDouble(),

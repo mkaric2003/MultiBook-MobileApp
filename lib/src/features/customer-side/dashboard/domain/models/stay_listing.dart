@@ -25,7 +25,9 @@ class StayListing {
     return StayListing(
       id: business.id,
       name: business.name,
-      location: business.location.address,
+      location: business.location.city.isNotEmpty
+          ? business.location.city
+          : business.location.address,
       pricePerNight: business.stayDetails?.pricePerNight,
       rating: business.averageRating,
       reviewCount: business.reviewCount,

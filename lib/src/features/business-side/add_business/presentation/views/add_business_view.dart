@@ -29,11 +29,13 @@ class AddBusinessView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final nameController = useTextEditingController();
+    final cityController = useTextEditingController();
     final addressController = useTextEditingController();
     final descriptionController = useTextEditingController();
     final priceController = useTextEditingController();
 
     useListenable(nameController);
+    useListenable(cityController);
     useListenable(addressController);
     useListenable(priceController);
 
@@ -63,6 +65,7 @@ class AddBusinessView extends HookWidget {
           final categories = AddBusinessCategories.forType(state.businessType);
           final canCreate =
               nameController.text.trim().isNotEmpty &&
+              cityController.text.trim().isNotEmpty &&
               addressController.text.trim().isNotEmpty &&
               state.categoryId != null &&
               (state.businessType != BusinessType.stays ||
@@ -177,6 +180,13 @@ class AddBusinessView extends HookWidget {
                             ),
                             const SizedBox(height: 26),
                           ],
+                          const FormFieldLabel('City*'),
+                          const SizedBox(height: 10),
+                          CustomTextField(
+                            hintText: 'Enter city',
+                            controller: cityController,
+                          ),
+                          const SizedBox(height: 26),
                           const FormFieldLabel('Address*'),
                           const SizedBox(height: 10),
                           CustomTextField(
@@ -225,6 +235,7 @@ class AddBusinessView extends HookWidget {
                                 ? () => context.read<AddBusinessBloc>().add(
                                     BusinessCreationRequested(
                                       name: nameController.text,
+                                      city: cityController.text,
                                       address: addressController.text,
                                       shortDescription:
                                           descriptionController.text,
