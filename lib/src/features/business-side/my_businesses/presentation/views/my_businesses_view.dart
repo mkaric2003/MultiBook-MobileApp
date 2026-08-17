@@ -4,7 +4,7 @@ import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_cubit.dart';
 import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_state.dart';
 import 'package:aquabook/src/features/business-side/my_businesses/presentation/widgets/my_business_list_tile.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:aquabook/src/features/business-side/my_businesses/presentation/widgets/my_businesses_header.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,10 +26,7 @@ class MyBusinessesView extends StatelessWidget {
             body: SafeArea(
               child: Column(
                 children: [
-                  CustomAppBar(
-                    title: 'My Businesses',
-                    onBackPressed: () => context.pop(),
-                  ),
+                  const MyBusinessesHeader(),
                   Expanded(
                     child: state.isLoading
                         ? const Center(child: CircularProgressIndicator())
@@ -37,21 +34,13 @@ class MyBusinessesView extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(25, 32, 25, 24),
                             children: [
                               const Text(
-                                'My Businesses',
-                                style: TextStyle(
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              const Text(
                                 'Select a business to manage or add a new one.',
                                 style: TextStyle(
                                   color: AppColors.muted,
                                   fontSize: 18,
                                 ),
                               ),
-                              const SizedBox(height: 52),
+                              const SizedBox(height: 40),
                               if (state.businesses.isEmpty)
                                 const Center(
                                   child: Text(
@@ -119,7 +108,7 @@ class MyBusinessesView extends StatelessWidget {
             bottomNavigationBar: SafeArea(
               top: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(25, 12, 25, 24),
+                padding: const EdgeInsets.fromLTRB(25, 12, 25, 5),
                 child: CustomButton(
                   buttonName: 'Add New Business',
                   leadingIcon: const Icon(Icons.add),

@@ -39,6 +39,16 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     'customerId',
     _$customerId,
   );
+  static String _$customerName(BookingModel v) => v.customerName;
+  static const Field<BookingModel, String> _f$customerName = Field(
+    'customerName',
+    _$customerName,
+  );
+  static String _$customerEmail(BookingModel v) => v.customerEmail;
+  static const Field<BookingModel, String> _f$customerEmail = Field(
+    'customerEmail',
+    _$customerEmail,
+  );
   static String _$businessName(BookingModel v) => v.businessName;
   static const Field<BookingModel, String> _f$businessName = Field(
     'businessName',
@@ -130,6 +140,12 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     _$roomType,
     opt: true,
   );
+  static String? _$customerAvatarUrl(BookingModel v) => v.customerAvatarUrl;
+  static const Field<BookingModel, String> _f$customerAvatarUrl = Field(
+    'customerAvatarUrl',
+    _$customerAvatarUrl,
+    opt: true,
+  );
   static DateTime? _$createdAt(BookingModel v) => v.createdAt;
   static const Field<BookingModel, DateTime> _f$createdAt = Field(
     'createdAt',
@@ -143,6 +159,8 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     #businessId: _f$businessId,
     #businessOwnerId: _f$businessOwnerId,
     #customerId: _f$customerId,
+    #customerName: _f$customerName,
+    #customerEmail: _f$customerEmail,
     #businessName: _f$businessName,
     #businessCity: _f$businessCity,
     #businessImageUrl: _f$businessImageUrl,
@@ -163,6 +181,7 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     #paymentMethod: _f$paymentMethod,
     #confirmationCode: _f$confirmationCode,
     #roomType: _f$roomType,
+    #customerAvatarUrl: _f$customerAvatarUrl,
     #createdAt: _f$createdAt,
   };
 
@@ -172,6 +191,8 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
       businessId: data.dec(_f$businessId),
       businessOwnerId: data.dec(_f$businessOwnerId),
       customerId: data.dec(_f$customerId),
+      customerName: data.dec(_f$customerName),
+      customerEmail: data.dec(_f$customerEmail),
       businessName: data.dec(_f$businessName),
       businessCity: data.dec(_f$businessCity),
       businessImageUrl: data.dec(_f$businessImageUrl),
@@ -192,6 +213,7 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
       paymentMethod: data.dec(_f$paymentMethod),
       confirmationCode: data.dec(_f$confirmationCode),
       roomType: data.dec(_f$roomType),
+      customerAvatarUrl: data.dec(_f$customerAvatarUrl),
       createdAt: data.dec(_f$createdAt),
     );
   }
@@ -269,6 +291,8 @@ abstract class BookingModelCopyWith<$R, $In extends BookingModel, $Out>
     String? businessId,
     String? businessOwnerId,
     String? customerId,
+    String? customerName,
+    String? customerEmail,
     String? businessName,
     String? businessCity,
     String? businessImageUrl,
@@ -289,6 +313,7 @@ abstract class BookingModelCopyWith<$R, $In extends BookingModel, $Out>
     String? paymentMethod,
     String? confirmationCode,
     String? roomType,
+    String? customerAvatarUrl,
     DateTime? createdAt,
   });
   BookingModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
@@ -319,6 +344,8 @@ class _BookingModelCopyWithImpl<$R, $Out>
     String? businessId,
     String? businessOwnerId,
     String? customerId,
+    String? customerName,
+    String? customerEmail,
     String? businessName,
     String? businessCity,
     String? businessImageUrl,
@@ -339,6 +366,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
     String? paymentMethod,
     String? confirmationCode,
     Object? roomType = $none,
+    Object? customerAvatarUrl = $none,
     Object? createdAt = $none,
   }) => $apply(
     FieldCopyWithData({
@@ -346,6 +374,8 @@ class _BookingModelCopyWithImpl<$R, $Out>
       if (businessId != null) #businessId: businessId,
       if (businessOwnerId != null) #businessOwnerId: businessOwnerId,
       if (customerId != null) #customerId: customerId,
+      if (customerName != null) #customerName: customerName,
+      if (customerEmail != null) #customerEmail: customerEmail,
       if (businessName != null) #businessName: businessName,
       if (businessCity != null) #businessCity: businessCity,
       if (businessImageUrl != null) #businessImageUrl: businessImageUrl,
@@ -366,6 +396,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
       if (paymentMethod != null) #paymentMethod: paymentMethod,
       if (confirmationCode != null) #confirmationCode: confirmationCode,
       if (roomType != $none) #roomType: roomType,
+      if (customerAvatarUrl != $none) #customerAvatarUrl: customerAvatarUrl,
       if (createdAt != $none) #createdAt: createdAt,
     }),
   );
@@ -375,6 +406,8 @@ class _BookingModelCopyWithImpl<$R, $Out>
     businessId: data.get(#businessId, or: $value.businessId),
     businessOwnerId: data.get(#businessOwnerId, or: $value.businessOwnerId),
     customerId: data.get(#customerId, or: $value.customerId),
+    customerName: data.get(#customerName, or: $value.customerName),
+    customerEmail: data.get(#customerEmail, or: $value.customerEmail),
     businessName: data.get(#businessName, or: $value.businessName),
     businessCity: data.get(#businessCity, or: $value.businessCity),
     businessImageUrl: data.get(#businessImageUrl, or: $value.businessImageUrl),
@@ -395,6 +428,10 @@ class _BookingModelCopyWithImpl<$R, $Out>
     paymentMethod: data.get(#paymentMethod, or: $value.paymentMethod),
     confirmationCode: data.get(#confirmationCode, or: $value.confirmationCode),
     roomType: data.get(#roomType, or: $value.roomType),
+    customerAvatarUrl: data.get(
+      #customerAvatarUrl,
+      or: $value.customerAvatarUrl,
+    ),
     createdAt: data.get(#createdAt, or: $value.createdAt),
   );
 

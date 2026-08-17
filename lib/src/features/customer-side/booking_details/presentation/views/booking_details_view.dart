@@ -83,7 +83,7 @@ class BookingDetailsView extends StatelessWidget {
                         const SizedBox(height: 12),
                         BookingGuestCounter(
                           label: 'Children',
-                          subtitle: 'Ages 2–12',
+                          subtitle: 'Ages 2=12',
                           value: state.children,
                           onChanged: context
                               .read<BookingDetailsCubit>()

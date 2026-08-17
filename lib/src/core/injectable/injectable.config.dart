@@ -31,6 +31,8 @@ import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
 import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart'
     as _i458;
+import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart'
+    as _i488;
 import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart'
     as _i758;
 import 'package:aquabook/src/features/business-side/home/bloc/client_entry_cubit.dart'
@@ -195,6 +197,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i415.PaymentCubit>(
       () => _i415.PaymentCubit(gh<_i961.BookingRepository>()),
+    );
+    gh.factory<_i488.ClientBookingsCubit>(
+      () => _i488.ClientBookingsCubit(
+        gh<_i961.BookingRepository>(),
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
     );
     return this;
   }

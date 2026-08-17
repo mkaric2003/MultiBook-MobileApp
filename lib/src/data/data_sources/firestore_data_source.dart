@@ -48,6 +48,14 @@ abstract class FirestoreDataSource {
     listSerializer,
   });
 
+  DataCursor<T> createCursorWhereAll<T>({
+    required String collection,
+    required Map<String, Object> filters,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
+  });
+
   Future<Map<String, dynamic>?> getDocument({
     required String collection,
     required String documentId,
@@ -171,6 +179,22 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
         .where(field, isEqualTo: value)
         .limit(pageSize);
     return DataCursor<T>(query, listSerializer);
+  }
+
+  @override
+  DataCursor<T> createCursorWhereAll<T>({
+    required String collection,
+    required Map<String, Object> filters,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
+  }) {
+    Query<Map<String, dynamic>> query = _firestore.collection(collection);
+    for (final filter in filters.entries) {
+      query = query.where(filter.key, isEqualTo: filter.value);
+    }
+
+    return DataCursor<T>(query.limit(pageSize), listSerializer);
   }
 
   @override

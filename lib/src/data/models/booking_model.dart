@@ -12,6 +12,8 @@ class BookingModel with BookingModelMappable {
     required this.businessId,
     required this.businessOwnerId,
     required this.customerId,
+    required this.customerName,
+    required this.customerEmail,
     required this.businessName,
     required this.businessCity,
     required this.businessImageUrl,
@@ -32,12 +34,15 @@ class BookingModel with BookingModelMappable {
     required this.paymentMethod,
     required this.confirmationCode,
     this.roomType,
+    this.customerAvatarUrl,
     this.createdAt,
   });
   final String id;
   final String businessId;
   final String businessOwnerId;
   final String customerId;
+  final String customerName;
+  final String customerEmail;
   final String businessName;
   final String businessCity;
   final String businessImageUrl;
@@ -58,5 +63,6 @@ class BookingModel with BookingModelMappable {
   final String paymentMethod;
   final String confirmationCode;
   final String? roomType;
+  final String? customerAvatarUrl;
   final DateTime? createdAt;
 }
