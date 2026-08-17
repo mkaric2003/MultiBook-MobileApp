@@ -5,10 +5,18 @@ import 'package:aquabook/src/features/customer-side/stay_detail/presentation/wid
 import 'package:flutter/material.dart';
 
 class StayDetailHero extends StatelessWidget {
-  const StayDetailHero({super.key, required this.stay, required this.onBack});
+  const StayDetailHero({
+    super.key,
+    required this.stay,
+    required this.onBack,
+    required this.isSaved,
+    required this.onSaved,
+  });
 
   final StayListing stay;
   final VoidCallback onBack;
+  final bool isSaved;
+  final VoidCallback onSaved;
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +51,19 @@ class StayDetailHero extends StatelessWidget {
               onPressed: onBack,
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 45,
             right: 76,
             child: StayDetailActionButton(icon: Icons.ios_share_outlined),
           ),
-          const Positioned(
+          Positioned(
             top: 45,
             right: 18,
-            child: StayDetailActionButton(icon: Icons.favorite_border),
+            child: StayDetailActionButton(
+              icon: isSaved ? Icons.favorite : Icons.favorite_border,
+              onPressed: onSaved,
+              iconColor: isSaved ? Colors.red : Colors.white,
+            ),
           ),
           if (galleryImages.length > 1)
             Positioned(

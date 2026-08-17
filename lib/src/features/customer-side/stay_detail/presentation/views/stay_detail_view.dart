@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/cubit/stay_detail_cubit.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/cubit/stay_detail_state.dart';
@@ -14,6 +14,7 @@ import 'package:aquabook/src/features/customer-side/stay_detail/presentation/wid
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 class StayDetailView extends StatelessWidget {
   const StayDetailView({super.key, required this.stay});
@@ -49,7 +50,32 @@ class StayDetailView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    StayDetailHero(stay: listing, onBack: () => context.pop()),
+                    StayDetailHero(
+                      stay: listing,
+                      onBack: () => context.pop(),
+                      isSaved: state.isSaved,
+                      onSaved: () async {
+                        final wasSaved = state.isSaved;
+                        await context.read<StayDetailCubit>().toggleSaved(
+                          listing,
+                        );
+                        if (context.mounted) {
+                          toastification.show(
+                            context: context,
+                            autoCloseDuration: const Duration(seconds: 2),
+                            type: wasSaved
+                                ? ToastificationType.warning
+                                : ToastificationType.success,
+                            alignment: Alignment.bottomCenter,
+                            title: Text(
+                              wasSaved
+                                  ? 'Removed from saved'
+                                  : 'Added to saved',
+                            ),
+                          );
+                        }
+                      },
+                    ),
                     StayOverview(stay: listing),
                     StayBookingPanel(stay: listing),
                     AvailableRoomsSection(business: business, stay: listing),

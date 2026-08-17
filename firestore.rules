@@ -36,5 +36,9 @@ service cloud.firestore {
         && request.auth.uid == userId
         && (request.method != 'create' || request.resource.data.customerId == request.auth.uid);
     }
+    match /saved_businesses/{userId}/items/{businessId} {
+      allow read, create, update, delete: if request.auth != null
+        && request.auth.uid == userId;
+    }
   }
 }

@@ -25,6 +25,10 @@ abstract class FirestoreDataSource {
     required Object value,
   });
 
+  Future<List<Map<String, dynamic>>> getDocuments({
+    required String collection,
+  });
+
   Future<List<Map<String, dynamic>>> getDocumentsWhereArrayContains({
     required String collection,
     required String field,
@@ -131,6 +135,14 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
         .collection(collection)
         .where(field, isEqualTo: value)
         .get();
+    return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getDocuments({
+    required String collection,
+  }) async {
+    final query = await _firestore.collection(collection).get();
     return query.docs.map((document) => document.data()).toList();
   }
 

@@ -22,12 +22,12 @@ class CustomerHomeView extends StatelessWidget {
           return Scaffold(
             body: IndexedStack(
               index: state.currentTabIndex,
-              children: const [
-                CustomerDashboardView(),
-                ExploreView(),
-                CustomerBookingsView(),
-                SavedView(),
-                CustomerProfileView(),
+              children: [
+                const CustomerDashboardView(),
+                const ExploreView(),
+                const CustomerBookingsView(),
+                SavedView(key: ValueKey(state.currentTabIndex)),
+                const CustomerProfileView(),
               ],
             ),
             bottomNavigationBar: CustomerBottomNavigation(
