@@ -13,6 +13,8 @@ class UserModel with UserModelMappable {
     required this.email,
     this.type = UserType.provider,
     this.selectedBusinessId,
+    this.phoneNumber,
+    this.profileImageUrl,
   });
 
   final String id;
@@ -22,4 +24,6 @@ class UserModel with UserModelMappable {
   final String email;
   final UserType type;
   final String? selectedBusinessId;
+  final String? phoneNumber;
+  final String? profileImageUrl;
 }

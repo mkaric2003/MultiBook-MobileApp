@@ -14,6 +14,7 @@ class AppRoutes {
   static const BOOKING_CONFIRMED = '/booking-confirmed';
   static const ADD_BUSINESS = '/add-business';
   static const MY_BUSINESSES = '/my-businesses';
+  static const ACCOUNT_SETTINGS = '/account-settings';
   static const ONBOARDING = '/onboarding';
   static const USER_TYPE_CHECKER = '/user-type-checker';
   static const SIGNIN = '/sign-in';

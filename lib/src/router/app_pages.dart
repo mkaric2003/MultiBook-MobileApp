@@ -103,6 +103,11 @@ final router = GoRouter(
       builder: (context, state) => const MyBusinessesView(),
     ),
     GoRoute(
+      path: AppRoutes.ACCOUNT_SETTINGS,
+      name: AppRoutes.ACCOUNT_SETTINGS,
+      builder: (context, state) => const AccountSettingsView(),
+    ),
+    GoRoute(
       path: AppRoutes.SIGNUP,
       name: AppRoutes.SIGNUP,
       builder: (context, state) => const SignupView(),

@@ -3,6 +3,7 @@ import 'package:aquabook/src/core/theme/app_theme.dart';
 import 'package:aquabook/src/data/repositories/authentication_repository.dart';
 import 'package:aquabook/src/data/repositories/onboarding_repository.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
+import 'package:aquabook/src/features/business-side/account_settings/presentation/views/account_settings_view.dart';
 import 'package:aquabook/src/features/business-side/home/presentation/views/client_entry_view.dart';
 import 'package:aquabook/src/features/business-side/home/presentation/views/home_view.dart';
 import 'package:aquabook/src/features/business-side/my_businesses/presentation/views/my_businesses_view.dart';

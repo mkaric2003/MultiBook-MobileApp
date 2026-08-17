@@ -54,6 +54,18 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     _$selectedBusinessId,
     opt: true,
   );
+  static String? _$phoneNumber(UserModel v) => v.phoneNumber;
+  static const Field<UserModel, String> _f$phoneNumber = Field(
+    'phoneNumber',
+    _$phoneNumber,
+    opt: true,
+  );
+  static String? _$profileImageUrl(UserModel v) => v.profileImageUrl;
+  static const Field<UserModel, String> _f$profileImageUrl = Field(
+    'profileImageUrl',
+    _$profileImageUrl,
+    opt: true,
+  );
 
   @override
   final MappableFields<UserModel> fields = const {
@@ -64,6 +76,8 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     #email: _f$email,
     #type: _f$type,
     #selectedBusinessId: _f$selectedBusinessId,
+    #phoneNumber: _f$phoneNumber,
+    #profileImageUrl: _f$profileImageUrl,
   };
 
   static UserModel _instantiate(DecodingData data) {
@@ -75,6 +89,8 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
       email: data.dec(_f$email),
       type: data.dec(_f$type),
       selectedBusinessId: data.dec(_f$selectedBusinessId),
+      phoneNumber: data.dec(_f$phoneNumber),
+      profileImageUrl: data.dec(_f$profileImageUrl),
     );
   }
 
@@ -145,6 +161,8 @@ abstract class UserModelCopyWith<$R, $In extends UserModel, $Out>
     String? email,
     UserType? type,
     String? selectedBusinessId,
+    String? phoneNumber,
+    String? profileImageUrl,
   });
   UserModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -166,6 +184,8 @@ class _UserModelCopyWithImpl<$R, $Out>
     String? email,
     UserType? type,
     Object? selectedBusinessId = $none,
+    Object? phoneNumber = $none,
+    Object? profileImageUrl = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -175,6 +195,8 @@ class _UserModelCopyWithImpl<$R, $Out>
       if (email != null) #email: email,
       if (type != null) #type: type,
       if (selectedBusinessId != $none) #selectedBusinessId: selectedBusinessId,
+      if (phoneNumber != $none) #phoneNumber: phoneNumber,
+      if (profileImageUrl != $none) #profileImageUrl: profileImageUrl,
     }),
   );
   @override
@@ -189,6 +211,8 @@ class _UserModelCopyWithImpl<$R, $Out>
       #selectedBusinessId,
       or: $value.selectedBusinessId,
     ),
+    phoneNumber: data.get(#phoneNumber, or: $value.phoneNumber),
+    profileImageUrl: data.get(#profileImageUrl, or: $value.profileImageUrl),
   );
 
   @override

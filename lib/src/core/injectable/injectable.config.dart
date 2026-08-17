@@ -29,6 +29,8 @@ import 'package:aquabook/src/data/repositories/business_repository.dart'
 import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
     as _i366;
 import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
+import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_cubit.dart'
+    as _i57;
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart'
     as _i458;
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart'
@@ -39,6 +41,8 @@ import 'package:aquabook/src/features/business-side/home/bloc/client_entry_cubit
     as _i1018;
 import 'package:aquabook/src/features/business-side/home/bloc/home_bloc.dart'
     as _i952;
+import 'package:aquabook/src/features/business-side/more/bloc/more_cubit.dart'
+    as _i556;
 import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_cubit.dart'
     as _i908;
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart'
@@ -117,6 +121,17 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i747.UserRepository(
         gh<_i137.AuthenticationDataSource>(),
         gh<_i151.FirestoreDataSource>(),
+        gh<_i83.FirebaseStorageDataSource>(),
+      ),
+    );
+    gh.factory<_i30.UserTypeCheckerCubit>(
+      () => _i30.UserTypeCheckerCubit(gh<_i747.UserRepository>()),
+    );
+    gh.factory<_i57.AccountSettingsCubit>(
+      () => _i57.AccountSettingsCubit(
+        gh<_i747.UserRepository>(),
+        gh<_i1069.ImagePickerDataSource>(),
+        gh<_i460.SharedPreferences>(),
       ),
     );
     gh.lazySingleton<_i472.AuthenticationRepository>(
@@ -160,9 +175,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i192.ReviewStayCubit>(
       () => _i192.ReviewStayCubit(gh<_i1065.BusinessRepository>()),
     );
-    gh.factory<_i30.UserTypeCheckerCubit>(
-      () => _i30.UserTypeCheckerCubit(gh<_i747.UserRepository>()),
-    );
     gh.factory<_i1018.ClientEntryCubit>(
       () => _i1018.ClientEntryCubit(
         gh<_i1065.BusinessRepository>(),
@@ -171,6 +183,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i908.MyBusinessesCubit>(
       () => _i908.MyBusinessesCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i556.MoreCubit>(
+      () => _i556.MoreCubit(
         gh<_i1065.BusinessRepository>(),
         gh<_i747.UserRepository>(),
       ),

@@ -315,6 +315,8 @@ class AuthenticationRepository {
       'email': email,
       'type': UserType.provider.name,
       'selectedBusinessId': null,
+      'phoneNumber': null,
+      'profileImageUrl': null,
       'createdAt': _firestoreDataSource.serverTimestamp,
     },
   );
