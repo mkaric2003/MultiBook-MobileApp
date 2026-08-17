@@ -19,8 +19,11 @@ class ReviewStayView extends StatelessWidget {
   final ReviewStayArguments arguments;
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (_) =>
-        getIt<ReviewStayCubit>()..loadStay(arguments.booking.stay.id),
+    create: (_) => getIt<ReviewStayCubit>()
+      ..loadStay(
+        arguments.booking.stay.id,
+        selectedExtras: arguments.booking.draft?.selectedExtras ?? const [],
+      ),
     child: BlocBuilder<ReviewStayCubit, ReviewStayState>(
       builder: (context, state) {
         if (state.isLoading || state.business == null) {
@@ -41,7 +44,40 @@ class ReviewStayView extends StatelessWidget {
           body: SafeArea(
             child: Column(
               children: [
-                const CustomAppBar(title: 'Review your stay'),
+                CustomAppBar(
+                  title: 'Review your stay',
+                  onBackPressed: () async {
+                    final save = await showDialog<bool>(
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        title: const Text('Save booking draft?'),
+                        content: const Text(
+                          'Your selected extras will also be saved.',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(dialogContext, false),
+                            child: const Text('Discard'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(dialogContext, true),
+                            child: const Text('Save draft'),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (!context.mounted) return;
+                    if (save == true) {
+                      await context.read<ReviewStayCubit>().saveDraft(
+                        arguments,
+                      );
+                      if (context.mounted) context.go(AppRoutes.CUSTOMER_HOME);
+                      return;
+                    }
+                    context.pop();
+                  },
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(22, 22, 22, 28),

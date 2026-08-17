@@ -1,6 +1,7 @@
 import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
+import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
@@ -9,10 +10,11 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
-  CustomerDashboardCubit(this._businessRepository)
+  CustomerDashboardCubit(this._businessRepository, this._draftRepository)
     : super(const CustomerDashboardState());
 
   final BusinessRepository _businessRepository;
+  final BookingDraftRepository _draftRepository;
   DataCursor<BusinessModel>? _staysCursor;
 
   void selectTab(CustomerHomeTab tab) {
@@ -24,6 +26,22 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         isOtherStaysLoading: state.isOtherStaysLoading,
         otherStays: state.otherStays,
         hasMoreOtherStays: state.hasMoreOtherStays,
+        bookingDraft: state.bookingDraft,
+      ),
+    );
+  }
+
+  Future<void> loadDraft() async {
+    final draft = await _draftRepository.getDraft();
+    emit(
+      CustomerDashboardState(
+        selectedTab: state.selectedTab,
+        isRecommendedStaysLoading: state.isRecommendedStaysLoading,
+        recommendedStays: state.recommendedStays,
+        isOtherStaysLoading: state.isOtherStaysLoading,
+        otherStays: state.otherStays,
+        hasMoreOtherStays: state.hasMoreOtherStays,
+        bookingDraft: draft,
       ),
     );
   }
@@ -41,6 +59,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         isOtherStaysLoading: state.isOtherStaysLoading,
         otherStays: state.otherStays,
         hasMoreOtherStays: state.hasMoreOtherStays,
+        bookingDraft: state.bookingDraft,
       ),
     );
     await loadMoreStays();
@@ -60,6 +79,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         isOtherStaysLoading: true,
         otherStays: state.otherStays,
         hasMoreOtherStays: state.hasMoreOtherStays,
+        bookingDraft: state.bookingDraft,
       ),
     );
 
@@ -83,6 +103,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
           isOtherStaysLoading: false,
           otherStays: [...state.otherStays, ...newStays],
           hasMoreOtherStays: !_staysCursor!.isEverythingLoaded,
+          bookingDraft: state.bookingDraft,
         ),
       );
     } catch (_) {
@@ -94,6 +115,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
           isOtherStaysLoading: false,
           otherStays: state.otherStays,
           hasMoreOtherStays: false,
+          bookingDraft: state.bookingDraft,
         ),
       );
     }

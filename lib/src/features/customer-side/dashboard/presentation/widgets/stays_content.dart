@@ -1,4 +1,5 @@
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/data/models/booking_draft_model.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/continue_booking_card.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_section_title.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/other_stays_grid.dart';
@@ -19,6 +20,7 @@ class StaysContent extends HookWidget {
     required this.isOtherStaysLoading,
     required this.hasMoreOtherStays,
     required this.onLoadMoreStays,
+    this.bookingDraft,
   });
 
   final List<StayListing> nearbyStays;
@@ -28,6 +30,7 @@ class StaysContent extends HookWidget {
   final bool isOtherStaysLoading;
   final bool hasMoreOtherStays;
   final Future<void> Function() onLoadMoreStays;
+  final BookingDraftModel? bookingDraft;
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +61,12 @@ class StaysContent extends HookWidget {
           const SizedBox(height: 28),
           const PromotionBanner(),
           const SizedBox(height: 28),
-          const CustomerSectionTitle(title: 'Continue booking'),
-          const SizedBox(height: 14),
-          const ContinueBookingCard(),
-          const SizedBox(height: 28),
+          if (bookingDraft != null) ...[
+            const CustomerSectionTitle(title: 'Continue booking'),
+            const SizedBox(height: 14),
+            ContinueBookingCard(draft: bookingDraft!),
+            const SizedBox(height: 28),
+          ],
           const CustomerSectionTitle(title: 'Popular near you'),
           const SizedBox(height: 14),
           Row(

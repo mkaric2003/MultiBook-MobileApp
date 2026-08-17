@@ -41,7 +41,12 @@ class CustomerDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<CustomerDashboardCubit>()..loadRecommendedStays(),
+      create: (_) {
+        final cubit = getIt<CustomerDashboardCubit>();
+        cubit.loadRecommendedStays();
+        cubit.loadDraft();
+        return cubit;
+      },
       child: BlocBuilder<CustomerDashboardCubit, CustomerDashboardState>(
         builder: (context, state) {
           return SafeArea(
@@ -79,6 +84,7 @@ class CustomerDashboardView extends StatelessWidget {
                           onLoadMoreStays: context
                               .read<CustomerDashboardCubit>()
                               .loadMoreStays,
+                          bookingDraft: state.bookingDraft,
                         )
                       : const Center(child: Text('Services coming soon')),
                 ),

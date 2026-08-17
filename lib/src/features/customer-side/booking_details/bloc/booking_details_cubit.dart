@@ -1,16 +1,50 @@
 import 'package:aquabook/src/data/enums/booking_status.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/data/repositories/booking_repository.dart';
+import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
+import 'package:aquabook/src/data/models/booking_draft_model.dart';
+import 'package:aquabook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class BookingDetailsCubit extends Cubit<BookingDetailsState> {
-  BookingDetailsCubit(this._bookingRepository)
+  BookingDetailsCubit(this._bookingRepository, this._draftRepository)
     : super(BookingDetailsState.initial());
 
   final BookingRepository _bookingRepository;
+  final BookingDraftRepository _draftRepository;
+
+  void restoreDraft(BookingDraftModel draft) => emit(
+    state.copyWith(
+      checkIn: draft.checkIn,
+      checkOut: draft.checkOut,
+      visibleMonth: DateTime(draft.checkIn.year, draft.checkIn.month),
+      adults: draft.adults,
+      children: draft.children,
+      infants: draft.infants,
+    ),
+  );
+
+  Future<void> saveDraft(BookingDetailsArguments arguments) =>
+      _draftRepository.saveDraft(
+        BookingDraftModel(
+          id: '',
+          businessId: arguments.stay.id,
+          businessName: arguments.stay.name,
+          businessLocation: arguments.stay.location,
+          businessImageUrl: arguments.stay.imageUrl,
+          pricePerNight:
+              arguments.pricePerNight ?? arguments.stay.pricePerNight ?? 0,
+          checkIn: state.checkIn,
+          checkOut: state.checkOut,
+          adults: state.adults,
+          children: state.children,
+          infants: state.infants,
+          roomTypeId: arguments.room?.id,
+        ),
+      );
 
   Future<void> loadAvailability(String businessId) async {
     emit(state.copyWith(isLoadingAvailability: true));
@@ -20,10 +54,16 @@ class BookingDetailsCubit extends Cubit<BookingDetailsState> {
       );
       final unavailableDates = _unavailableDates(bookings);
       final checkIn = _nextAvailableDate(state.checkIn, unavailableDates);
-      final checkOut = _nextAvailableDate(
-        checkIn.add(const Duration(days: 1)),
-        unavailableDates,
-      );
+      final canRestoreRange =
+          _sameDay(checkIn, state.checkIn) &&
+          state.checkOut.isAfter(checkIn) &&
+          !_hasUnavailableDateBetween(checkIn, state.checkOut);
+      final checkOut = canRestoreRange
+          ? state.checkOut
+          : _nextAvailableDate(
+              checkIn.add(const Duration(days: 1)),
+              unavailableDates,
+            );
       emit(
         state.copyWith(
           unavailableDates: unavailableDates,

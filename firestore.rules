@@ -30,5 +30,11 @@ service cloud.firestore {
         && request.resource.data.customerId == resource.data.customerId
         && request.resource.data.businessOwnerId == resource.data.businessOwnerId;
     }
+
+    match /booking_drafts/{userId} {
+      allow read, create, update, delete: if request.auth != null
+        && request.auth.uid == userId
+        && (request.method != 'create' || request.resource.data.customerId == request.auth.uid);
+    }
   }
 }

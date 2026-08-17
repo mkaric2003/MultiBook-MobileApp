@@ -23,15 +23,55 @@ class BookingDetailsView extends StatelessWidget {
     final pricePerNight =
         arguments.pricePerNight ?? arguments.stay.pricePerNight ?? 0;
     return BlocProvider(
-      create: (_) =>
-          getIt<BookingDetailsCubit>()..loadAvailability(arguments.stay.id),
+      create: (_) {
+        final cubit = getIt<BookingDetailsCubit>();
+        if (arguments.draft != null) cubit.restoreDraft(arguments.draft!);
+        return cubit..loadAvailability(arguments.stay.id);
+      },
       child: BlocBuilder<BookingDetailsCubit, BookingDetailsState>(
         builder: (context, state) => Scaffold(
           backgroundColor: AppColors.background,
           body: SafeArea(
             child: Column(
               children: [
-                const CustomAppBar(title: 'Booking details'),
+                CustomAppBar(
+                  title: 'Booking details',
+                  onBackPressed: () async {
+                    final shouldSave = await showDialog<bool>(
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        title: const Text('Save booking draft?'),
+                        content: const Text(
+                          'You can continue this booking later from Home.',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(dialogContext, false),
+                            child: const Text('Discard'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(dialogContext, true),
+                            child: const Text('Save draft'),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (!context.mounted) return;
+                    if (shouldSave == true) {
+                      await context.read<BookingDetailsCubit>().saveDraft(
+                        arguments,
+                      );
+                      if (context.mounted) {
+                        context.go(AppRoutes.CUSTOMER_HOME);
+                      }
+                      return;
+                    }
+                    if (context.mounted) {
+                      context.pop();
+                    }
+                  },
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(22, 24, 22, 28),

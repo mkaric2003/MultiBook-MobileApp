@@ -1,9 +1,16 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:aquabook/app.dart';
+import 'package:aquabook/src/data/models/booking_draft_model.dart';
+import 'package:aquabook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class ContinueBookingCard extends StatelessWidget {
-  const ContinueBookingCard({super.key});
+  const ContinueBookingCard({super.key, required this.draft});
+  final BookingDraftModel draft;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,7 @@ class ContinueBookingCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=160&q=80',
+                  draft.businessImageUrl,
                   width: 65,
                   height: 65,
                   fit: BoxFit.cover,
@@ -33,12 +40,12 @@ class ContinueBookingCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 13),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hotel Aurora',
+                      draft.businessName,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -46,12 +53,12 @@ class ContinueBookingCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Oct 18–20 • 2 guests',
+                      '${DateFormat('dd.MM').format(draft.checkIn)}–${DateFormat('dd.MM').format(draft.checkOut)} • ${draft.adults + draft.children + draft.infants} guests',
                       style: TextStyle(color: AppColors.muted, fontSize: 14),
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '\$245/night',
+                      '\$${draft.pricePerNight}/night',
                       style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w800,
@@ -63,7 +70,26 @@ class ContinueBookingCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          CustomButton(buttonName: 'Resume', onPressed: () {}, height: 41),
+          CustomButton(
+            buttonName: 'Resume',
+            height: 41,
+            onPressed: () async => context.push(
+              AppRoutes.BOOKING_DETAILS,
+              extra: BookingDetailsArguments(
+                stay: StayListing(
+                  id: draft.businessId,
+                  name: draft.businessName,
+                  location: draft.businessLocation,
+                  pricePerNight: draft.pricePerNight,
+                  rating: 0,
+                  reviewCount: 0,
+                  imageUrl: draft.businessImageUrl,
+                ),
+                pricePerNight: draft.pricePerNight,
+                draft: draft,
+              ),
+            ),
+          ),
         ],
       ),
     );

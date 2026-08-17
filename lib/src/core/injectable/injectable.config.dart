@@ -23,6 +23,8 @@ import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart'
 import 'package:aquabook/src/data/models/booking_model.dart' as _i405;
 import 'package:aquabook/src/data/repositories/authentication_repository.dart'
     as _i472;
+import 'package:aquabook/src/data/repositories/booking_draft_repository.dart'
+    as _i64;
 import 'package:aquabook/src/data/repositories/booking_repository.dart'
     as _i961;
 import 'package:aquabook/src/data/repositories/business_repository.dart'
@@ -149,6 +151,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
       ),
     );
+    gh.lazySingleton<_i64.BookingDraftRepository>(
+      () => _i64.BookingDraftRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i1065.BusinessRepository>(
       () => _i1065.BusinessRepository(
         gh<_i137.AuthenticationDataSource>(),
@@ -172,17 +180,17 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
       ),
     );
-    gh.factory<_i567.CustomerDashboardCubit>(
-      () => _i567.CustomerDashboardCubit(gh<_i1065.BusinessRepository>()),
+    gh.factory<_i192.ReviewStayCubit>(
+      () => _i192.ReviewStayCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i64.BookingDraftRepository>(),
+      ),
     );
     gh.factory<_i940.CustomerSearchCubit>(
       () => _i940.CustomerSearchCubit(gh<_i1065.BusinessRepository>()),
     );
     gh.factory<_i386.StayDetailCubit>(
       () => _i386.StayDetailCubit(gh<_i1065.BusinessRepository>()),
-    );
-    gh.factory<_i192.ReviewStayCubit>(
-      () => _i192.ReviewStayCubit(gh<_i1065.BusinessRepository>()),
     );
     gh.factory<_i1018.ClientEntryCubit>(
       () => _i1018.ClientEntryCubit(
@@ -215,17 +223,26 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
       ),
     );
-    gh.factory<_i259.BookingDetailsCubit>(
-      () => _i259.BookingDetailsCubit(gh<_i961.BookingRepository>()),
-    );
     gh.factory<_i274.CustomerBookingsCubit>(
       () => _i274.CustomerBookingsCubit(gh<_i961.BookingRepository>()),
+    );
+    gh.factory<_i259.BookingDetailsCubit>(
+      () => _i259.BookingDetailsCubit(
+        gh<_i961.BookingRepository>(),
+        gh<_i64.BookingDraftRepository>(),
+      ),
     );
     gh.factory<_i458.AddBusinessBloc>(
       () => _i458.AddBusinessBloc(
         gh<_i1069.ImagePickerDataSource>(),
         gh<_i460.SharedPreferences>(),
         gh<_i1065.BusinessRepository>(),
+      ),
+    );
+    gh.factory<_i567.CustomerDashboardCubit>(
+      () => _i567.CustomerDashboardCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i64.BookingDraftRepository>(),
       ),
     );
     gh.factoryParam<
@@ -237,9 +254,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i961.BookingRepository>(),
         booking,
       ),
-    );
-    gh.factory<_i415.PaymentCubit>(
-      () => _i415.PaymentCubit(gh<_i961.BookingRepository>()),
     );
     gh.factory<_i488.ClientBookingsCubit>(
       () => _i488.ClientBookingsCubit(
@@ -253,6 +267,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i961.BookingRepository>(),
         gh<_i1065.BusinessRepository>(),
         gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i415.PaymentCubit>(
+      () => _i415.PaymentCubit(
+        gh<_i961.BookingRepository>(),
+        gh<_i64.BookingDraftRepository>(),
       ),
     );
     return this;
