@@ -5,7 +5,7 @@ import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/user_type.dart';
 import 'package:aquabook/src/data/models/user_model.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:aquabook/utils/image_utils.dart';
@@ -45,7 +45,7 @@ class UserRepository {
         return null;
       }
 
-      return UserModelMapper.fromMap(userData);
+      return UserModelMapper.fromMap(_normalizeUserData(userData));
     } on FirebaseException catch (error, stackTrace) {
       log(
         'Could not load the current user: ${error.code}',
@@ -95,6 +95,9 @@ class UserRepository {
     required String lastName,
     required String phoneNumber,
     String? profileImagePath,
+    String? countryCode,
+    DateTime? dateOfBirth,
+    String? address,
   }) async {
     final currentUser = _authenticationDataSource.currentUser;
     if (currentUser == null) {
@@ -140,6 +143,9 @@ class UserRepository {
           'fullName': fullName,
           'phoneNumber': trimmedPhoneNumber.isEmpty ? null : trimmedPhoneNumber,
           'profileImageUrl': profileImageUrl,
+          'countryCode': countryCode,
+          'dateOfBirth': dateOfBirth,
+          'address': address?.trim().isEmpty ?? true ? null : address!.trim(),
           'updatedAt': _firestoreDataSource.serverTimestamp,
         },
       );
@@ -150,6 +156,9 @@ class UserRepository {
         fullName: fullName,
         phoneNumber: trimmedPhoneNumber.isEmpty ? null : trimmedPhoneNumber,
         profileImageUrl: profileImageUrl,
+        countryCode: countryCode,
+        dateOfBirth: dateOfBirth,
+        address: address?.trim().isEmpty ?? true ? null : address!.trim(),
       );
     } on FirebaseException catch (error, stackTrace) {
       log(
@@ -160,5 +169,14 @@ class UserRepository {
       );
       throw const UserException('We could not update your profile.');
     }
+  }
+
+  Map<String, dynamic> _normalizeUserData(Map<String, dynamic> userData) {
+    final normalizedData = Map<String, dynamic>.from(userData);
+    final dateOfBirth = normalizedData['dateOfBirth'];
+    if (dateOfBirth is Timestamp) {
+      normalizedData['dateOfBirth'] = dateOfBirth.millisecondsSinceEpoch;
+    }
+    return normalizedData;
   }
 }

@@ -2,8 +2,8 @@ import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @injectable
@@ -46,6 +46,9 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
     required String firstName,
     required String lastName,
     required String phoneNumber,
+    String? countryCode,
+    DateTime? dateOfBirth,
+    String? address,
   }) async {
     if (state.isSaving) {
       return;
@@ -66,6 +69,9 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
         lastName: lastName,
         phoneNumber: phoneNumber,
         profileImagePath: state.profileImagePath,
+        countryCode: countryCode,
+        dateOfBirth: dateOfBirth,
+        address: address,
       );
       emit(
         AccountSettingsState(

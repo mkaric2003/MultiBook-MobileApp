@@ -114,6 +114,11 @@ final router = GoRouter(
       builder: (context, state) => const AccountSettingsView(),
     ),
     GoRoute(
+      path: AppRoutes.CUSTOMER_EDIT_PROFILE,
+      name: AppRoutes.CUSTOMER_EDIT_PROFILE,
+      builder: (context, state) => const CustomerEditProfileView(),
+    ),
+    GoRoute(
       path: AppRoutes.AVAILABILITY_CALENDAR,
       name: AppRoutes.AVAILABILITY_CALENDAR,
       builder: (context, state) => const AvailabilityCalendarView(),

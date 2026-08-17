@@ -16,6 +16,7 @@ class AppRoutes {
   static const ADD_BUSINESS = '/add-business';
   static const MY_BUSINESSES = '/my-businesses';
   static const ACCOUNT_SETTINGS = '/account-settings';
+  static const CUSTOMER_EDIT_PROFILE = '/customer-edit-profile';
   static const AVAILABILITY_CALENDAR = '/availability-calendar';
   static const ONBOARDING = '/onboarding';
   static const USER_TYPE_CHECKER = '/user-type-checker';

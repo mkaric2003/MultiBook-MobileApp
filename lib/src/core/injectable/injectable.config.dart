@@ -155,14 +155,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
       ),
     );
-    gh.lazySingleton<_i64.BookingDraftRepository>(
-      () => _i64.BookingDraftRepository(
+    gh.lazySingleton<_i390.SavedBusinessRepository>(
+      () => _i390.SavedBusinessRepository(
         gh<_i137.AuthenticationDataSource>(),
         gh<_i151.FirestoreDataSource>(),
       ),
     );
-    gh.lazySingleton<_i390.SavedBusinessRepository>(
-      () => _i390.SavedBusinessRepository(
+    gh.lazySingleton<_i64.BookingDraftRepository>(
+      () => _i64.BookingDraftRepository(
         gh<_i137.AuthenticationDataSource>(),
         gh<_i151.FirestoreDataSource>(),
       ),
@@ -180,9 +180,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i952.HomeBloc>(
       () => _i952.HomeBloc(gh<_i472.AuthenticationRepository>()),
-    );
-    gh.factory<_i897.CustomerProfileCubit>(
-      () => _i897.CustomerProfileCubit(gh<_i472.AuthenticationRepository>()),
     );
     gh.factory<_i758.DashboardCubit>(
       () => _i758.DashboardCubit(
@@ -205,20 +202,26 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
       ),
     );
-    gh.factory<_i908.MyBusinessesCubit>(
-      () => _i908.MyBusinessesCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i747.UserRepository>(),
-      ),
-    );
     gh.factory<_i556.MoreCubit>(
       () => _i556.MoreCubit(
         gh<_i1065.BusinessRepository>(),
         gh<_i747.UserRepository>(),
       ),
     );
+    gh.factory<_i908.MyBusinessesCubit>(
+      () => _i908.MyBusinessesCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
     gh.factory<_i551.SavedCubit>(
       () => _i551.SavedCubit(gh<_i390.SavedBusinessRepository>()),
+    );
+    gh.factory<_i897.CustomerProfileCubit>(
+      () => _i897.CustomerProfileCubit(
+        gh<_i472.AuthenticationRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
     );
     gh.factory<_i44.SigninCubit>(
       () => _i44.SigninCubit(

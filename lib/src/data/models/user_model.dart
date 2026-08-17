@@ -15,6 +15,9 @@ class UserModel with UserModelMappable {
     this.selectedBusinessId,
     this.phoneNumber,
     this.profileImageUrl,
+    this.countryCode,
+    this.dateOfBirth,
+    this.address,
   });
 
   final String id;
@@ -26,4 +29,7 @@ class UserModel with UserModelMappable {
   final String? selectedBusinessId;
   final String? phoneNumber;
   final String? profileImageUrl;
+  final String? countryCode;
+  final DateTime? dateOfBirth;
+  final String? address;
 }
