@@ -1,16 +1,15 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:flutter/material.dart';
+import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
+import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_body.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerBookingsView extends StatelessWidget {
   const CustomerBookingsView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Bookings',
-        style: TextStyle(color: AppColors.muted, fontSize: 18),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) => getIt<CustomerBookingsCubit>()..load(),
+    child: const CustomerBookingsBody(),
+  );
 }

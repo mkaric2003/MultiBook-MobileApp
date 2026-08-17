@@ -1,0 +1,1 @@
+enum CustomerBookingType { stays, services }

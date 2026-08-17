@@ -93,6 +93,12 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: AppRoutes.CUSTOMER_BOOKING_DETAILS,
+      name: AppRoutes.CUSTOMER_BOOKING_DETAILS,
+      builder: (context, state) =>
+          CustomerBookingDetailsView(booking: state.extra! as BookingModel),
+    ),
+    GoRoute(
       path: AppRoutes.ADD_BUSINESS,
       name: AppRoutes.ADD_BUSINESS,
       builder: (context, state) => const AddBusinessView(),

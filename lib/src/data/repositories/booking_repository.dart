@@ -218,6 +218,22 @@ class BookingRepository {
     return bookings;
   }
 
+  DataCursor<BookingModel> getCustomerBookingsCursor({int pageSize = 20}) {
+    final customerId = _auth.currentUser?.uid;
+    if (customerId == null) {
+      throw const BookingException('You need to sign in to view bookings.');
+    }
+
+    return _firestore.createCursorWhere<BookingModel>(
+      collection: _collection,
+      field: 'customerId',
+      value: customerId,
+      pageSize: pageSize,
+      listSerializer: (documents) =>
+          documents.map(_bookingFromDocument).toList(),
+    );
+  }
+
   Future<void> cancelBooking({required String bookingId}) async {
     final ownerId = _auth.currentUser?.uid;
     if (ownerId == null) {

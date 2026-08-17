@@ -12,6 +12,7 @@ class AppRoutes {
   static const REVIEW_STAY = '/review-stay';
   static const PAYMENT = '/payment';
   static const BOOKING_CONFIRMED = '/booking-confirmed';
+  static const CUSTOMER_BOOKING_DETAILS = '/customer-booking-details';
   static const ADD_BUSINESS = '/add-business';
   static const MY_BUSINESSES = '/my-businesses';
   static const ACCOUNT_SETTINGS = '/account-settings';
