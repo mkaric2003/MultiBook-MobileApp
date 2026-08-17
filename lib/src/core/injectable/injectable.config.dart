@@ -22,6 +22,8 @@ import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart'
     as _i1069;
 import 'package:aquabook/src/data/repositories/authentication_repository.dart'
     as _i472;
+import 'package:aquabook/src/data/repositories/booking_repository.dart'
+    as _i961;
 import 'package:aquabook/src/data/repositories/business_repository.dart'
     as _i1065;
 import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
@@ -39,6 +41,8 @@ import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_busine
     as _i908;
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart'
     as _i567;
+import 'package:aquabook/src/features/customer-side/payment/cubit/payment_cubit.dart'
+    as _i415;
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_cubit.dart'
     as _i897;
 import 'package:aquabook/src/features/customer-side/review_stay/cubit/review_stay_cubit.dart'
@@ -175,12 +179,22 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
       ),
     );
+    gh.lazySingleton<_i961.BookingRepository>(
+      () => _i961.BookingRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i1065.BusinessRepository>(),
+      ),
+    );
     gh.factory<_i458.AddBusinessBloc>(
       () => _i458.AddBusinessBloc(
         gh<_i1069.ImagePickerDataSource>(),
         gh<_i460.SharedPreferences>(),
         gh<_i1065.BusinessRepository>(),
       ),
+    );
+    gh.factory<_i415.PaymentCubit>(
+      () => _i415.PaymentCubit(gh<_i961.BookingRepository>()),
     );
     return this;
   }

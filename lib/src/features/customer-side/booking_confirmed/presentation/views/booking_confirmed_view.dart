@@ -3,7 +3,6 @@ import 'package:aquabook/src/features/customer-side/booking_confirmed/domain/mod
 import 'package:aquabook/src/features/customer-side/booking_confirmed/presentation/widgets/booking_confirmation_card.dart';
 import 'package:aquabook/src/features/customer-side/booking_confirmed/presentation/widgets/booking_confirmation_details.dart';
 import 'package:aquabook/src/features/customer-side/booking_confirmed/presentation/widgets/booking_confirmation_header.dart';
-import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/payment_price_breakdown.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -14,14 +13,7 @@ class BookingConfirmedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final booking = arguments.payment.review.bookingState;
-    final price =
-        arguments.payment.review.booking.pricePerNight ??
-        arguments.payment.review.booking.stay.pricePerNight ??
-        0;
-    final total = PaymentPriceBreakdown(
-      arguments: arguments.payment,
-      pricePerNight: price,
-    ).total();
+    final total = arguments.booking.total;
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -41,7 +33,7 @@ class BookingConfirmedView extends StatelessWidget {
                       ),
                       const SizedBox(height: 18),
                       BookingConfirmationDetails(
-                        code: 'MB-${DateTime.now().year}-8X7K9M',
+                        code: arguments.booking.confirmationCode,
                         total: total,
                       ),
                       const SizedBox(height: 18),
