@@ -16,6 +16,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       MapperContainer.globals.use(_instance = AddBusinessStateMapper._());
       BusinessTypeMapper.ensureInitialized();
       StayAmenityMapper.ensureInitialized();
+      StayExtraTypeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -40,6 +41,10 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       v.selectedAmenities;
   static const Field<AddBusinessState, List<StayAmenity>> _f$selectedAmenities =
       Field('selectedAmenities', _$selectedAmenities, opt: true, def: const []);
+  static List<StayExtraType> _$selectedExtras(AddBusinessState v) =>
+      v.selectedExtras;
+  static const Field<AddBusinessState, List<StayExtraType>> _f$selectedExtras =
+      Field('selectedExtras', _$selectedExtras, opt: true, def: const []);
   static String? _$logoPath(AddBusinessState v) => v.logoPath;
   static const Field<AddBusinessState, String> _f$logoPath = Field(
     'logoPath',
@@ -92,6 +97,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #businessType: _f$businessType,
     #categoryId: _f$categoryId,
     #selectedAmenities: _f$selectedAmenities,
+    #selectedExtras: _f$selectedExtras,
     #logoPath: _f$logoPath,
     #coverPhotoPath: _f$coverPhotoPath,
     #isLoading: _f$isLoading,
@@ -106,6 +112,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       businessType: data.dec(_f$businessType),
       categoryId: data.dec(_f$categoryId),
       selectedAmenities: data.dec(_f$selectedAmenities),
+      selectedExtras: data.dec(_f$selectedExtras),
       logoPath: data.dec(_f$logoPath),
       coverPhotoPath: data.dec(_f$coverPhotoPath),
       isLoading: data.dec(_f$isLoading),
@@ -180,10 +187,17 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, StayAmenity, ObjectCopyWith<$R, StayAmenity, StayAmenity>>
   get selectedAmenities;
+  ListCopyWith<
+    $R,
+    StayExtraType,
+    ObjectCopyWith<$R, StayExtraType, StayExtraType>
+  >
+  get selectedExtras;
   $R call({
     BusinessType? businessType,
     String? categoryId,
     List<StayAmenity>? selectedAmenities,
+    List<StayExtraType>? selectedExtras,
     String? logoPath,
     String? coverPhotoPath,
     bool? isLoading,
@@ -213,10 +227,22 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     (v) => call(selectedAmenities: v),
   );
   @override
+  ListCopyWith<
+    $R,
+    StayExtraType,
+    ObjectCopyWith<$R, StayExtraType, StayExtraType>
+  >
+  get selectedExtras => ListCopyWith(
+    $value.selectedExtras,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(selectedExtras: v),
+  );
+  @override
   $R call({
     BusinessType? businessType,
     Object? categoryId = $none,
     List<StayAmenity>? selectedAmenities,
+    List<StayExtraType>? selectedExtras,
     Object? logoPath = $none,
     Object? coverPhotoPath = $none,
     bool? isLoading,
@@ -229,6 +255,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       if (businessType != null) #businessType: businessType,
       if (categoryId != $none) #categoryId: categoryId,
       if (selectedAmenities != null) #selectedAmenities: selectedAmenities,
+      if (selectedExtras != null) #selectedExtras: selectedExtras,
       if (logoPath != $none) #logoPath: logoPath,
       if (coverPhotoPath != $none) #coverPhotoPath: coverPhotoPath,
       if (isLoading != null) #isLoading: isLoading,
@@ -247,6 +274,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       #selectedAmenities,
       or: $value.selectedAmenities,
     ),
+    selectedExtras: data.get(#selectedExtras, or: $value.selectedExtras),
     logoPath: data.get(#logoPath, or: $value.logoPath),
     coverPhotoPath: data.get(#coverPhotoPath, or: $value.coverPhotoPath),
     isLoading: data.get(#isLoading, or: $value.isLoading),

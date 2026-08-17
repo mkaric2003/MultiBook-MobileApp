@@ -3,9 +3,10 @@ import 'package:aquabook/src/features/customer-side/stay_detail/domain/models/st
 import 'package:flutter/material.dart';
 
 class StayRoomCard extends StatelessWidget {
-  const StayRoomCard({super.key, required this.room});
+  const StayRoomCard({super.key, required this.room, required this.onBook});
 
   final StayRoom room;
+  final VoidCallback onBook;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class StayRoomCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    FilledButton(onPressed: () {}, child: const Text('Book')),
+                    FilledButton(onPressed: onBook, child: const Text('Book')),
                   ],
                 ),
               ],

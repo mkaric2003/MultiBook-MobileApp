@@ -8,8 +8,16 @@ import 'package:aquabook/src/features/business-side/home/presentation/views/home
 import 'package:aquabook/src/features/business-side/my_businesses/presentation/views/my_businesses_view.dart';
 import 'package:aquabook/src/features/customer-side/home/presentation/views/customer_home_view.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
+import 'package:aquabook/src/features/customer-side/booking_details/presentation/views/booking_details_view.dart';
 import 'package:aquabook/src/features/customer-side/search/presentation/views/customer_search_view.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/views/stay_detail_view.dart';
+import 'package:aquabook/src/features/customer-side/review_stay/domain/models/review_stay_arguments.dart';
+import 'package:aquabook/src/features/customer-side/review_stay/presentation/views/review_stay_view.dart';
+import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
+import 'package:aquabook/src/features/customer-side/payment/presentation/views/payment_view.dart';
+import 'package:aquabook/src/features/customer-side/booking_confirmed/domain/models/booking_confirmed_arguments.dart';
+import 'package:aquabook/src/features/customer-side/booking_confirmed/presentation/views/booking_confirmed_view.dart';
 import 'package:aquabook/src/features/shared/onboarding/presentation/views/onboarding_view.dart';
 import 'package:aquabook/src/features/shared/sign_in/presentation/views/signin_view.dart';
 import 'package:aquabook/src/features/shared/sign_up/presentation/views/signup_view.dart';

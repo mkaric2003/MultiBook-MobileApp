@@ -6,9 +6,11 @@ import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/business_location_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/models/stay_details_model.dart';
+import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/utils/image_utils.dart';
@@ -361,6 +363,23 @@ class BusinessRepository {
               'pricePerNight': pricePerNight,
               'amenities': amenities,
               'rooms': rooms,
+              'extras': [
+                {
+                  'type': StayExtraType.breakfast.name,
+                  'price': 20,
+                  'isPerNight': true,
+                },
+                {
+                  'type': StayExtraType.parking.name,
+                  'price': 15,
+                  'isPerNight': true,
+                },
+                {
+                  'type': StayExtraType.spaAccess.name,
+                  'price': 40,
+                  'isPerNight': false,
+                },
+              ],
             },
             'createdAt': _firestoreDataSource.serverTimestamp,
             'updatedAt': _firestoreDataSource.serverTimestamp,
@@ -424,6 +443,7 @@ class BusinessRepository {
     int? pricePerNight,
     List<StayAmenity> amenities = const [],
     List<StayRoomModel> rooms = const [],
+    List<StayExtraModel> extras = const [],
     String? logoPath,
     String? coverPhotoPath,
   }) async {
@@ -481,6 +501,7 @@ class BusinessRepository {
                 pricePerNight: pricePerNight,
                 amenities: amenities,
                 rooms: rooms,
+                extras: extras,
               )
             : null,
       );
@@ -523,6 +544,15 @@ class BusinessRepository {
                           'maxGuests': room.maxGuests,
                           'sizeSquareMeters': room.sizeSquareMeters,
                           'pricePerNight': room.pricePerNight,
+                        },
+                      )
+                      .toList(),
+                  'extras': business.stayDetails!.extras
+                      .map(
+                        (extra) => {
+                          'type': extra.type.name,
+                          'price': extra.price,
+                          'isPerNight': extra.isPerNight,
                         },
                       )
                       .toList(),
@@ -616,6 +646,21 @@ class BusinessRepository {
                           (room['pricePerNight'] as num?)?.toInt() ?? 0,
                     ),
                   )
+                  .toList(),
+              extras: (stayDetailsData['extras'] as List? ?? const [])
+                  .whereType<Map>()
+                  .map((extra) {
+                    final types = StayExtraType.values.where(
+                      (type) => type.name == extra['type'],
+                    );
+                    if (types.isEmpty) return null;
+                    return StayExtraModel(
+                      type: types.first,
+                      price: (extra['price'] as num?)?.toInt() ?? 0,
+                      isPerNight: extra['isPerNight'] as bool? ?? false,
+                    );
+                  })
+                  .whereType<StayExtraModel>()
                   .toList(),
             )
           : null,

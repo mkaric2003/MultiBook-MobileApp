@@ -51,8 +51,8 @@ class StayDetailView extends StatelessWidget {
                   children: [
                     StayDetailHero(stay: listing, onBack: () => context.pop()),
                     StayOverview(stay: listing),
-                    const StayBookingPanel(),
-                    AvailableRoomsSection(business: business),
+                    StayBookingPanel(stay: listing),
+                    AvailableRoomsSection(business: business, stay: listing),
                     AmenitiesSection(business: business),
                     StayAboutSection(business: business),
                     StayGuestReviewsSection(stay: listing),

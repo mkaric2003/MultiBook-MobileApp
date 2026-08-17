@@ -17,6 +17,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     on<BusinessTypeChanged>(_onBusinessTypeChanged);
     on<BusinessCategoryChanged>(_onBusinessCategoryChanged);
     on<BusinessAmenityToggled>(_onBusinessAmenityToggled);
+    on<BusinessExtraToggled>(_onBusinessExtraToggled);
     on<BusinessImagePickRequested>(_onBusinessImagePickRequested);
     on<LostBusinessImageRestoreRequested>(_onLostBusinessImageRestoreRequested);
     on<ExistingBusinessesLoadRequested>(_onExistingBusinessesLoadRequested);
@@ -58,6 +59,17 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       amenities.add(event.amenity);
     }
     emit(state.copyWith(selectedAmenities: amenities));
+  }
+
+  void _onBusinessExtraToggled(
+    BusinessExtraToggled event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    final extras = [...state.selectedExtras];
+    extras.contains(event.extra)
+        ? extras.remove(event.extra)
+        : extras.add(event.extra);
+    emit(state.copyWith(selectedExtras: extras));
   }
 
   Future<void> _onBusinessImagePickRequested(
@@ -150,6 +162,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         pricePerNight: event.pricePerNight,
         amenities: event.amenities,
         rooms: event.rooms,
+        extras: event.extras,
         logoPath: state.logoPath,
         coverPhotoPath: state.coverPhotoPath,
       );

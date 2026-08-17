@@ -1,6 +1,8 @@
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
+import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,6 +26,11 @@ class BusinessAmenityToggled extends AddBusinessEvent {
   const BusinessAmenityToggled(this.amenity);
 
   final StayAmenity amenity;
+}
+
+class BusinessExtraToggled extends AddBusinessEvent {
+  const BusinessExtraToggled(this.extra);
+  final StayExtraType extra;
 }
 
 class BusinessImagePickRequested extends AddBusinessEvent {
@@ -57,6 +64,7 @@ class BusinessCreationRequested extends AddBusinessEvent {
     this.pricePerNight,
     this.amenities = const [],
     this.rooms = const [],
+    this.extras = const [],
   });
 
   final String name;
@@ -66,4 +74,5 @@ class BusinessCreationRequested extends AddBusinessEvent {
   final int? pricePerNight;
   final List<StayAmenity> amenities;
   final List<StayRoomModel> rooms;
+  final List<StayExtraModel> extras;
 }

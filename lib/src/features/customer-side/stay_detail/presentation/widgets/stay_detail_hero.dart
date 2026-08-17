@@ -36,7 +36,7 @@ class StayDetailHero extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 18,
+            top: 45,
             left: 18,
             child: StayDetailActionButton(
               icon: Icons.arrow_back,
@@ -44,12 +44,12 @@ class StayDetailHero extends StatelessWidget {
             ),
           ),
           const Positioned(
-            top: 18,
+            top: 45,
             right: 76,
             child: StayDetailActionButton(icon: Icons.ios_share_outlined),
           ),
           const Positioned(
-            top: 18,
+            top: 45,
             right: 18,
             child: StayDetailActionButton(icon: Icons.favorite_border),
           ),

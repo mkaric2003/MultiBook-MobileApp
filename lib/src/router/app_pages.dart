@@ -67,6 +67,32 @@ final router = GoRouter(
           StayDetailView(stay: state.extra! as StayListing),
     ),
     GoRoute(
+      path: AppRoutes.BOOKING_DETAILS,
+      name: AppRoutes.BOOKING_DETAILS,
+      builder: (context, state) => BookingDetailsView(
+        arguments: state.extra! as BookingDetailsArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.REVIEW_STAY,
+      name: AppRoutes.REVIEW_STAY,
+      builder: (context, state) =>
+          ReviewStayView(arguments: state.extra! as ReviewStayArguments),
+    ),
+    GoRoute(
+      path: AppRoutes.PAYMENT,
+      name: AppRoutes.PAYMENT,
+      builder: (context, state) =>
+          PaymentView(arguments: state.extra! as PaymentArguments),
+    ),
+    GoRoute(
+      path: AppRoutes.BOOKING_CONFIRMED,
+      name: AppRoutes.BOOKING_CONFIRMED,
+      builder: (context, state) => BookingConfirmedView(
+        arguments: state.extra! as BookingConfirmedArguments,
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.ADD_BUSINESS,
       name: AppRoutes.ADD_BUSINESS,
       builder: (context, state) => const AddBusinessView(),

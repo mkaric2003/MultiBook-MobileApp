@@ -2,6 +2,8 @@ import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_event.dart';
@@ -15,6 +17,7 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/image_source_picker_sheet.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/hotel_room_form.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
@@ -203,6 +206,15 @@ class AddBusinessView extends HookWidget {
                                   .read<AddBusinessBloc>()
                                   .add(BusinessAmenityToggled(amenity)),
                             ),
+                            const SizedBox(height: 26),
+                            const FormFieldLabel('Optional extras'),
+                            const SizedBox(height: 10),
+                            StayExtrasSelector(
+                              selectedExtras: state.selectedExtras,
+                              onChanged: (extra) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(BusinessExtraToggled(extra)),
+                            ),
                             const SizedBox(height: 28),
                             if (state.categoryId == 'hotel') ...[
                               const FormFieldLabel('Rooms'),
@@ -298,6 +310,21 @@ class AddBusinessView extends HookWidget {
                                               ),
                                             ]
                                           : const [],
+                                      extras: state.selectedExtras
+                                          .map(
+                                            (extra) => StayExtraModel(
+                                              type: extra,
+                                              price: switch (extra) {
+                                                StayExtraType.breakfast => 20,
+                                                StayExtraType.parking => 15,
+                                                StayExtraType.spaAccess => 40,
+                                              },
+                                              isPerNight:
+                                                  extra !=
+                                                  StayExtraType.spaAccess,
+                                            ),
+                                          )
+                                          .toList(),
                                     ),
                                   )
                                 : null,
