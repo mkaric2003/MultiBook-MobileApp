@@ -158,6 +158,19 @@ class BookingRepository {
     );
   }
 
+  Future<List<BookingModel>> getOwnedBusinessBookings({
+    required String businessId,
+  }) async {
+    final cursor = getOwnedBookingsCursor(businessId: businessId, pageSize: 50);
+    final bookings = <BookingModel>[];
+
+    while (!cursor.isEverythingLoaded) {
+      bookings.addAll(await cursor.fetchNextPage());
+    }
+
+    return bookings;
+  }
+
   Future<void> cancelBooking({required String bookingId}) async {
     final ownerId = _auth.currentUser?.uid;
     if (ownerId == null) {

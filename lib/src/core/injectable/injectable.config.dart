@@ -33,6 +33,8 @@ import 'package:aquabook/src/features/business-side/account_settings/bloc/accoun
     as _i57;
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart'
     as _i458;
+import 'package:aquabook/src/features/business-side/availability_calendar/bloc/availability_calendar_cubit.dart'
+    as _i519;
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart'
     as _i488;
 import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart'
@@ -218,6 +220,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i488.ClientBookingsCubit>(
       () => _i488.ClientBookingsCubit(
+        gh<_i961.BookingRepository>(),
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i519.AvailabilityCalendarCubit>(
+      () => _i519.AvailabilityCalendarCubit(
         gh<_i961.BookingRepository>(),
         gh<_i1065.BusinessRepository>(),
         gh<_i747.UserRepository>(),

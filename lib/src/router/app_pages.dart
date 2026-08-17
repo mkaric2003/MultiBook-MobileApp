@@ -108,6 +108,11 @@ final router = GoRouter(
       builder: (context, state) => const AccountSettingsView(),
     ),
     GoRoute(
+      path: AppRoutes.AVAILABILITY_CALENDAR,
+      name: AppRoutes.AVAILABILITY_CALENDAR,
+      builder: (context, state) => const AvailabilityCalendarView(),
+    ),
+    GoRoute(
       path: AppRoutes.SIGNUP,
       name: AppRoutes.SIGNUP,
       builder: (context, state) => const SignupView(),

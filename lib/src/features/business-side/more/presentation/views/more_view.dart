@@ -33,7 +33,7 @@ class MoreView extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(27, 32, 27, 30),
                   children: [
-                    const MoreMenuSection(
+                    MoreMenuSection(
                       title: 'Business management',
                       items: [
                         MoreMenuItem(
@@ -47,6 +47,8 @@ class MoreView extends StatelessWidget {
                         MoreMenuItem(
                           label: 'Availability & Calendar',
                           icon: Icons.calendar_month_rounded,
+                          onTap: () =>
+                              context.push(AppRoutes.AVAILABILITY_CALENDAR),
                         ),
                         MoreMenuItem(
                           label: 'Promotions & Discounts',
