@@ -140,6 +140,12 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     _$roomType,
     opt: true,
   );
+  static String? _$roomTypeId(BookingModel v) => v.roomTypeId;
+  static const Field<BookingModel, String> _f$roomTypeId = Field(
+    'roomTypeId',
+    _$roomTypeId,
+    opt: true,
+  );
   static String? _$customerAvatarUrl(BookingModel v) => v.customerAvatarUrl;
   static const Field<BookingModel, String> _f$customerAvatarUrl = Field(
     'customerAvatarUrl',
@@ -181,6 +187,7 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     #paymentMethod: _f$paymentMethod,
     #confirmationCode: _f$confirmationCode,
     #roomType: _f$roomType,
+    #roomTypeId: _f$roomTypeId,
     #customerAvatarUrl: _f$customerAvatarUrl,
     #createdAt: _f$createdAt,
   };
@@ -213,6 +220,7 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
       paymentMethod: data.dec(_f$paymentMethod),
       confirmationCode: data.dec(_f$confirmationCode),
       roomType: data.dec(_f$roomType),
+      roomTypeId: data.dec(_f$roomTypeId),
       customerAvatarUrl: data.dec(_f$customerAvatarUrl),
       createdAt: data.dec(_f$createdAt),
     );
@@ -313,6 +321,7 @@ abstract class BookingModelCopyWith<$R, $In extends BookingModel, $Out>
     String? paymentMethod,
     String? confirmationCode,
     String? roomType,
+    String? roomTypeId,
     String? customerAvatarUrl,
     DateTime? createdAt,
   });
@@ -366,6 +375,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
     String? paymentMethod,
     String? confirmationCode,
     Object? roomType = $none,
+    Object? roomTypeId = $none,
     Object? customerAvatarUrl = $none,
     Object? createdAt = $none,
   }) => $apply(
@@ -396,6 +406,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
       if (paymentMethod != null) #paymentMethod: paymentMethod,
       if (confirmationCode != null) #confirmationCode: confirmationCode,
       if (roomType != $none) #roomType: roomType,
+      if (roomTypeId != $none) #roomTypeId: roomTypeId,
       if (customerAvatarUrl != $none) #customerAvatarUrl: customerAvatarUrl,
       if (createdAt != $none) #createdAt: createdAt,
     }),
@@ -428,6 +439,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
     paymentMethod: data.get(#paymentMethod, or: $value.paymentMethod),
     confirmationCode: data.get(#confirmationCode, or: $value.confirmationCode),
     roomType: data.get(#roomType, or: $value.roomType),
+    roomTypeId: data.get(#roomTypeId, or: $value.roomTypeId),
     customerAvatarUrl: data.get(
       #customerAvatarUrl,
       or: $value.customerAvatarUrl,

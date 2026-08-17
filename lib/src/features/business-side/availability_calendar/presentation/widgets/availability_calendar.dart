@@ -1,5 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/enums/booking_status.dart';
+import 'package:aquabook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_day.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_weekday_label.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class AvailabilityCalendar extends StatelessWidget {
     required this.visibleDate,
     required this.isMonthly,
     required this.selectedDate,
-    required this.statuses,
+    required this.daySummaries,
     required this.onPrevious,
     required this.onNext,
     required this.onDateSelected,
@@ -20,7 +20,7 @@ class AvailabilityCalendar extends StatelessWidget {
   final DateTime visibleDate;
   final bool isMonthly;
   final DateTime selectedDate;
-  final Map<DateTime, BookingStatus> statuses;
+  final Map<DateTime, AvailabilityDaySummary> daySummaries;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
   final ValueChanged<DateTime> onDateSelected;
@@ -91,11 +91,11 @@ class AvailabilityCalendar extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final date = dates[index];
                   if (date == null) return const SizedBox.shrink();
-                  final status = _statusForDate(date);
+                  final summary = _summaryForDate(date);
                   return AvailabilityCalendarDay(
                     date: date,
                     isSelected: _sameDay(date, selectedDate),
-                    status: status,
+                    summary: summary,
                     onTap: () => onDateSelected(date),
                   );
                 },
@@ -126,8 +126,8 @@ class AvailabilityCalendar extends StatelessWidget {
     return List.generate(7, (index) => monday.add(Duration(days: index)));
   }
 
-  BookingStatus? _statusForDate(DateTime date) {
-    for (final entry in statuses.entries) {
+  AvailabilityDaySummary? _summaryForDate(DateTime date) {
+    for (final entry in daySummaries.entries) {
       if (_sameDay(entry.key, date)) return entry.value;
     }
     return null;

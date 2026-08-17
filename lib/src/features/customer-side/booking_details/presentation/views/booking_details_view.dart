@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_cubit.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
@@ -22,7 +23,8 @@ class BookingDetailsView extends StatelessWidget {
     final pricePerNight =
         arguments.pricePerNight ?? arguments.stay.pricePerNight ?? 0;
     return BlocProvider(
-      create: (_) => BookingDetailsCubit(),
+      create: (_) =>
+          getIt<BookingDetailsCubit>()..loadAvailability(arguments.stay.id),
       child: BlocBuilder<BookingDetailsCubit, BookingDetailsState>(
         builder: (context, state) => Scaffold(
           backgroundColor: AppColors.background,
@@ -48,6 +50,8 @@ class BookingDetailsView extends StatelessWidget {
                           checkIn: state.checkIn,
                           checkOut: state.checkOut,
                           visibleMonth: state.visibleMonth,
+                          unavailableDates: state.unavailableDates,
+                          isLoadingAvailability: state.isLoadingAvailability,
                           onDateSelected: context
                               .read<BookingDetailsCubit>()
                               .selectDate,

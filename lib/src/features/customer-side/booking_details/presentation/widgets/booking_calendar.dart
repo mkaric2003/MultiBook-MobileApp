@@ -8,6 +8,8 @@ class BookingCalendar extends StatelessWidget {
     required this.checkIn,
     required this.checkOut,
     required this.visibleMonth,
+    required this.unavailableDates,
+    required this.isLoadingAvailability,
     required this.onDateSelected,
     required this.onPreviousMonth,
     required this.onNextMonth,
@@ -16,6 +18,8 @@ class BookingCalendar extends StatelessWidget {
   final DateTime checkIn;
   final DateTime checkOut;
   final DateTime visibleMonth;
+  final Set<DateTime> unavailableDates;
+  final bool isLoadingAvailability;
   final ValueChanged<DateTime> onDateSelected;
   final VoidCallback onPreviousMonth;
   final VoidCallback onNextMonth;
@@ -99,23 +103,31 @@ class BookingCalendar extends StatelessWidget {
               final selected =
                   _sameDay(date, checkIn) || _sameDay(date, checkOut);
               final between = date.isAfter(checkIn) && date.isBefore(checkOut);
+              final unavailable = _isUnavailable(date);
               return InkWell(
                 borderRadius: BorderRadius.circular(9),
-                onTap: () => onDateSelected(date),
-                child: Container(
-                  margin: const EdgeInsets.all(2),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: selected
-                        ? AppColors.primary
-                        : between
-                        ? AppColors.primary.withValues(alpha: .25)
-                        : null,
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Text(
-                    '${date.day}',
-                    style: const TextStyle(fontWeight: FontWeight.w700),
+                onTap: unavailable || isLoadingAvailability
+                    ? null
+                    : () => onDateSelected(date),
+                child: Opacity(
+                  opacity: unavailable ? .32 : 1,
+                  child: Container(
+                    margin: const EdgeInsets.all(2),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: selected
+                          ? AppColors.primary
+                          : between
+                          ? AppColors.primary.withValues(alpha: .25)
+                          : unavailable
+                          ? AppColors.surfaceHighlight
+                          : null,
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Text(
+                      '${date.day}',
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ),
               );
@@ -130,4 +142,7 @@ class BookingCalendar extends StatelessWidget {
       first.year == second.year &&
       first.month == second.month &&
       first.day == second.day;
+
+  bool _isUnavailable(DateTime date) =>
+      unavailableDates.any((item) => _sameDay(item, date));
 }

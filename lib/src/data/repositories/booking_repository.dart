@@ -9,6 +9,7 @@ import 'package:aquabook/src/data/enums/payment_status.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
+import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,16 +40,25 @@ class BookingRepository {
     if (business == null) {
       throw const BookingException('This stay is no longer available.');
     }
+    final stayRooms = business.stayDetails?.rooms ?? const [];
+    final selectedRoom = arguments.review.booking.room;
+    final defaultRoom = _defaultRoom(
+      rooms: stayRooms,
+      pricePerNight: business.stayDetails?.pricePerNight,
+    );
+    final room = selectedRoom ?? defaultRoom;
     final booking = arguments.review.bookingState;
     final price =
+        selectedRoom?.pricePerNight ??
         arguments.review.booking.pricePerNight ??
         business.stayDetails?.pricePerNight ??
+        room?.pricePerNight ??
         0;
-    final room = price * booking.nightCount;
+    final roomSubtotal = price * booking.nightCount;
     final extras = _extrasTotal(arguments.selectedExtras, booking.nightCount);
     final cleaning = 25;
-    final service = ((room + extras) * .05).round();
-    final taxes = ((room + extras + cleaning + service) * .08).round();
+    final service = ((roomSubtotal + extras) * .05).round();
+    final taxes = ((roomSubtotal + extras + cleaning + service) * .08).round();
     final id = _firestore.createDocumentId(collection: _collection);
     final result = BookingModel(
       id: id,
@@ -67,12 +77,14 @@ class BookingRepository {
       children: booking.children,
       infants: booking.infants,
       pricePerNight: price,
+      roomType: room?.name,
+      roomTypeId: room?.id,
       selectedExtras: arguments.selectedExtras,
-      roomSubtotal: room,
+      roomSubtotal: roomSubtotal,
       cleaningFee: cleaning,
       serviceFee: service,
       taxes: taxes,
-      total: room + extras + cleaning + service + taxes,
+      total: roomSubtotal + extras + cleaning + service + taxes,
       status: BookingStatus.confirmed,
       paymentStatus: PaymentStatus.paid,
       paymentMethod: 'card',
@@ -99,6 +111,8 @@ class BookingRepository {
           'children': result.children,
           'infants': result.infants,
           'pricePerNight': result.pricePerNight,
+          'roomType': result.roomType,
+          'roomTypeId': result.roomTypeId,
           'selectedExtras': result.selectedExtras
               .map(
                 (extra) => {
@@ -135,6 +149,17 @@ class BookingRepository {
     }
   }
 
+  StayRoomModel? _defaultRoom({
+    required List<StayRoomModel> rooms,
+    required int? pricePerNight,
+  }) {
+    if (rooms.isEmpty) return null;
+    return rooms.firstWhere(
+      (room) => room.pricePerNight == pricePerNight,
+      orElse: () => rooms.first,
+    );
+  }
+
   DataCursor<BookingModel> getOwnedBookingsCursor({
     required String businessId,
     BookingStatus? status,
@@ -168,6 +193,28 @@ class BookingRepository {
       bookings.addAll(await cursor.fetchNextPage());
     }
 
+    return bookings;
+  }
+
+  Future<List<BookingModel>> getCustomerBusinessBookings({
+    required String businessId,
+  }) async {
+    final customerId = _auth.currentUser?.uid;
+    if (customerId == null) {
+      throw const BookingException('You need to sign in to view bookings.');
+    }
+
+    final cursor = _firestore.createCursorWhereAll<BookingModel>(
+      collection: _collection,
+      filters: {'customerId': customerId, 'businessId': businessId},
+      pageSize: 50,
+      listSerializer: (documents) =>
+          documents.map(_bookingFromDocument).toList(),
+    );
+    final bookings = <BookingModel>[];
+    while (!cursor.isEverythingLoaded) {
+      bookings.addAll(await cursor.fetchNextPage());
+    }
     return bookings;
   }
 
@@ -251,6 +298,7 @@ class BookingRepository {
       paymentMethod: document['paymentMethod'] as String? ?? '',
       confirmationCode: document['confirmationCode'] as String? ?? '',
       roomType: document['roomType'] as String?,
+      roomTypeId: document['roomTypeId'] as String?,
       createdAt: document['createdAt'] is Timestamp
           ? (document['createdAt'] as Timestamp).toDate()
           : null,

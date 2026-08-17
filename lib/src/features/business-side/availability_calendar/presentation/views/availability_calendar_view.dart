@@ -2,8 +2,10 @@ import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
+import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/bloc/availability_calendar_cubit.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/bloc/availability_calendar_state.dart';
+import 'package:aquabook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_legend.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_mode_button.dart';
@@ -79,7 +81,10 @@ class AvailabilityCalendarView extends HookWidget {
                                 visibleDate: visibleDate.value,
                                 isMonthly: isMonthly.value,
                                 selectedDate: selectedDate.value,
-                                statuses: _bookingStatuses(state.bookings),
+                                daySummaries: _daySummaries(
+                                  business: state.business!,
+                                  bookings: state.bookings,
+                                ),
                                 onPrevious: () =>
                                     visibleDate.value = isMonthly.value
                                     ? DateTime(
@@ -133,17 +138,34 @@ class AvailabilityCalendarView extends HookWidget {
     );
   }
 
-  Map<DateTime, BookingStatus> _bookingStatuses(List<BookingModel> bookings) {
-    final statuses = <DateTime, BookingStatus>{};
+  Map<DateTime, AvailabilityDaySummary> _daySummaries({
+    required BusinessModel business,
+    required List<BookingModel> bookings,
+  }) {
+    final totalRooms = business.stayDetails?.rooms.isEmpty ?? true
+        ? 1
+        : business.stayDetails!.rooms.fold(
+            0,
+            (total, room) => total + room.quantity,
+          );
+    final summaries = <DateTime, AvailabilityDaySummary>{};
     for (final booking in bookings) {
       var date = _dateOnly(booking.checkIn);
       final checkOut = _dateOnly(booking.checkOut);
       while (date.isBefore(checkOut)) {
-        statuses[date] = _preferredStatus(statuses[date], booking.status);
+        final existing = summaries[date];
+        final statuses = [...?existing?.statuses, booking.status];
+        summaries[date] = AvailabilityDaySummary(
+          statuses: statuses,
+          bookedRooms:
+              (existing?.bookedRooms ?? 0) +
+              (_occupiesInventory(booking.status) ? 1 : 0),
+          totalRooms: totalRooms,
+        );
         date = date.add(const Duration(days: 1));
       }
     }
-    return statuses;
+    return summaries;
   }
 
   List<BookingModel> _todaysBookings(List<BookingModel> bookings) {
@@ -156,19 +178,6 @@ class AvailabilityCalendarView extends HookWidget {
   DateTime _dateOnly(DateTime value) =>
       DateTime(value.year, value.month, value.day);
 
-  BookingStatus _preferredStatus(
-    BookingStatus? currentStatus,
-    BookingStatus candidateStatus,
-  ) {
-    if (currentStatus == null) return candidateStatus;
-    const priorities = {
-      BookingStatus.confirmed: 4,
-      BookingStatus.completed: 3,
-      BookingStatus.declined: 2,
-      BookingStatus.cancelled: 1,
-    };
-    return priorities[candidateStatus]! >= priorities[currentStatus]!
-        ? candidateStatus
-        : currentStatus;
-  }
+  bool _occupiesInventory(BookingStatus status) =>
+      status == BookingStatus.confirmed || status == BookingStatus.completed;
 }

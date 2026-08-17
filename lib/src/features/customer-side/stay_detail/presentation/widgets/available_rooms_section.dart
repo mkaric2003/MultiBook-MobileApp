@@ -45,6 +45,7 @@ class AvailableRoomsSection extends StatelessWidget {
                 extra: BookingDetailsArguments(
                   stay: stay,
                   pricePerNight: room.pricePerNight,
+                  room: room,
                 ),
               ),
             ),

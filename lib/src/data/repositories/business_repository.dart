@@ -321,16 +321,20 @@ class BusinessRepository {
         final rooms = categoryId == 'hotel'
             ? [
                 {
+                  'id': 'deluxe-room',
                   'name': 'Deluxe Room',
                   'maxGuests': 2,
                   'sizeSquareMeters': 32,
                   'pricePerNight': pricePerNight,
+                  'quantity': 12,
                 },
                 {
+                  'id': 'executive-suite',
                   'name': 'Executive Suite',
                   'maxGuests': 4,
                   'sizeSquareMeters': 55,
                   'pricePerNight': pricePerNight + 90,
+                  'quantity': 6,
                 },
               ]
             : const <Map<String, Object>>[];
@@ -540,10 +544,12 @@ class BusinessRepository {
                   'rooms': business.stayDetails!.rooms
                       .map(
                         (room) => {
+                          'id': room.id,
                           'name': room.name,
                           'maxGuests': room.maxGuests,
                           'sizeSquareMeters': room.sizeSquareMeters,
                           'pricePerNight': room.pricePerNight,
+                          'quantity': room.quantity,
                         },
                       )
                       .toList(),
@@ -638,12 +644,17 @@ class BusinessRepository {
                   .whereType<Map>()
                   .map(
                     (room) => StayRoomModel(
+                      id:
+                          room['id'] as String? ??
+                          room['name'] as String? ??
+                          '',
                       name: room['name'] as String? ?? '',
                       maxGuests: (room['maxGuests'] as num?)?.toInt() ?? 1,
                       sizeSquareMeters:
                           (room['sizeSquareMeters'] as num?)?.toInt() ?? 0,
                       pricePerNight:
                           (room['pricePerNight'] as num?)?.toInt() ?? 0,
+                      quantity: (room['quantity'] as num?)?.toInt() ?? 1,
                     ),
                   )
                   .toList(),

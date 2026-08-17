@@ -34,6 +34,7 @@ class BookingModel with BookingModelMappable {
     required this.paymentMethod,
     required this.confirmationCode,
     this.roomType,
+    this.roomTypeId,
     this.customerAvatarUrl,
     this.createdAt,
   });
@@ -63,6 +64,7 @@ class BookingModel with BookingModelMappable {
   final String paymentMethod;
   final String confirmationCode;
   final String? roomType;
+  final String? roomTypeId;
   final String? customerAvatarUrl;
   final DateTime? createdAt;
 }

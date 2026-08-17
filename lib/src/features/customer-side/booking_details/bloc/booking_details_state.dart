@@ -7,6 +7,8 @@ class BookingDetailsState {
     this.children = 0,
     this.infants = 0,
     this.isSelectingCheckIn = true,
+    this.unavailableDates = const {},
+    this.isLoadingAvailability = false,
   });
 
   factory BookingDetailsState.initial() {
@@ -30,6 +32,8 @@ class BookingDetailsState {
   final int children;
   final int infants;
   final bool isSelectingCheckIn;
+  final Set<DateTime> unavailableDates;
+  final bool isLoadingAvailability;
 
   int get totalGuests => adults + children + infants;
   int get nightCount => checkOut.difference(checkIn).inDays;
@@ -42,6 +46,8 @@ class BookingDetailsState {
     int? children,
     int? infants,
     bool? isSelectingCheckIn,
+    Set<DateTime>? unavailableDates,
+    bool? isLoadingAvailability,
   }) => BookingDetailsState(
     checkIn: checkIn ?? this.checkIn,
     checkOut: checkOut ?? this.checkOut,
@@ -50,5 +56,7 @@ class BookingDetailsState {
     children: children ?? this.children,
     infants: infants ?? this.infants,
     isSelectingCheckIn: isSelectingCheckIn ?? this.isSelectingCheckIn,
+    unavailableDates: unavailableDates ?? this.unavailableDates,
+    isLoadingAvailability: isLoadingAvailability ?? this.isLoadingAvailability,
   );
 }

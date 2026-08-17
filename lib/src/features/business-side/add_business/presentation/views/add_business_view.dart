@@ -43,6 +43,7 @@ class AddBusinessView extends HookWidget {
     final roomGuestsController = useTextEditingController();
     final roomSizeController = useTextEditingController();
     final roomPriceController = useTextEditingController();
+    final roomQuantityController = useTextEditingController();
 
     useListenable(nameController);
     useListenable(cityController);
@@ -52,6 +53,7 @@ class AddBusinessView extends HookWidget {
     useListenable(roomGuestsController);
     useListenable(roomSizeController);
     useListenable(roomPriceController);
+    useListenable(roomQuantityController);
 
     return BlocProvider(
       create: (_) => getIt<AddBusinessBloc>(),
@@ -88,7 +90,8 @@ class AddBusinessView extends HookWidget {
                   (roomNameController.text.trim().isNotEmpty &&
                       (int.tryParse(roomGuestsController.text) ?? 0) > 0 &&
                       (int.tryParse(roomSizeController.text) ?? 0) > 0 &&
-                      (int.tryParse(roomPriceController.text) ?? 0) > 0));
+                      (int.tryParse(roomPriceController.text) ?? 0) > 0 &&
+                      (int.tryParse(roomQuantityController.text) ?? 0) > 0));
 
           void selectImage(BusinessImageType imageType) {
             showModalBottomSheet<void>(
@@ -224,6 +227,7 @@ class AddBusinessView extends HookWidget {
                                 guestsController: roomGuestsController,
                                 sizeController: roomSizeController,
                                 priceController: roomPriceController,
+                                quantityController: roomQuantityController,
                               ),
                               const SizedBox(height: 28),
                             ],
@@ -296,6 +300,7 @@ class AddBusinessView extends HookWidget {
                                       rooms: state.categoryId == 'hotel'
                                           ? [
                                               StayRoomModel(
+                                                id: 'room-${DateTime.now().microsecondsSinceEpoch}',
                                                 name: roomNameController.text
                                                     .trim(),
                                                 maxGuests: int.parse(
@@ -306,6 +311,9 @@ class AddBusinessView extends HookWidget {
                                                 ),
                                                 pricePerNight: int.parse(
                                                   roomPriceController.text,
+                                                ),
+                                                quantity: int.parse(
+                                                  roomQuantityController.text,
                                                 ),
                                               ),
                                             ]

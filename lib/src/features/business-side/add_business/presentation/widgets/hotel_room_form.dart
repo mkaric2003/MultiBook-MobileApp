@@ -10,12 +10,14 @@ class HotelRoomForm extends StatelessWidget {
     required this.guestsController,
     required this.sizeController,
     required this.priceController,
+    required this.quantityController,
   });
 
   final TextEditingController nameController;
   final TextEditingController guestsController;
   final TextEditingController sizeController;
   final TextEditingController priceController;
+  final TextEditingController quantityController;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +53,26 @@ class HotelRoomForm extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        CustomTextField(
-          hintText: 'Room price per night',
-          controller: priceController,
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                hintText: 'Price per night',
+                controller: priceController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: CustomTextField(
+                hintText: 'Rooms available',
+                controller: quantityController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
+            ),
+          ],
         ),
       ],
     );

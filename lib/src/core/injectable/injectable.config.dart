@@ -47,6 +47,8 @@ import 'package:aquabook/src/features/business-side/more/bloc/more_cubit.dart'
     as _i556;
 import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_cubit.dart'
     as _i908;
+import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_cubit.dart'
+    as _i259;
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart'
     as _i567;
 import 'package:aquabook/src/features/customer-side/payment/cubit/payment_cubit.dart'
@@ -207,6 +209,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
         gh<_i1065.BusinessRepository>(),
       ),
+    );
+    gh.factory<_i259.BookingDetailsCubit>(
+      () => _i259.BookingDetailsCubit(gh<_i961.BookingRepository>()),
     );
     gh.factory<_i458.AddBusinessBloc>(
       () => _i458.AddBusinessBloc(
