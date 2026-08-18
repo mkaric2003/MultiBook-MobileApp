@@ -58,7 +58,11 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.CUSTOMER_SEARCH,
       name: AppRoutes.CUSTOMER_SEARCH,
-      builder: (context, state) => const CustomerSearchView(),
+      builder: (context, state) => CustomerSearchView(
+        initialTab: state.extra is CustomerHomeTab
+            ? state.extra! as CustomerHomeTab
+            : CustomerHomeTab.stays,
+      ),
     ),
     GoRoute(
       path: AppRoutes.STAY_DETAIL,

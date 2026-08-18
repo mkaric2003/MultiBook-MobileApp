@@ -3,6 +3,8 @@ import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
+import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
+import 'package:aquabook/src/data/models/service_offering_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -31,6 +33,30 @@ class BusinessAmenityToggled extends AddBusinessEvent {
 class BusinessExtraToggled extends AddBusinessEvent {
   const BusinessExtraToggled(this.extra);
   final StayExtraType extra;
+}
+
+class ServiceOfferingAdded extends AddBusinessEvent {
+  const ServiceOfferingAdded(this.offering);
+
+  final ServiceOfferingModel offering;
+}
+
+class ServiceOfferingRemoved extends AddBusinessEvent {
+  const ServiceOfferingRemoved(this.offeringId);
+
+  final String offeringId;
+}
+
+class ServiceAvailabilitySlotAdded extends AddBusinessEvent {
+  const ServiceAvailabilitySlotAdded(this.slot);
+
+  final ServiceAvailabilitySlotModel slot;
+}
+
+class ServiceAvailabilitySlotRemoved extends AddBusinessEvent {
+  const ServiceAvailabilitySlotRemoved(this.slotId);
+
+  final String slotId;
 }
 
 class BusinessLocationChanged extends AddBusinessEvent {
@@ -65,6 +91,10 @@ class DemoStaysSeedRequested extends AddBusinessEvent {
   const DemoStaysSeedRequested();
 }
 
+class DemoServicesSeedRequested extends AddBusinessEvent {
+  const DemoServicesSeedRequested();
+}
+
 class BusinessCreationRequested extends AddBusinessEvent {
   const BusinessCreationRequested({
     required this.name,
@@ -75,6 +105,8 @@ class BusinessCreationRequested extends AddBusinessEvent {
     this.amenities = const [],
     this.rooms = const [],
     this.extras = const [],
+    this.serviceOfferings = const [],
+    this.availabilitySlots = const [],
   });
 
   final String name;
@@ -85,4 +117,6 @@ class BusinessCreationRequested extends AddBusinessEvent {
   final List<StayAmenity> amenities;
   final List<StayRoomModel> rooms;
   final List<StayExtraModel> extras;
+  final List<ServiceOfferingModel> serviceOfferings;
+  final List<ServiceAvailabilitySlotModel> availabilitySlots;
 }

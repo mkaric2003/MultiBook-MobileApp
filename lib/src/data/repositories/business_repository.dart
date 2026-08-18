@@ -6,10 +6,14 @@ import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/enums/service_weekday.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/business_location_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
+import 'package:aquabook/src/data/models/service_details_model.dart';
+import 'package:aquabook/src/data/models/service_offering_model.dart';
 import 'package:aquabook/src/data/models/stay_details_model.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
@@ -86,6 +90,98 @@ class BusinessRepository {
     'Foča',
     'Jahorina',
     'Srebrenik',
+  ];
+  static const _demoServices = <Map<String, String>>[
+    {
+      'name': 'Studio Glow',
+      'categoryId': 'hair_salon',
+      'serviceName': 'Women\'s haircut & styling',
+      'city': 'Sarajevo',
+    },
+    {
+      'name': 'Gentleman\'s Cut',
+      'categoryId': 'barbershop',
+      'serviceName': 'Haircut and beard trim',
+      'city': 'Mostar',
+    },
+    {
+      'name': 'Pearl Dental Care',
+      'categoryId': 'dental_clinic',
+      'serviceName': 'Dental examination',
+      'city': 'Banja Luka',
+    },
+    {
+      'name': 'Nails by Lana',
+      'categoryId': 'nail_salon',
+      'serviceName': 'Gel manicure',
+      'city': 'Tuzla',
+    },
+    {
+      'name': 'Volt Elektro',
+      'categoryId': 'electrician',
+      'serviceName': 'Electrical inspection',
+      'city': 'Zenica',
+    },
+    {
+      'name': 'Relax Point Spa',
+      'categoryId': 'massage_spa',
+      'serviceName': 'Full body massage',
+      'city': 'Bihać',
+    },
+    {
+      'name': 'Move Better Physio',
+      'categoryId': 'physiotherapy',
+      'serviceName': 'Physiotherapy session',
+      'city': 'Trebinje',
+    },
+    {
+      'name': 'Beauty Lab',
+      'categoryId': 'beauty_salon',
+      'serviceName': 'Facial treatment',
+      'city': 'Neum',
+    },
+    {
+      'name': 'FitCore Training',
+      'categoryId': 'personal_training',
+      'serviceName': 'Personal training session',
+      'city': 'Jajce',
+    },
+    {
+      'name': 'Bright Minds',
+      'categoryId': 'tutoring',
+      'serviceName': 'One-to-one math lesson',
+      'city': 'Travnik',
+    },
+    {
+      'name': 'AquaFix Plumbing',
+      'categoryId': 'plumber',
+      'serviceName': 'Plumbing consultation',
+      'city': 'Konjic',
+    },
+    {
+      'name': 'Fresh Home Cleaning',
+      'categoryId': 'cleaning_service',
+      'serviceName': 'Home cleaning visit',
+      'city': 'Visoko',
+    },
+    {
+      'name': 'AutoPro Service',
+      'categoryId': 'automotive_service',
+      'serviceName': 'Vehicle diagnostic',
+      'city': 'Prijedor',
+    },
+    {
+      'name': 'MediPlus Clinic',
+      'categoryId': 'medical_clinic',
+      'serviceName': 'General consultation',
+      'city': 'Brčko',
+    },
+    {
+      'name': 'Glow Pedi Studio',
+      'categoryId': 'nail_salon',
+      'serviceName': 'Spa pedicure',
+      'city': 'Bijeljina',
+    },
   ];
 
   final AuthenticationDataSource _authenticationDataSource;
@@ -232,6 +328,31 @@ class BusinessRepository {
     }
   }
 
+  Future<List<BusinessModel>> getPopularServices({int limit = 3}) async {
+    try {
+      final businessesData = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.services.name,
+      );
+      final services =
+          businessesData
+              .map(_businessFromData)
+              .where((business) => business.isActive)
+              .toList()
+            ..shuffle();
+      return services.take(limit).toList();
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not load popular services: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
   Future<List<BusinessModel>> searchStays(String query) async {
     final normalizedQuery = _normalizeSearchValue(query);
     if (normalizedQuery.isEmpty) {
@@ -295,11 +416,84 @@ class BusinessRepository {
     }
   }
 
+  Future<List<BusinessModel>> searchServices(String query) async {
+    final normalizedQuery = _normalizeSearchValue(query);
+    if (normalizedQuery.isEmpty) {
+      return const [];
+    }
+
+    try {
+      final results = await Future.wait([
+        _firestoreDataSource.getDocumentsWherePrefix(
+          collection: _businessesCollection,
+          equalityField: 'type',
+          equalityValue: BusinessType.services.name,
+          prefixField: 'nameLowercase',
+          prefix: normalizedQuery,
+        ),
+        _firestoreDataSource.getDocumentsWherePrefix(
+          collection: _businessesCollection,
+          equalityField: 'type',
+          equalityValue: BusinessType.services.name,
+          prefixField: 'location.cityLowercase',
+          prefix: normalizedQuery,
+        ),
+      ]);
+      final services = results
+          .expand((documents) => documents)
+          .map(_businessFromData)
+          .where((business) => business.isActive)
+          .toList();
+      if (services.isNotEmpty) {
+        return {
+          for (final service in services) service.id: service,
+        }.values.toList();
+      }
+
+      final legacyServices = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.services.name,
+      );
+      return legacyServices
+          .map(_businessFromData)
+          .where(
+            (business) =>
+                business.isActive &&
+                (_normalizeSearchValue(
+                      business.name,
+                    ).contains(normalizedQuery) ||
+                    _normalizeSearchValue(
+                      business.location.city,
+                    ).startsWith(normalizedQuery)),
+          )
+          .toList();
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not search services: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
   DataCursor<BusinessModel> getStaysCursor({int pageSize = 6}) {
     return _firestoreDataSource.createCursorWhere<BusinessModel>(
       collection: _businessesCollection,
       field: 'type',
       value: BusinessType.stays.name,
+      pageSize: pageSize,
+      listSerializer: (documents) => documents.map(_businessFromData).toList(),
+    );
+  }
+
+  DataCursor<BusinessModel> getServicesCursor({int pageSize = 6}) {
+    return _firestoreDataSource.createCursorWhere<BusinessModel>(
+      collection: _businessesCollection,
+      field: 'type',
+      value: BusinessType.services.name,
       pageSize: pageSize,
       listSerializer: (documents) => documents.map(_businessFromData).toList(),
     );
@@ -420,6 +614,131 @@ class BusinessRepository {
     }
   }
 
+  Future<int> seedDemoServices() async {
+    final ownerId = _authenticationDataSource.currentUser?.uid;
+    if (ownerId == null) {
+      throw const BusinessException(
+        'You need to sign in before creating demo services.',
+      );
+    }
+
+    String? firstBusinessId;
+    try {
+      for (var index = 0; index < _demoServices.length; index++) {
+        final service = _demoServices[index];
+        final businessId = _firestoreDataSource.createDocumentId(
+          collection: _businessesCollection,
+        );
+        firstBusinessId ??= businessId;
+        final imageUrl = _demoStayImageUrls[index % _demoStayImageUrls.length];
+        final price = 25 + (index * 7);
+        final duration = 30 + ((index % 3) * 15);
+        final rating = 4.2 + ((index % 4) * 0.15);
+        final city = service['city']!;
+        final name = service['name']!;
+
+        await _firestoreDataSource.setDocument(
+          collection: _businessesCollection,
+          documentId: businessId,
+          data: {
+            'id': businessId,
+            'ownerId': ownerId,
+            'type': BusinessType.services.name,
+            'name': name,
+            'nameLowercase': _normalizeSearchValue(name),
+            'categoryId': service['categoryId'],
+            'location': {
+              'address': '${index + 1} Service Street, $city',
+              'city': city,
+              'cityLowercase': _normalizeSearchValue(city),
+              'latitude': 43.8563 + (index * 0.0025),
+              'longitude': 18.4131 + (index * 0.0025),
+            },
+            'shortDescription':
+                'Book a convenient appointment with ${service['name']}.',
+            'logoUrl': imageUrl,
+            'coverPhotoUrl': imageUrl,
+            'photoUrls': [imageUrl],
+            'isActive': true,
+            'averageRating': rating,
+            'reviewCount': 28 + (index * 9),
+            'stayDetails': null,
+            'serviceDetails': {
+              'offerings': [
+                {
+                  'id': 'primary-service',
+                  'name': service['serviceName'],
+                  'durationMinutes': duration,
+                  'price': price,
+                  'description': 'A bookable ${service['serviceName']}.',
+                },
+                {
+                  'id': 'extended-service',
+                  'name': '${service['serviceName']} – extended',
+                  'durationMinutes': duration + 30,
+                  'price': price + 20,
+                  'description': 'A longer appointment with extra care.',
+                },
+              ],
+              'availabilitySlots': [
+                {
+                  'id': 'weekday-morning',
+                  'weekday': ServiceWeekday.monday.name,
+                  'startMinutes': 540,
+                  'endMinutes': 1020,
+                },
+                {
+                  'id': 'weekday-morning-tuesday',
+                  'weekday': ServiceWeekday.tuesday.name,
+                  'startMinutes': 540,
+                  'endMinutes': 1020,
+                },
+                {
+                  'id': 'weekday-morning-wednesday',
+                  'weekday': ServiceWeekday.wednesday.name,
+                  'startMinutes': 540,
+                  'endMinutes': 1020,
+                },
+                {
+                  'id': 'weekday-morning-thursday',
+                  'weekday': ServiceWeekday.thursday.name,
+                  'startMinutes': 540,
+                  'endMinutes': 1020,
+                },
+                {
+                  'id': 'weekday-morning-friday',
+                  'weekday': ServiceWeekday.friday.name,
+                  'startMinutes': 540,
+                  'endMinutes': 1020,
+                },
+              ],
+            },
+            'createdAt': _firestoreDataSource.serverTimestamp,
+            'updatedAt': _firestoreDataSource.serverTimestamp,
+          },
+        );
+      }
+      if (firstBusinessId != null) {
+        await _setSelectedBusiness(firstBusinessId);
+      }
+      log(
+        'Created ${_demoServices.length} demo service businesses.',
+        name: 'BusinessRepository',
+      );
+      return _demoServices.length;
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not seed demo services: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const BusinessException(
+        'We could not create the demo service businesses.',
+      );
+    }
+  }
+
   Future<void> deleteBusiness(BusinessModel business) async {
     final ownerId = _authenticationDataSource.currentUser?.uid;
     if (ownerId == null || business.ownerId != ownerId) {
@@ -461,6 +780,8 @@ class BusinessRepository {
     List<StayAmenity> amenities = const [],
     List<StayRoomModel> rooms = const [],
     List<StayExtraModel> extras = const [],
+    List<ServiceOfferingModel> serviceOfferings = const [],
+    List<ServiceAvailabilitySlotModel> availabilitySlots = const [],
     String? logoPath,
     String? coverPhotoPath,
   }) async {
@@ -473,6 +794,14 @@ class BusinessRepository {
     if (type == BusinessType.stays &&
         (pricePerNight == null || pricePerNight <= 0)) {
       throw const BusinessException('Please enter a valid price per night.');
+    }
+    if (type == BusinessType.services && serviceOfferings.isEmpty) {
+      throw const BusinessException('Please add at least one service.');
+    }
+    if (type == BusinessType.services && availabilitySlots.isEmpty) {
+      throw const BusinessException(
+        'Please add at least one availability slot.',
+      );
     }
     if (latitude == null || longitude == null) {
       throw const BusinessException(
@@ -524,6 +853,12 @@ class BusinessRepository {
                 amenities: amenities,
                 rooms: rooms,
                 extras: extras,
+              )
+            : null,
+        serviceDetails: type == BusinessType.services
+            ? ServiceDetailsModel(
+                offerings: serviceOfferings,
+                availabilitySlots: availabilitySlots,
               )
             : null,
       );
@@ -581,6 +916,33 @@ class BusinessRepository {
                       )
                       .toList(),
                 },
+          'serviceDetails': business.serviceDetails == null
+              ? null
+              : {
+                  'offerings': business.serviceDetails!.offerings
+                      .map(
+                        (offering) => {
+                          'id': offering.id,
+                          'name': offering.name,
+                          'durationMinutes': offering.durationMinutes,
+                          'price': offering.price,
+                          'description': offering.description,
+                        },
+                      )
+                      .toList(),
+                  'availabilitySlots': business
+                      .serviceDetails!
+                      .availabilitySlots
+                      .map(
+                        (slot) => {
+                          'id': slot.id,
+                          'weekday': slot.weekday.name,
+                          'startMinutes': slot.startMinutes,
+                          'endMinutes': slot.endMinutes,
+                        },
+                      )
+                      .toList(),
+                },
           'createdAt': _firestoreDataSource.serverTimestamp,
           'updatedAt': _firestoreDataSource.serverTimestamp,
         },
@@ -622,6 +984,7 @@ class BusinessRepository {
     );
     final typeName = data['type'] as String?;
     final stayDetailsData = data['stayDetails'];
+    final serviceDetailsData = data['serviceDetails'];
     final businessType = BusinessType.values.where(
       (type) => type.name == typeName,
     );
@@ -691,6 +1054,42 @@ class BusinessRepository {
                   })
                   .whereType<StayExtraModel>()
                   .toList(),
+            )
+          : null,
+      serviceDetails: serviceDetailsData is Map
+          ? ServiceDetailsModel(
+              offerings: (serviceDetailsData['offerings'] as List? ?? const [])
+                  .whereType<Map>()
+                  .map(
+                    (offering) => ServiceOfferingModel(
+                      id: offering['id'] as String? ?? '',
+                      name: offering['name'] as String? ?? '',
+                      durationMinutes:
+                          (offering['durationMinutes'] as num?)?.toInt() ?? 0,
+                      price: (offering['price'] as num?)?.toInt() ?? 0,
+                      description: offering['description'] as String?,
+                    ),
+                  )
+                  .toList(),
+              availabilitySlots:
+                  (serviceDetailsData['availabilitySlots'] as List? ?? const [])
+                      .whereType<Map>()
+                      .map((slot) {
+                        final weekdays = ServiceWeekday.values.where(
+                          (weekday) => weekday.name == slot['weekday'],
+                        );
+                        if (weekdays.isEmpty) return null;
+                        return ServiceAvailabilitySlotModel(
+                          id: slot['id'] as String? ?? '',
+                          weekday: weekdays.first,
+                          startMinutes:
+                              (slot['startMinutes'] as num?)?.toInt() ?? 0,
+                          endMinutes:
+                              (slot['endMinutes'] as num?)?.toInt() ?? 0,
+                        );
+                      })
+                      .whereType<ServiceAvailabilitySlotModel>()
+                      .toList(),
             )
           : null,
     );

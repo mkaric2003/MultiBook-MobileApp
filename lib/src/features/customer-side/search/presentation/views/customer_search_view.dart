@@ -5,13 +5,19 @@ import 'package:aquabook/src/features/customer-side/search/cubit/customer_search
 import 'package:aquabook/src/features/customer-side/search/cubit/customer_search_state.dart';
 import 'package:aquabook/src/features/customer-side/search/presentation/widgets/search_app_bar.dart';
 import 'package:aquabook/src/features/customer-side/search/presentation/widgets/customer_search_results_list.dart';
+import 'package:aquabook/src/features/customer-side/search/presentation/widgets/customer_service_search_results_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomerSearchView extends HookWidget {
-  const CustomerSearchView({super.key});
+  const CustomerSearchView({
+    this.initialTab = CustomerHomeTab.stays,
+    super.key,
+  });
+
+  final CustomerHomeTab initialTab;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class CustomerSearchView extends HookWidget {
     }, [searchFocusNode]);
 
     return BlocProvider(
-      create: (_) => getIt<CustomerSearchCubit>(),
+      create: (_) => getIt<CustomerSearchCubit>()..selectTab(initialTab),
       child: BlocBuilder<CustomerSearchCubit, CustomerSearchState>(
         builder: (context, state) {
           return Scaffold(
@@ -40,6 +46,9 @@ class CustomerSearchView extends HookWidget {
                       focusNode: searchFocusNode,
                       onChanged: context.read<CustomerSearchCubit>().search,
                       onBackPressed: () => context.pop(),
+                      hintText: state.selectedTab == CustomerHomeTab.stays
+                          ? 'Where do you want to stay?'
+                          : 'What service do you need?',
                     ),
                     const SizedBox(height: 24),
                     CustomerHomeTabSelector(
@@ -53,7 +62,11 @@ class CustomerSearchView extends HookWidget {
                               stays: state.stays,
                               isLoading: state.isLoading,
                             )
-                          : const Center(child: Text('Services coming soon')),
+                          : CustomerServiceSearchResultsList(
+                              query: state.query,
+                              services: state.services,
+                              isLoading: state.isLoading,
+                            ),
                     ),
                   ],
                 ),

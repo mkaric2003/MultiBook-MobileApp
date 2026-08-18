@@ -17,6 +17,8 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       BusinessTypeMapper.ensureInitialized();
       StayAmenityMapper.ensureInitialized();
       StayExtraTypeMapper.ensureInitialized();
+      ServiceOfferingModelMapper.ensureInitialized();
+      ServiceAvailabilitySlotModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -45,6 +47,25 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       v.selectedExtras;
   static const Field<AddBusinessState, List<StayExtraType>> _f$selectedExtras =
       Field('selectedExtras', _$selectedExtras, opt: true, def: const []);
+  static List<ServiceOfferingModel> _$serviceOfferings(AddBusinessState v) =>
+      v.serviceOfferings;
+  static const Field<AddBusinessState, List<ServiceOfferingModel>>
+  _f$serviceOfferings = Field(
+    'serviceOfferings',
+    _$serviceOfferings,
+    opt: true,
+    def: const [],
+  );
+  static List<ServiceAvailabilitySlotModel> _$availabilitySlots(
+    AddBusinessState v,
+  ) => v.availabilitySlots;
+  static const Field<AddBusinessState, List<ServiceAvailabilitySlotModel>>
+  _f$availabilitySlots = Field(
+    'availabilitySlots',
+    _$availabilitySlots,
+    opt: true,
+    def: const [],
+  );
   static double? _$latitude(AddBusinessState v) => v.latitude;
   static const Field<AddBusinessState, double> _f$latitude = Field(
     'latitude',
@@ -130,6 +151,8 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #categoryId: _f$categoryId,
     #selectedAmenities: _f$selectedAmenities,
     #selectedExtras: _f$selectedExtras,
+    #serviceOfferings: _f$serviceOfferings,
+    #availabilitySlots: _f$availabilitySlots,
     #latitude: _f$latitude,
     #longitude: _f$longitude,
     #resolvedCity: _f$resolvedCity,
@@ -150,6 +173,8 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       categoryId: data.dec(_f$categoryId),
       selectedAmenities: data.dec(_f$selectedAmenities),
       selectedExtras: data.dec(_f$selectedExtras),
+      serviceOfferings: data.dec(_f$serviceOfferings),
+      availabilitySlots: data.dec(_f$availabilitySlots),
       latitude: data.dec(_f$latitude),
       longitude: data.dec(_f$longitude),
       resolvedCity: data.dec(_f$resolvedCity),
@@ -235,11 +260,29 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     ObjectCopyWith<$R, StayExtraType, StayExtraType>
   >
   get selectedExtras;
+  ListCopyWith<
+    $R,
+    ServiceOfferingModel,
+    ServiceOfferingModelCopyWith<$R, ServiceOfferingModel, ServiceOfferingModel>
+  >
+  get serviceOfferings;
+  ListCopyWith<
+    $R,
+    ServiceAvailabilitySlotModel,
+    ServiceAvailabilitySlotModelCopyWith<
+      $R,
+      ServiceAvailabilitySlotModel,
+      ServiceAvailabilitySlotModel
+    >
+  >
+  get availabilitySlots;
   $R call({
     BusinessType? businessType,
     String? categoryId,
     List<StayAmenity>? selectedAmenities,
     List<StayExtraType>? selectedExtras,
+    List<ServiceOfferingModel>? serviceOfferings,
+    List<ServiceAvailabilitySlotModel>? availabilitySlots,
     double? latitude,
     double? longitude,
     String? resolvedCity,
@@ -285,11 +328,39 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     (v) => call(selectedExtras: v),
   );
   @override
+  ListCopyWith<
+    $R,
+    ServiceOfferingModel,
+    ServiceOfferingModelCopyWith<$R, ServiceOfferingModel, ServiceOfferingModel>
+  >
+  get serviceOfferings => ListCopyWith(
+    $value.serviceOfferings,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(serviceOfferings: v),
+  );
+  @override
+  ListCopyWith<
+    $R,
+    ServiceAvailabilitySlotModel,
+    ServiceAvailabilitySlotModelCopyWith<
+      $R,
+      ServiceAvailabilitySlotModel,
+      ServiceAvailabilitySlotModel
+    >
+  >
+  get availabilitySlots => ListCopyWith(
+    $value.availabilitySlots,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(availabilitySlots: v),
+  );
+  @override
   $R call({
     BusinessType? businessType,
     Object? categoryId = $none,
     List<StayAmenity>? selectedAmenities,
     List<StayExtraType>? selectedExtras,
+    List<ServiceOfferingModel>? serviceOfferings,
+    List<ServiceAvailabilitySlotModel>? availabilitySlots,
     Object? latitude = $none,
     Object? longitude = $none,
     Object? resolvedCity = $none,
@@ -308,6 +379,8 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       if (categoryId != $none) #categoryId: categoryId,
       if (selectedAmenities != null) #selectedAmenities: selectedAmenities,
       if (selectedExtras != null) #selectedExtras: selectedExtras,
+      if (serviceOfferings != null) #serviceOfferings: serviceOfferings,
+      if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
       if (latitude != $none) #latitude: latitude,
       if (longitude != $none) #longitude: longitude,
       if (resolvedCity != $none) #resolvedCity: resolvedCity,
@@ -333,6 +406,11 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       or: $value.selectedAmenities,
     ),
     selectedExtras: data.get(#selectedExtras, or: $value.selectedExtras),
+    serviceOfferings: data.get(#serviceOfferings, or: $value.serviceOfferings),
+    availabilitySlots: data.get(
+      #availabilitySlots,
+      or: $value.availabilitySlots,
+    ),
     latitude: data.get(#latitude, or: $value.latitude),
     longitude: data.get(#longitude, or: $value.longitude),
     resolvedCity: data.get(#resolvedCity, or: $value.resolvedCity),

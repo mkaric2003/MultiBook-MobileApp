@@ -5,6 +5,7 @@ import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -16,50 +17,29 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   final BusinessRepository _businessRepository;
   final BookingDraftRepository _draftRepository;
   DataCursor<BusinessModel>? _staysCursor;
+  DataCursor<BusinessModel>? _servicesCursor;
 
   void selectTab(CustomerHomeTab tab) {
-    emit(
-      CustomerDashboardState(
-        selectedTab: tab,
-        isRecommendedStaysLoading: state.isRecommendedStaysLoading,
-        recommendedStays: state.recommendedStays,
-        isOtherStaysLoading: state.isOtherStaysLoading,
-        otherStays: state.otherStays,
-        hasMoreOtherStays: state.hasMoreOtherStays,
-        bookingDraft: state.bookingDraft,
-      ),
-    );
+    emit(state.copyWith(selectedTab: tab));
+    if (tab == CustomerHomeTab.services && state.isPopularServicesLoading) {
+      loadPopularServices();
+    }
   }
 
   Future<void> loadDraft() async {
     final draft = await _draftRepository.getDraft();
-    emit(
-      CustomerDashboardState(
-        selectedTab: state.selectedTab,
-        isRecommendedStaysLoading: state.isRecommendedStaysLoading,
-        recommendedStays: state.recommendedStays,
-        isOtherStaysLoading: state.isOtherStaysLoading,
-        otherStays: state.otherStays,
-        hasMoreOtherStays: state.hasMoreOtherStays,
-        bookingDraft: draft,
-      ),
-    );
+    emit(state.copyWith(bookingDraft: draft));
   }
 
   Future<void> loadRecommendedStays() async {
     final recommendedBusinesses = await _businessRepository
         .getRecommendedStays();
     emit(
-      CustomerDashboardState(
-        selectedTab: state.selectedTab,
+      state.copyWith(
         isRecommendedStaysLoading: false,
         recommendedStays: recommendedBusinesses
             .map(StayListing.fromBusiness)
             .toList(),
-        isOtherStaysLoading: state.isOtherStaysLoading,
-        otherStays: state.otherStays,
-        hasMoreOtherStays: state.hasMoreOtherStays,
-        bookingDraft: state.bookingDraft,
       ),
     );
     await loadMoreStays();
@@ -71,17 +51,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     }
 
     _staysCursor ??= _businessRepository.getStaysCursor();
-    emit(
-      CustomerDashboardState(
-        selectedTab: state.selectedTab,
-        isRecommendedStaysLoading: state.isRecommendedStaysLoading,
-        recommendedStays: state.recommendedStays,
-        isOtherStaysLoading: true,
-        otherStays: state.otherStays,
-        hasMoreOtherStays: state.hasMoreOtherStays,
-        bookingDraft: state.bookingDraft,
-      ),
-    );
+    emit(state.copyWith(isOtherStaysLoading: true));
 
     try {
       final nextPage = await _staysCursor!.fetchNextPage();
@@ -96,26 +66,64 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
           .map(StayListing.fromBusiness)
           .toList();
       emit(
-        CustomerDashboardState(
-          selectedTab: state.selectedTab,
-          isRecommendedStaysLoading: state.isRecommendedStaysLoading,
-          recommendedStays: state.recommendedStays,
+        state.copyWith(
           isOtherStaysLoading: false,
           otherStays: [...state.otherStays, ...newStays],
           hasMoreOtherStays: !_staysCursor!.isEverythingLoaded,
-          bookingDraft: state.bookingDraft,
         ),
       );
     } catch (_) {
       emit(
-        CustomerDashboardState(
-          selectedTab: state.selectedTab,
-          isRecommendedStaysLoading: state.isRecommendedStaysLoading,
-          recommendedStays: state.recommendedStays,
-          isOtherStaysLoading: false,
-          otherStays: state.otherStays,
-          hasMoreOtherStays: false,
-          bookingDraft: state.bookingDraft,
+        state.copyWith(isOtherStaysLoading: false, hasMoreOtherStays: false),
+      );
+    }
+  }
+
+  Future<void> loadPopularServices() async {
+    final popularBusinesses = await _businessRepository.getPopularServices();
+    emit(
+      state.copyWith(
+        isPopularServicesLoading: false,
+        popularServices: popularBusinesses
+            .map(ServiceListing.fromBusiness)
+            .toList(),
+      ),
+    );
+    await loadMoreServices();
+  }
+
+  Future<void> loadMoreServices() async {
+    if (state.isOtherServicesLoading || !state.hasMoreOtherServices) {
+      return;
+    }
+
+    _servicesCursor ??= _businessRepository.getServicesCursor();
+    emit(state.copyWith(isOtherServicesLoading: true));
+
+    try {
+      final nextPage = await _servicesCursor!.fetchNextPage();
+      final popularIds = state.popularServices
+          .map((service) => service.id)
+          .toSet();
+      final newServices = nextPage
+          .where(
+            (business) =>
+                business.isActive && !popularIds.contains(business.id),
+          )
+          .map(ServiceListing.fromBusiness)
+          .toList();
+      emit(
+        state.copyWith(
+          isOtherServicesLoading: false,
+          otherServices: [...state.otherServices, ...newServices],
+          hasMoreOtherServices: !_servicesCursor!.isEverythingLoaded,
+        ),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isOtherServicesLoading: false,
+          hasMoreOtherServices: false,
         ),
       );
     }

@@ -11,6 +11,7 @@ import 'package:aquabook/src/features/business-side/my_businesses/presentation/v
 import 'package:aquabook/src/features/customer-side/home/presentation/views/customer_home_view.dart';
 import 'package:aquabook/src/features/customer-side/profile/presentation/views/customer_edit_profile_view.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/presentation/views/booking_details_view.dart';
 import 'package:aquabook/src/features/customer-side/search/presentation/views/customer_search_view.dart';
