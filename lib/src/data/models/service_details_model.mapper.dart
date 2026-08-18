@@ -16,6 +16,7 @@ class ServiceDetailsModelMapper extends ClassMapperBase<ServiceDetailsModel> {
       MapperContainer.globals.use(_instance = ServiceDetailsModelMapper._());
       ServiceOfferingModelMapper.ensureInitialized();
       ServiceAvailabilitySlotModelMapper.ensureInitialized();
+      ServiceProviderModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -37,17 +38,22 @@ class ServiceDetailsModelMapper extends ClassMapperBase<ServiceDetailsModel> {
     opt: true,
     def: const [],
   );
+  static ServiceProviderModel? _$provider(ServiceDetailsModel v) => v.provider;
+  static const Field<ServiceDetailsModel, ServiceProviderModel> _f$provider =
+      Field('provider', _$provider, opt: true);
 
   @override
   final MappableFields<ServiceDetailsModel> fields = const {
     #offerings: _f$offerings,
     #availabilitySlots: _f$availabilitySlots,
+    #provider: _f$provider,
   };
 
   static ServiceDetailsModel _instantiate(DecodingData data) {
     return ServiceDetailsModel(
       offerings: data.dec(_f$offerings),
       availabilitySlots: data.dec(_f$availabilitySlots),
+      provider: data.dec(_f$provider),
     );
   }
 
@@ -137,9 +143,12 @@ abstract class ServiceDetailsModelCopyWith<
     >
   >
   get availabilitySlots;
+  ServiceProviderModelCopyWith<$R, ServiceProviderModel, ServiceProviderModel>?
+  get provider;
   $R call({
     List<ServiceOfferingModel>? offerings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
+    ServiceProviderModel? provider,
   });
   ServiceDetailsModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -181,13 +190,18 @@ class _ServiceDetailsModelCopyWithImpl<$R, $Out>
     (v) => call(availabilitySlots: v),
   );
   @override
+  ServiceProviderModelCopyWith<$R, ServiceProviderModel, ServiceProviderModel>?
+  get provider => $value.provider?.copyWith.$chain((v) => call(provider: v));
+  @override
   $R call({
     List<ServiceOfferingModel>? offerings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
+    Object? provider = $none,
   }) => $apply(
     FieldCopyWithData({
       if (offerings != null) #offerings: offerings,
       if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
+      if (provider != $none) #provider: provider,
     }),
   );
   @override
@@ -197,6 +211,7 @@ class _ServiceDetailsModelCopyWithImpl<$R, $Out>
       #availabilitySlots,
       or: $value.availabilitySlots,
     ),
+    provider: data.get(#provider, or: $value.provider),
   );
 
   @override

@@ -6,16 +6,23 @@ class PaymentWalletOption extends StatelessWidget {
     super.key,
     required this.label,
     required this.icon,
+    this.backgroundColor = AppColors.surface,
+    this.foregroundColor = Colors.white,
+    this.borderColor,
   });
   final String label;
   final Widget icon;
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final Color? borderColor;
   @override
   Widget build(BuildContext context) => Container(
     height: 72,
     alignment: Alignment.center,
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: backgroundColor,
       borderRadius: BorderRadius.circular(18),
+      border: borderColor == null ? null : Border.all(color: borderColor!),
     ),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -24,7 +31,11 @@ class PaymentWalletOption extends StatelessWidget {
         const SizedBox(width: 12),
         Text(
           label,
-          style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
+          style: TextStyle(
+            color: foregroundColor,
+            fontSize: 19,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ],
     ),

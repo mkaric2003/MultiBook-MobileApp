@@ -14,6 +14,7 @@ import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
 import 'package:aquabook/src/data/models/service_details_model.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
+import 'package:aquabook/src/data/models/service_provider_model.dart';
 import 'package:aquabook/src/data/models/stay_details_model.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
@@ -712,6 +713,16 @@ class BusinessRepository {
                   'endMinutes': 1020,
                 },
               ],
+              'provider': {
+                'name': [
+                  'Amina Hadzic',
+                  'Lejla Kovacevic',
+                  'Marko Jovic',
+                  'Sara Begic',
+                  'Emir Mujic',
+                ][index % 5],
+                'title': 'Service provider',
+              },
             },
             'createdAt': _firestoreDataSource.serverTimestamp,
             'updatedAt': _firestoreDataSource.serverTimestamp,
@@ -782,6 +793,7 @@ class BusinessRepository {
     List<StayExtraModel> extras = const [],
     List<ServiceOfferingModel> serviceOfferings = const [],
     List<ServiceAvailabilitySlotModel> availabilitySlots = const [],
+    String? serviceProviderName,
     String? logoPath,
     String? coverPhotoPath,
   }) async {
@@ -802,6 +814,10 @@ class BusinessRepository {
       throw const BusinessException(
         'Please add at least one availability slot.',
       );
+    }
+    if (type == BusinessType.services &&
+        serviceProviderName?.trim().isEmpty != false) {
+      throw const BusinessException('Please add the service provider name.');
     }
     if (latitude == null || longitude == null) {
       throw const BusinessException(
@@ -859,6 +875,9 @@ class BusinessRepository {
             ? ServiceDetailsModel(
                 offerings: serviceOfferings,
                 availabilitySlots: availabilitySlots,
+                provider: ServiceProviderModel(
+                  name: serviceProviderName!.trim(),
+                ),
               )
             : null,
       );
@@ -942,6 +961,12 @@ class BusinessRepository {
                         },
                       )
                       .toList(),
+                  'provider': business.serviceDetails!.provider == null
+                      ? null
+                      : {
+                          'name': business.serviceDetails!.provider!.name,
+                          'title': business.serviceDetails!.provider!.title,
+                        },
                 },
           'createdAt': _firestoreDataSource.serverTimestamp,
           'updatedAt': _firestoreDataSource.serverTimestamp,
@@ -1090,6 +1115,17 @@ class BusinessRepository {
                       })
                       .whereType<ServiceAvailabilitySlotModel>()
                       .toList(),
+              provider: serviceDetailsData['provider'] is Map
+                  ? ServiceProviderModel(
+                      name:
+                          (serviceDetailsData['provider'] as Map)['name']
+                              as String? ??
+                          '',
+                      title:
+                          (serviceDetailsData['provider'] as Map)['title']
+                              as String?,
+                    )
+                  : null,
             )
           : null,
     );

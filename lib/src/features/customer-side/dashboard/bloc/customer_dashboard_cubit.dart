@@ -2,6 +2,8 @@ import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
+import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart';
+import 'package:aquabook/src/data/models/appointment_draft_model.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
@@ -11,11 +13,15 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
-  CustomerDashboardCubit(this._businessRepository, this._draftRepository)
-    : super(const CustomerDashboardState());
+  CustomerDashboardCubit(
+    this._businessRepository,
+    this._draftRepository,
+    this._appointmentDraftRepository,
+  ) : super(const CustomerDashboardState());
 
   final BusinessRepository _businessRepository;
   final BookingDraftRepository _draftRepository;
+  final AppointmentDraftRepository _appointmentDraftRepository;
   DataCursor<BusinessModel>? _staysCursor;
   DataCursor<BusinessModel>? _servicesCursor;
 
@@ -30,6 +36,15 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     final draft = await _draftRepository.getDraft();
     emit(state.copyWith(bookingDraft: draft));
   }
+
+  Future<void> loadAppointmentDraft() async {
+    final draft = await _appointmentDraftRepository.getDraft();
+    emit(state.copyWith(appointmentDraft: draft));
+  }
+
+  Future<BusinessModel?> getAppointmentDraftBusiness(
+    AppointmentDraftModel draft,
+  ) => _businessRepository.getBusiness(businessId: draft.businessId);
 
   Future<void> loadRecommendedStays() async {
     final recommendedBusinesses = await _businessRepository

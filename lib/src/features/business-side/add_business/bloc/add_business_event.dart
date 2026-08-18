@@ -107,6 +107,7 @@ class BusinessCreationRequested extends AddBusinessEvent {
     this.extras = const [],
     this.serviceOfferings = const [],
     this.availabilitySlots = const [],
+    this.serviceProviderName,
   });
 
   final String name;
@@ -119,4 +120,5 @@ class BusinessCreationRequested extends AddBusinessEvent {
   final List<StayExtraModel> extras;
   final List<ServiceOfferingModel> serviceOfferings;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
+  final String? serviceProviderName;
 }

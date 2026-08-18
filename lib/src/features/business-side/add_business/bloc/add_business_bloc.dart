@@ -245,6 +245,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         extras: event.extras,
         serviceOfferings: event.serviceOfferings,
         availabilitySlots: event.availabilitySlots,
+        serviceProviderName: event.serviceProviderName,
         latitude: state.latitude,
         longitude: state.longitude,
         logoPath: state.logoPath,

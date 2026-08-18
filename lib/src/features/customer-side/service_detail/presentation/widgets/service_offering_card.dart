@@ -1,0 +1,85 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/data/models/service_offering_model.dart';
+import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:flutter/material.dart';
+
+class ServiceOfferingCard extends StatelessWidget {
+  const ServiceOfferingCard({
+    required this.offering,
+    required this.onBook,
+    super.key,
+  });
+
+  final ServiceOfferingModel offering;
+  final VoidCallback onBook;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  offering.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                if (offering.description?.isNotEmpty ?? false) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    offering.description!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColors.muted,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 9),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.schedule,
+                      color: AppColors.muted,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${offering.durationMinutes} min',
+                      style: const TextStyle(color: AppColors.muted),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      '\$${offering.price}',
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          SizedBox(
+            width: 76,
+            child: CustomButton(
+              buttonName: 'Book',
+              horizontalPadding: 12,
+              onPressed: onBook,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

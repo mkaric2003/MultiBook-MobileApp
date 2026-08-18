@@ -2,6 +2,7 @@ import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/custo
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/data/models/booking_draft_model.dart';
+import 'package:aquabook/src/data/models/appointment_draft_model.dart';
 
 class CustomerDashboardState {
   const CustomerDashboardState({
@@ -17,6 +18,7 @@ class CustomerDashboardState {
     this.otherServices = const [],
     this.hasMoreOtherServices = true,
     this.bookingDraft,
+    this.appointmentDraft,
   });
 
   final CustomerHomeTab selectedTab;
@@ -31,6 +33,7 @@ class CustomerDashboardState {
   final List<ServiceListing> otherServices;
   final bool hasMoreOtherServices;
   final BookingDraftModel? bookingDraft;
+  final AppointmentDraftModel? appointmentDraft;
 
   CustomerDashboardState copyWith({
     CustomerHomeTab? selectedTab,
@@ -45,6 +48,7 @@ class CustomerDashboardState {
     List<ServiceListing>? otherServices,
     bool? hasMoreOtherServices,
     Object? bookingDraft = _unset,
+    Object? appointmentDraft = _unset,
   }) {
     return CustomerDashboardState(
       selectedTab: selectedTab ?? this.selectedTab,
@@ -64,6 +68,9 @@ class CustomerDashboardState {
       bookingDraft: identical(bookingDraft, _unset)
           ? this.bookingDraft
           : bookingDraft as BookingDraftModel?,
+      appointmentDraft: identical(appointmentDraft, _unset)
+          ? this.appointmentDraft
+          : appointmentDraft as AppointmentDraftModel?,
     );
   }
 

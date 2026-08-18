@@ -1,0 +1,268 @@
+import 'package:aquabook/app.dart';
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/data/enums/service_weekday.dart';
+import 'package:aquabook/src/data/models/service_offering_model.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/appointment_time_availability.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/create_appointment_arguments.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/cubit/appointment_draft_cubit.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_calendar.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_service_option_card.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_time_grid.dart';
+import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
+import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+class CreateAppointmentView extends HookWidget {
+  const CreateAppointmentView({required this.arguments, super.key});
+
+  final CreateAppointmentArguments arguments;
+
+  @override
+  Widget build(BuildContext context) {
+    final offerings =
+        arguments.business.serviceDetails?.offerings ??
+        const <ServiceOfferingModel>[];
+    final initialOfferingId =
+        offerings.any((offering) => offering.id == arguments.initialOfferingId)
+        ? arguments.initialOfferingId
+        : offerings.firstOrNull?.id;
+    final restoredOfferingIds =
+        arguments.draft?.selectedOfferingIds ?? const [];
+    final selectedOfferingIds = useState<Set<String>>(
+      restoredOfferingIds.isNotEmpty
+          ? restoredOfferingIds.toSet()
+          : initialOfferingId == null
+          ? <String>{}
+          : {initialOfferingId},
+    );
+    final selectedDate = useState(
+      DateUtils.dateOnly(arguments.draft?.date ?? DateTime.now()),
+    );
+    final visibleMonth = useState(
+      DateTime(selectedDate.value.year, selectedDate.value.month),
+    );
+    final selectedTime = useState<int?>(arguments.draft?.startMinutes);
+    final selectedOfferings = offerings
+        .where((offering) => selectedOfferingIds.value.contains(offering.id))
+        .toList();
+    final totalDurationMinutes = selectedOfferings.fold(
+      0,
+      (total, offering) => total + offering.durationMinutes,
+    );
+    final availability = _availableTimes(
+      selectedDate: selectedDate.value,
+      totalDurationMinutes: totalDurationMinutes,
+      arguments: arguments,
+    );
+
+    final canContinue =
+        selectedOfferings.isNotEmpty && selectedTime.value != null;
+
+    return BlocProvider(
+      create: (_) => getIt<AppointmentDraftCubit>(),
+      child: Builder(
+        builder: (context) => Scaffold(
+          backgroundColor: AppColors.background,
+          body: SafeArea(
+            child: Column(
+              children: [
+                CustomAppBar(
+                  title: 'Create appointment',
+                  onBackPressed: () async {
+                    final shouldSave = await showDialog<bool>(
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        title: const Text('Save appointment draft?'),
+                        content: const Text(
+                          'You can continue this appointment later from Home.',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.pop(dialogContext, false),
+                            child: const Text('Discard'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(dialogContext, true),
+                            child: const Text('Save draft'),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (!context.mounted) return;
+                    if (shouldSave == true) {
+                      await context.read<AppointmentDraftCubit>().save(
+                        business: arguments.business,
+                        offeringIds: selectedOfferingIds.value.toList(),
+                        date: selectedDate.value,
+                        startMinutes: selectedTime.value,
+                      );
+                      if (context.mounted) context.go(AppRoutes.CUSTOMER_HOME);
+                      return;
+                    }
+                    if (context.mounted) context.pop();
+                  },
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(22, 24, 22, 28),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Select a service',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ...offerings.map(
+                          (offering) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: AppointmentServiceOptionCard(
+                              offering: offering,
+                              isSelected: selectedOfferingIds.value.contains(
+                                offering.id,
+                              ),
+                              onTap: () {
+                                final updated = {...selectedOfferingIds.value};
+                                updated.contains(offering.id)
+                                    ? updated.remove(offering.id)
+                                    : updated.add(offering.id);
+                                selectedOfferingIds.value = updated;
+                                selectedTime.value = null;
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 26),
+                        const Text(
+                          'Select date',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        AppointmentCalendar(
+                          visibleMonth: visibleMonth.value,
+                          selectedDate: selectedDate.value,
+                          onPreviousMonth: () {
+                            final current = visibleMonth.value;
+                            final previous = DateTime(
+                              current.year,
+                              current.month - 1,
+                            );
+                            if (!previous.isBefore(
+                              DateTime(
+                                DateTime.now().year,
+                                DateTime.now().month,
+                              ),
+                            )) {
+                              visibleMonth.value = previous;
+                            }
+                          },
+                          onNextMonth: () {
+                            final current = visibleMonth.value;
+                            visibleMonth.value = DateTime(
+                              current.year,
+                              current.month + 1,
+                            );
+                          },
+                          onDateSelected: (date) {
+                            selectedDate.value = date;
+                            selectedTime.value = null;
+                          },
+                        ),
+                        const SizedBox(height: 26),
+                        const Text(
+                          'Available times',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        AppointmentTimeGrid(
+                          times: availability.availableTimes,
+                          bookableStartTimes: availability.bookableStartTimes,
+                          selectedTime: selectedTime.value,
+                          selectedDurationMinutes: totalDurationMinutes,
+                          onTimeSelected: (time) => selectedTime.value = time,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(22, 16, 22, 22),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: AppColors.surfaceHighlight),
+                    ),
+                  ),
+                  child: CustomButton(
+                    buttonName: 'Continue',
+                    enabled: canContinue,
+                    onPressed: !canContinue
+                        ? null
+                        : () => context.push(
+                            AppRoutes.REVIEW_APPOINTMENT,
+                            extra: ReviewAppointmentArguments(
+                              business: arguments.business,
+                              offerings: selectedOfferings,
+                              date: selectedDate.value,
+                              startMinutes: selectedTime.value!,
+                              preselectedAddOnIds:
+                                  arguments.draft?.selectedAddOnIds ?? const [],
+                            ),
+                          ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  AppointmentTimeAvailability _availableTimes({
+    required DateTime selectedDate,
+    required int totalDurationMinutes,
+    required CreateAppointmentArguments arguments,
+  }) {
+    if (totalDurationMinutes <= 0) {
+      return const AppointmentTimeAvailability(
+        availableTimes: [],
+        bookableStartTimes: {},
+      );
+    }
+    final weekday = ServiceWeekday.values[selectedDate.weekday - 1];
+    final slots =
+        arguments.business.serviceDetails?.availabilitySlots
+            .where((slot) => slot.weekday == weekday)
+            .toList() ??
+        const [];
+    final times = <int>{};
+    final bookableStartTimes = <int>{};
+    for (final slot in slots) {
+      for (var time = slot.startMinutes; time < slot.endMinutes; time += 30) {
+        times.add(time);
+        if (time + totalDurationMinutes <= slot.endMinutes) {
+          bookableStartTimes.add(time);
+        }
+      }
+    }
+    return AppointmentTimeAvailability(
+      availableTimes: times.toList()..sort(),
+      bookableStartTimes: bookableStartTimes,
+    );
+  }
+}

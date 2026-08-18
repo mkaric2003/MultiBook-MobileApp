@@ -1,5 +1,6 @@
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/create_appointment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
@@ -7,8 +8,8 @@ import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_top_bar.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/destination_search_field.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stays_content.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/services_content.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stays_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +47,7 @@ class CustomerDashboardView extends StatelessWidget {
         final cubit = getIt<CustomerDashboardCubit>();
         cubit.loadRecommendedStays();
         cubit.loadDraft();
+        cubit.loadAppointmentDraft();
         return cubit;
       },
       child: BlocBuilder<CustomerDashboardCubit, CustomerDashboardState>(
@@ -103,6 +105,29 @@ class CustomerDashboardView extends StatelessWidget {
                           onLoadMoreServices: context
                               .read<CustomerDashboardCubit>()
                               .loadMoreServices,
+                          appointmentDraft: state.appointmentDraft,
+                          onContinueAppointment: state.appointmentDraft == null
+                              ? null
+                              : () async {
+                                  final draft = state.appointmentDraft!;
+                                  final business = await context
+                                      .read<CustomerDashboardCubit>()
+                                      .getAppointmentDraftBusiness(draft);
+                                  if (context.mounted && business != null) {
+                                    context.push(
+                                      AppRoutes.CREATE_APPOINTMENT,
+                                      extra: CreateAppointmentArguments(
+                                        business: business,
+                                        initialOfferingId:
+                                            draft
+                                                .selectedOfferingIds
+                                                .firstOrNull ??
+                                            '',
+                                        draft: draft,
+                                      ),
+                                    );
+                                  }
+                                },
                         ),
                 ),
               ],

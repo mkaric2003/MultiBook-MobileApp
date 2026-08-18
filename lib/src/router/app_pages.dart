@@ -71,6 +71,40 @@ final router = GoRouter(
           StayDetailView(stay: state.extra! as StayListing),
     ),
     GoRoute(
+      path: AppRoutes.SERVICE_DETAIL,
+      name: AppRoutes.SERVICE_DETAIL,
+      builder: (context, state) =>
+          ServiceDetailView(service: state.extra! as ServiceListing),
+    ),
+    GoRoute(
+      path: AppRoutes.CREATE_APPOINTMENT,
+      name: AppRoutes.CREATE_APPOINTMENT,
+      builder: (context, state) => CreateAppointmentView(
+        arguments: state.extra! as CreateAppointmentArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.REVIEW_APPOINTMENT,
+      name: AppRoutes.REVIEW_APPOINTMENT,
+      builder: (context, state) => ReviewAppointmentView(
+        arguments: state.extra! as ReviewAppointmentArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.APPOINTMENT_PAYMENT,
+      name: AppRoutes.APPOINTMENT_PAYMENT,
+      builder: (context, state) => AppointmentPaymentView(
+        arguments: state.extra! as AppointmentPaymentArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.APPOINTMENT_CONFIRMED,
+      name: AppRoutes.APPOINTMENT_CONFIRMED,
+      builder: (context, state) => AppointmentConfirmedView(
+        arguments: state.extra! as AppointmentConfirmedArguments,
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.BOOKING_DETAILS,
       name: AppRoutes.BOOKING_DETAILS,
       builder: (context, state) => BookingDetailsView(

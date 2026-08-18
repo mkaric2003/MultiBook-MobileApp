@@ -1,6 +1,8 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/app.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ServiceListingCard extends StatelessWidget {
   const ServiceListingCard({
@@ -68,27 +70,30 @@ class ServiceListingCard extends StatelessWidget {
           ),
         );
 
-        return Container(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(13),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.network(
-                service.imageUrl,
-                height: imageHeight,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => SizedBox(
+        return GestureDetector(
+          onTap: () => context.push(AppRoutes.SERVICE_DETAIL, extra: service),
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(13),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.network(
+                  service.imageUrl,
                   height: imageHeight,
-                  child: const ColoredBox(color: AppColors.surfaceHighlight),
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => SizedBox(
+                    height: imageHeight,
+                    child: const ColoredBox(color: AppColors.surfaceHighlight),
+                  ),
                 ),
-              ),
-              if (pinPriceToBottom) Expanded(child: details) else details,
-            ],
+                if (pinPriceToBottom) Expanded(child: details) else details,
+              ],
+            ),
           ),
         );
       },
