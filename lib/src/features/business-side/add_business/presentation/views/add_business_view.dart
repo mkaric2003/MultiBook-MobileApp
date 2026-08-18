@@ -10,8 +10,8 @@ import 'package:aquabook/src/features/business-side/add_business/bloc/add_busine
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_state.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/models/add_business_categories.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_location_placeholder.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/amenities_selector.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_location_map.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_media_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_type_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
@@ -61,8 +61,17 @@ class AddBusinessView extends HookWidget {
         listenWhen: (previous, current) =>
             previous.errorMessage != current.errorMessage ||
             previous.successMessage != current.successMessage ||
-            previous.isSuccess != current.isSuccess,
+            previous.isSuccess != current.isSuccess ||
+            previous.resolvedCity != current.resolvedCity ||
+            previous.resolvedAddress != current.resolvedAddress,
         listener: (context, state) {
+          if (state.resolvedCity?.isNotEmpty ?? false) {
+            cityController.text = state.resolvedCity!;
+          }
+          if (state.resolvedAddress?.isNotEmpty ?? false) {
+            addressController.text = state.resolvedAddress!;
+          }
+
           final message =
               state.errorMessage ??
               state.successMessage ??
@@ -83,6 +92,8 @@ class AddBusinessView extends HookWidget {
               nameController.text.trim().isNotEmpty &&
               cityController.text.trim().isNotEmpty &&
               addressController.text.trim().isNotEmpty &&
+              state.latitude != null &&
+              state.longitude != null &&
               state.categoryId != null &&
               (state.businessType != BusinessType.stays ||
                   (int.tryParse(priceController.text) ?? 0) > 0) &&
@@ -246,7 +257,17 @@ class AddBusinessView extends HookWidget {
                             controller: addressController,
                           ),
                           const SizedBox(height: 10),
-                          const BusinessLocationPlaceholder(),
+                          BusinessLocationMap(
+                            latitude: state.latitude,
+                            longitude: state.longitude,
+                            onLocationSelected: (location) =>
+                                context.read<AddBusinessBloc>().add(
+                                  BusinessLocationChanged(
+                                    latitude: location.latitude,
+                                    longitude: location.longitude,
+                                  ),
+                                ),
+                          ),
                           const SizedBox(height: 26),
                           const FormFieldLabel('Short description'),
                           const SizedBox(height: 10),

@@ -82,7 +82,7 @@ class StayDetailView extends StatelessWidget {
                     AmenitiesSection(business: business),
                     StayAboutSection(business: business),
                     StayGuestReviewsSection(stay: listing),
-                    StayLocationSection(stay: listing),
+                    StayLocationSection(business: business),
                     const SizedBox(height: 28),
                   ],
                 ),

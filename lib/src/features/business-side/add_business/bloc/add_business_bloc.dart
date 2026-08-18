@@ -18,6 +18,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     on<BusinessCategoryChanged>(_onBusinessCategoryChanged);
     on<BusinessAmenityToggled>(_onBusinessAmenityToggled);
     on<BusinessExtraToggled>(_onBusinessExtraToggled);
+    on<BusinessLocationChanged>(_onBusinessLocationChanged);
     on<BusinessImagePickRequested>(_onBusinessImagePickRequested);
     on<LostBusinessImageRestoreRequested>(_onLostBusinessImageRestoreRequested);
     on<ExistingBusinessesLoadRequested>(_onExistingBusinessesLoadRequested);
@@ -70,6 +71,32 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         ? extras.remove(event.extra)
         : extras.add(event.extra);
     emit(state.copyWith(selectedExtras: extras));
+  }
+
+  Future<void> _onBusinessLocationChanged(
+    BusinessLocationChanged event,
+    Emitter<AddBusinessState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        latitude: event.latitude,
+        longitude: event.longitude,
+        isResolvingLocation: true,
+      ),
+    );
+    final location = await _businessRepository.resolveBusinessLocation(
+      latitude: event.latitude,
+      longitude: event.longitude,
+    );
+    emit(
+      state.copyWith(
+        latitude: event.latitude,
+        longitude: event.longitude,
+        resolvedCity: location?.city,
+        resolvedAddress: location?.address,
+        isResolvingLocation: false,
+      ),
+    );
   }
 
   Future<void> _onBusinessImagePickRequested(
@@ -163,6 +190,8 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         amenities: event.amenities,
         rooms: event.rooms,
         extras: event.extras,
+        latitude: state.latitude,
+        longitude: state.longitude,
         logoPath: state.logoPath,
         coverPhotoPath: state.coverPhotoPath,
       );

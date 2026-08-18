@@ -4,6 +4,7 @@ import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
+import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
@@ -30,6 +31,7 @@ class BusinessRepository {
     this._authenticationDataSource,
     this._firestoreDataSource,
     this._storageDataSource,
+    this._nominatimDataSource,
     this._userRepository,
   );
 
@@ -89,6 +91,7 @@ class BusinessRepository {
   final AuthenticationDataSource _authenticationDataSource;
   final FirestoreDataSource _firestoreDataSource;
   final FirebaseStorageDataSource _storageDataSource;
+  final NominatimDataSource _nominatimDataSource;
   final UserRepository _userRepository;
 
   Future<bool> hasBusinesses() async {
@@ -113,6 +116,14 @@ class BusinessRepository {
       return false;
     }
   }
+
+  Future<BusinessLocationModel?> resolveBusinessLocation({
+    required double latitude,
+    required double longitude,
+  }) => _nominatimDataSource.reverseGeocode(
+    latitude: latitude,
+    longitude: longitude,
+  );
 
   Future<BusinessModel?> getBusiness({required String businessId}) async {
     try {
@@ -444,6 +455,8 @@ class BusinessRepository {
     required String city,
     required String address,
     required String shortDescription,
+    required double? latitude,
+    required double? longitude,
     int? pricePerNight,
     List<StayAmenity> amenities = const [],
     List<StayRoomModel> rooms = const [],
@@ -460,6 +473,11 @@ class BusinessRepository {
     if (type == BusinessType.stays &&
         (pricePerNight == null || pricePerNight <= 0)) {
       throw const BusinessException('Please enter a valid price per night.');
+    }
+    if (latitude == null || longitude == null) {
+      throw const BusinessException(
+        'Please select your business location on the map.',
+      );
     }
 
     final businessId = _firestoreDataSource.createDocumentId(
@@ -492,8 +510,8 @@ class BusinessRepository {
         location: BusinessLocationModel(
           city: city.trim(),
           address: address.trim(),
-          latitude: 0,
-          longitude: 0,
+          latitude: latitude,
+          longitude: longitude,
         ),
         shortDescription: shortDescription.trim().isEmpty
             ? null

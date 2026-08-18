@@ -33,6 +33,16 @@ class BusinessExtraToggled extends AddBusinessEvent {
   final StayExtraType extra;
 }
 
+class BusinessLocationChanged extends AddBusinessEvent {
+  const BusinessLocationChanged({
+    required this.latitude,
+    required this.longitude,
+  });
+
+  final double latitude;
+  final double longitude;
+}
+
 class BusinessImagePickRequested extends AddBusinessEvent {
   const BusinessImagePickRequested({
     required this.imageType,

@@ -20,6 +20,8 @@ import 'package:aquabook/src/data/data_sources/firestore_data_source.dart'
     as _i151;
 import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart'
     as _i1069;
+import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart'
+    as _i377;
 import 'package:aquabook/src/data/models/booking_model.dart' as _i405;
 import 'package:aquabook/src/data/repositories/authentication_repository.dart'
     as _i472;
@@ -105,6 +107,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => sharedPrefsModule.prefs,
       preResolve: true,
     );
+    gh.lazySingleton<_i377.NominatimDataSource>(
+      () => _i377.NominatimDataSourceImpl(),
+    );
     gh.lazySingleton<_i1069.ImagePickerDataSource>(
       () => _i1069.ImagePickerDataSourceImpl(),
     );
@@ -139,8 +144,48 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i83.FirebaseStorageDataSource>(),
       ),
     );
+    gh.lazySingleton<_i1065.BusinessRepository>(
+      () => _i1065.BusinessRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i83.FirebaseStorageDataSource>(),
+        gh<_i377.NominatimDataSource>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i940.CustomerSearchCubit>(
+      () => _i940.CustomerSearchCubit(gh<_i1065.BusinessRepository>()),
+    );
     gh.factory<_i30.UserTypeCheckerCubit>(
       () => _i30.UserTypeCheckerCubit(gh<_i747.UserRepository>()),
+    );
+    gh.factory<_i1018.ClientEntryCubit>(
+      () => _i1018.ClientEntryCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i556.MoreCubit>(
+      () => _i556.MoreCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i908.MyBusinessesCubit>(
+      () => _i908.MyBusinessesCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i961.BookingRepository>(
+      () => _i961.BookingRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i1065.BusinessRepository>(),
+      ),
+    );
+    gh.factory<_i274.CustomerBookingsCubit>(
+      () => _i274.CustomerBookingsCubit(gh<_i961.BookingRepository>()),
     );
     gh.factory<_i57.AccountSettingsCubit>(
       () => _i57.AccountSettingsCubit(
@@ -155,6 +200,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
       ),
     );
+    gh.factory<_i458.AddBusinessBloc>(
+      () => _i458.AddBusinessBloc(
+        gh<_i1069.ImagePickerDataSource>(),
+        gh<_i460.SharedPreferences>(),
+        gh<_i1065.BusinessRepository>(),
+      ),
+    );
     gh.lazySingleton<_i390.SavedBusinessRepository>(
       () => _i390.SavedBusinessRepository(
         gh<_i137.AuthenticationDataSource>(),
@@ -167,12 +219,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
       ),
     );
-    gh.lazySingleton<_i1065.BusinessRepository>(
-      () => _i1065.BusinessRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
-        gh<_i83.FirebaseStorageDataSource>(),
-        gh<_i747.UserRepository>(),
+    gh.factoryParam<
+      _i690.CustomerBookingDetailsCubit,
+      _i405.BookingModel,
+      dynamic
+    >(
+      (booking, _) => _i690.CustomerBookingDetailsCubit(
+        gh<_i961.BookingRepository>(),
+        booking,
       ),
     );
     gh.factory<_i1028.SignupCubit>(
@@ -193,86 +247,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i64.BookingDraftRepository>(),
       ),
     );
-    gh.factory<_i940.CustomerSearchCubit>(
-      () => _i940.CustomerSearchCubit(gh<_i1065.BusinessRepository>()),
-    );
-    gh.factory<_i1018.ClientEntryCubit>(
-      () => _i1018.ClientEntryCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i747.UserRepository>(),
-      ),
-    );
-    gh.factory<_i556.MoreCubit>(
-      () => _i556.MoreCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i747.UserRepository>(),
-      ),
-    );
-    gh.factory<_i908.MyBusinessesCubit>(
-      () => _i908.MyBusinessesCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i747.UserRepository>(),
-      ),
-    );
     gh.factory<_i551.SavedCubit>(
       () => _i551.SavedCubit(gh<_i390.SavedBusinessRepository>()),
-    );
-    gh.factory<_i897.CustomerProfileCubit>(
-      () => _i897.CustomerProfileCubit(
-        gh<_i472.AuthenticationRepository>(),
-        gh<_i747.UserRepository>(),
-      ),
-    );
-    gh.factory<_i44.SigninCubit>(
-      () => _i44.SigninCubit(
-        gh<_i472.AuthenticationRepository>(),
-        gh<_i747.UserRepository>(),
-      ),
-    );
-    gh.lazySingleton<_i961.BookingRepository>(
-      () => _i961.BookingRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
-        gh<_i1065.BusinessRepository>(),
-      ),
-    );
-    gh.factory<_i274.CustomerBookingsCubit>(
-      () => _i274.CustomerBookingsCubit(gh<_i961.BookingRepository>()),
-    );
-    gh.factory<_i259.BookingDetailsCubit>(
-      () => _i259.BookingDetailsCubit(
-        gh<_i961.BookingRepository>(),
-        gh<_i64.BookingDraftRepository>(),
-      ),
-    );
-    gh.factory<_i458.AddBusinessBloc>(
-      () => _i458.AddBusinessBloc(
-        gh<_i1069.ImagePickerDataSource>(),
-        gh<_i460.SharedPreferences>(),
-        gh<_i1065.BusinessRepository>(),
-      ),
-    );
-    gh.factory<_i567.CustomerDashboardCubit>(
-      () => _i567.CustomerDashboardCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i64.BookingDraftRepository>(),
-      ),
-    );
-    gh.factory<_i386.StayDetailCubit>(
-      () => _i386.StayDetailCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i390.SavedBusinessRepository>(),
-      ),
-    );
-    gh.factoryParam<
-      _i690.CustomerBookingDetailsCubit,
-      _i405.BookingModel,
-      dynamic
-    >(
-      (booking, _) => _i690.CustomerBookingDetailsCubit(
-        gh<_i961.BookingRepository>(),
-        booking,
-      ),
     );
     gh.factory<_i488.ClientBookingsCubit>(
       () => _i488.ClientBookingsCubit(
@@ -292,6 +268,36 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i415.PaymentCubit(
         gh<_i961.BookingRepository>(),
         gh<_i64.BookingDraftRepository>(),
+      ),
+    );
+    gh.factory<_i897.CustomerProfileCubit>(
+      () => _i897.CustomerProfileCubit(
+        gh<_i472.AuthenticationRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i44.SigninCubit>(
+      () => _i44.SigninCubit(
+        gh<_i472.AuthenticationRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i259.BookingDetailsCubit>(
+      () => _i259.BookingDetailsCubit(
+        gh<_i961.BookingRepository>(),
+        gh<_i64.BookingDraftRepository>(),
+      ),
+    );
+    gh.factory<_i567.CustomerDashboardCubit>(
+      () => _i567.CustomerDashboardCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i64.BookingDraftRepository>(),
+      ),
+    );
+    gh.factory<_i386.StayDetailCubit>(
+      () => _i386.StayDetailCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i390.SavedBusinessRepository>(),
       ),
     );
     return this;

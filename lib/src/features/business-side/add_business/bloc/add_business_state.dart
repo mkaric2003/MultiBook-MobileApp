@@ -12,6 +12,11 @@ class AddBusinessState with AddBusinessStateMappable {
     this.categoryId,
     this.selectedAmenities = const [],
     this.selectedExtras = const [],
+    this.latitude,
+    this.longitude,
+    this.resolvedCity,
+    this.resolvedAddress,
+    this.isResolvingLocation = false,
     this.logoPath,
     this.coverPhotoPath,
     this.isLoading = false,
@@ -25,6 +30,11 @@ class AddBusinessState with AddBusinessStateMappable {
   final String? categoryId;
   final List<StayAmenity> selectedAmenities;
   final List<StayExtraType> selectedExtras;
+  final double? latitude;
+  final double? longitude;
+  final String? resolvedCity;
+  final String? resolvedAddress;
+  final bool isResolvingLocation;
   final String? logoPath;
   final String? coverPhotoPath;
   final bool isLoading;

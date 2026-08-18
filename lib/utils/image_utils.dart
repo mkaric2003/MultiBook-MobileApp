@@ -11,7 +11,7 @@ Future<Uint8List> compressImage(XFile image) async {
       originalBytes,
       minWidth: 1600,
       minHeight: 1600,
-      quality: 80,
+      quality: 60,
       format: CompressFormat.webp,
     );
 

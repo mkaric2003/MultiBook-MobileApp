@@ -1,12 +1,14 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_location_map.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StayLocationSection extends StatelessWidget {
-  const StayLocationSection({super.key, required this.stay});
+  const StayLocationSection({super.key, required this.business});
 
-  final StayListing stay;
+  final BusinessModel business;
 
   @override
   Widget build(BuildContext context) {
@@ -23,24 +25,16 @@ class StayLocationSection extends StatelessWidget {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 16),
-          Container(
-            height: 145,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Icon(
-              Icons.map_outlined,
-              size: 48,
-              color: AppColors.primary,
-            ),
+          StayLocationMap(
+            latitude: business.location.latitude,
+            longitude: business.location.longitude,
+            label: business.name,
           ),
           const SizedBox(height: 14),
           Text(
-            stay.location.isEmpty
+            business.location.address.isEmpty
                 ? 'Location available on request'
-                : stay.location,
+                : business.location.address,
             style: const TextStyle(color: AppColors.muted),
           ),
           const SizedBox(height: 14),
@@ -48,10 +42,27 @@ class StayLocationSection extends StatelessWidget {
             buttonName: 'Open in Maps',
             color: Colors.transparent,
             borderColor: AppColors.border,
-            onPressed: () async {},
+            onPressed: () => _openInGoogleMaps(context),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _openInGoogleMaps(BuildContext context) async {
+    final location = business.location;
+    final mapsUri = Uri.https('www.google.com', '/maps/search/', {
+      'api': '1',
+      'query': '${location.latitude},${location.longitude}',
+    });
+    final opened = await launchUrl(
+      mapsUri,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open Google Maps.')),
+      );
+    }
   }
 }
