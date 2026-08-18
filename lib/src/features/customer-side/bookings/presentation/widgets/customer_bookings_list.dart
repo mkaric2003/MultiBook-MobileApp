@@ -1,0 +1,55 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
+import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
+import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_section.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class CustomerBookingsList extends StatelessWidget {
+  const CustomerBookingsList({
+    super.key,
+    required this.state,
+    required this.controller,
+  });
+
+  final CustomerBookingsState state;
+  final ScrollController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (state.bookings.isEmpty) {
+      return Center(
+        child: Text(
+          state.errorMessage ?? 'No bookings yet.',
+          style: const TextStyle(color: AppColors.muted, fontSize: 16),
+        ),
+      );
+    }
+    return ListView(
+      controller: controller,
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
+      children: [
+        CustomerBookingsSection(
+          title: 'Upcoming',
+          bookings: state.upcomingBookings,
+          onBookingUpdated: context.read<CustomerBookingsCubit>().updateBooking,
+        ),
+        if (state.upcomingBookings.isNotEmpty && state.pastBookings.isNotEmpty)
+          const SizedBox(height: 18),
+        CustomerBookingsSection(
+          title: 'Past',
+          bookings: state.pastBookings,
+          onBookingUpdated: context.read<CustomerBookingsCubit>().updateBooking,
+        ),
+        if (state.isLoadingMore)
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+      ],
+    );
+  }
+}

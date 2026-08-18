@@ -54,6 +54,36 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     _$selectedBusinessId,
     opt: true,
   );
+  static String? _$phoneNumber(UserModel v) => v.phoneNumber;
+  static const Field<UserModel, String> _f$phoneNumber = Field(
+    'phoneNumber',
+    _$phoneNumber,
+    opt: true,
+  );
+  static String? _$profileImageUrl(UserModel v) => v.profileImageUrl;
+  static const Field<UserModel, String> _f$profileImageUrl = Field(
+    'profileImageUrl',
+    _$profileImageUrl,
+    opt: true,
+  );
+  static String? _$countryCode(UserModel v) => v.countryCode;
+  static const Field<UserModel, String> _f$countryCode = Field(
+    'countryCode',
+    _$countryCode,
+    opt: true,
+  );
+  static DateTime? _$dateOfBirth(UserModel v) => v.dateOfBirth;
+  static const Field<UserModel, DateTime> _f$dateOfBirth = Field(
+    'dateOfBirth',
+    _$dateOfBirth,
+    opt: true,
+  );
+  static String? _$address(UserModel v) => v.address;
+  static const Field<UserModel, String> _f$address = Field(
+    'address',
+    _$address,
+    opt: true,
+  );
 
   @override
   final MappableFields<UserModel> fields = const {
@@ -64,6 +94,11 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     #email: _f$email,
     #type: _f$type,
     #selectedBusinessId: _f$selectedBusinessId,
+    #phoneNumber: _f$phoneNumber,
+    #profileImageUrl: _f$profileImageUrl,
+    #countryCode: _f$countryCode,
+    #dateOfBirth: _f$dateOfBirth,
+    #address: _f$address,
   };
 
   static UserModel _instantiate(DecodingData data) {
@@ -75,6 +110,11 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
       email: data.dec(_f$email),
       type: data.dec(_f$type),
       selectedBusinessId: data.dec(_f$selectedBusinessId),
+      phoneNumber: data.dec(_f$phoneNumber),
+      profileImageUrl: data.dec(_f$profileImageUrl),
+      countryCode: data.dec(_f$countryCode),
+      dateOfBirth: data.dec(_f$dateOfBirth),
+      address: data.dec(_f$address),
     );
   }
 
@@ -145,6 +185,11 @@ abstract class UserModelCopyWith<$R, $In extends UserModel, $Out>
     String? email,
     UserType? type,
     String? selectedBusinessId,
+    String? phoneNumber,
+    String? profileImageUrl,
+    String? countryCode,
+    DateTime? dateOfBirth,
+    String? address,
   });
   UserModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -166,6 +211,11 @@ class _UserModelCopyWithImpl<$R, $Out>
     String? email,
     UserType? type,
     Object? selectedBusinessId = $none,
+    Object? phoneNumber = $none,
+    Object? profileImageUrl = $none,
+    Object? countryCode = $none,
+    Object? dateOfBirth = $none,
+    Object? address = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -175,6 +225,11 @@ class _UserModelCopyWithImpl<$R, $Out>
       if (email != null) #email: email,
       if (type != null) #type: type,
       if (selectedBusinessId != $none) #selectedBusinessId: selectedBusinessId,
+      if (phoneNumber != $none) #phoneNumber: phoneNumber,
+      if (profileImageUrl != $none) #profileImageUrl: profileImageUrl,
+      if (countryCode != $none) #countryCode: countryCode,
+      if (dateOfBirth != $none) #dateOfBirth: dateOfBirth,
+      if (address != $none) #address: address,
     }),
   );
   @override
@@ -189,6 +244,11 @@ class _UserModelCopyWithImpl<$R, $Out>
       #selectedBusinessId,
       or: $value.selectedBusinessId,
     ),
+    phoneNumber: data.get(#phoneNumber, or: $value.phoneNumber),
+    profileImageUrl: data.get(#profileImageUrl, or: $value.profileImageUrl),
+    countryCode: data.get(#countryCode, or: $value.countryCode),
+    dateOfBirth: data.get(#dateOfBirth, or: $value.dateOfBirth),
+    address: data.get(#address, or: $value.address),
   );
 
   @override

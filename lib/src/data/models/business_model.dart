@@ -2,6 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 import '../enums/business_type.dart';
 import 'business_location_model.dart';
+import 'stay_details_model.dart';
 
 part 'business_model.mapper.dart';
 
@@ -24,6 +25,9 @@ class BusinessModel with BusinessModelMappable {
   final List<String> photoUrls;
 
   final bool isActive;
+  final double averageRating;
+  final int reviewCount;
+  final StayDetailsModel? stayDetails;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -40,6 +44,9 @@ class BusinessModel with BusinessModelMappable {
     this.coverPhotoUrl,
     this.photoUrls = const [],
     this.isActive = true,
+    this.averageRating = 0,
+    this.reviewCount = 0,
+    this.stayDetails,
     this.createdAt,
     this.updatedAt,
   });

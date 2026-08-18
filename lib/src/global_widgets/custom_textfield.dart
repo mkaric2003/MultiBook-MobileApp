@@ -1,3 +1,4 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -51,11 +52,11 @@ class CustomTextField extends StatelessWidget {
         filled: true,
         fillColor: colorScheme.surface,
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 16),
+        hintStyle: const TextStyle(color: AppColors.muted, fontSize: 16),
         prefixIcon: prefixIcon != null
             ? Padding(
                 padding: const EdgeInsetsDirectional.only(start: 12, end: 8),
-                child: Icon(prefixIcon, size: 20, color: Color(0xFF9CA3AF)),
+                child: Icon(prefixIcon, size: 20, color: AppColors.muted),
               )
             : null,
         prefixIconConstraints: const BoxConstraints(
@@ -66,11 +67,7 @@ class CustomTextField extends StatelessWidget {
             ? IconButton(
                 onPressed: onSuffixTap,
                 splashRadius: 20,
-                icon: Icon(
-                  suffixIcon,
-                  size: 20,
-                  color: const Color(0xFF9CA3AF),
-                ),
+                icon: Icon(suffixIcon, size: 20, color: AppColors.muted),
               )
             : null,
         contentPadding: const EdgeInsets.symmetric(

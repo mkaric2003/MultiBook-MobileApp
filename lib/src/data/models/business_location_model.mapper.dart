@@ -22,6 +22,13 @@ class BusinessLocationModelMapper
   @override
   final String id = 'BusinessLocationModel';
 
+  static String _$city(BusinessLocationModel v) => v.city;
+  static const Field<BusinessLocationModel, String> _f$city = Field(
+    'city',
+    _$city,
+    opt: true,
+    def: '',
+  );
   static String _$address(BusinessLocationModel v) => v.address;
   static const Field<BusinessLocationModel, String> _f$address = Field(
     'address',
@@ -40,6 +47,7 @@ class BusinessLocationModelMapper
 
   @override
   final MappableFields<BusinessLocationModel> fields = const {
+    #city: _f$city,
     #address: _f$address,
     #latitude: _f$latitude,
     #longitude: _f$longitude,
@@ -47,6 +55,7 @@ class BusinessLocationModelMapper
 
   static BusinessLocationModel _instantiate(DecodingData data) {
     return BusinessLocationModel(
+      city: data.dec(_f$city),
       address: data.dec(_f$address),
       latitude: data.dec(_f$latitude),
       longitude: data.dec(_f$longitude),
@@ -123,7 +132,7 @@ abstract class BusinessLocationModelCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? address, double? latitude, double? longitude});
+  $R call({String? city, String? address, double? latitude, double? longitude});
   BusinessLocationModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -138,8 +147,14 @@ class _BusinessLocationModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<BusinessLocationModel> $mapper =
       BusinessLocationModelMapper.ensureInitialized();
   @override
-  $R call({String? address, double? latitude, double? longitude}) => $apply(
+  $R call({
+    String? city,
+    String? address,
+    double? latitude,
+    double? longitude,
+  }) => $apply(
     FieldCopyWithData({
+      if (city != null) #city: city,
       if (address != null) #address: address,
       if (latitude != null) #latitude: latitude,
       if (longitude != null) #longitude: longitude,
@@ -147,6 +162,7 @@ class _BusinessLocationModelCopyWithImpl<$R, $Out>
   );
   @override
   BusinessLocationModel $make(CopyWithData data) => BusinessLocationModel(
+    city: data.get(#city, or: $value.city),
     address: data.get(#address, or: $value.address),
     latitude: data.get(#latitude, or: $value.latitude),
     longitude: data.get(#longitude, or: $value.longitude),

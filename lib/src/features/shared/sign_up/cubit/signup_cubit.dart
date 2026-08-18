@@ -25,7 +25,7 @@ class SignupCubit extends Cubit<SignupState> {
         email: email,
         password: password,
       );
-      emit(SignupState(isSuccess: true));
+      emit(SignupState(isSuccess: true, requiresUserTypeSelection: true));
     } on AuthenticationException catch (error) {
       emit(SignupState(errorMessage: error.message));
     }
@@ -35,8 +35,8 @@ class SignupCubit extends Cubit<SignupState> {
     emit(SignupState(isLoading: true));
 
     try {
-      await _authenticationRepository.signInWithGoogle();
-      emit(SignupState(isSuccess: true));
+      final isNewUser = await _authenticationRepository.signInWithGoogle();
+      emit(SignupState(isSuccess: true, requiresUserTypeSelection: isNewUser));
     } on AuthenticationCancelledException {
       emit(SignupState());
     } on AuthenticationException catch (error) {

@@ -1,3 +1,4 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class PasswordRequirementItem extends StatelessWidget {
@@ -12,7 +13,7 @@ class PasswordRequirementItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textColor = Color(0xFF9CA3AF);
+    const textColor = AppColors.muted;
     const okColor = Color(0xFF34D399);
     const errColor = Color(0xFFF28B82);
 

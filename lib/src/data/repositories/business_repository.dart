@@ -1,11 +1,18 @@
 import 'dart:developer';
 
+import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
+import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/business_location_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/data/models/stay_details_model.dart';
+import 'package:aquabook/src/data/models/stay_extra_model.dart';
+import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/utils/image_utils.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,14 +31,67 @@ class BusinessRepository {
     this._authenticationDataSource,
     this._firestoreDataSource,
     this._storageDataSource,
+    this._nominatimDataSource,
     this._userRepository,
   );
 
   static const _businessesCollection = 'businesses';
+  static const _demoStayNames = [
+    'Oceanview Resort',
+    'Mountain Cabin Retreat',
+    'City Center Hotel',
+    'Sunset Beach Villa',
+    'Old Town Apartment',
+    'Pinewood Lodge',
+    'Riverside Guesthouse',
+    'Azure Bay Hotel',
+    'Golden Peak Chalet',
+    'Harbor View Suites',
+    'Lakehouse Escape',
+    'Downtown Loft',
+    'Seaside Boutique Hotel',
+    'Forest Edge Cabin',
+    'Skyline Residence',
+    'Meadowbrook Villa',
+    'Coastal Breeze Apartment',
+    'Alpine Hideaway',
+    'The Grand Terrace',
+    'Palm Grove Resort',
+  ];
+  static const _demoStayImageUrls = [
+    'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=85',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=85',
+  ];
+  static const _demoStayCities = [
+    'Sarajevo',
+    'Mostar',
+    'Banja Luka',
+    'Tuzla',
+    'Zenica',
+    'Bihać',
+    'Trebinje',
+    'Neum',
+    'Jajce',
+    'Travnik',
+    'Konjic',
+    'Visoko',
+    'Prijedor',
+    'Brčko',
+    'Bijeljina',
+    'Goražde',
+    'Livno',
+    'Foča',
+    'Jahorina',
+    'Srebrenik',
+  ];
 
   final AuthenticationDataSource _authenticationDataSource;
   final FirestoreDataSource _firestoreDataSource;
   final FirebaseStorageDataSource _storageDataSource;
+  final NominatimDataSource _nominatimDataSource;
   final UserRepository _userRepository;
 
   Future<bool> hasBusinesses() async {
@@ -56,6 +116,14 @@ class BusinessRepository {
       return false;
     }
   }
+
+  Future<BusinessLocationModel?> resolveBusinessLocation({
+    required double latitude,
+    required double longitude,
+  }) => _nominatimDataSource.reverseGeocode(
+    latitude: latitude,
+    longitude: longitude,
+  );
 
   Future<BusinessModel?> getBusiness({required String businessId}) async {
     try {
@@ -123,6 +191,235 @@ class BusinessRepository {
     }
   }
 
+  Future<List<BusinessModel>> getRecommendedStays({int limit = 3}) async {
+    try {
+      final businessesData = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.stays.name,
+      );
+      final stays = businessesData
+          .map(_businessFromData)
+          .where((business) => business.isActive)
+          .toList();
+      final ratedStays =
+          stays.where((business) => business.averageRating > 0).toList()
+            ..sort((first, second) {
+              final ratingComparison = second.averageRating.compareTo(
+                first.averageRating,
+              );
+              return ratingComparison != 0
+                  ? ratingComparison
+                  : second.reviewCount.compareTo(first.reviewCount);
+            });
+
+      if (ratedStays.isEmpty) {
+        return stays.take(limit).toList();
+      }
+
+      final unratedStays = stays
+          .where((business) => business.averageRating <= 0)
+          .toList();
+      return [...ratedStays, ...unratedStays].take(limit).toList();
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not load recommended stays: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
+  Future<List<BusinessModel>> searchStays(String query) async {
+    final normalizedQuery = _normalizeSearchValue(query);
+    if (normalizedQuery.isEmpty) {
+      return const [];
+    }
+
+    try {
+      final results = await Future.wait([
+        _firestoreDataSource.getDocumentsWherePrefix(
+          collection: _businessesCollection,
+          equalityField: 'type',
+          equalityValue: BusinessType.stays.name,
+          prefixField: 'nameLowercase',
+          prefix: normalizedQuery,
+        ),
+        _firestoreDataSource.getDocumentsWherePrefix(
+          collection: _businessesCollection,
+          equalityField: 'type',
+          equalityValue: BusinessType.stays.name,
+          prefixField: 'location.cityLowercase',
+          prefix: normalizedQuery,
+        ),
+      ]);
+      final stays = results
+          .expand((documents) => documents)
+          .map(_businessFromData)
+          .where((business) => business.isActive)
+          .toList();
+      if (stays.isNotEmpty) {
+        return {for (final stay in stays) stay.id: stay}.values.toList();
+      }
+
+      // Existing documents created before the normalized fields were added are
+      // kept searchable until their data is migrated.
+      final legacyStays = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.stays.name,
+      );
+      return legacyStays
+          .map(_businessFromData)
+          .where(
+            (business) =>
+                business.isActive &&
+                (_normalizeSearchValue(
+                      business.name,
+                    ).contains(normalizedQuery) ||
+                    _normalizeSearchValue(
+                      business.location.city,
+                    ).startsWith(normalizedQuery)),
+          )
+          .toList();
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not search stays: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
+  DataCursor<BusinessModel> getStaysCursor({int pageSize = 6}) {
+    return _firestoreDataSource.createCursorWhere<BusinessModel>(
+      collection: _businessesCollection,
+      field: 'type',
+      value: BusinessType.stays.name,
+      pageSize: pageSize,
+      listSerializer: (documents) => documents.map(_businessFromData).toList(),
+    );
+  }
+
+  Future<int> seedDemoStays() async {
+    final ownerId = _authenticationDataSource.currentUser?.uid;
+    if (ownerId == null) {
+      throw const BusinessException(
+        'You need to sign in before creating demo stays.',
+      );
+    }
+
+    String? firstBusinessId;
+    try {
+      for (var index = 0; index < _demoStayNames.length; index++) {
+        final businessId = _firestoreDataSource.createDocumentId(
+          collection: _businessesCollection,
+        );
+        firstBusinessId ??= businessId;
+        final pricePerNight = 80 + (index * 15);
+        final rating = index.isEven ? 4.1 + ((index % 5) * 0.18) : 0.0;
+        final imageUrl = _demoStayImageUrls[index % _demoStayImageUrls.length];
+        final city = _demoStayCities[index % _demoStayCities.length];
+        final categoryId = ['hotel', 'apartment', 'cabin'][index % 3];
+        final amenities = StayAmenity.values
+            .take(2 + (index % 5))
+            .map((amenity) => amenity.name)
+            .toList();
+        final rooms = categoryId == 'hotel'
+            ? [
+                {
+                  'id': 'deluxe-room',
+                  'name': 'Deluxe Room',
+                  'maxGuests': 2,
+                  'sizeSquareMeters': 32,
+                  'pricePerNight': pricePerNight,
+                  'quantity': 12,
+                },
+                {
+                  'id': 'executive-suite',
+                  'name': 'Executive Suite',
+                  'maxGuests': 4,
+                  'sizeSquareMeters': 55,
+                  'pricePerNight': pricePerNight + 90,
+                  'quantity': 6,
+                },
+              ]
+            : const <Map<String, Object>>[];
+
+        await _firestoreDataSource.setDocument(
+          collection: _businessesCollection,
+          documentId: businessId,
+          data: {
+            'id': businessId,
+            'ownerId': ownerId,
+            'type': BusinessType.stays.name,
+            'name': _demoStayNames[index],
+            'categoryId': categoryId,
+            'nameLowercase': _normalizeSearchValue(_demoStayNames[index]),
+            'location': {
+              'address': '${index + 1} Demo Street, $city',
+              'city': city,
+              'cityLowercase': _normalizeSearchValue(city),
+              'latitude': 43.8563 + (index * 0.002),
+              'longitude': 18.4131 + (index * 0.002),
+            },
+            'shortDescription': 'A comfortable stay for your next trip.',
+            'logoUrl': imageUrl,
+            'coverPhotoUrl': imageUrl,
+            'photoUrls': [imageUrl],
+            'isActive': true,
+            'averageRating': rating,
+            'reviewCount': rating > 0 ? 40 + (index * 11) : 0,
+            'stayDetails': {
+              'pricePerNight': pricePerNight,
+              'amenities': amenities,
+              'rooms': rooms,
+              'extras': [
+                {
+                  'type': StayExtraType.breakfast.name,
+                  'price': 20,
+                  'isPerNight': true,
+                },
+                {
+                  'type': StayExtraType.parking.name,
+                  'price': 15,
+                  'isPerNight': true,
+                },
+                {
+                  'type': StayExtraType.spaAccess.name,
+                  'price': 40,
+                  'isPerNight': false,
+                },
+              ],
+            },
+            'createdAt': _firestoreDataSource.serverTimestamp,
+            'updatedAt': _firestoreDataSource.serverTimestamp,
+          },
+        );
+      }
+      if (firstBusinessId != null) {
+        await _setSelectedBusiness(firstBusinessId);
+      }
+      log(
+        'Created ${_demoStayNames.length} demo stays.',
+        name: 'BusinessRepository',
+      );
+      return _demoStayNames.length;
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not seed demo stays: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const BusinessException('We could not create the demo stays.');
+    }
+  }
+
   Future<void> deleteBusiness(BusinessModel business) async {
     final ownerId = _authenticationDataSource.currentUser?.uid;
     if (ownerId == null || business.ownerId != ownerId) {
@@ -155,8 +452,15 @@ class BusinessRepository {
     required BusinessType type,
     required String name,
     required String categoryId,
+    required String city,
     required String address,
     required String shortDescription,
+    required double? latitude,
+    required double? longitude,
+    int? pricePerNight,
+    List<StayAmenity> amenities = const [],
+    List<StayRoomModel> rooms = const [],
+    List<StayExtraModel> extras = const [],
     String? logoPath,
     String? coverPhotoPath,
   }) async {
@@ -164,6 +468,15 @@ class BusinessRepository {
     if (ownerId == null) {
       throw const BusinessException(
         'You need to sign in before creating a business.',
+      );
+    }
+    if (type == BusinessType.stays &&
+        (pricePerNight == null || pricePerNight <= 0)) {
+      throw const BusinessException('Please enter a valid price per night.');
+    }
+    if (latitude == null || longitude == null) {
+      throw const BusinessException(
+        'Please select your business location on the map.',
       );
     }
 
@@ -195,15 +508,24 @@ class BusinessRepository {
         name: name.trim(),
         categoryId: categoryId,
         location: BusinessLocationModel(
+          city: city.trim(),
           address: address.trim(),
-          latitude: 0,
-          longitude: 0,
+          latitude: latitude,
+          longitude: longitude,
         ),
         shortDescription: shortDescription.trim().isEmpty
             ? null
             : shortDescription.trim(),
         logoUrl: logoUrl,
         coverPhotoUrl: coverPhotoUrl,
+        stayDetails: type == BusinessType.stays
+            ? StayDetailsModel(
+                pricePerNight: pricePerNight,
+                amenities: amenities,
+                rooms: rooms,
+                extras: extras,
+              )
+            : null,
       );
 
       await _firestoreDataSource.setDocument(
@@ -214,8 +536,11 @@ class BusinessRepository {
           'ownerId': business.ownerId,
           'type': business.type.name,
           'name': business.name,
+          'nameLowercase': _normalizeSearchValue(business.name),
           'categoryId': business.categoryId,
           'location': {
+            'city': business.location.city,
+            'cityLowercase': _normalizeSearchValue(business.location.city),
             'address': business.location.address,
             'latitude': business.location.latitude,
             'longitude': business.location.longitude,
@@ -225,6 +550,37 @@ class BusinessRepository {
           'coverPhotoUrl': business.coverPhotoUrl,
           'photoUrls': business.photoUrls,
           'isActive': business.isActive,
+          'averageRating': business.averageRating,
+          'reviewCount': business.reviewCount,
+          'stayDetails': business.stayDetails == null
+              ? null
+              : {
+                  'pricePerNight': business.stayDetails!.pricePerNight,
+                  'amenities': business.stayDetails!.amenities
+                      .map((amenity) => amenity.name)
+                      .toList(),
+                  'rooms': business.stayDetails!.rooms
+                      .map(
+                        (room) => {
+                          'id': room.id,
+                          'name': room.name,
+                          'maxGuests': room.maxGuests,
+                          'sizeSquareMeters': room.sizeSquareMeters,
+                          'pricePerNight': room.pricePerNight,
+                          'quantity': room.quantity,
+                        },
+                      )
+                      .toList(),
+                  'extras': business.stayDetails!.extras
+                      .map(
+                        (extra) => {
+                          'type': extra.type.name,
+                          'price': extra.price,
+                          'isPerNight': extra.isPerNight,
+                        },
+                      )
+                      .toList(),
+                },
           'createdAt': _firestoreDataSource.serverTimestamp,
           'updatedAt': _firestoreDataSource.serverTimestamp,
         },
@@ -265,6 +621,7 @@ class BusinessRepository {
       data['location'] as Map<String, dynamic>,
     );
     final typeName = data['type'] as String?;
+    final stayDetailsData = data['stayDetails'];
     final businessType = BusinessType.values.where(
       (type) => type.name == typeName,
     );
@@ -276,6 +633,7 @@ class BusinessRepository {
       name: data['name'] as String,
       categoryId: data['categoryId'] as String,
       location: BusinessLocationModel(
+        city: locationData['city'] as String? ?? '',
         address: locationData['address'] as String,
         latitude: (locationData['latitude'] as num).toDouble(),
         longitude: (locationData['longitude'] as num).toDouble(),
@@ -285,6 +643,56 @@ class BusinessRepository {
       coverPhotoUrl: data['coverPhotoUrl'] as String?,
       photoUrls: List<String>.from(data['photoUrls'] as List? ?? const []),
       isActive: data['isActive'] as bool? ?? true,
+      averageRating: (data['averageRating'] as num?)?.toDouble() ?? 0,
+      reviewCount: (data['reviewCount'] as num?)?.toInt() ?? 0,
+      stayDetails: stayDetailsData is Map
+          ? StayDetailsModel(
+              pricePerNight: (stayDetailsData['pricePerNight'] as num?)
+                  ?.toInt(),
+              amenities: (stayDetailsData['amenities'] as List? ?? const [])
+                  .map(
+                    (name) => StayAmenity.values.where(
+                      (amenity) => amenity.name == name,
+                    ),
+                  )
+                  .where((matches) => matches.isNotEmpty)
+                  .map((matches) => matches.first)
+                  .toList(),
+              rooms: (stayDetailsData['rooms'] as List? ?? const [])
+                  .whereType<Map>()
+                  .map(
+                    (room) => StayRoomModel(
+                      id:
+                          room['id'] as String? ??
+                          room['name'] as String? ??
+                          '',
+                      name: room['name'] as String? ?? '',
+                      maxGuests: (room['maxGuests'] as num?)?.toInt() ?? 1,
+                      sizeSquareMeters:
+                          (room['sizeSquareMeters'] as num?)?.toInt() ?? 0,
+                      pricePerNight:
+                          (room['pricePerNight'] as num?)?.toInt() ?? 0,
+                      quantity: (room['quantity'] as num?)?.toInt() ?? 1,
+                    ),
+                  )
+                  .toList(),
+              extras: (stayDetailsData['extras'] as List? ?? const [])
+                  .whereType<Map>()
+                  .map((extra) {
+                    final types = StayExtraType.values.where(
+                      (type) => type.name == extra['type'],
+                    );
+                    if (types.isEmpty) return null;
+                    return StayExtraModel(
+                      type: types.first,
+                      price: (extra['price'] as num?)?.toInt() ?? 0,
+                      isPerNight: extra['isPerNight'] as bool? ?? false,
+                    );
+                  })
+                  .whereType<StayExtraModel>()
+                  .toList(),
+            )
+          : null,
     );
   }
 
@@ -299,6 +707,18 @@ class BusinessRepository {
         stackTrace: stackTrace,
       );
     }
+  }
+
+  String _normalizeSearchValue(String value) {
+    return value
+        .trim()
+        .toLowerCase()
+        .replaceAll('č', 'c')
+        .replaceAll('ć', 'c')
+        .replaceAll('š', 's')
+        .replaceAll('ž', 'z')
+        .replaceAll(RegExp(r'[^a-z0-9 ]'), '')
+        .replaceAll(RegExp(r'\s+'), ' ');
   }
 
   Future<String?> _uploadImage({

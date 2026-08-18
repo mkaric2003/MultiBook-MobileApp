@@ -2,6 +2,7 @@
 
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart';
 import 'package:aquabook/src/features/shared/sign_up/cubit/signup_state.dart';
 import 'package:aquabook/src/features/shared/sign_up/presentation/widgets/agree_terms_tile.dart';
@@ -31,7 +32,11 @@ class SignupView extends HookWidget {
       child: BlocConsumer<SignupCubit, SignupState>(
         listener: (context, state) {
           if (state.isSuccess) {
-            context.go(AppRoutes.HOME);
+            context.go(
+              state.requiresUserTypeSelection
+                  ? AppRoutes.USER_TYPE_CHECKER
+                  : AppRoutes.HOME,
+            );
           }
 
           if (state.errorMessage != null) {
@@ -67,7 +72,7 @@ class SignupView extends HookWidget {
                       'Join thousands of users discovering their favorite stays and services.',
                       style: GoogleFonts.inter(
                         fontSize: 16,
-                        color: Color(0xFF9CA3AF),
+                        color: AppColors.muted,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -127,7 +132,7 @@ class SignupView extends HookWidget {
                         const Text(
                           'Already have an account?',
                           style: TextStyle(
-                            color: Color(0xFF9CA3AF),
+                            color: AppColors.muted,
                             fontSize: 18,
                           ),
                         ),

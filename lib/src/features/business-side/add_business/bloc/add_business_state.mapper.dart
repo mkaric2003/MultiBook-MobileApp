@@ -15,6 +15,8 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = AddBusinessStateMapper._());
       BusinessTypeMapper.ensureInitialized();
+      StayAmenityMapper.ensureInitialized();
+      StayExtraTypeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -34,6 +36,46 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     'categoryId',
     _$categoryId,
     opt: true,
+  );
+  static List<StayAmenity> _$selectedAmenities(AddBusinessState v) =>
+      v.selectedAmenities;
+  static const Field<AddBusinessState, List<StayAmenity>> _f$selectedAmenities =
+      Field('selectedAmenities', _$selectedAmenities, opt: true, def: const []);
+  static List<StayExtraType> _$selectedExtras(AddBusinessState v) =>
+      v.selectedExtras;
+  static const Field<AddBusinessState, List<StayExtraType>> _f$selectedExtras =
+      Field('selectedExtras', _$selectedExtras, opt: true, def: const []);
+  static double? _$latitude(AddBusinessState v) => v.latitude;
+  static const Field<AddBusinessState, double> _f$latitude = Field(
+    'latitude',
+    _$latitude,
+    opt: true,
+  );
+  static double? _$longitude(AddBusinessState v) => v.longitude;
+  static const Field<AddBusinessState, double> _f$longitude = Field(
+    'longitude',
+    _$longitude,
+    opt: true,
+  );
+  static String? _$resolvedCity(AddBusinessState v) => v.resolvedCity;
+  static const Field<AddBusinessState, String> _f$resolvedCity = Field(
+    'resolvedCity',
+    _$resolvedCity,
+    opt: true,
+  );
+  static String? _$resolvedAddress(AddBusinessState v) => v.resolvedAddress;
+  static const Field<AddBusinessState, String> _f$resolvedAddress = Field(
+    'resolvedAddress',
+    _$resolvedAddress,
+    opt: true,
+  );
+  static bool _$isResolvingLocation(AddBusinessState v) =>
+      v.isResolvingLocation;
+  static const Field<AddBusinessState, bool> _f$isResolvingLocation = Field(
+    'isResolvingLocation',
+    _$isResolvingLocation,
+    opt: true,
+    def: false,
   );
   static String? _$logoPath(AddBusinessState v) => v.logoPath;
   static const Field<AddBusinessState, String> _f$logoPath = Field(
@@ -67,6 +109,12 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     _$errorMessage,
     opt: true,
   );
+  static String? _$successMessage(AddBusinessState v) => v.successMessage;
+  static const Field<AddBusinessState, String> _f$successMessage = Field(
+    'successMessage',
+    _$successMessage,
+    opt: true,
+  );
   static bool _$hasExistingBusiness(AddBusinessState v) =>
       v.hasExistingBusiness;
   static const Field<AddBusinessState, bool> _f$hasExistingBusiness = Field(
@@ -80,11 +128,19 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
   final MappableFields<AddBusinessState> fields = const {
     #businessType: _f$businessType,
     #categoryId: _f$categoryId,
+    #selectedAmenities: _f$selectedAmenities,
+    #selectedExtras: _f$selectedExtras,
+    #latitude: _f$latitude,
+    #longitude: _f$longitude,
+    #resolvedCity: _f$resolvedCity,
+    #resolvedAddress: _f$resolvedAddress,
+    #isResolvingLocation: _f$isResolvingLocation,
     #logoPath: _f$logoPath,
     #coverPhotoPath: _f$coverPhotoPath,
     #isLoading: _f$isLoading,
     #isSuccess: _f$isSuccess,
     #errorMessage: _f$errorMessage,
+    #successMessage: _f$successMessage,
     #hasExistingBusiness: _f$hasExistingBusiness,
   };
 
@@ -92,11 +148,19 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     return AddBusinessState(
       businessType: data.dec(_f$businessType),
       categoryId: data.dec(_f$categoryId),
+      selectedAmenities: data.dec(_f$selectedAmenities),
+      selectedExtras: data.dec(_f$selectedExtras),
+      latitude: data.dec(_f$latitude),
+      longitude: data.dec(_f$longitude),
+      resolvedCity: data.dec(_f$resolvedCity),
+      resolvedAddress: data.dec(_f$resolvedAddress),
+      isResolvingLocation: data.dec(_f$isResolvingLocation),
       logoPath: data.dec(_f$logoPath),
       coverPhotoPath: data.dec(_f$coverPhotoPath),
       isLoading: data.dec(_f$isLoading),
       isSuccess: data.dec(_f$isSuccess),
       errorMessage: data.dec(_f$errorMessage),
+      successMessage: data.dec(_f$successMessage),
       hasExistingBusiness: data.dec(_f$hasExistingBusiness),
     );
   }
@@ -163,14 +227,30 @@ extension AddBusinessStateValueCopy<$R, $Out>
 
 abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  ListCopyWith<$R, StayAmenity, ObjectCopyWith<$R, StayAmenity, StayAmenity>>
+  get selectedAmenities;
+  ListCopyWith<
+    $R,
+    StayExtraType,
+    ObjectCopyWith<$R, StayExtraType, StayExtraType>
+  >
+  get selectedExtras;
   $R call({
     BusinessType? businessType,
     String? categoryId,
+    List<StayAmenity>? selectedAmenities,
+    List<StayExtraType>? selectedExtras,
+    double? latitude,
+    double? longitude,
+    String? resolvedCity,
+    String? resolvedAddress,
+    bool? isResolvingLocation,
     String? logoPath,
     String? coverPhotoPath,
     bool? isLoading,
     bool? isSuccess,
     String? errorMessage,
+    String? successMessage,
     bool? hasExistingBusiness,
   });
   AddBusinessStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -187,24 +267,59 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AddBusinessState> $mapper =
       AddBusinessStateMapper.ensureInitialized();
   @override
+  ListCopyWith<$R, StayAmenity, ObjectCopyWith<$R, StayAmenity, StayAmenity>>
+  get selectedAmenities => ListCopyWith(
+    $value.selectedAmenities,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(selectedAmenities: v),
+  );
+  @override
+  ListCopyWith<
+    $R,
+    StayExtraType,
+    ObjectCopyWith<$R, StayExtraType, StayExtraType>
+  >
+  get selectedExtras => ListCopyWith(
+    $value.selectedExtras,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(selectedExtras: v),
+  );
+  @override
   $R call({
     BusinessType? businessType,
     Object? categoryId = $none,
+    List<StayAmenity>? selectedAmenities,
+    List<StayExtraType>? selectedExtras,
+    Object? latitude = $none,
+    Object? longitude = $none,
+    Object? resolvedCity = $none,
+    Object? resolvedAddress = $none,
+    bool? isResolvingLocation,
     Object? logoPath = $none,
     Object? coverPhotoPath = $none,
     bool? isLoading,
     bool? isSuccess,
     Object? errorMessage = $none,
+    Object? successMessage = $none,
     bool? hasExistingBusiness,
   }) => $apply(
     FieldCopyWithData({
       if (businessType != null) #businessType: businessType,
       if (categoryId != $none) #categoryId: categoryId,
+      if (selectedAmenities != null) #selectedAmenities: selectedAmenities,
+      if (selectedExtras != null) #selectedExtras: selectedExtras,
+      if (latitude != $none) #latitude: latitude,
+      if (longitude != $none) #longitude: longitude,
+      if (resolvedCity != $none) #resolvedCity: resolvedCity,
+      if (resolvedAddress != $none) #resolvedAddress: resolvedAddress,
+      if (isResolvingLocation != null)
+        #isResolvingLocation: isResolvingLocation,
       if (logoPath != $none) #logoPath: logoPath,
       if (coverPhotoPath != $none) #coverPhotoPath: coverPhotoPath,
       if (isLoading != null) #isLoading: isLoading,
       if (isSuccess != null) #isSuccess: isSuccess,
       if (errorMessage != $none) #errorMessage: errorMessage,
+      if (successMessage != $none) #successMessage: successMessage,
       if (hasExistingBusiness != null)
         #hasExistingBusiness: hasExistingBusiness,
     }),
@@ -213,11 +328,25 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
   AddBusinessState $make(CopyWithData data) => AddBusinessState(
     businessType: data.get(#businessType, or: $value.businessType),
     categoryId: data.get(#categoryId, or: $value.categoryId),
+    selectedAmenities: data.get(
+      #selectedAmenities,
+      or: $value.selectedAmenities,
+    ),
+    selectedExtras: data.get(#selectedExtras, or: $value.selectedExtras),
+    latitude: data.get(#latitude, or: $value.latitude),
+    longitude: data.get(#longitude, or: $value.longitude),
+    resolvedCity: data.get(#resolvedCity, or: $value.resolvedCity),
+    resolvedAddress: data.get(#resolvedAddress, or: $value.resolvedAddress),
+    isResolvingLocation: data.get(
+      #isResolvingLocation,
+      or: $value.isResolvingLocation,
+    ),
     logoPath: data.get(#logoPath, or: $value.logoPath),
     coverPhotoPath: data.get(#coverPhotoPath, or: $value.coverPhotoPath),
     isLoading: data.get(#isLoading, or: $value.isLoading),
     isSuccess: data.get(#isSuccess, or: $value.isSuccess),
     errorMessage: data.get(#errorMessage, or: $value.errorMessage),
+    successMessage: data.get(#successMessage, or: $value.successMessage),
     hasExistingBusiness: data.get(
       #hasExistingBusiness,
       or: $value.hasExistingBusiness,

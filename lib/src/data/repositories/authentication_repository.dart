@@ -101,7 +101,7 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     log('Starting Google sign-in flow.', name: 'AuthenticationRepository');
 
     User? user;
@@ -115,7 +115,8 @@ class AuthenticationRepository {
         );
       }
 
-      if (credential.additionalUserInfo?.isNewUser ?? false) {
+      final isNewUser = credential.additionalUserInfo?.isNewUser ?? false;
+      if (isNewUser) {
         final fullName = user.displayName?.trim() ?? '';
         final nameParts = fullName.isEmpty
             ? const <String>[]
@@ -135,6 +136,7 @@ class AuthenticationRepository {
       }
 
       log('Google sign-in completed.', name: 'AuthenticationRepository');
+      return isNewUser;
     } on GoogleSignInException catch (error, stackTrace) {
       if (error.code == GoogleSignInExceptionCode.canceled) {
         log('Google sign-in cancelled.', name: 'AuthenticationRepository');
@@ -313,6 +315,8 @@ class AuthenticationRepository {
       'email': email,
       'type': UserType.provider.name,
       'selectedBusinessId': null,
+      'phoneNumber': null,
+      'profileImageUrl': null,
       'createdAt': _firestoreDataSource.serverTimestamp,
     },
   );

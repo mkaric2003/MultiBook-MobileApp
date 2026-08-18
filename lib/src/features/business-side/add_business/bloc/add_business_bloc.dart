@@ -16,9 +16,13 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   ) : super(const AddBusinessState()) {
     on<BusinessTypeChanged>(_onBusinessTypeChanged);
     on<BusinessCategoryChanged>(_onBusinessCategoryChanged);
+    on<BusinessAmenityToggled>(_onBusinessAmenityToggled);
+    on<BusinessExtraToggled>(_onBusinessExtraToggled);
+    on<BusinessLocationChanged>(_onBusinessLocationChanged);
     on<BusinessImagePickRequested>(_onBusinessImagePickRequested);
     on<LostBusinessImageRestoreRequested>(_onLostBusinessImageRestoreRequested);
     on<ExistingBusinessesLoadRequested>(_onExistingBusinessesLoadRequested);
+    on<DemoStaysSeedRequested>(_onDemoStaysSeedRequested);
     on<BusinessCreationRequested>(_onBusinessCreationRequested);
 
     add(const LostBusinessImageRestoreRequested());
@@ -43,6 +47,56 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     Emitter<AddBusinessState> emit,
   ) {
     emit(state.copyWith(categoryId: event.categoryId));
+  }
+
+  void _onBusinessAmenityToggled(
+    BusinessAmenityToggled event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    final amenities = [...state.selectedAmenities];
+    if (amenities.contains(event.amenity)) {
+      amenities.remove(event.amenity);
+    } else {
+      amenities.add(event.amenity);
+    }
+    emit(state.copyWith(selectedAmenities: amenities));
+  }
+
+  void _onBusinessExtraToggled(
+    BusinessExtraToggled event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    final extras = [...state.selectedExtras];
+    extras.contains(event.extra)
+        ? extras.remove(event.extra)
+        : extras.add(event.extra);
+    emit(state.copyWith(selectedExtras: extras));
+  }
+
+  Future<void> _onBusinessLocationChanged(
+    BusinessLocationChanged event,
+    Emitter<AddBusinessState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        latitude: event.latitude,
+        longitude: event.longitude,
+        isResolvingLocation: true,
+      ),
+    );
+    final location = await _businessRepository.resolveBusinessLocation(
+      latitude: event.latitude,
+      longitude: event.longitude,
+    );
+    emit(
+      state.copyWith(
+        latitude: event.latitude,
+        longitude: event.longitude,
+        resolvedCity: location?.city,
+        resolvedAddress: location?.address,
+        isResolvingLocation: false,
+      ),
+    );
   }
 
   Future<void> _onBusinessImagePickRequested(
@@ -116,14 +170,28 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       return;
     }
 
-    emit(state.copyWith(isLoading: true, isSuccess: false, errorMessage: null));
+    emit(
+      state.copyWith(
+        isLoading: true,
+        isSuccess: false,
+        errorMessage: null,
+        successMessage: null,
+      ),
+    );
     try {
       await _businessRepository.createBusiness(
         type: state.businessType,
         name: event.name,
         categoryId: state.categoryId!,
+        city: event.city,
         address: event.address,
         shortDescription: event.shortDescription,
+        pricePerNight: event.pricePerNight,
+        amenities: event.amenities,
+        rooms: event.rooms,
+        extras: event.extras,
+        latitude: state.latitude,
+        longitude: state.longitude,
         logoPath: state.logoPath,
         coverPhotoPath: state.coverPhotoPath,
       );
@@ -132,6 +200,31 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
           isLoading: false,
           isSuccess: true,
           hasExistingBusiness: true,
+        ),
+      );
+    } on BusinessException catch (error) {
+      emit(state.copyWith(isLoading: false, errorMessage: error.message));
+    }
+  }
+
+  Future<void> _onDemoStaysSeedRequested(
+    DemoStaysSeedRequested event,
+    Emitter<AddBusinessState> emit,
+  ) async {
+    if (state.isLoading) {
+      return;
+    }
+
+    emit(
+      state.copyWith(isLoading: true, errorMessage: null, successMessage: null),
+    );
+    try {
+      final seededCount = await _businessRepository.seedDemoStays();
+      emit(
+        state.copyWith(
+          isLoading: false,
+          hasExistingBusiness: seededCount > 0 || state.hasExistingBusiness,
+          successMessage: '$seededCount demo stays created.',
         ),
       );
     } on BusinessException catch (error) {

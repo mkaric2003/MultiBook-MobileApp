@@ -1,3 +1,4 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AgreeTermsTile extends StatelessWidget {
@@ -16,7 +17,7 @@ class AgreeTermsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const baseColor = Color(0xFF9CA3AF);
+    const baseColor = AppColors.muted;
     const linkColor = Color(0xFF7C3AED);
 
     return Row(

@@ -1,0 +1,38 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/features/business-side/bookings/domain/enums/client_booking_filter.dart';
+import 'package:flutter/material.dart';
+
+class ClientBookingFilterChips extends StatelessWidget {
+  const ClientBookingFilterChips({
+    super.key,
+    required this.selected,
+    required this.onSelected,
+  });
+  final ClientBookingFilter selected;
+  final ValueChanged<ClientBookingFilter> onSelected;
+  @override
+  Widget build(BuildContext context) => SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Row(
+      children: [
+        for (final filter in ClientBookingFilter.values)
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Text(filter.label),
+              selected: selected == filter,
+              onSelected: (_) => onSelected(filter),
+              selectedColor: AppColors.primary,
+              backgroundColor: AppColors.surfaceHighlight,
+              labelStyle: TextStyle(
+                color: selected == filter ? Colors.white : AppColors.muted,
+                fontWeight: FontWeight.w700,
+              ),
+              side: BorderSide.none,
+              shape: const StadiumBorder(),
+            ),
+          ),
+      ],
+    ),
+  );
+}

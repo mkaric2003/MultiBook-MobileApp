@@ -17,5 +17,28 @@ service cloud.firestore {
       allow delete: if request.auth != null
         && resource.data.ownerId == request.auth.uid;
     }
+
+    match /bookings/{bookingId} {
+      allow read: if request.auth != null
+        && (resource.data.customerId == request.auth.uid
+          || resource.data.businessOwnerId == request.auth.uid);
+      allow create: if request.auth != null
+        && request.resource.data.customerId == request.auth.uid;
+      allow update: if request.auth != null
+        && (resource.data.customerId == request.auth.uid
+          || resource.data.businessOwnerId == request.auth.uid)
+        && request.resource.data.customerId == resource.data.customerId
+        && request.resource.data.businessOwnerId == resource.data.businessOwnerId;
+    }
+
+    match /booking_drafts/{userId} {
+      allow read, create, update, delete: if request.auth != null
+        && request.auth.uid == userId
+        && (request.method != 'create' || request.resource.data.customerId == request.auth.uid);
+    }
+    match /saved_businesses/{userId}/items/{businessId} {
+      allow read, create, update, delete: if request.auth != null
+        && request.auth.uid == userId;
+    }
   }
 }

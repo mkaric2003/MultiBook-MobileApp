@@ -1,5 +1,7 @@
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/data/enums/user_type.dart';
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart';
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_state.dart';
 import 'package:aquabook/src/features/shared/sign_in/presentation/widgets/signin_form.dart';
@@ -26,7 +28,13 @@ class SigninView extends HookWidget {
       child: BlocConsumer<SigninCubit, SigninState>(
         listener: (context, state) {
           if (state.isSuccess) {
-            context.go(AppRoutes.HOME);
+            context.go(
+              state.requiresUserTypeSelection
+                  ? AppRoutes.USER_TYPE_CHECKER
+                  : state.userType == UserType.customer
+                  ? AppRoutes.CUSTOMER_HOME
+                  : AppRoutes.HOME,
+            );
           }
 
           final message = state.errorMessage ?? state.successMessage;
@@ -60,7 +68,7 @@ class SigninView extends HookWidget {
                       style: GoogleFonts.inter(
                         fontSize: 17,
                         height: 1.5,
-                        color: const Color(0xFF9CA3AF),
+                        color: AppColors.muted,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -134,7 +142,7 @@ class SigninView extends HookWidget {
                         const Text(
                           "Don't have an account?",
                           style: TextStyle(
-                            color: Color(0xFF9CA3AF),
+                            color: AppColors.muted,
                             fontSize: 18,
                           ),
                         ),

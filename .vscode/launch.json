@@ -4,7 +4,10 @@
         {
             "name": "AquaBook",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--debug"
+            ]
         },
         {
             "name": "AquaBook (release mode)",

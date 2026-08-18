@@ -6,11 +6,13 @@ part 'signup_state.mapper.dart';
 class SignupState with SignupStateMappable {
   final bool isLoading;
   final bool isSuccess;
+  final bool requiresUserTypeSelection;
   final String? errorMessage;
 
   SignupState({
     this.isLoading = false,
     this.isSuccess = false,
+    this.requiresUserTypeSelection = false,
     this.errorMessage,
   });
 }

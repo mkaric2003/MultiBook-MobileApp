@@ -82,23 +82,29 @@ class MyBusinessListTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            color: AppColors.muted,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 3),
-                          Text(
-                            business.location.address,
-                            style: const TextStyle(
+                      SizedBox(
+                        width: 140,
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
                               color: AppColors.muted,
-                              fontSize: 16,
+                              size: 20,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 3),
+                            Expanded(
+                              child: Text(
+                                business.location.address,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: AppColors.muted,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

@@ -1,3 +1,4 @@
+import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
@@ -22,6 +23,41 @@ abstract class FirestoreDataSource {
     required String collection,
     required String field,
     required Object value,
+  });
+
+  Future<List<Map<String, dynamic>>> getDocuments({
+    required String collection,
+  });
+
+  Future<List<Map<String, dynamic>>> getDocumentsWhereArrayContains({
+    required String collection,
+    required String field,
+    required Object value,
+  });
+
+  Future<List<Map<String, dynamic>>> getDocumentsWherePrefix({
+    required String collection,
+    required String equalityField,
+    required Object equalityValue,
+    required String prefixField,
+    required String prefix,
+  });
+
+  DataCursor<T> createCursorWhere<T>({
+    required String collection,
+    required String field,
+    required Object value,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
+  });
+
+  DataCursor<T> createCursorWhereAll<T>({
+    required String collection,
+    required Map<String, Object> filters,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
   });
 
   Future<Map<String, dynamic>?> getDocument({
@@ -100,6 +136,77 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
         .where(field, isEqualTo: value)
         .get();
     return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getDocuments({
+    required String collection,
+  }) async {
+    final query = await _firestore.collection(collection).get();
+    return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getDocumentsWhereArrayContains({
+    required String collection,
+    required String field,
+    required Object value,
+  }) async {
+    final query = await _firestore
+        .collection(collection)
+        .where(field, arrayContains: value)
+        .get();
+    return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getDocumentsWherePrefix({
+    required String collection,
+    required String equalityField,
+    required Object equalityValue,
+    required String prefixField,
+    required String prefix,
+  }) async {
+    final query = await _firestore
+        .collection(collection)
+        .where(equalityField, isEqualTo: equalityValue)
+        .orderBy(prefixField)
+        .startAt([prefix])
+        .endAt(['$prefix\uf8ff'])
+        .get();
+    return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  DataCursor<T> createCursorWhere<T>({
+    required String collection,
+    required String field,
+    required Object value,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
+  }) {
+    final query = _firestore
+        .collection(collection)
+        .where(field, isEqualTo: value)
+        .limit(pageSize);
+    return DataCursor<T>(query, listSerializer);
+  }
+
+  @override
+  DataCursor<T> createCursorWhereAll<T>({
+    required String collection,
+    required Map<String, Object> filters,
+    required int pageSize,
+    required List<T> Function(List<Map<String, dynamic>> documents)
+    listSerializer,
+  }) {
+    Query<Map<String, dynamic>> query = _firestore.collection(collection);
+    for (final filter in filters.entries) {
+      query = query.where(filter.key, isEqualTo: filter.value);
+    }
+
+    return DataCursor<T>(query.limit(pageSize), listSerializer);
   }
 
   @override
