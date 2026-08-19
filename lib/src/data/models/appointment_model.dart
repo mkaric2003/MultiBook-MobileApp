@@ -24,6 +24,7 @@ class AppointmentModel {
     required this.paymentMethod,
     required this.confirmationCode,
     this.status = 'confirmed',
+    this.rescheduleCount = 0,
   });
 
   final String id;
@@ -50,11 +51,16 @@ class AppointmentModel {
   final String paymentMethod;
   final String confirmationCode;
   final String status;
+  final int rescheduleCount;
 
   AppointmentModel copyWith({
     String? businessName,
     String? businessImageUrl,
     String? status,
+    DateTime? date,
+    int? startMinutes,
+    int? endMinutes,
+    int? rescheduleCount,
   }) => AppointmentModel(
     id: id,
     businessId: businessId,
@@ -69,9 +75,9 @@ class AppointmentModel {
     providerName: providerName,
     serviceIds: serviceIds,
     serviceNames: serviceNames,
-    date: date,
-    startMinutes: startMinutes,
-    endMinutes: endMinutes,
+    date: date ?? this.date,
+    startMinutes: startMinutes ?? this.startMinutes,
+    endMinutes: endMinutes ?? this.endMinutes,
     serviceCost: serviceCost,
     addOnsCost: addOnsCost,
     serviceFee: serviceFee,
@@ -80,5 +86,6 @@ class AppointmentModel {
     paymentMethod: paymentMethod,
     confirmationCode: confirmationCode,
     status: status ?? this.status,
+    rescheduleCount: rescheduleCount ?? this.rescheduleCount,
   );
 }

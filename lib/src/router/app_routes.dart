@@ -14,6 +14,7 @@ class AppRoutes {
   static const APPOINTMENT_PAYMENT = '/appointment-payment';
   static const APPOINTMENT_CONFIRMED = '/appointment-confirmed';
   static const APPOINTMENT_DETAILS = '/appointment-details';
+  static const RESCHEDULE_APPOINTMENT = '/reschedule-appointment';
   static const BOOKING_DETAILS = '/booking-details';
   static const REVIEW_STAY = '/review-stay';
   static const PAYMENT = '/payment';

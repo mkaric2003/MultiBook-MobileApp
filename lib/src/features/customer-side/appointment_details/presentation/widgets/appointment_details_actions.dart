@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 class AppointmentDetailsActions extends StatelessWidget {
   const AppointmentDetailsActions({
     required this.isCancelling,
+    required this.canReschedule,
     required this.onCancel,
+    required this.onReschedule,
     super.key,
   });
 
   final bool isCancelling;
+  final bool canReschedule;
   final Future<void> Function() onCancel;
+  final Future<void> Function() onReschedule;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -21,8 +25,13 @@ class AppointmentDetailsActions extends StatelessWidget {
         enabled: !isCancelling,
         onPressed: () => onCancel(),
       ),
-      const SizedBox(height: 12),
-      CustomButton(buttonName: 'Reschedule appointment', onPressed: () {}),
+      if (canReschedule) ...[
+        const SizedBox(height: 12),
+        CustomButton(
+          buttonName: 'Reschedule appointment',
+          onPressed: () => onReschedule(),
+        ),
+      ],
       const SizedBox(height: 12),
       CustomButton(
         buttonName: 'Message provider',

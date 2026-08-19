@@ -78,6 +78,8 @@ import 'package:aquabook/src/features/customer-side/payment/cubit/payment_cubit.
     as _i415;
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_cubit.dart'
     as _i897;
+import 'package:aquabook/src/features/customer-side/reschedule_appointment/cubit/reschedule_appointment_cubit.dart'
+    as _i569;
 import 'package:aquabook/src/features/customer-side/review_stay/cubit/review_stay_cubit.dart'
     as _i192;
 import 'package:aquabook/src/features/customer-side/saved/cubit/saved_cubit.dart'
@@ -319,6 +321,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i492.AppointmentAvailabilityCubit>(
       () =>
           _i492.AppointmentAvailabilityCubit(gh<_i567.AppointmentRepository>()),
+    );
+    gh.factory<_i569.RescheduleAppointmentCubit>(
+      () => _i569.RescheduleAppointmentCubit(gh<_i567.AppointmentRepository>()),
     );
     gh.factory<_i415.PaymentCubit>(
       () => _i415.PaymentCubit(

@@ -1,5 +1,7 @@
+import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/cubit/appointment_details_cubit.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/cubit/appointment_details_state.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/domain/models/appointment_details_arguments.dart';
@@ -7,10 +9,12 @@ import 'package:aquabook/src/features/customer-side/appointment_details/presenta
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_business_card.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_information_card.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_price_card.dart';
+import 'package:aquabook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 class AppointmentDetailsView extends StatelessWidget {
   const AppointmentDetailsView({required this.arguments, super.key});
@@ -26,9 +30,13 @@ class AppointmentDetailsView extends StatelessWidget {
       listener: (context, state) {
         if (state.appointment != null) context.pop(state.appointment);
         if (state.errorMessage != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+          toastification.show(
+            context: context,
+            alignment: Alignment.bottomCenter,
+            autoCloseDuration: const Duration(seconds: 3),
+            type: ToastificationType.error,
+            title: Text(state.errorMessage!),
+          );
         }
       },
       builder: (context, state) => Scaffold(
@@ -54,6 +62,8 @@ class AppointmentDetailsView extends StatelessWidget {
                         const SizedBox(height: 24),
                         AppointmentDetailsActions(
                           isCancelling: state.isCancelling,
+                          canReschedule:
+                              arguments.canReschedule && state.business != null,
                           onCancel: () async {
                             final confirmed = await showDialog<bool>(
                               context: context,
@@ -80,6 +90,21 @@ class AppointmentDetailsView extends StatelessWidget {
                               await context
                                   .read<AppointmentDetailsCubit>()
                                   .cancel(arguments.appointment);
+                            }
+                          },
+                          onReschedule: () async {
+                            final business = state.business;
+                            if (business == null) return;
+                            final updated = await context
+                                .push<AppointmentModel>(
+                                  AppRoutes.RESCHEDULE_APPOINTMENT,
+                                  extra: RescheduleAppointmentArguments(
+                                    appointment: arguments.appointment,
+                                    business: business,
+                                  ),
+                                );
+                            if (updated != null && context.mounted) {
+                              context.pop(updated);
                             }
                           },
                         ),

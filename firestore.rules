@@ -51,7 +51,17 @@ service cloud.firestore {
         && (resource.data.customerId == request.auth.uid
           || resource.data.businessOwnerId == request.auth.uid)
         && request.resource.data.customerId == resource.data.customerId
-        && request.resource.data.businessOwnerId == resource.data.businessOwnerId;
+        && request.resource.data.businessOwnerId == resource.data.businessOwnerId
+        && (
+          (request.resource.data.rescheduleCount == resource.data.rescheduleCount
+            && request.resource.data.date == resource.data.date
+            && request.resource.data.startMinutes == resource.data.startMinutes
+            && request.resource.data.endMinutes == resource.data.endMinutes)
+          || (resource.data.rescheduleCount == 0
+            && request.resource.data.rescheduleCount == 1)
+          || (!('rescheduleCount' in resource.data)
+            && request.resource.data.rescheduleCount == 1)
+        );
     }
     // Stores only availability metadata for a provider's 30-minute slot.
     // No customer data is exposed through this collection.
@@ -63,7 +73,9 @@ service cloud.firestore {
         && getAfter(/databases/$(database)/documents/appointments/$(request.resource.data.appointmentId)).data.customerId == request.auth.uid
         && getAfter(/databases/$(database)/documents/appointments/$(request.resource.data.appointmentId)).data.businessId == request.resource.data.businessId
         && getAfter(/databases/$(database)/documents/appointments/$(request.resource.data.appointmentId)).data.providerId == request.resource.data.providerId;
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if request.auth != null
+        && resource.data.customerId == request.auth.uid;
     }
     match /saved_businesses/{userId}/items/{businessId} {
       allow read, create, update, delete: if request.auth != null

@@ -114,6 +114,13 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: AppRoutes.RESCHEDULE_APPOINTMENT,
+      name: AppRoutes.RESCHEDULE_APPOINTMENT,
+      builder: (context, state) => RescheduleAppointmentView(
+        arguments: state.extra! as RescheduleAppointmentArguments,
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.BOOKING_DETAILS,
       name: AppRoutes.BOOKING_DETAILS,
       builder: (context, state) => BookingDetailsView(

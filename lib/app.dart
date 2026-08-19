@@ -28,6 +28,8 @@ import 'package:aquabook/src/features/customer-side/appointment_confirmed/domain
 import 'package:aquabook/src/features/customer-side/appointment_confirmed/presentation/views/appointment_confirmed_view.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/domain/models/appointment_details_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/views/appointment_details_view.dart';
+import 'package:aquabook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
+import 'package:aquabook/src/features/customer-side/reschedule_appointment/presentation/views/reschedule_appointment_view.dart';
 import 'package:aquabook/src/features/customer-side/review_stay/domain/models/review_stay_arguments.dart';
 import 'package:aquabook/src/features/customer-side/review_stay/presentation/views/review_stay_view.dart';
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';

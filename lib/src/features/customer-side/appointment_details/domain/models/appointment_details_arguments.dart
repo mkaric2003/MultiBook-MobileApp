@@ -17,4 +17,6 @@ class AppointmentDetailsArguments {
     ).add(Duration(minutes: appointment.endMinutes));
     return !end.isAfter(DateTime.now());
   }
+
+  bool get canReschedule => !isFinished && appointment.rescheduleCount == 0;
 }

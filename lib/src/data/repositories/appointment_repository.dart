@@ -6,6 +6,7 @@ import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/data/models/firestore_document_write.dart';
+import 'package:aquabook/src/data/models/firestore_document_path.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
@@ -137,6 +138,7 @@ class AppointmentRepository {
           'paymentStatus': 'paid',
           'paymentMethod': result.paymentMethod,
           'status': 'confirmed',
+          'rescheduleCount': 0,
           'confirmationCode': result.confirmationCode,
           'createdAt': _firestore.serverTimestamp,
         },
@@ -254,6 +256,125 @@ class AppointmentRepository {
     }
   }
 
+  Future<AppointmentModel> rescheduleAppointment({
+    required AppointmentModel appointment,
+    required DateTime date,
+    required int startMinutes,
+  }) async {
+    final customerId = _auth.currentUser?.uid;
+    if (customerId == null || customerId != appointment.customerId) {
+      throw const AppointmentException(
+        'You can only reschedule your own appointment.',
+      );
+    }
+    if (appointment.rescheduleCount >= 1) {
+      throw const AppointmentException(
+        'This appointment has already been rescheduled once.',
+      );
+    }
+    if (appointment.status != 'confirmed') {
+      throw const AppointmentException(
+        'Only confirmed appointments can be rescheduled.',
+      );
+    }
+
+    final business = await _businessRepository.getBusiness(
+      businessId: appointment.businessId,
+    );
+    final provider = business?.serviceDetails?.availableProviders
+        .where((item) => item.id == appointment.providerId)
+        .firstOrNull;
+    if (provider == null) {
+      throw const AppointmentException('This service provider is unavailable.');
+    }
+    final endMinutes =
+        startMinutes + (appointment.endMinutes - appointment.startMinutes);
+    final normalizedDate = DateTime(date.year, date.month, date.day);
+    final isWithinAvailability = provider.availabilitySlots.any(
+      (slot) =>
+          slot.weekday.index + 1 == normalizedDate.weekday &&
+          startMinutes >= slot.startMinutes &&
+          endMinutes <= slot.endMinutes,
+    );
+    if (!isWithinAvailability) {
+      throw const AppointmentException(
+        'The selected time is no longer available for this provider.',
+      );
+    }
+
+    final updated = appointment.copyWith(
+      date: normalizedDate,
+      startMinutes: startMinutes,
+      endMinutes: endMinutes,
+      rescheduleCount: appointment.rescheduleCount + 1,
+    );
+    final newDateKey = _dateKey(normalizedDate);
+    final oldDateKey = _dateKey(appointment.date);
+    final newSlotWrites = _slotStarts(start: startMinutes, end: endMinutes)
+        .map(
+          (slotStart) => _slotWrite(
+            appointment: updated,
+            customerId: customerId,
+            dateKey: newDateKey,
+            slotStart: slotStart,
+          ),
+        )
+        .toList();
+    final oldSlotPaths =
+        _slotStarts(
+              start: appointment.startMinutes,
+              end: appointment.endMinutes,
+            )
+            .map(
+              (slotStart) => FirestoreDocumentPath(
+                collection: _slotCollection,
+                documentId:
+                    '${_availabilityKey(businessId: appointment.businessId, providerId: appointment.providerId, dateKey: oldDateKey)}-$slotStart',
+              ),
+            )
+            .toList();
+
+    try {
+      final didReschedule = await _firestore.createDocumentsIfAbsent(
+        documentsToCheck: newSlotWrites,
+        documentsToCreate: newSlotWrites,
+        documentsToUpdate: [
+          FirestoreDocumentWrite(
+            collection: _collection,
+            documentId: appointment.id,
+            data: {
+              'date': updated.date,
+              'dateKey': newDateKey,
+              'startMinutes': updated.startMinutes,
+              'endMinutes': updated.endMinutes,
+              'rescheduleCount': updated.rescheduleCount,
+              'updatedAt': _firestore.serverTimestamp,
+            },
+          ),
+        ],
+        documentsToDelete: oldSlotPaths,
+      );
+      if (!didReschedule) {
+        throw const AppointmentException(
+          'One or more selected times were just booked. Please choose another time.',
+        );
+      }
+      return updated;
+    } on AppointmentException {
+      rethrow;
+    } catch (error, stackTrace) {
+      log(
+        'Could not reschedule appointment.',
+        name: 'AppointmentRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const AppointmentException(
+        'We could not reschedule your appointment. Please try again.',
+      );
+    }
+  }
+
   DataCursor<AppointmentModel> getCustomerAppointmentsCursor({
     int pageSize = 20,
   }) {
@@ -326,6 +447,7 @@ class AppointmentRepository {
       paymentMethod: document['paymentMethod'] as String? ?? '',
       confirmationCode: document['confirmationCode'] as String? ?? '',
       status: document['status'] as String? ?? 'confirmed',
+      rescheduleCount: (document['rescheduleCount'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -345,6 +467,33 @@ class AppointmentRepository {
     for (var time = start; time < end; time += 30) {
       yield time;
     }
+  }
+
+  FirestoreDocumentWrite _slotWrite({
+    required AppointmentModel appointment,
+    required String customerId,
+    required String dateKey,
+    required int slotStart,
+  }) {
+    final availabilityKey = _availabilityKey(
+      businessId: appointment.businessId,
+      providerId: appointment.providerId,
+      dateKey: dateKey,
+    );
+    return FirestoreDocumentWrite(
+      collection: _slotCollection,
+      documentId: '$availabilityKey-$slotStart',
+      data: {
+        'availabilityKey': availabilityKey,
+        'appointmentId': appointment.id,
+        'businessId': appointment.businessId,
+        'providerId': appointment.providerId,
+        'dateKey': dateKey,
+        'startMinutes': slotStart,
+        'customerId': customerId,
+        'createdAt': _firestore.serverTimestamp,
+      },
+    );
   }
 
   static String _confirmationCode() => '#AP-${1000 + Random().nextInt(9000)}';

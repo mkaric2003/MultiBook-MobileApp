@@ -1,5 +1,6 @@
 import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/models/firestore_document_write.dart';
+import 'package:aquabook/src/data/models/firestore_document_path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
@@ -76,6 +77,8 @@ abstract class FirestoreDataSource {
   Future<bool> createDocumentsIfAbsent({
     required List<FirestoreDocumentWrite> documentsToCheck,
     required List<FirestoreDocumentWrite> documentsToCreate,
+    List<FirestoreDocumentWrite> documentsToUpdate = const [],
+    List<FirestoreDocumentPath> documentsToDelete = const [],
   });
 
   Future<void> updateDocument({
@@ -242,6 +245,8 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
   Future<bool> createDocumentsIfAbsent({
     required List<FirestoreDocumentWrite> documentsToCheck,
     required List<FirestoreDocumentWrite> documentsToCreate,
+    List<FirestoreDocumentWrite> documentsToUpdate = const [],
+    List<FirestoreDocumentPath> documentsToDelete = const [],
   }) async {
     if (documentsToCheck.isEmpty) return true;
 
@@ -256,11 +261,33 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
       final snapshots = await Future.wait(references.map(transaction.get));
       if (snapshots.any((snapshot) => snapshot.exists)) return false;
 
+      final deleteReferences = documentsToDelete
+          .map(
+            (document) => _firestore
+                .collection(document.collection)
+                .doc(document.documentId),
+          )
+          .toList();
+      final deleteSnapshots = await Future.wait(
+        deleteReferences.map(transaction.get),
+      );
+
       for (final document in documentsToCreate) {
         transaction.set(
           _firestore.collection(document.collection).doc(document.documentId),
           document.data,
         );
+      }
+      for (final document in documentsToUpdate) {
+        transaction.update(
+          _firestore.collection(document.collection).doc(document.documentId),
+          document.data,
+        );
+      }
+      for (var index = 0; index < deleteReferences.length; index++) {
+        if (deleteSnapshots[index].exists) {
+          transaction.delete(deleteReferences[index]);
+        }
       }
       return true;
     });
