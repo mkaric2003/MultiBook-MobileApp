@@ -22,9 +22,7 @@ class AvailabilityCalendarCubit extends Cubit<AvailabilityCalendarState> {
   Future<void> load() async {
     try {
       final user = await _userRepository.getCurrentUser();
-      final businesses = (await _businessRepository.getOwnedBusinesses())
-          .where((business) => business.type == BusinessType.stays)
-          .toList();
+      final businesses = await _businessRepository.getOwnedBusinesses();
       final business =
           _findBusiness(businesses, user?.selectedBusinessId) ??
           (businesses.isEmpty ? null : businesses.first);
@@ -36,6 +34,11 @@ class AvailabilityCalendarCubit extends Cubit<AvailabilityCalendarState> {
 
       if (business.id != user?.selectedBusinessId) {
         await _userRepository.setSelectedBusiness(businessId: business.id);
+      }
+
+      if (business.type != BusinessType.stays) {
+        emit(AvailabilityCalendarState(isLoading: false, business: business));
+        return;
       }
 
       final bookings = await _bookingRepository.getOwnedBusinessBookings(

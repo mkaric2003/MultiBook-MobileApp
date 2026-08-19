@@ -16,7 +16,7 @@ class MoreHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.fromLTRB(24, 22, 20, 18),
+    padding: const EdgeInsets.fromLTRB(20, 16, 16, 14),
     decoration: const BoxDecoration(
       border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
     ),
@@ -25,7 +25,7 @@ class MoreHeader extends StatelessWidget {
         const Expanded(
           child: Text(
             'More',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
         ),
         PopupMenuButton<String>(
@@ -47,8 +47,8 @@ class MoreHeader extends StatelessWidget {
               )
               .toList(),
           child: Container(
-            constraints: const BoxConstraints(maxWidth: 205),
-            padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 11),
+            constraints: const BoxConstraints(maxWidth: 178),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
               color: const Color(0xFF172554),
               borderRadius: BorderRadius.circular(11),
@@ -56,18 +56,25 @@ class MoreHeader extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.apartment_rounded, color: AppColors.primary),
-                const SizedBox(width: 8),
+                const Icon(
+                  Icons.apartment_rounded,
+                  color: AppColors.primary,
+                  size: 19,
+                ),
+                const SizedBox(width: 6),
                 Flexible(
                   child: Text(
                     selectedBusiness?.name ?? 'Select business',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                const Icon(Icons.keyboard_arrow_down),
+                const SizedBox(width: 5),
+                const Icon(Icons.keyboard_arrow_down, size: 20),
               ],
             ),
           ),

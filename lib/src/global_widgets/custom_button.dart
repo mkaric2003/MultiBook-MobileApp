@@ -20,6 +20,8 @@ class CustomButton extends StatelessWidget {
     this.disabledBackgroundColor = AppColors.border,
     this.disabledTextColor = AppColors.muted,
     this.radius = 12,
+    this.fontSize = 18,
+    this.horizontalPadding = 24,
   });
 
   final String buttonName;
@@ -36,6 +38,8 @@ class CustomButton extends StatelessWidget {
   final Color disabledBackgroundColor;
   final Color disabledTextColor;
   final double radius;
+  final double fontSize;
+  final double horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +62,9 @@ class CustomButton extends StatelessWidget {
           style: ButtonStyle(
             minimumSize: WidgetStateProperty.all(
               Size(width ?? double.infinity, height ?? 53),
+            ),
+            padding: WidgetStateProperty.all(
+              EdgeInsets.symmetric(horizontal: horizontalPadding),
             ),
             elevation: WidgetStateProperty.all(0),
             shape: WidgetStateProperty.all(
@@ -95,7 +102,10 @@ class CustomButton extends StatelessWidget {
       child: leadingIcon == null && trailingIcon == null
           ? Text(
               buttonName,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w600),
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
             )
           : Row(
               mainAxisSize: MainAxisSize.min,
@@ -109,10 +119,13 @@ class CustomButton extends StatelessWidget {
                 ],
                 Text(
                   buttonName,
-                  style: const TextStyle(
-                    fontSize: 18,
+                  style: TextStyle(
+                    fontSize: fontSize,
                     fontWeight: FontWeight.w600,
                   ),
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 if (trailingIcon != null) ...[
                   const SizedBox(width: 8),

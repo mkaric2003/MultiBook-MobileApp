@@ -9,11 +9,13 @@ class BillingInformationForm extends StatelessWidget {
     required this.email,
     required this.phone,
     required this.address,
+    this.showAddress = true,
   });
   final TextEditingController name;
   final TextEditingController email;
   final TextEditingController phone;
   final TextEditingController address;
+  final bool showAddress;
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(20),
@@ -43,14 +45,16 @@ class BillingInformationForm extends StatelessWidget {
           controller: phone,
           keyboardType: TextInputType.phone,
         ),
-        const SizedBox(height: 18),
-        const Text('Billing Address'),
-        const SizedBox(height: 8),
-        CustomTextField(
-          hintText: 'Enter your billing address',
-          controller: address,
-          maxLines: 3,
-        ),
+        if (showAddress) ...[
+          const SizedBox(height: 18),
+          const Text('Billing Address'),
+          const SizedBox(height: 8),
+          CustomTextField(
+            hintText: 'Enter your billing address',
+            controller: address,
+            maxLines: 3,
+          ),
+        ],
       ],
     ),
   );

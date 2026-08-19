@@ -58,13 +58,67 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.CUSTOMER_SEARCH,
       name: AppRoutes.CUSTOMER_SEARCH,
-      builder: (context, state) => const CustomerSearchView(),
+      builder: (context, state) => CustomerSearchView(
+        initialTab: state.extra is CustomerHomeTab
+            ? state.extra! as CustomerHomeTab
+            : CustomerHomeTab.stays,
+      ),
     ),
     GoRoute(
       path: AppRoutes.STAY_DETAIL,
       name: AppRoutes.STAY_DETAIL,
       builder: (context, state) =>
           StayDetailView(stay: state.extra! as StayListing),
+    ),
+    GoRoute(
+      path: AppRoutes.SERVICE_DETAIL,
+      name: AppRoutes.SERVICE_DETAIL,
+      builder: (context, state) =>
+          ServiceDetailView(service: state.extra! as ServiceListing),
+    ),
+    GoRoute(
+      path: AppRoutes.CREATE_APPOINTMENT,
+      name: AppRoutes.CREATE_APPOINTMENT,
+      builder: (context, state) => CreateAppointmentView(
+        arguments: state.extra! as CreateAppointmentArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.REVIEW_APPOINTMENT,
+      name: AppRoutes.REVIEW_APPOINTMENT,
+      builder: (context, state) => ReviewAppointmentView(
+        arguments: state.extra! as ReviewAppointmentArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.APPOINTMENT_PAYMENT,
+      name: AppRoutes.APPOINTMENT_PAYMENT,
+      builder: (context, state) => AppointmentPaymentView(
+        arguments: state.extra! as AppointmentPaymentArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.APPOINTMENT_CONFIRMED,
+      name: AppRoutes.APPOINTMENT_CONFIRMED,
+      builder: (context, state) => AppointmentConfirmedView(
+        arguments: state.extra! as AppointmentConfirmedArguments,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.APPOINTMENT_DETAILS,
+      name: AppRoutes.APPOINTMENT_DETAILS,
+      builder: (context, state) => AppointmentDetailsView(
+        arguments: AppointmentDetailsArguments(
+          appointment: state.extra! as AppointmentModel,
+        ),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.RESCHEDULE_APPOINTMENT,
+      name: AppRoutes.RESCHEDULE_APPOINTMENT,
+      builder: (context, state) => RescheduleAppointmentView(
+        arguments: state.extra! as RescheduleAppointmentArguments,
+      ),
     ),
     GoRoute(
       path: AppRoutes.BOOKING_DETAILS,

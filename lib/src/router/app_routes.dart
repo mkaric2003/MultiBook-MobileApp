@@ -8,6 +8,13 @@ class AppRoutes {
   static const CUSTOMER_HOME = '/customer-home';
   static const CUSTOMER_SEARCH = '/customer-search';
   static const STAY_DETAIL = '/stay-detail';
+  static const SERVICE_DETAIL = '/service-detail';
+  static const CREATE_APPOINTMENT = '/create-appointment';
+  static const REVIEW_APPOINTMENT = '/review-appointment';
+  static const APPOINTMENT_PAYMENT = '/appointment-payment';
+  static const APPOINTMENT_CONFIRMED = '/appointment-confirmed';
+  static const APPOINTMENT_DETAILS = '/appointment-details';
+  static const RESCHEDULE_APPOINTMENT = '/reschedule-appointment';
   static const BOOKING_DETAILS = '/booking-details';
   static const REVIEW_STAY = '/review-stay';
   static const PAYMENT = '/payment';

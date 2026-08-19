@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart';
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_booking_filter_chips.dart';
@@ -14,6 +15,9 @@ class BookingsView extends HookWidget {
   Widget build(BuildContext context) {
     final cubit = useMemoized(() => getIt<ClientBookingsCubit>());
     final scrollController = useScrollController();
+    final selectedBusinessId = useValueListenable(
+      getIt<UserRepository>().selectedBusinessId,
+    );
 
     useEffect(() {
       void onScroll() {
@@ -30,6 +34,13 @@ class BookingsView extends HookWidget {
       };
     }, [cubit, scrollController]);
 
+    useEffect(() {
+      if (selectedBusinessId != null) {
+        cubit.load(businessId: selectedBusinessId);
+      }
+      return null;
+    }, [cubit, selectedBusinessId]);
+
     return BlocProvider.value(
       value: cubit,
       child: BlocBuilder<ClientBookingsCubit, ClientBookingsState>(
@@ -43,7 +54,7 @@ class BookingsView extends HookWidget {
                 onBusinessSelected: cubit.selectBusiness,
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(24, 16, 0, 16),
+                padding: const EdgeInsets.fromLTRB(20, 12, 0, 12),
                 child: ClientBookingFilterChips(
                   selected: state.filter,
                   onSelected: (filter) => cubit.load(filter: filter),

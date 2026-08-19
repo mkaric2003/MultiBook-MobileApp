@@ -18,11 +18,24 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     on<BusinessCategoryChanged>(_onBusinessCategoryChanged);
     on<BusinessAmenityToggled>(_onBusinessAmenityToggled);
     on<BusinessExtraToggled>(_onBusinessExtraToggled);
+    on<ServiceOfferingAdded>(_onServiceOfferingAdded);
+    on<ServiceOfferingRemoved>(_onServiceOfferingRemoved);
+    on<ServiceAvailabilitySlotAdded>(_onServiceAvailabilitySlotAdded);
+    on<ServiceAvailabilitySlotRemoved>(_onServiceAvailabilitySlotRemoved);
+    on<ServiceProviderAdded>(_onServiceProviderAdded);
+    on<ServiceProviderRemoved>(_onServiceProviderRemoved);
+    on<ServiceProviderAvailabilitySlotAdded>(
+      _onServiceProviderAvailabilitySlotAdded,
+    );
+    on<ServiceProviderAvailabilitySlotRemoved>(
+      _onServiceProviderAvailabilitySlotRemoved,
+    );
     on<BusinessLocationChanged>(_onBusinessLocationChanged);
     on<BusinessImagePickRequested>(_onBusinessImagePickRequested);
     on<LostBusinessImageRestoreRequested>(_onLostBusinessImageRestoreRequested);
     on<ExistingBusinessesLoadRequested>(_onExistingBusinessesLoadRequested);
     on<DemoStaysSeedRequested>(_onDemoStaysSeedRequested);
+    on<DemoServicesSeedRequested>(_onDemoServicesSeedRequested);
     on<BusinessCreationRequested>(_onBusinessCreationRequested);
 
     add(const LostBusinessImageRestoreRequested());
@@ -72,6 +85,113 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         : extras.add(event.extra);
     emit(state.copyWith(selectedExtras: extras));
   }
+
+  void _onServiceOfferingAdded(
+    ServiceOfferingAdded event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        serviceOfferings: [...state.serviceOfferings, event.offering],
+      ),
+    );
+  }
+
+  void _onServiceOfferingRemoved(
+    ServiceOfferingRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        serviceOfferings: state.serviceOfferings
+            .where((offering) => offering.id != event.offeringId)
+            .toList(),
+      ),
+    );
+  }
+
+  void _onServiceAvailabilitySlotAdded(
+    ServiceAvailabilitySlotAdded event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        availabilitySlots: [...state.availabilitySlots, event.slot],
+      ),
+    );
+  }
+
+  void _onServiceAvailabilitySlotRemoved(
+    ServiceAvailabilitySlotRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        availabilitySlots: state.availabilitySlots
+            .where((slot) => slot.id != event.slotId)
+            .toList(),
+      ),
+    );
+  }
+
+  void _onServiceProviderAdded(
+    ServiceProviderAdded event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: [...state.serviceProviders, event.provider],
+    ),
+  );
+
+  void _onServiceProviderRemoved(
+    ServiceProviderRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: state.serviceProviders
+          .where((provider) => provider.id != event.providerId)
+          .toList(),
+    ),
+  );
+
+  void _onServiceProviderAvailabilitySlotAdded(
+    ServiceProviderAvailabilitySlotAdded event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: state.serviceProviders
+          .map(
+            (provider) => provider.id == event.providerId
+                ? provider.copyWith(
+                    availabilitySlots: [
+                      ...provider.availabilitySlots,
+                      event.slot,
+                    ],
+                  )
+                : provider,
+          )
+          .toList(),
+    ),
+  );
+
+  void _onServiceProviderAvailabilitySlotRemoved(
+    ServiceProviderAvailabilitySlotRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: state.serviceProviders
+          .map(
+            (provider) => provider.id == event.providerId
+                ? provider.copyWith(
+                    availabilitySlots: provider.availabilitySlots
+                        .where((slot) => slot.id != event.slotId)
+                        .toList(),
+                  )
+                : provider,
+          )
+          .toList(),
+    ),
+  );
 
   Future<void> _onBusinessLocationChanged(
     BusinessLocationChanged event,
@@ -190,6 +310,10 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         amenities: event.amenities,
         rooms: event.rooms,
         extras: event.extras,
+        serviceOfferings: event.serviceOfferings,
+        availabilitySlots: event.availabilitySlots,
+        serviceProviderName: event.serviceProviderName,
+        serviceProviders: event.serviceProviders,
         latitude: state.latitude,
         longitude: state.longitude,
         logoPath: state.logoPath,
@@ -225,6 +349,31 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
           isLoading: false,
           hasExistingBusiness: seededCount > 0 || state.hasExistingBusiness,
           successMessage: '$seededCount demo stays created.',
+        ),
+      );
+    } on BusinessException catch (error) {
+      emit(state.copyWith(isLoading: false, errorMessage: error.message));
+    }
+  }
+
+  Future<void> _onDemoServicesSeedRequested(
+    DemoServicesSeedRequested event,
+    Emitter<AddBusinessState> emit,
+  ) async {
+    if (state.isLoading) {
+      return;
+    }
+
+    emit(
+      state.copyWith(isLoading: true, errorMessage: null, successMessage: null),
+    );
+    try {
+      final seededCount = await _businessRepository.seedDemoServices();
+      emit(
+        state.copyWith(
+          isLoading: false,
+          hasExistingBusiness: seededCount > 0 || state.hasExistingBusiness,
+          successMessage: '$seededCount demo service businesses created.',
         ),
       );
     } on BusinessException catch (error) {

@@ -2,9 +2,14 @@ import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class DestinationSearchField extends StatelessWidget {
-  const DestinationSearchField({super.key, required this.onTap});
+  const DestinationSearchField({
+    required this.onTap,
+    required this.hintText,
+    super.key,
+  });
 
   final VoidCallback onTap;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +24,12 @@ class DestinationSearchField extends StatelessWidget {
           borderRadius: BorderRadius.circular(13),
           border: Border.all(color: AppColors.surfaceHighlight),
         ),
-        child: const Row(
+        child: Row(
           children: [
             Expanded(
               child: Text(
-                'Where to?',
-                style: TextStyle(
+                hintText,
+                style: const TextStyle(
                   color: AppColors.muted,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,

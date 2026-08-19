@@ -1,6 +1,8 @@
 import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:aquabook/src/data/repositories/appointment_repository.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/repositories/booking_repository.dart';
@@ -8,6 +10,7 @@ import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
 import 'package:aquabook/src/features/business-side/bookings/domain/enums/client_booking_filter.dart';
+import 'package:aquabook/src/features/business-side/bookings/domain/enums/client_bookings_tab.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -15,11 +18,13 @@ import 'package:injectable/injectable.dart';
 class ClientBookingsCubit extends Cubit<ClientBookingsState> {
   ClientBookingsCubit(
     this._bookingRepository,
+    this._appointmentRepository,
     this._businessRepository,
     this._userRepository,
   ) : super(const ClientBookingsState());
 
   final BookingRepository _bookingRepository;
+  final AppointmentRepository _appointmentRepository;
   final BusinessRepository _businessRepository;
   final UserRepository _userRepository;
   DataCursor<BookingModel>? _cursor;
@@ -35,14 +40,13 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
         filter: filter,
         businesses: state.businesses,
         selectedBusiness: state.selectedBusiness,
+        tab: state.tab,
       ),
     );
 
     try {
       final user = await _userRepository.getCurrentUser();
-      final businesses = (await _businessRepository.getOwnedBusinesses())
-          .where((business) => business.type == BusinessType.stays)
-          .toList();
+      final businesses = await _businessRepository.getOwnedBusinesses();
       final selectedBusiness =
           _findBusiness(businesses, businessId ?? user?.selectedBusinessId) ??
           (businesses.isEmpty ? null : businesses.first);
@@ -58,22 +62,43 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
         );
       }
 
-      _cursor = _bookingRepository.getOwnedBookingsCursor(
+      if (selectedBusiness.type == BusinessType.stays) {
+        _cursor = _bookingRepository.getOwnedBookingsCursor(
+          businessId: selectedBusiness.id,
+          status: filter.bookingStatus,
+        );
+        final bookings = await _cursor!.fetchNextPage();
+        if (requestId != _loadRequestId) return;
+        emit(
+          ClientBookingsState(
+            filter: filter,
+            bookings: bookings,
+            businesses: businesses,
+            selectedBusiness: selectedBusiness,
+            tab: ClientBookingsTab.stays,
+            isLoading: false,
+            hasReachedEnd: _cursor!.isEverythingLoaded,
+          ),
+        );
+        return;
+      }
+      _cursor = null;
+      final appointments = await _getOwnedAppointments(
         businessId: selectedBusiness.id,
-        status: filter.bookingStatus,
+        filter: filter,
       );
-      final bookings = await _cursor!.fetchNextPage();
       if (requestId != _loadRequestId) {
         return;
       }
       emit(
         ClientBookingsState(
           filter: filter,
-          bookings: bookings,
+          appointments: appointments,
           businesses: businesses,
           selectedBusiness: selectedBusiness,
+          tab: ClientBookingsTab.services,
           isLoading: false,
-          hasReachedEnd: _cursor!.isEverythingLoaded,
+          hasReachedEnd: true,
         ),
       );
     } on BookingException catch (error) {
@@ -85,6 +110,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
           filter: filter,
           businesses: state.businesses,
           selectedBusiness: state.selectedBusiness,
+          tab: state.tab,
           isLoading: false,
           errorMessage: error.message,
         ),
@@ -98,11 +124,27 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
           filter: filter,
           businesses: state.businesses,
           selectedBusiness: state.selectedBusiness,
+          tab: state.tab,
           isLoading: false,
           errorMessage: 'We could not load bookings. Please try again.',
         ),
       );
     }
+  }
+
+  Future<List<AppointmentModel>> _getOwnedAppointments({
+    required String businessId,
+    required ClientBookingFilter filter,
+  }) async {
+    final cursor = _appointmentRepository.getOwnedAppointmentsCursor(
+      businessId: businessId,
+      status: filter == ClientBookingFilter.all ? null : filter.name,
+    );
+    final appointments = <AppointmentModel>[];
+    while (!cursor.isEverythingLoaded) {
+      appointments.addAll(await cursor.fetchNextPage());
+    }
+    return appointments;
   }
 
   Future<void> loadMore() async {
@@ -117,6 +159,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
         bookings: state.bookings,
         businesses: state.businesses,
         selectedBusiness: state.selectedBusiness,
+        tab: state.tab,
         isLoading: false,
         isLoadingMore: true,
       ),
@@ -133,6 +176,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
           bookings: [...state.bookings, ...nextPage],
           businesses: state.businesses,
           selectedBusiness: state.selectedBusiness,
+          tab: state.tab,
           isLoading: false,
           hasReachedEnd: cursor.isEverythingLoaded,
         ),
@@ -147,6 +191,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
           bookings: state.bookings,
           businesses: state.businesses,
           selectedBusiness: state.selectedBusiness,
+          tab: state.tab,
           isLoading: false,
           errorMessage: 'We could not load more bookings. Please try again.',
         ),
@@ -188,6 +233,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
           bookings: updatedBookings,
           businesses: state.businesses,
           selectedBusiness: state.selectedBusiness,
+          tab: state.tab,
           isLoading: false,
           hasReachedEnd: state.hasReachedEnd,
         ),
@@ -196,6 +242,45 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     } on BookingException {
       return false;
     }
+  }
+
+  Future<bool> cancelAppointment(AppointmentModel appointment) async {
+    try {
+      final cancelled = await _appointmentRepository.cancelAppointment(
+        appointment,
+      );
+      _replaceAppointment(cancelled);
+      return true;
+    } on AppointmentException {
+      return false;
+    }
+  }
+
+  void updateAppointment(AppointmentModel appointment) {
+    _replaceAppointment(appointment);
+  }
+
+  void _replaceAppointment(AppointmentModel appointment) {
+    final appointments =
+        state.filter == ClientBookingFilter.all ||
+            state.filter.name == appointment.status
+        ? state.appointments
+              .map((item) => item.id == appointment.id ? appointment : item)
+              .toList()
+        : state.appointments
+              .where((item) => item.id != appointment.id)
+              .toList();
+    emit(
+      ClientBookingsState(
+        filter: state.filter,
+        appointments: appointments,
+        businesses: state.businesses,
+        selectedBusiness: state.selectedBusiness,
+        tab: state.tab,
+        isLoading: false,
+        hasReachedEnd: state.hasReachedEnd,
+      ),
+    );
   }
 
   BusinessModel? _findBusiness(

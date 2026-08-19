@@ -8,12 +8,14 @@ class SearchAppBar extends StatelessWidget {
     required this.focusNode,
     required this.onChanged,
     required this.onBackPressed,
+    required this.hintText,
   });
 
   final TextEditingController controller;
   final FocusNode focusNode;
   final ValueChanged<String> onChanged;
   final VoidCallback onBackPressed;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +51,9 @@ class SearchAppBar extends StatelessWidget {
                     onChanged: onChanged,
                     cursorColor: AppColors.primary,
                     style: const TextStyle(fontSize: 17),
-                    decoration: const InputDecoration(
-                      hintText: 'Where do you want to stay?',
-                      hintStyle: TextStyle(color: AppColors.muted),
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      hintStyle: const TextStyle(color: AppColors.muted),
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,

@@ -1,0 +1,34 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
+
+class CustomerAppointmentStatusPill extends StatelessWidget {
+  const CustomerAppointmentStatusPill({required this.status, super.key});
+
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalized = status.toLowerCase();
+    final color = switch (normalized) {
+      'confirmed' => AppColors.success,
+      'completed' => AppColors.iconMuted,
+      'cancelled' => Colors.redAccent,
+      _ => AppColors.primary,
+    };
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: .22),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        '${normalized[0].toUpperCase()}${normalized.substring(1)}',
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.w800,
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+}

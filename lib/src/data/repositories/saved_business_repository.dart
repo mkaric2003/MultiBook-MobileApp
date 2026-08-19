@@ -1,6 +1,7 @@
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
@@ -26,7 +27,10 @@ class SavedBusinessRepository {
     if (userId == null) return;
     final collection = _collectionFor(userId);
     if (saved) {
-      await _firestore.deleteDocument(collection: collection, documentId: stay.id);
+      await _firestore.deleteDocument(
+        collection: collection,
+        documentId: stay.id,
+      );
       return;
     }
     await _firestore.setDocument(
@@ -40,6 +44,35 @@ class SavedBusinessRepository {
         'rating': stay.rating,
         'reviewCount': stay.reviewCount,
         'imageUrl': stay.imageUrl,
+        'createdAt': _firestore.serverTimestamp,
+      },
+    );
+  }
+
+  Future<void> toggleService(ServiceListing service, bool saved) async {
+    final userId = _userId;
+    if (userId == null) return;
+    final collection = _collectionFor(userId);
+    if (saved) {
+      await _firestore.deleteDocument(
+        collection: collection,
+        documentId: service.id,
+      );
+      return;
+    }
+    await _firestore.setDocument(
+      collection: collection,
+      documentId: service.id,
+      data: {
+        'businessId': service.id,
+        'type': 'services',
+        'name': service.name,
+        'location': service.location,
+        'price': service.price,
+        'durationMinutes': service.durationMinutes,
+        'rating': service.rating,
+        'reviewCount': service.reviewCount,
+        'imageUrl': service.imageUrl,
         'createdAt': _firestore.serverTimestamp,
       },
     );

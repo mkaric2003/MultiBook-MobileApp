@@ -9,4 +9,5 @@ abstract final class AppColors {
   static const iconMuted = Color(0xFF6B7280);
   static const surfaceHighlight = Color(0xFF374151);
   static const primary = Color(0xFF8B5CF6);
+  static const success = Color(0xFF10B981);
 }

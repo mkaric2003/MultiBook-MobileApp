@@ -31,7 +31,7 @@ class MoreView extends StatelessWidget {
               ),
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.fromLTRB(27, 32, 27, 30),
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
                   children: [
                     MoreMenuSection(
                       title: 'Business management',
@@ -56,7 +56,7 @@ class MoreView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 33),
+                    const SizedBox(height: 25),
                     const MoreMenuSection(
                       title: 'Financials',
                       items: [
@@ -74,7 +74,7 @@ class MoreView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 33),
+                    const SizedBox(height: 25),
                     const MoreMenuSection(
                       title: 'Notifications & Communication',
                       items: [
@@ -89,7 +89,7 @@ class MoreView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 33),
+                    const SizedBox(height: 25),
                     MoreMenuSection(
                       title: 'Settings',
                       items: [
@@ -116,14 +116,15 @@ class MoreView extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 42),
+                    const SizedBox(height: 30),
                     CustomButton(
                       buttonName: 'Logout',
                       color: Colors.transparent,
                       textColor: const Color(0xFFFF4B4B),
                       borderColor: const Color(0xFFFF4B4B),
                       leadingIcon: const Icon(Icons.logout_rounded),
-                      height: 55,
+                      height: 48,
+                      fontSize: 15,
                       onPressed: onLogout,
                     ),
                   ],

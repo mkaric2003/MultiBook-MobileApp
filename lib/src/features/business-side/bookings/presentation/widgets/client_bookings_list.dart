@@ -2,6 +2,12 @@ import 'package:aquabook/src/features/business-side/bookings/bloc/client_booking
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_booking_card.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/manage_booking_sheet.dart';
+import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_appointment_card.dart';
+import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/manage_appointment_sheet.dart';
+import 'package:aquabook/app.dart';
+import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:aquabook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +27,11 @@ class ClientBookingsList extends StatelessWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (state.errorMessage != null && state.bookings.isEmpty) {
+    final isServices = state.tab.name == 'services';
+    final itemCount = isServices
+        ? state.appointments.length
+        : state.bookings.length;
+    if (state.errorMessage != null && itemCount == 0) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -34,10 +44,10 @@ class ClientBookingsList extends StatelessWidget {
       );
     }
 
-    if (state.bookings.isEmpty) {
+    if (itemCount == 0) {
       return const Center(
         child: Text(
-          'No bookings found.',
+          'No bookings found for this business.',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       );
@@ -45,14 +55,46 @@ class ClientBookingsList extends StatelessWidget {
 
     return ListView.separated(
       controller: controller,
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
-      itemCount: state.bookings.length + (state.isLoadingMore ? 1 : 0),
-      separatorBuilder: (_, _) => const SizedBox(height: 18),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+      itemCount: itemCount + (state.isLoadingMore ? 1 : 0),
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        if (index == state.bookings.length) {
+        if (index == itemCount) {
           return const Center(child: CircularProgressIndicator());
         }
 
+        if (isServices) {
+          final appointment = state.appointments[index];
+          return ClientAppointmentCard(
+            appointment: appointment,
+            onManage: () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (sheetContext) => ManageAppointmentSheet(
+                appointment: appointment,
+                onCancel: context.read<ClientBookingsCubit>().cancelAppointment,
+                onReschedule: () async {
+                  final business = state.selectedBusiness;
+                  if (business == null) return;
+                  final updated = await context.push<AppointmentModel>(
+                    AppRoutes.RESCHEDULE_APPOINTMENT,
+                    extra: RescheduleAppointmentArguments(
+                      appointment: appointment,
+                      business: business,
+                    ),
+                  );
+                  if (updated != null && context.mounted) {
+                    context.read<ClientBookingsCubit>().updateAppointment(
+                      updated,
+                    );
+                    if (sheetContext.mounted) Navigator.pop(sheetContext);
+                  }
+                },
+              ),
+            ),
+          );
+        }
         final booking = state.bookings[index];
         return ClientBookingCard(
           booking: booking,

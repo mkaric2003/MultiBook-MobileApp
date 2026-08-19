@@ -17,6 +17,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       BusinessTypeMapper.ensureInitialized();
       BusinessLocationModelMapper.ensureInitialized();
       StayDetailsModelMapper.ensureInitialized();
+      ServiceDetailsModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -100,6 +101,10 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     _$stayDetails,
     opt: true,
   );
+  static ServiceDetailsModel? _$serviceDetails(BusinessModel v) =>
+      v.serviceDetails;
+  static const Field<BusinessModel, ServiceDetailsModel> _f$serviceDetails =
+      Field('serviceDetails', _$serviceDetails, opt: true);
   static DateTime? _$createdAt(BusinessModel v) => v.createdAt;
   static const Field<BusinessModel, DateTime> _f$createdAt = Field(
     'createdAt',
@@ -129,6 +134,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     #averageRating: _f$averageRating,
     #reviewCount: _f$reviewCount,
     #stayDetails: _f$stayDetails,
+    #serviceDetails: _f$serviceDetails,
     #createdAt: _f$createdAt,
     #updatedAt: _f$updatedAt,
   };
@@ -149,6 +155,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       averageRating: data.dec(_f$averageRating),
       reviewCount: data.dec(_f$reviewCount),
       stayDetails: data.dec(_f$stayDetails),
+      serviceDetails: data.dec(_f$serviceDetails),
       createdAt: data.dec(_f$createdAt),
       updatedAt: data.dec(_f$updatedAt),
     );
@@ -225,6 +232,8 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get photoUrls;
   StayDetailsModelCopyWith<$R, StayDetailsModel, StayDetailsModel>?
   get stayDetails;
+  ServiceDetailsModelCopyWith<$R, ServiceDetailsModel, ServiceDetailsModel>?
+  get serviceDetails;
   $R call({
     String? id,
     String? ownerId,
@@ -240,6 +249,7 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
     double? averageRating,
     int? reviewCount,
     StayDetailsModel? stayDetails,
+    ServiceDetailsModel? serviceDetails,
     DateTime? createdAt,
     DateTime? updatedAt,
   });
@@ -273,6 +283,10 @@ class _BusinessModelCopyWithImpl<$R, $Out>
   get stayDetails =>
       $value.stayDetails?.copyWith.$chain((v) => call(stayDetails: v));
   @override
+  ServiceDetailsModelCopyWith<$R, ServiceDetailsModel, ServiceDetailsModel>?
+  get serviceDetails =>
+      $value.serviceDetails?.copyWith.$chain((v) => call(serviceDetails: v));
+  @override
   $R call({
     String? id,
     String? ownerId,
@@ -288,6 +302,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     double? averageRating,
     int? reviewCount,
     Object? stayDetails = $none,
+    Object? serviceDetails = $none,
     Object? createdAt = $none,
     Object? updatedAt = $none,
   }) => $apply(
@@ -306,6 +321,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
       if (averageRating != null) #averageRating: averageRating,
       if (reviewCount != null) #reviewCount: reviewCount,
       if (stayDetails != $none) #stayDetails: stayDetails,
+      if (serviceDetails != $none) #serviceDetails: serviceDetails,
       if (createdAt != $none) #createdAt: createdAt,
       if (updatedAt != $none) #updatedAt: updatedAt,
     }),
@@ -326,6 +342,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     averageRating: data.get(#averageRating, or: $value.averageRating),
     reviewCount: data.get(#reviewCount, or: $value.reviewCount),
     stayDetails: data.get(#stayDetails, or: $value.stayDetails),
+    serviceDetails: data.get(#serviceDetails, or: $value.serviceDetails),
     createdAt: data.get(#createdAt, or: $value.createdAt),
     updatedAt: data.get(#updatedAt, or: $value.updatedAt),
   );

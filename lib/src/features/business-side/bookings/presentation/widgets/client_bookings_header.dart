@@ -16,7 +16,7 @@ class ClientBookingsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.fromLTRB(24, 22, 20, 18),
+    padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
     decoration: const BoxDecoration(
       border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
     ),
@@ -25,7 +25,7 @@ class ClientBookingsHeader extends StatelessWidget {
         const Expanded(
           child: Text(
             'Bookings',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
         ),
         PopupMenuButton<String>(
@@ -55,7 +55,7 @@ class ClientBookingsHeader extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  selectedBusiness?.name ?? 'Select stay',
+                  selectedBusiness?.name ?? 'Select business',
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(width: 8),

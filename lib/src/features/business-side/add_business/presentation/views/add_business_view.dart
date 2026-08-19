@@ -15,8 +15,10 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_media_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_type_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/image_source_picker_sheet.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/hotel_room_form.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/image_source_picker_sheet.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_offerings_section.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_providers_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
@@ -97,6 +99,12 @@ class AddBusinessView extends HookWidget {
               state.categoryId != null &&
               (state.businessType != BusinessType.stays ||
                   (int.tryParse(priceController.text) ?? 0) > 0) &&
+              (state.businessType != BusinessType.services ||
+                  (state.serviceOfferings.isNotEmpty &&
+                      state.serviceProviders.isNotEmpty &&
+                      state.serviceProviders.every(
+                        (provider) => provider.availabilitySlots.isNotEmpty,
+                      ))) &&
               (state.categoryId != 'hotel' ||
                   (roomNameController.text.trim().isNotEmpty &&
                       (int.tryParse(roomGuestsController.text) ?? 0) > 0 &&
@@ -243,6 +251,42 @@ class AddBusinessView extends HookWidget {
                               const SizedBox(height: 28),
                             ],
                           ],
+                          if (state.businessType == BusinessType.services) ...[
+                            ServiceProvidersSection(
+                              providers: state.serviceProviders,
+                              onProviderAdded: (provider) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(ServiceProviderAdded(provider)),
+                              onProviderRemoved: (providerId) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(ServiceProviderRemoved(providerId)),
+                              onSlotAdded: (providerId, slot) =>
+                                  context.read<AddBusinessBloc>().add(
+                                    ServiceProviderAvailabilitySlotAdded(
+                                      providerId: providerId,
+                                      slot: slot,
+                                    ),
+                                  ),
+                              onSlotRemoved: (providerId, slotId) =>
+                                  context.read<AddBusinessBloc>().add(
+                                    ServiceProviderAvailabilitySlotRemoved(
+                                      providerId: providerId,
+                                      slotId: slotId,
+                                    ),
+                                  ),
+                            ),
+                            const SizedBox(height: 28),
+                            ServiceOfferingsSection(
+                              offerings: state.serviceOfferings,
+                              onOfferingAdded: (offering) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(ServiceOfferingAdded(offering)),
+                              onOfferingRemoved: (offeringId) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(ServiceOfferingRemoved(offeringId)),
+                            ),
+                            const SizedBox(height: 28),
+                          ],
                           const FormFieldLabel('City*'),
                           const SizedBox(height: 10),
                           CustomTextField(
@@ -289,19 +333,36 @@ class AddBusinessView extends HookWidget {
                                 selectImage(BusinessImageType.coverPhoto),
                           ),
                           const SizedBox(height: 30),
-                          CustomButton(
-                            buttonName: 'Seed 20 demo stays',
-                            color: AppColors.surface,
-                            textColor: AppColors.primary,
-                            borderColor: AppColors.primary,
-                            onPressed: state.isLoading
-                                ? null
-                                : () => context.read<AddBusinessBloc>().add(
-                                    const DemoStaysSeedRequested(),
-                                  ),
-                            enabled: !state.isLoading,
-                          ),
-                          const SizedBox(height: 14),
+                          if (state.businessType == BusinessType.stays) ...[
+                            CustomButton(
+                              buttonName: 'Seed 20 demo stays',
+                              color: AppColors.surface,
+                              textColor: AppColors.primary,
+                              borderColor: AppColors.primary,
+                              onPressed: state.isLoading
+                                  ? null
+                                  : () => context.read<AddBusinessBloc>().add(
+                                      const DemoStaysSeedRequested(),
+                                    ),
+                              enabled: !state.isLoading,
+                            ),
+                            const SizedBox(height: 14),
+                          ],
+                          if (state.businessType == BusinessType.services) ...[
+                            CustomButton(
+                              buttonName: 'Seed 15 demo services',
+                              color: AppColors.surface,
+                              textColor: AppColors.primary,
+                              borderColor: AppColors.primary,
+                              onPressed: state.isLoading
+                                  ? null
+                                  : () => context.read<AddBusinessBloc>().add(
+                                      const DemoServicesSeedRequested(),
+                                    ),
+                              enabled: !state.isLoading,
+                            ),
+                            const SizedBox(height: 14),
+                          ],
                           CustomButton(
                             buttonName: 'Create business',
                             onPressed: canCreate && !state.isLoading
@@ -354,6 +415,8 @@ class AddBusinessView extends HookWidget {
                                             ),
                                           )
                                           .toList(),
+                                      serviceOfferings: state.serviceOfferings,
+                                      serviceProviders: state.serviceProviders,
                                     ),
                                   )
                                 : null,
