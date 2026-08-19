@@ -103,8 +103,8 @@ class AppointmentConfirmationSummaryCard extends StatelessWidget {
           AppointmentConfirmationInfo(
             icon: Icons.attach_money_rounded,
             label: 'TOTAL AMOUNT',
-            value: '\$${arguments.payment.total.toStringAsFixed(2)}',
-            detail: 'Paid via ${arguments.paymentMethod}',
+            value: '\$${arguments.appointment.total.toStringAsFixed(2)}',
+            detail: 'Paid via ${arguments.appointment.paymentMethod}',
             iconBackground: AppColors.success.withValues(alpha: .2),
             iconColor: AppColors.success,
           ),

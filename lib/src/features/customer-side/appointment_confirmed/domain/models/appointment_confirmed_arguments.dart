@@ -1,13 +1,12 @@
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
+import 'package:aquabook/src/data/models/appointment_model.dart';
 
 class AppointmentConfirmedArguments {
-  AppointmentConfirmedArguments({
+  const AppointmentConfirmedArguments({
     required this.payment,
-    required this.paymentMethod,
-  }) : confirmationCode =
-           '#AP-${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}';
+    required this.appointment,
+  });
 
   final AppointmentPaymentArguments payment;
-  final String paymentMethod;
-  final String confirmationCode;
+  final AppointmentModel appointment;
 }

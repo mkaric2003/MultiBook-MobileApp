@@ -19,6 +19,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       StayExtraTypeMapper.ensureInitialized();
       ServiceOfferingModelMapper.ensureInitialized();
       ServiceAvailabilitySlotModelMapper.ensureInitialized();
+      ServiceProviderModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -63,6 +64,15 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
   _f$availabilitySlots = Field(
     'availabilitySlots',
     _$availabilitySlots,
+    opt: true,
+    def: const [],
+  );
+  static List<ServiceProviderModel> _$serviceProviders(AddBusinessState v) =>
+      v.serviceProviders;
+  static const Field<AddBusinessState, List<ServiceProviderModel>>
+  _f$serviceProviders = Field(
+    'serviceProviders',
+    _$serviceProviders,
     opt: true,
     def: const [],
   );
@@ -153,6 +163,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #selectedExtras: _f$selectedExtras,
     #serviceOfferings: _f$serviceOfferings,
     #availabilitySlots: _f$availabilitySlots,
+    #serviceProviders: _f$serviceProviders,
     #latitude: _f$latitude,
     #longitude: _f$longitude,
     #resolvedCity: _f$resolvedCity,
@@ -175,6 +186,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       selectedExtras: data.dec(_f$selectedExtras),
       serviceOfferings: data.dec(_f$serviceOfferings),
       availabilitySlots: data.dec(_f$availabilitySlots),
+      serviceProviders: data.dec(_f$serviceProviders),
       latitude: data.dec(_f$latitude),
       longitude: data.dec(_f$longitude),
       resolvedCity: data.dec(_f$resolvedCity),
@@ -276,6 +288,12 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     >
   >
   get availabilitySlots;
+  ListCopyWith<
+    $R,
+    ServiceProviderModel,
+    ServiceProviderModelCopyWith<$R, ServiceProviderModel, ServiceProviderModel>
+  >
+  get serviceProviders;
   $R call({
     BusinessType? businessType,
     String? categoryId,
@@ -283,6 +301,7 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     List<StayExtraType>? selectedExtras,
     List<ServiceOfferingModel>? serviceOfferings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
+    List<ServiceProviderModel>? serviceProviders,
     double? latitude,
     double? longitude,
     String? resolvedCity,
@@ -354,6 +373,17 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     (v) => call(availabilitySlots: v),
   );
   @override
+  ListCopyWith<
+    $R,
+    ServiceProviderModel,
+    ServiceProviderModelCopyWith<$R, ServiceProviderModel, ServiceProviderModel>
+  >
+  get serviceProviders => ListCopyWith(
+    $value.serviceProviders,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(serviceProviders: v),
+  );
+  @override
   $R call({
     BusinessType? businessType,
     Object? categoryId = $none,
@@ -361,6 +391,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     List<StayExtraType>? selectedExtras,
     List<ServiceOfferingModel>? serviceOfferings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
+    List<ServiceProviderModel>? serviceProviders,
     Object? latitude = $none,
     Object? longitude = $none,
     Object? resolvedCity = $none,
@@ -381,6 +412,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       if (selectedExtras != null) #selectedExtras: selectedExtras,
       if (serviceOfferings != null) #serviceOfferings: serviceOfferings,
       if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
+      if (serviceProviders != null) #serviceProviders: serviceProviders,
       if (latitude != $none) #latitude: latitude,
       if (longitude != $none) #longitude: longitude,
       if (resolvedCity != $none) #resolvedCity: resolvedCity,
@@ -411,6 +443,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       #availabilitySlots,
       or: $value.availabilitySlots,
     ),
+    serviceProviders: data.get(#serviceProviders, or: $value.serviceProviders),
     latitude: data.get(#latitude, or: $value.latitude),
     longitude: data.get(#longitude, or: $value.longitude),
     resolvedCity: data.get(#resolvedCity, or: $value.resolvedCity),

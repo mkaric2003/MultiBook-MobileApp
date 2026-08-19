@@ -84,6 +84,8 @@ class ReviewAppointmentView extends HookWidget {
                     offeringIds: arguments.offerings
                         .map((offering) => offering.id)
                         .toList(),
+                    providerId: arguments.provider.id,
+                    providerName: arguments.provider.name,
                     date: arguments.date,
                     startMinutes: arguments.startMinutes,
                     addOnIds: selectedAddOnIds.value.toList(),

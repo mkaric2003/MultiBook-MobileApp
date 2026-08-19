@@ -22,6 +22,14 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     on<ServiceOfferingRemoved>(_onServiceOfferingRemoved);
     on<ServiceAvailabilitySlotAdded>(_onServiceAvailabilitySlotAdded);
     on<ServiceAvailabilitySlotRemoved>(_onServiceAvailabilitySlotRemoved);
+    on<ServiceProviderAdded>(_onServiceProviderAdded);
+    on<ServiceProviderRemoved>(_onServiceProviderRemoved);
+    on<ServiceProviderAvailabilitySlotAdded>(
+      _onServiceProviderAvailabilitySlotAdded,
+    );
+    on<ServiceProviderAvailabilitySlotRemoved>(
+      _onServiceProviderAvailabilitySlotRemoved,
+    );
     on<BusinessLocationChanged>(_onBusinessLocationChanged);
     on<BusinessImagePickRequested>(_onBusinessImagePickRequested);
     on<LostBusinessImageRestoreRequested>(_onLostBusinessImageRestoreRequested);
@@ -125,6 +133,65 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       ),
     );
   }
+
+  void _onServiceProviderAdded(
+    ServiceProviderAdded event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: [...state.serviceProviders, event.provider],
+    ),
+  );
+
+  void _onServiceProviderRemoved(
+    ServiceProviderRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: state.serviceProviders
+          .where((provider) => provider.id != event.providerId)
+          .toList(),
+    ),
+  );
+
+  void _onServiceProviderAvailabilitySlotAdded(
+    ServiceProviderAvailabilitySlotAdded event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: state.serviceProviders
+          .map(
+            (provider) => provider.id == event.providerId
+                ? provider.copyWith(
+                    availabilitySlots: [
+                      ...provider.availabilitySlots,
+                      event.slot,
+                    ],
+                  )
+                : provider,
+          )
+          .toList(),
+    ),
+  );
+
+  void _onServiceProviderAvailabilitySlotRemoved(
+    ServiceProviderAvailabilitySlotRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      serviceProviders: state.serviceProviders
+          .map(
+            (provider) => provider.id == event.providerId
+                ? provider.copyWith(
+                    availabilitySlots: provider.availabilitySlots
+                        .where((slot) => slot.id != event.slotId)
+                        .toList(),
+                  )
+                : provider,
+          )
+          .toList(),
+    ),
+  );
 
   Future<void> _onBusinessLocationChanged(
     BusinessLocationChanged event,
@@ -246,6 +313,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         serviceOfferings: event.serviceOfferings,
         availabilitySlots: event.availabilitySlots,
         serviceProviderName: event.serviceProviderName,
+        serviceProviders: event.serviceProviders,
         latitude: state.latitude,
         longitude: state.longitude,
         logoPath: state.logoPath,

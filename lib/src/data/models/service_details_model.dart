@@ -12,9 +12,24 @@ class ServiceDetailsModel with ServiceDetailsModelMappable {
     this.offerings = const [],
     this.availabilitySlots = const [],
     this.provider,
+    this.providers = const [],
   });
 
   final List<ServiceOfferingModel> offerings;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
   final ServiceProviderModel? provider;
+  final List<ServiceProviderModel> providers;
+
+  List<ServiceProviderModel> get availableProviders => providers.isNotEmpty
+      ? providers
+      : provider == null
+      ? const []
+      : [
+          ServiceProviderModel(
+            id: 'legacy-provider',
+            name: provider!.name,
+            title: provider!.title,
+            availabilitySlots: availabilitySlots,
+          ),
+        ];
 }

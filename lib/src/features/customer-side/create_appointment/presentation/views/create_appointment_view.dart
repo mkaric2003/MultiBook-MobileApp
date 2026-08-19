@@ -3,11 +3,13 @@ import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/data/enums/service_weekday.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
+import 'package:aquabook/src/data/models/service_provider_model.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/appointment_time_availability.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/create_appointment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/cubit/appointment_draft_cubit.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_calendar.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_service_option_card.dart';
+import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_provider_option_card.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_time_grid.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
@@ -27,6 +29,9 @@ class CreateAppointmentView extends HookWidget {
     final offerings =
         arguments.business.serviceDetails?.offerings ??
         const <ServiceOfferingModel>[];
+    final providers =
+        arguments.business.serviceDetails?.availableProviders ??
+        const <ServiceProviderModel>[];
     final initialOfferingId =
         offerings.any((offering) => offering.id == arguments.initialOfferingId)
         ? arguments.initialOfferingId
@@ -40,6 +45,16 @@ class CreateAppointmentView extends HookWidget {
           ? <String>{}
           : {initialOfferingId},
     );
+    final initialProviderId =
+        providers.any(
+          (provider) => provider.id == arguments.draft?.selectedProviderId,
+        )
+        ? arguments.draft?.selectedProviderId
+        : providers.firstOrNull?.id;
+    final selectedProviderId = useState<String?>(initialProviderId);
+    final selectedProvider = providers
+        .where((provider) => provider.id == selectedProviderId.value)
+        .firstOrNull;
     final selectedDate = useState(
       DateUtils.dateOnly(arguments.draft?.date ?? DateTime.now()),
     );
@@ -57,11 +72,13 @@ class CreateAppointmentView extends HookWidget {
     final availability = _availableTimes(
       selectedDate: selectedDate.value,
       totalDurationMinutes: totalDurationMinutes,
-      arguments: arguments,
+      provider: selectedProvider,
     );
 
     final canContinue =
-        selectedOfferings.isNotEmpty && selectedTime.value != null;
+        selectedOfferings.isNotEmpty &&
+        selectedProvider != null &&
+        selectedTime.value != null;
 
     return BlocProvider(
       create: (_) => getIt<AppointmentDraftCubit>(),
@@ -99,6 +116,8 @@ class CreateAppointmentView extends HookWidget {
                       await context.read<AppointmentDraftCubit>().save(
                         business: arguments.business,
                         offeringIds: selectedOfferingIds.value.toList(),
+                        providerId: selectedProviderId.value,
+                        providerName: selectedProvider?.name,
                         date: selectedDate.value,
                         startMinutes: selectedTime.value,
                       );
@@ -141,6 +160,35 @@ class CreateAppointmentView extends HookWidget {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 26),
+                        const Text(
+                          'Select provider',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        if (providers.isEmpty)
+                          const Text(
+                            'No service providers are available yet.',
+                            style: TextStyle(color: AppColors.muted),
+                          )
+                        else
+                          ...providers.map(
+                            (provider) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: AppointmentProviderOptionCard(
+                                provider: provider,
+                                isSelected:
+                                    selectedProviderId.value == provider.id,
+                                onTap: () {
+                                  selectedProviderId.value = provider.id;
+                                  selectedTime.value = null;
+                                },
+                              ),
+                            ),
+                          ),
                         const SizedBox(height: 26),
                         const Text(
                           'Select date',
@@ -217,6 +265,7 @@ class CreateAppointmentView extends HookWidget {
                             extra: ReviewAppointmentArguments(
                               business: arguments.business,
                               offerings: selectedOfferings,
+                              provider: selectedProvider,
                               date: selectedDate.value,
                               startMinutes: selectedTime.value!,
                               preselectedAddOnIds:
@@ -236,7 +285,7 @@ class CreateAppointmentView extends HookWidget {
   AppointmentTimeAvailability _availableTimes({
     required DateTime selectedDate,
     required int totalDurationMinutes,
-    required CreateAppointmentArguments arguments,
+    required ServiceProviderModel? provider,
   }) {
     if (totalDurationMinutes <= 0) {
       return const AppointmentTimeAvailability(
@@ -246,7 +295,7 @@ class CreateAppointmentView extends HookWidget {
     }
     final weekday = ServiceWeekday.values[selectedDate.weekday - 1];
     final slots =
-        arguments.business.serviceDetails?.availabilitySlots
+        provider?.availabilitySlots
             .where((slot) => slot.weekday == weekday)
             .toList() ??
         const [];

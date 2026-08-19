@@ -3,6 +3,7 @@ import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
+import 'package:aquabook/src/data/models/service_provider_model.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'add_business_state.mapper.dart';
@@ -16,6 +17,7 @@ class AddBusinessState with AddBusinessStateMappable {
     this.selectedExtras = const [],
     this.serviceOfferings = const [],
     this.availabilitySlots = const [],
+    this.serviceProviders = const [],
     this.latitude,
     this.longitude,
     this.resolvedCity,
@@ -36,6 +38,7 @@ class AddBusinessState with AddBusinessStateMappable {
   final List<StayExtraType> selectedExtras;
   final List<ServiceOfferingModel> serviceOfferings;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
+  final List<ServiceProviderModel> serviceProviders;
   final double? latitude;
   final double? longitude;
   final String? resolvedCity;

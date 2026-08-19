@@ -92,6 +92,11 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           AppointmentSummaryRow(
+            label: 'Provider',
+            value: arguments.provider.name,
+          ),
+          const SizedBox(height: 12),
+          AppointmentSummaryRow(
             label: 'Date',
             value: DateFormat('EEE, MMM d').format(arguments.date),
           ),

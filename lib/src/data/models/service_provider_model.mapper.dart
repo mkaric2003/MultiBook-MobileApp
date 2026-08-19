@@ -14,6 +14,7 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
   static ServiceProviderModelMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = ServiceProviderModelMapper._());
+      ServiceAvailabilitySlotModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -21,6 +22,8 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
   @override
   final String id = 'ServiceProviderModel';
 
+  static String _$id(ServiceProviderModel v) => v.id;
+  static const Field<ServiceProviderModel, String> _f$id = Field('id', _$id);
   static String _$name(ServiceProviderModel v) => v.name;
   static const Field<ServiceProviderModel, String> _f$name = Field(
     'name',
@@ -32,17 +35,31 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
     _$title,
     opt: true,
   );
+  static List<ServiceAvailabilitySlotModel> _$availabilitySlots(
+    ServiceProviderModel v,
+  ) => v.availabilitySlots;
+  static const Field<ServiceProviderModel, List<ServiceAvailabilitySlotModel>>
+  _f$availabilitySlots = Field(
+    'availabilitySlots',
+    _$availabilitySlots,
+    opt: true,
+    def: const [],
+  );
 
   @override
   final MappableFields<ServiceProviderModel> fields = const {
+    #id: _f$id,
     #name: _f$name,
     #title: _f$title,
+    #availabilitySlots: _f$availabilitySlots,
   };
 
   static ServiceProviderModel _instantiate(DecodingData data) {
     return ServiceProviderModel(
+      id: data.dec(_f$id),
       name: data.dec(_f$name),
       title: data.dec(_f$title),
+      availabilitySlots: data.dec(_f$availabilitySlots),
     );
   }
 
@@ -116,7 +133,22 @@ abstract class ServiceProviderModelCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? name, String? title});
+  ListCopyWith<
+    $R,
+    ServiceAvailabilitySlotModel,
+    ServiceAvailabilitySlotModelCopyWith<
+      $R,
+      ServiceAvailabilitySlotModel,
+      ServiceAvailabilitySlotModel
+    >
+  >
+  get availabilitySlots;
+  $R call({
+    String? id,
+    String? name,
+    String? title,
+    List<ServiceAvailabilitySlotModel>? availabilitySlots,
+  });
   ServiceProviderModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -131,16 +163,43 @@ class _ServiceProviderModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<ServiceProviderModel> $mapper =
       ServiceProviderModelMapper.ensureInitialized();
   @override
-  $R call({String? name, Object? title = $none}) => $apply(
+  ListCopyWith<
+    $R,
+    ServiceAvailabilitySlotModel,
+    ServiceAvailabilitySlotModelCopyWith<
+      $R,
+      ServiceAvailabilitySlotModel,
+      ServiceAvailabilitySlotModel
+    >
+  >
+  get availabilitySlots => ListCopyWith(
+    $value.availabilitySlots,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(availabilitySlots: v),
+  );
+  @override
+  $R call({
+    String? id,
+    String? name,
+    Object? title = $none,
+    List<ServiceAvailabilitySlotModel>? availabilitySlots,
+  }) => $apply(
     FieldCopyWithData({
+      if (id != null) #id: id,
       if (name != null) #name: name,
       if (title != $none) #title: title,
+      if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
     }),
   );
   @override
   ServiceProviderModel $make(CopyWithData data) => ServiceProviderModel(
+    id: data.get(#id, or: $value.id),
     name: data.get(#name, or: $value.name),
     title: data.get(#title, or: $value.title),
+    availabilitySlots: data.get(
+      #availabilitySlots,
+      or: $value.availabilitySlots,
+    ),
   );
 
   @override

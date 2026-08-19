@@ -723,6 +723,94 @@ class BusinessRepository {
                 ][index % 5],
                 'title': 'Service provider',
               },
+              'providers': [
+                {
+                  'id': 'provider-primary',
+                  'name': [
+                    'Amina Hadzic',
+                    'Lejla Kovacevic',
+                    'Marko Jovic',
+                    'Sara Begic',
+                    'Emir Mujic',
+                  ][index % 5],
+                  'title': 'Service provider',
+                  'availabilitySlots': [
+                    {
+                      'id': 'provider-primary-monday',
+                      'weekday': ServiceWeekday.monday.name,
+                      'startMinutes': 540,
+                      'endMinutes': 1020,
+                    },
+                    {
+                      'id': 'provider-primary-tuesday',
+                      'weekday': ServiceWeekday.tuesday.name,
+                      'startMinutes': 540,
+                      'endMinutes': 1020,
+                    },
+                    {
+                      'id': 'provider-primary-wednesday',
+                      'weekday': ServiceWeekday.wednesday.name,
+                      'startMinutes': 540,
+                      'endMinutes': 1020,
+                    },
+                    {
+                      'id': 'provider-primary-thursday',
+                      'weekday': ServiceWeekday.thursday.name,
+                      'startMinutes': 540,
+                      'endMinutes': 1020,
+                    },
+                    {
+                      'id': 'provider-primary-friday',
+                      'weekday': ServiceWeekday.friday.name,
+                      'startMinutes': 540,
+                      'endMinutes': 1020,
+                    },
+                  ],
+                },
+                {
+                  'id': 'provider-secondary',
+                  'name': [
+                    'Nina Basic',
+                    'Tarik Memic',
+                    'Mia Knezic',
+                    'Haris Causevic',
+                    'Ena Colic',
+                  ][index % 5],
+                  'title': 'Service provider',
+                  'availabilitySlots': [
+                    {
+                      'id': 'provider-secondary-monday',
+                      'weekday': ServiceWeekday.monday.name,
+                      'startMinutes': 600,
+                      'endMinutes': 1080,
+                    },
+                    {
+                      'id': 'provider-secondary-tuesday',
+                      'weekday': ServiceWeekday.tuesday.name,
+                      'startMinutes': 600,
+                      'endMinutes': 1080,
+                    },
+                    {
+                      'id': 'provider-secondary-wednesday',
+                      'weekday': ServiceWeekday.wednesday.name,
+                      'startMinutes': 600,
+                      'endMinutes': 1080,
+                    },
+                    {
+                      'id': 'provider-secondary-thursday',
+                      'weekday': ServiceWeekday.thursday.name,
+                      'startMinutes': 600,
+                      'endMinutes': 1080,
+                    },
+                    {
+                      'id': 'provider-secondary-friday',
+                      'weekday': ServiceWeekday.friday.name,
+                      'startMinutes': 600,
+                      'endMinutes': 1080,
+                    },
+                  ],
+                },
+              ],
             },
             'createdAt': _firestoreDataSource.serverTimestamp,
             'updatedAt': _firestoreDataSource.serverTimestamp,
@@ -794,6 +882,7 @@ class BusinessRepository {
     List<ServiceOfferingModel> serviceOfferings = const [],
     List<ServiceAvailabilitySlotModel> availabilitySlots = const [],
     String? serviceProviderName,
+    List<ServiceProviderModel> serviceProviders = const [],
     String? logoPath,
     String? coverPhotoPath,
   }) async {
@@ -810,14 +899,18 @@ class BusinessRepository {
     if (type == BusinessType.services && serviceOfferings.isEmpty) {
       throw const BusinessException('Please add at least one service.');
     }
-    if (type == BusinessType.services && availabilitySlots.isEmpty) {
+    if (type == BusinessType.services && serviceProviders.isEmpty) {
       throw const BusinessException(
-        'Please add at least one availability slot.',
+        'Please add at least one service provider.',
       );
     }
     if (type == BusinessType.services &&
-        serviceProviderName?.trim().isEmpty != false) {
-      throw const BusinessException('Please add the service provider name.');
+        serviceProviders.any(
+          (provider) => provider.availabilitySlots.isEmpty,
+        )) {
+      throw const BusinessException(
+        'Please add availability for every service provider.',
+      );
     }
     if (latitude == null || longitude == null) {
       throw const BusinessException(
@@ -875,9 +968,8 @@ class BusinessRepository {
             ? ServiceDetailsModel(
                 offerings: serviceOfferings,
                 availabilitySlots: availabilitySlots,
-                provider: ServiceProviderModel(
-                  name: serviceProviderName!.trim(),
-                ),
+                provider: serviceProviders.first,
+                providers: serviceProviders,
               )
             : null,
       );
@@ -967,6 +1059,25 @@ class BusinessRepository {
                           'name': business.serviceDetails!.provider!.name,
                           'title': business.serviceDetails!.provider!.title,
                         },
+                  'providers': business.serviceDetails!.providers
+                      .map(
+                        (provider) => {
+                          'id': provider.id,
+                          'name': provider.name,
+                          'title': provider.title,
+                          'availabilitySlots': provider.availabilitySlots
+                              .map(
+                                (slot) => {
+                                  'id': slot.id,
+                                  'weekday': slot.weekday.name,
+                                  'startMinutes': slot.startMinutes,
+                                  'endMinutes': slot.endMinutes,
+                                },
+                              )
+                              .toList(),
+                        },
+                      )
+                      .toList(),
                 },
           'createdAt': _firestoreDataSource.serverTimestamp,
           'updatedAt': _firestoreDataSource.serverTimestamp,
@@ -1117,6 +1228,7 @@ class BusinessRepository {
                       .toList(),
               provider: serviceDetailsData['provider'] is Map
                   ? ServiceProviderModel(
+                      id: 'legacy-provider',
                       name:
                           (serviceDetailsData['provider'] as Map)['name']
                               as String? ??
@@ -1126,6 +1238,37 @@ class BusinessRepository {
                               as String?,
                     )
                   : null,
+              providers: (serviceDetailsData['providers'] as List? ?? const [])
+                  .whereType<Map>()
+                  .map(
+                    (provider) => ServiceProviderModel(
+                      id: provider['id'] as String? ?? '',
+                      name: provider['name'] as String? ?? '',
+                      title: provider['title'] as String?,
+                      availabilitySlots:
+                          (provider['availabilitySlots'] as List? ?? const [])
+                              .whereType<Map>()
+                              .map((slot) {
+                                final weekdays = ServiceWeekday.values.where(
+                                  (weekday) => weekday.name == slot['weekday'],
+                                );
+                                if (weekdays.isEmpty) return null;
+                                return ServiceAvailabilitySlotModel(
+                                  id: slot['id'] as String? ?? '',
+                                  weekday: weekdays.first,
+                                  startMinutes:
+                                      (slot['startMinutes'] as num?)?.toInt() ??
+                                      0,
+                                  endMinutes:
+                                      (slot['endMinutes'] as num?)?.toInt() ??
+                                      0,
+                                );
+                              })
+                              .whereType<ServiceAvailabilitySlotModel>()
+                              .toList(),
+                    ),
+                  )
+                  .toList(),
             )
           : null,
     );

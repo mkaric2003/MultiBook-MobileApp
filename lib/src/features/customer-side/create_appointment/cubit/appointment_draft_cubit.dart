@@ -13,6 +13,8 @@ class AppointmentDraftCubit extends Cubit<bool> {
   Future<void> save({
     required BusinessModel business,
     required List<String> offeringIds,
+    required String? providerId,
+    String? providerName,
     required DateTime date,
     required int? startMinutes,
     List<String> addOnIds = const [],
@@ -26,6 +28,8 @@ class AppointmentDraftCubit extends Cubit<bool> {
           businessName: business.name,
           businessImageUrl: business.coverPhotoUrl ?? business.logoUrl ?? '',
           selectedOfferingIds: offeringIds,
+          selectedProviderId: providerId,
+          selectedProviderName: providerName,
           date: date,
           startMinutes: startMinutes,
           selectedAddOnIds: addOnIds,

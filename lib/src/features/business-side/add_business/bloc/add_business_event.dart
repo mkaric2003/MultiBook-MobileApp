@@ -5,6 +5,7 @@ import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
+import 'package:aquabook/src/data/models/service_provider_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -59,6 +60,38 @@ class ServiceAvailabilitySlotRemoved extends AddBusinessEvent {
   final String slotId;
 }
 
+class ServiceProviderAdded extends AddBusinessEvent {
+  const ServiceProviderAdded(this.provider);
+
+  final ServiceProviderModel provider;
+}
+
+class ServiceProviderRemoved extends AddBusinessEvent {
+  const ServiceProviderRemoved(this.providerId);
+
+  final String providerId;
+}
+
+class ServiceProviderAvailabilitySlotAdded extends AddBusinessEvent {
+  const ServiceProviderAvailabilitySlotAdded({
+    required this.providerId,
+    required this.slot,
+  });
+
+  final String providerId;
+  final ServiceAvailabilitySlotModel slot;
+}
+
+class ServiceProviderAvailabilitySlotRemoved extends AddBusinessEvent {
+  const ServiceProviderAvailabilitySlotRemoved({
+    required this.providerId,
+    required this.slotId,
+  });
+
+  final String providerId;
+  final String slotId;
+}
+
 class BusinessLocationChanged extends AddBusinessEvent {
   const BusinessLocationChanged({
     required this.latitude,
@@ -108,6 +141,7 @@ class BusinessCreationRequested extends AddBusinessEvent {
     this.serviceOfferings = const [],
     this.availabilitySlots = const [],
     this.serviceProviderName,
+    this.serviceProviders = const [],
   });
 
   final String name;
@@ -121,4 +155,5 @@ class BusinessCreationRequested extends AddBusinessEvent {
   final List<ServiceOfferingModel> serviceOfferings;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
   final String? serviceProviderName;
+  final List<ServiceProviderModel> serviceProviders;
 }

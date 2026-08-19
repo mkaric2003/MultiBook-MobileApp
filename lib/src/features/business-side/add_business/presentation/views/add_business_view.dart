@@ -17,9 +17,8 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/hotel_room_form.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/image_source_picker_sheet.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_availability_slots_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_offerings_section.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_provider_field.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_providers_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
@@ -47,7 +46,6 @@ class AddBusinessView extends HookWidget {
     final roomSizeController = useTextEditingController();
     final roomPriceController = useTextEditingController();
     final roomQuantityController = useTextEditingController();
-    final serviceProviderController = useTextEditingController();
 
     useListenable(nameController);
     useListenable(cityController);
@@ -58,7 +56,6 @@ class AddBusinessView extends HookWidget {
     useListenable(roomSizeController);
     useListenable(roomPriceController);
     useListenable(roomQuantityController);
-    useListenable(serviceProviderController);
 
     return BlocProvider(
       create: (_) => getIt<AddBusinessBloc>(),
@@ -104,8 +101,10 @@ class AddBusinessView extends HookWidget {
                   (int.tryParse(priceController.text) ?? 0) > 0) &&
               (state.businessType != BusinessType.services ||
                   (state.serviceOfferings.isNotEmpty &&
-                      state.availabilitySlots.isNotEmpty &&
-                      serviceProviderController.text.trim().isNotEmpty)) &&
+                      state.serviceProviders.isNotEmpty &&
+                      state.serviceProviders.every(
+                        (provider) => provider.availabilitySlots.isNotEmpty,
+                      ))) &&
               (state.categoryId != 'hotel' ||
                   (roomNameController.text.trim().isNotEmpty &&
                       (int.tryParse(roomGuestsController.text) ?? 0) > 0 &&
@@ -253,8 +252,28 @@ class AddBusinessView extends HookWidget {
                             ],
                           ],
                           if (state.businessType == BusinessType.services) ...[
-                            ServiceProviderField(
-                              controller: serviceProviderController,
+                            ServiceProvidersSection(
+                              providers: state.serviceProviders,
+                              onProviderAdded: (provider) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(ServiceProviderAdded(provider)),
+                              onProviderRemoved: (providerId) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(ServiceProviderRemoved(providerId)),
+                              onSlotAdded: (providerId, slot) =>
+                                  context.read<AddBusinessBloc>().add(
+                                    ServiceProviderAvailabilitySlotAdded(
+                                      providerId: providerId,
+                                      slot: slot,
+                                    ),
+                                  ),
+                              onSlotRemoved: (providerId, slotId) =>
+                                  context.read<AddBusinessBloc>().add(
+                                    ServiceProviderAvailabilitySlotRemoved(
+                                      providerId: providerId,
+                                      slotId: slotId,
+                                    ),
+                                  ),
                             ),
                             const SizedBox(height: 28),
                             ServiceOfferingsSection(
@@ -265,16 +284,6 @@ class AddBusinessView extends HookWidget {
                               onOfferingRemoved: (offeringId) => context
                                   .read<AddBusinessBloc>()
                                   .add(ServiceOfferingRemoved(offeringId)),
-                            ),
-                            const SizedBox(height: 28),
-                            ServiceAvailabilitySlotsSection(
-                              slots: state.availabilitySlots,
-                              onSlotAdded: (slot) => context
-                                  .read<AddBusinessBloc>()
-                                  .add(ServiceAvailabilitySlotAdded(slot)),
-                              onSlotRemoved: (slotId) => context
-                                  .read<AddBusinessBloc>()
-                                  .add(ServiceAvailabilitySlotRemoved(slotId)),
                             ),
                             const SizedBox(height: 28),
                           ],
@@ -407,10 +416,7 @@ class AddBusinessView extends HookWidget {
                                           )
                                           .toList(),
                                       serviceOfferings: state.serviceOfferings,
-                                      availabilitySlots:
-                                          state.availabilitySlots,
-                                      serviceProviderName:
-                                          serviceProviderController.text,
+                                      serviceProviders: state.serviceProviders,
                                     ),
                                   )
                                 : null,

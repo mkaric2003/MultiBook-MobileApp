@@ -35,6 +35,13 @@ class ContinueAppointmentCard extends StatelessWidget {
                   'Continue appointment',
                   style: TextStyle(fontWeight: FontWeight.w800),
                 ),
+                if (draft.selectedProviderName?.isNotEmpty ?? false) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    'With ${draft.selectedProviderName}',
+                    style: const TextStyle(color: AppColors.muted),
+                  ),
+                ],
                 const SizedBox(height: 4),
                 Text(
                   '${draft.businessName} · ${DateFormat('dd.MM').format(draft.date)}',

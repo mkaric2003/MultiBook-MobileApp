@@ -5,6 +5,8 @@ class AppointmentDraftModel {
     required this.businessName,
     required this.businessImageUrl,
     required this.selectedOfferingIds,
+    this.selectedProviderId,
+    this.selectedProviderName,
     required this.date,
     this.startMinutes,
     this.selectedAddOnIds = const [],
@@ -15,6 +17,8 @@ class AppointmentDraftModel {
   final String businessName;
   final String businessImageUrl;
   final List<String> selectedOfferingIds;
+  final String? selectedProviderId;
+  final String? selectedProviderName;
   final DateTime date;
   final int? startMinutes;
   final List<String> selectedAddOnIds;

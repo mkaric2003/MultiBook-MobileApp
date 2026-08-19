@@ -24,6 +24,8 @@ class AppointmentDraftRepository {
         'businessName': draft.businessName,
         'businessImageUrl': draft.businessImageUrl,
         'selectedOfferingIds': draft.selectedOfferingIds,
+        'selectedProviderId': draft.selectedProviderId,
+        'selectedProviderName': draft.selectedProviderName,
         'date': draft.date,
         'startMinutes': draft.startMinutes,
         'selectedAddOnIds': draft.selectedAddOnIds,
@@ -59,6 +61,8 @@ class AppointmentDraftRepository {
       selectedOfferingIds: List<String>.from(
         data['selectedOfferingIds'] as List? ?? const [],
       ),
+      selectedProviderId: data['selectedProviderId'] as String?,
+      selectedProviderName: data['selectedProviderName'] as String?,
       date: value is Timestamp ? value.toDate() : DateTime.now(),
       startMinutes: (data['startMinutes'] as num?)?.toInt(),
       selectedAddOnIds: List<String>.from(

@@ -9,7 +9,7 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = arguments.payment.review.business.serviceDetails?.provider;
+    final provider = arguments.payment.review.provider;
     return Column(
       children: [
         Container(
@@ -28,7 +28,7 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                arguments.confirmationCode,
+                arguments.appointment.confirmationCode,
                 style: const TextStyle(
                   fontSize: 27,
                   fontWeight: FontWeight.w800,
@@ -68,7 +68,7 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
                   ),
                   Flexible(
                     child: Text(
-                      provider?.name ?? 'Service provider',
+                      provider.name,
                       textAlign: TextAlign.end,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontWeight: FontWeight.w700),
