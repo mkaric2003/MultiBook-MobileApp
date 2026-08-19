@@ -58,6 +58,8 @@ import 'package:aquabook/src/features/business-side/more/bloc/more_cubit.dart'
     as _i556;
 import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_cubit.dart'
     as _i908;
+import 'package:aquabook/src/features/customer-side/appointment_details/cubit/appointment_details_cubit.dart'
+    as _i270;
 import 'package:aquabook/src/features/customer-side/appointment_payment/cubit/appointment_payment_cubit.dart'
     as _i167;
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_cubit.dart'
@@ -201,9 +203,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
       ),
     );
-    gh.factory<_i274.CustomerBookingsCubit>(
-      () => _i274.CustomerBookingsCubit(gh<_i961.BookingRepository>()),
-    );
     gh.factory<_i57.AccountSettingsCubit>(
       () => _i57.AccountSettingsCubit(
         gh<_i747.UserRepository>(),
@@ -279,6 +278,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i363.AppointmentDraftRepository>(),
       ),
     );
+    gh.factory<_i270.AppointmentDetailsCubit>(
+      () => _i270.AppointmentDetailsCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i567.AppointmentRepository>(),
+      ),
+    );
     gh.factory<_i551.SavedCubit>(
       () => _i551.SavedCubit(gh<_i390.SavedBusinessRepository>()),
     );
@@ -301,6 +306,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
         gh<_i64.BookingDraftRepository>(),
         gh<_i363.AppointmentDraftRepository>(),
+      ),
+    );
+    gh.factory<_i274.CustomerBookingsCubit>(
+      () => _i274.CustomerBookingsCubit(
+        gh<_i961.BookingRepository>(),
+        gh<_i567.AppointmentRepository>(),
       ),
     );
     gh.factory<_i415.PaymentCubit>(

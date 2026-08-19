@@ -1,0 +1,97 @@
+import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/features/customer-side/appointment_details/cubit/appointment_details_cubit.dart';
+import 'package:aquabook/src/features/customer-side/appointment_details/cubit/appointment_details_state.dart';
+import 'package:aquabook/src/features/customer-side/appointment_details/domain/models/appointment_details_arguments.dart';
+import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_actions.dart';
+import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_business_card.dart';
+import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_information_card.dart';
+import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_price_card.dart';
+import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+class AppointmentDetailsView extends StatelessWidget {
+  const AppointmentDetailsView({required this.arguments, super.key});
+
+  final AppointmentDetailsArguments arguments;
+
+  @override
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) =>
+        getIt<AppointmentDetailsCubit>()
+          ..load(arguments.appointment.businessId),
+    child: BlocConsumer<AppointmentDetailsCubit, AppointmentDetailsState>(
+      listener: (context, state) {
+        if (state.appointment != null) context.pop(state.appointment);
+        if (state.errorMessage != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+        }
+      },
+      builder: (context, state) => Scaffold(
+        backgroundColor: AppColors.background,
+        body: SafeArea(
+          child: Column(
+            children: [
+              const CustomAppBar(title: 'Appointment details'),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+                  child: Column(
+                    children: [
+                      AppointmentDetailsBusinessCard(
+                        arguments: arguments,
+                        business: state.business,
+                      ),
+                      const SizedBox(height: 18),
+                      AppointmentDetailsInformationCard(arguments: arguments),
+                      const SizedBox(height: 18),
+                      AppointmentDetailsPriceCard(arguments: arguments),
+                      if (!arguments.isFinished) ...[
+                        const SizedBox(height: 24),
+                        AppointmentDetailsActions(
+                          isCancelling: state.isCancelling,
+                          onCancel: () async {
+                            final confirmed = await showDialog<bool>(
+                              context: context,
+                              builder: (dialogContext) => AlertDialog(
+                                title: const Text('Cancel appointment?'),
+                                content: const Text(
+                                  'This action cannot be undone.',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext, false),
+                                    child: const Text('Keep appointment'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(dialogContext, true),
+                                    child: const Text('Cancel appointment'),
+                                  ),
+                                ],
+                              ),
+                            );
+                            if (confirmed == true && context.mounted) {
+                              await context
+                                  .read<AppointmentDetailsCubit>()
+                                  .cancel(arguments.appointment);
+                            }
+                          },
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}

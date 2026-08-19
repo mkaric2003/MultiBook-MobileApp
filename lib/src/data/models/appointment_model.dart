@@ -3,6 +3,8 @@ class AppointmentModel {
     required this.id,
     required this.businessId,
     required this.businessOwnerId,
+    required this.businessName,
+    required this.businessImageUrl,
     required this.customerId,
     required this.customerName,
     required this.customerEmail,
@@ -21,11 +23,14 @@ class AppointmentModel {
     required this.total,
     required this.paymentMethod,
     required this.confirmationCode,
+    this.status = 'confirmed',
   });
 
   final String id;
   final String businessId;
   final String businessOwnerId;
+  final String businessName;
+  final String businessImageUrl;
   final String customerId;
   final String customerName;
   final String customerEmail;
@@ -44,4 +49,36 @@ class AppointmentModel {
   final double total;
   final String paymentMethod;
   final String confirmationCode;
+  final String status;
+
+  AppointmentModel copyWith({
+    String? businessName,
+    String? businessImageUrl,
+    String? status,
+  }) => AppointmentModel(
+    id: id,
+    businessId: businessId,
+    businessOwnerId: businessOwnerId,
+    businessName: businessName ?? this.businessName,
+    businessImageUrl: businessImageUrl ?? this.businessImageUrl,
+    customerId: customerId,
+    customerName: customerName,
+    customerEmail: customerEmail,
+    customerPhone: customerPhone,
+    providerId: providerId,
+    providerName: providerName,
+    serviceIds: serviceIds,
+    serviceNames: serviceNames,
+    date: date,
+    startMinutes: startMinutes,
+    endMinutes: endMinutes,
+    serviceCost: serviceCost,
+    addOnsCost: addOnsCost,
+    serviceFee: serviceFee,
+    taxes: taxes,
+    total: total,
+    paymentMethod: paymentMethod,
+    confirmationCode: confirmationCode,
+    status: status ?? this.status,
+  );
 }

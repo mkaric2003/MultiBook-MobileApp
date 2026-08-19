@@ -105,6 +105,15 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: AppRoutes.APPOINTMENT_DETAILS,
+      name: AppRoutes.APPOINTMENT_DETAILS,
+      builder: (context, state) => AppointmentDetailsView(
+        arguments: AppointmentDetailsArguments(
+          appointment: state.extra! as AppointmentModel,
+        ),
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.BOOKING_DETAILS,
       name: AppRoutes.BOOKING_DETAILS,
       builder: (context, state) => BookingDetailsView(
