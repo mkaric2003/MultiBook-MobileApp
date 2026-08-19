@@ -43,6 +43,9 @@ import 'package:aquabook/src/features/shared/onboarding/presentation/views/onboa
 import 'package:aquabook/src/features/shared/sign_in/presentation/views/signin_view.dart';
 import 'package:aquabook/src/features/shared/sign_up/presentation/views/signup_view.dart';
 import 'package:aquabook/src/features/shared/user_type_checker/presentation/views/user_type_checker_view.dart';
+import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
+import 'package:aquabook/src/features/shared/chat/presentation/views/chat_conversation_view.dart';
+import 'package:aquabook/src/features/shared/chat/presentation/views/chat_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

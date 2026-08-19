@@ -178,6 +178,18 @@ final router = GoRouter(
       builder: (context, state) => const AvailabilityCalendarView(),
     ),
     GoRoute(
+      path: AppRoutes.CHAT_LIST,
+      name: AppRoutes.CHAT_LIST,
+      builder: (context, state) => const ChatListView(),
+    ),
+    GoRoute(
+      path: AppRoutes.CHAT_CONVERSATION,
+      name: AppRoutes.CHAT_CONVERSATION,
+      builder: (context, state) => ChatConversationView(
+        arguments: state.extra! as ChatConversationArguments,
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.SIGNUP,
       name: AppRoutes.SIGNUP,
       builder: (context, state) => const SignupView(),

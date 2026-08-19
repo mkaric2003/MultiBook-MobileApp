@@ -8,6 +8,7 @@ class AppointmentDetailsActions extends StatelessWidget {
     required this.canReschedule,
     required this.onCancel,
     required this.onReschedule,
+    required this.onMessageProvider,
     super.key,
   });
 
@@ -15,6 +16,7 @@ class AppointmentDetailsActions extends StatelessWidget {
   final bool canReschedule;
   final Future<void> Function() onCancel;
   final Future<void> Function() onReschedule;
+  final VoidCallback onMessageProvider;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -36,7 +38,7 @@ class AppointmentDetailsActions extends StatelessWidget {
       CustomButton(
         buttonName: 'Message provider',
         color: AppColors.surfaceHighlight,
-        onPressed: () {},
+        onPressed: onMessageProvider,
       ),
     ],
   );

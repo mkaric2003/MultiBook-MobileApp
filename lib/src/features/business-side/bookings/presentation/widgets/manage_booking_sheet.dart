@@ -1,10 +1,13 @@
+import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_booking_status_pill.dart';
+import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 class ManageBookingSheet extends StatelessWidget {
   const ManageBookingSheet({
@@ -217,7 +220,21 @@ class ManageBookingSheet extends StatelessWidget {
               buttonName: 'Message customer',
               color: AppColors.surfaceHighlight,
               height: 70,
-              onPressed: () async {},
+              onPressed: () {
+                Navigator.of(context).pop();
+                context.push(
+                  AppRoutes.CHAT_CONVERSATION,
+                  extra: ChatConversationArguments(
+                    businessId: booking.businessId,
+                    businessOwnerId: booking.businessOwnerId,
+                    businessName: booking.businessName,
+                    businessImageUrl: booking.businessImageUrl,
+                    customerId: booking.customerId,
+                    customerName: booking.customerName,
+                    customerImageUrl: booking.customerAvatarUrl,
+                  ),
+                );
+              },
             ),
           ],
         ),

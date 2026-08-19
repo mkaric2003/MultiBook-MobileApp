@@ -1,10 +1,13 @@
+import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_appointment_status_label.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/appointment_info_row.dart';
+import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 class ManageAppointmentSheet extends StatelessWidget {
   const ManageAppointmentSheet({
@@ -157,7 +160,21 @@ class ManageAppointmentSheet extends StatelessWidget {
                 height: 48,
                 fontSize: 16,
                 leadingIcon: const Icon(Icons.chat_bubble_outline),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  context.push(
+                    AppRoutes.CHAT_CONVERSATION,
+                    extra: ChatConversationArguments(
+                      businessId: appointment.businessId,
+                      businessOwnerId: appointment.businessOwnerId,
+                      businessName: appointment.businessName,
+                      businessImageUrl: appointment.businessImageUrl,
+                      customerId: appointment.customerId,
+                      customerName: appointment.customerName,
+                      customerImageUrl: appointment.customerAvatarUrl,
+                    ),
+                  );
+                },
               ),
             ],
           ),
