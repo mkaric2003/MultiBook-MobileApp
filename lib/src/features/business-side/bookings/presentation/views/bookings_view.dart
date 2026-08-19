@@ -1,9 +1,11 @@
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart';
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_booking_filter_chips.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_bookings_header.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_bookings_list.dart';
+import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_bookings_type_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -14,6 +16,9 @@ class BookingsView extends HookWidget {
   Widget build(BuildContext context) {
     final cubit = useMemoized(() => getIt<ClientBookingsCubit>());
     final scrollController = useScrollController();
+    final selectedBusinessId = useValueListenable(
+      getIt<UserRepository>().selectedBusinessId,
+    );
 
     useEffect(() {
       void onScroll() {
@@ -30,6 +35,13 @@ class BookingsView extends HookWidget {
       };
     }, [cubit, scrollController]);
 
+    useEffect(() {
+      if (selectedBusinessId != null) {
+        cubit.load(businessId: selectedBusinessId);
+      }
+      return null;
+    }, [cubit, selectedBusinessId]);
+
     return BlocProvider.value(
       value: cubit,
       child: BlocBuilder<ClientBookingsCubit, ClientBookingsState>(
@@ -37,13 +49,13 @@ class BookingsView extends HookWidget {
           bottom: false,
           child: Column(
             children: [
-              ClientBookingsHeader(
-                businesses: state.businesses,
-                selectedBusiness: state.selectedBusiness,
-                onBusinessSelected: cubit.selectBusiness,
+              ClientBookingsHeader(selectedBusiness: state.selectedBusiness),
+              ClientBookingsTypeTabs(
+                selected: state.tab,
+                onChanged: cubit.selectTab,
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(24, 16, 0, 16),
+                padding: const EdgeInsets.fromLTRB(20, 12, 0, 12),
                 child: ClientBookingFilterChips(
                   selected: state.filter,
                   onSelected: (filter) => cubit.load(filter: filter),

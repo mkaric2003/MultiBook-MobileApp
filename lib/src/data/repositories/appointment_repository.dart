@@ -5,8 +5,8 @@ import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
-import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:aquabook/src/data/models/firestore_document_path.dart';
+import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
@@ -254,6 +254,29 @@ class AppointmentRepository {
         'We could not cancel your appointment. Please try again.',
       );
     }
+  }
+
+  DataCursor<AppointmentModel> getOwnedAppointmentsCursor({
+    required String businessId,
+    String? status,
+    int pageSize = 12,
+  }) {
+    final ownerId = _auth.currentUser?.uid;
+    if (ownerId == null) {
+      throw const AppointmentException(
+        'You need to sign in to view appointments.',
+      );
+    }
+    return _firestore.createCursorWhereAll<AppointmentModel>(
+      collection: _collection,
+      filters: {
+        'businessOwnerId': ownerId,
+        'businessId': businessId,
+        if (status != null) 'status': status,
+      },
+      pageSize: pageSize,
+      listSerializer: (documents) => documents.map(_fromDocument).toList(),
+    );
   }
 
   Future<AppointmentModel> rescheduleAppointment({

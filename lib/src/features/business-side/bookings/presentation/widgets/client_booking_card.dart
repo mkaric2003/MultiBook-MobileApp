@@ -15,7 +15,7 @@ class ClientBookingCard extends StatelessWidget {
   final VoidCallback onManage;
   @override
   Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(18),
+    padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
       color: const Color(0xFF172554),
       borderRadius: BorderRadius.circular(18),
@@ -26,7 +26,7 @@ class ClientBookingCard extends StatelessWidget {
         Row(
           children: [
             CircleAvatar(
-              radius: 25,
+              radius: 22,
               backgroundImage: (booking.customerAvatarUrl ?? '').isEmpty
                   ? null
                   : NetworkImage(booking.customerAvatarUrl!),
@@ -42,7 +42,7 @@ class ClientBookingCard extends StatelessWidget {
                   Text(
                     booking.customerName,
                     style: const TextStyle(
-                      fontSize: 19,
+                      fontSize: 16,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -51,7 +51,7 @@ class ClientBookingCard extends StatelessWidget {
                     booking.roomType ?? 'Stay booking',
                     style: const TextStyle(
                       color: AppColors.muted,
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                 ],
@@ -60,14 +60,14 @@ class ClientBookingCard extends StatelessWidget {
             ClientBookingStatusPill(status: booking.status),
           ],
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 14),
         Row(
           children: [
-            Icon(Icons.watch_later_rounded, color: AppColors.primary, size: 25),
+            Icon(Icons.watch_later_rounded, color: AppColors.primary, size: 21),
             const SizedBox(width: 5),
             Text(
               '${DateFormat('MMM d, y').format(booking.checkIn)} – ${DateFormat('MMM d, y').format(booking.checkOut)}',
-              style: const TextStyle(color: AppColors.muted, fontSize: 16),
+              style: const TextStyle(color: AppColors.muted, fontSize: 14),
             ),
           ],
         ),
@@ -77,19 +77,19 @@ class ClientBookingCard extends StatelessWidget {
             Icon(
               _totalGuests < 2 ? Icons.person : Icons.groups,
               color: AppColors.primary,
-              size: 25,
+              size: 21,
             ),
             const SizedBox(width: 5),
             Text(
               '$_totalGuests ${_totalGuests == 1 ? 'guest' : 'guests'}',
-              style: const TextStyle(color: AppColors.muted, fontSize: 16),
+              style: const TextStyle(color: AppColors.muted, fontSize: 14),
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 14),
         CustomButton(
           buttonName: 'Manage',
-          height: 50,
+          height: 44,
           onPressed: () async => onManage(),
         ),
       ],

@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:aquabook/utils/image_utils.dart';
+import 'package:flutter/foundation.dart';
 
 class UserException implements Exception {
   const UserException(this.message);
@@ -29,6 +30,7 @@ class UserRepository {
   final AuthenticationDataSource _authenticationDataSource;
   final FirestoreDataSource _firestoreDataSource;
   final FirebaseStorageDataSource _storageDataSource;
+  final ValueNotifier<String?> selectedBusinessId = ValueNotifier(null);
 
   Future<UserModel?> getCurrentUser() async {
     final userId = _authenticationDataSource.currentUser?.uid;
@@ -45,7 +47,9 @@ class UserRepository {
         return null;
       }
 
-      return UserModelMapper.fromMap(_normalizeUserData(userData));
+      final user = UserModelMapper.fromMap(_normalizeUserData(userData));
+      selectedBusinessId.value = user.selectedBusinessId;
+      return user;
     } on FirebaseException catch (error, stackTrace) {
       log(
         'Could not load the current user: ${error.code}',
@@ -72,6 +76,7 @@ class UserRepository {
         'updatedAt': _firestoreDataSource.serverTimestamp,
       },
     );
+    selectedBusinessId.value = businessId;
   }
 
   Future<void> setUserType({required UserType type}) async {

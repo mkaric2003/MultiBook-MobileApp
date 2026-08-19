@@ -288,15 +288,16 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i567.AppointmentRepository>(),
       ),
     );
-    gh.factory<_i551.SavedCubit>(
-      () => _i551.SavedCubit(gh<_i390.SavedBusinessRepository>()),
-    );
     gh.factory<_i488.ClientBookingsCubit>(
       () => _i488.ClientBookingsCubit(
         gh<_i961.BookingRepository>(),
+        gh<_i567.AppointmentRepository>(),
         gh<_i1065.BusinessRepository>(),
         gh<_i747.UserRepository>(),
       ),
+    );
+    gh.factory<_i551.SavedCubit>(
+      () => _i551.SavedCubit(gh<_i390.SavedBusinessRepository>()),
     );
     gh.factory<_i519.AvailabilityCalendarCubit>(
       () => _i519.AvailabilityCalendarCubit(
