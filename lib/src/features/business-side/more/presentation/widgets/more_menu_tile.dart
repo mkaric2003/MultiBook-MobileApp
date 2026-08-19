@@ -11,29 +11,29 @@ class MoreMenuTile extends StatelessWidget {
   Widget build(BuildContext context) => InkWell(
     onTap: item.onTap,
     child: SizedBox(
-      height: 96,
+      height: 72,
       child: Row(
         children: [
           Container(
-            height: 52,
-            width: 52,
+            height: 40,
+            width: 40,
             decoration: BoxDecoration(
               color: const Color(0xFF3F3375),
               borderRadius: BorderRadius.circular(11),
             ),
-            child: Icon(item.icon, color: AppColors.primary, size: 25),
+            child: Icon(item.icon, color: AppColors.primary, size: 20),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               item.label,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
             ),
           ),
           if (item.badgeCount != null) ...[
             Container(
-              height: 32,
-              width: 32,
+              height: 26,
+              width: 26,
               alignment: Alignment.center,
               decoration: const BoxDecoration(
                 color: Color(0xFFFF4B4B),
@@ -44,9 +44,9 @@ class MoreMenuTile extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.w800),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 8),
           ],
-          const Icon(Icons.chevron_right, color: AppColors.muted, size: 31),
+          const Icon(Icons.chevron_right, color: AppColors.muted, size: 24),
         ],
       ),
     ),

@@ -17,16 +17,16 @@ class MoreMenuSection extends StatelessWidget {
         title.toUpperCase(),
         style: const TextStyle(
           color: AppColors.muted,
-          fontSize: 16,
+          fontSize: 13,
           fontWeight: FontWeight.w800,
         ),
       ),
-      const SizedBox(height: 17),
+      const SizedBox(height: 12),
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
           color: const Color(0xFF172554),
-          borderRadius: BorderRadius.circular(17),
+          borderRadius: BorderRadius.circular(14),
         ),
         child: Column(
           children: [
