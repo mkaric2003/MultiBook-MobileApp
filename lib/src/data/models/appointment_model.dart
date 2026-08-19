@@ -9,6 +9,7 @@ class AppointmentModel {
     required this.customerName,
     required this.customerEmail,
     required this.customerPhone,
+    this.customerAvatarUrl,
     required this.providerId,
     required this.providerName,
     required this.serviceIds,
@@ -36,6 +37,7 @@ class AppointmentModel {
   final String customerName;
   final String customerEmail;
   final String customerPhone;
+  final String? customerAvatarUrl;
   final String providerId;
   final String providerName;
   final List<String> serviceIds;
@@ -71,6 +73,7 @@ class AppointmentModel {
     customerName: customerName,
     customerEmail: customerEmail,
     customerPhone: customerPhone,
+    customerAvatarUrl: customerAvatarUrl,
     providerId: providerId,
     providerName: providerName,
     serviceIds: serviceIds,

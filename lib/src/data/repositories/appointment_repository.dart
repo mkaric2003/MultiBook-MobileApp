@@ -8,6 +8,7 @@ import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/data/models/firestore_document_path.dart';
 import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
+import 'package:aquabook/src/data/repositories/service_availability_repository.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,7 +22,12 @@ class AppointmentException implements Exception {
 
 @lazySingleton
 class AppointmentRepository {
-  AppointmentRepository(this._auth, this._firestore, this._businessRepository);
+  AppointmentRepository(
+    this._auth,
+    this._firestore,
+    this._businessRepository,
+    this._serviceAvailabilityRepository,
+  );
 
   static const _collection = 'appointments';
   static const _slotCollection = 'appointment_slots';
@@ -29,6 +35,7 @@ class AppointmentRepository {
   final AuthenticationDataSource _auth;
   final FirestoreDataSource _firestore;
   final BusinessRepository _businessRepository;
+  final ServiceAvailabilityRepository _serviceAvailabilityRepository;
 
   Future<AppointmentModel> createAppointment({
     required AppointmentPaymentArguments arguments,
@@ -74,6 +81,18 @@ class AppointmentRepository {
       );
     }
 
+    final blockedSlotStarts = await _serviceAvailabilityRepository
+        .getBlockedSlotStarts(
+          businessId: business.id,
+          providerId: provider.id,
+          date: arguments.review.date,
+        );
+    if (_slotStarts(start: start, end: end).any(blockedSlotStarts.contains)) {
+      throw const AppointmentException(
+        'One or more selected times are unavailable.',
+      );
+    }
+
     final dateKey = _dateKey(arguments.review.date);
 
     final id = _firestore.createDocumentId(collection: _collection);
@@ -87,6 +106,7 @@ class AppointmentRepository {
       customerName: request.customerName.trim(),
       customerEmail: request.customerEmail.trim(),
       customerPhone: request.customerPhone.trim(),
+      customerAvatarUrl: _auth.currentUser?.photoURL,
       providerId: provider.id,
       providerName: provider.name,
       serviceIds: arguments.review.offerings.map((item) => item.id).toList(),
@@ -122,6 +142,7 @@ class AppointmentRepository {
           'customerName': result.customerName,
           'customerEmail': result.customerEmail,
           'customerPhone': result.customerPhone,
+          'customerAvatarUrl': result.customerAvatarUrl,
           'providerId': result.providerId,
           'providerName': result.providerName,
           'serviceIds': result.serviceIds,
@@ -340,6 +361,21 @@ class AppointmentRepository {
       );
     }
 
+    final blockedSlotStarts = await _serviceAvailabilityRepository
+        .getBlockedSlotStarts(
+          businessId: appointment.businessId,
+          providerId: appointment.providerId,
+          date: normalizedDate,
+        );
+    if (_slotStarts(
+      start: startMinutes,
+      end: endMinutes,
+    ).any(blockedSlotStarts.contains)) {
+      throw const AppointmentException(
+        'One or more selected times are unavailable.',
+      );
+    }
+
     final updated = appointment.copyWith(
       date: normalizedDate,
       startMinutes: startMinutes,
@@ -468,6 +504,7 @@ class AppointmentRepository {
       customerName: document['customerName'] as String? ?? '',
       customerEmail: document['customerEmail'] as String? ?? '',
       customerPhone: document['customerPhone'] as String? ?? '',
+      customerAvatarUrl: document['customerAvatarUrl'] as String?,
       providerId: document['providerId'] as String? ?? '',
       providerName: document['providerName'] as String? ?? '',
       serviceIds: List<String>.from(

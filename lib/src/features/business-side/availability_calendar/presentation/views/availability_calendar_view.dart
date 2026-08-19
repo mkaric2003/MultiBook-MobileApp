@@ -1,8 +1,10 @@
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/bloc/availability_calendar_cubit.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/bloc/availability_calendar_state.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
@@ -11,6 +13,7 @@ import 'package:aquabook/src/features/business-side/availability_calendar/presen
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_mode_button.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/todays_booking_card.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/todays_bookings_empty_state.dart';
+import 'package:aquabook/src/features/business-side/availability_calendar/presentation/views/service_availability_calendar_view.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,11 +28,14 @@ class AvailabilityCalendarView extends HookWidget {
     final visibleDate = useState(DateTime.now());
     final selectedDate = useState(DateTime.now());
     final isMonthly = useState(true);
+    final selectedBusinessId = useValueListenable(
+      getIt<UserRepository>().selectedBusinessId,
+    );
 
     useEffect(() {
       cubit.load();
       return cubit.close;
-    }, [cubit]);
+    }, [cubit, selectedBusinessId]);
 
     return BlocProvider.value(
       value: cubit,
@@ -45,10 +51,15 @@ class AvailabilityCalendarView extends HookWidget {
                       : state.business == null
                       ? const Center(
                           child: Text(
-                            'Select a stay business to view availability.',
+                            'Select a business to view availability.',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: AppColors.muted),
                           ),
+                        )
+                      : state.business!.type == BusinessType.services
+                      ? ServiceAvailabilityCalendarView(
+                          key: ValueKey(state.business!.id),
+                          business: state.business!,
                         )
                       : SingleChildScrollView(
                           padding: const EdgeInsets.fromLTRB(25, 28, 25, 32),

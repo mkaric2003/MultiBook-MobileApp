@@ -86,6 +86,13 @@ service cloud.firestore {
           || (existsAfter(/databases/$(database)/documents/appointments/$(resource.data.appointmentId))
             && getAfter(/databases/$(database)/documents/appointments/$(resource.data.appointmentId)).data.businessOwnerId == request.auth.uid));
     }
+    match /service_availability_blocks/{blockId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.businessOwnerId == request.auth.uid;
+      allow delete: if request.auth != null
+        && resource.data.businessOwnerId == request.auth.uid;
+    }
     match /saved_businesses/{userId}/items/{businessId} {
       allow read, create, update, delete: if request.auth != null
         && request.auth.uid == userId;

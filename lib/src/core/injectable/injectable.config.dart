@@ -39,6 +39,8 @@ import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
     as _i366;
 import 'package:aquabook/src/data/repositories/saved_business_repository.dart'
     as _i390;
+import 'package:aquabook/src/data/repositories/service_availability_repository.dart'
+    as _i1064;
 import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
 import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_cubit.dart'
     as _i57;
@@ -200,13 +202,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
       ),
     );
-    gh.lazySingleton<_i567.AppointmentRepository>(
-      () => _i567.AppointmentRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
-        gh<_i1065.BusinessRepository>(),
-      ),
-    );
     gh.factory<_i57.AccountSettingsCubit>(
       () => _i57.AccountSettingsCubit(
         gh<_i747.UserRepository>(),
@@ -245,6 +240,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
       ),
     );
+    gh.lazySingleton<_i1064.ServiceAvailabilityRepository>(
+      () => _i1064.ServiceAvailabilityRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+      ),
+    );
     gh.factoryParam<
       _i690.CustomerBookingDetailsCubit,
       _i405.BookingModel,
@@ -276,10 +277,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i64.BookingDraftRepository>(),
       ),
     );
-    gh.factory<_i167.AppointmentPaymentCubit>(
-      () => _i167.AppointmentPaymentCubit(
-        gh<_i567.AppointmentRepository>(),
-        gh<_i363.AppointmentDraftRepository>(),
+    gh.lazySingleton<_i567.AppointmentRepository>(
+      () => _i567.AppointmentRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i1065.BusinessRepository>(),
+        gh<_i1064.ServiceAvailabilityRepository>(),
       ),
     );
     gh.factory<_i270.AppointmentDetailsCubit>(
@@ -319,10 +322,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i567.AppointmentRepository>(),
       ),
     );
-    gh.factory<_i492.AppointmentAvailabilityCubit>(
-      () =>
-          _i492.AppointmentAvailabilityCubit(gh<_i567.AppointmentRepository>()),
-    );
     gh.factory<_i569.RescheduleAppointmentCubit>(
       () => _i569.RescheduleAppointmentCubit(gh<_i567.AppointmentRepository>()),
     );
@@ -344,6 +343,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
       ),
     );
+    gh.factory<_i492.AppointmentAvailabilityCubit>(
+      () => _i492.AppointmentAvailabilityCubit(
+        gh<_i567.AppointmentRepository>(),
+        gh<_i1064.ServiceAvailabilityRepository>(),
+      ),
+    );
     gh.factory<_i259.BookingDetailsCubit>(
       () => _i259.BookingDetailsCubit(
         gh<_i961.BookingRepository>(),
@@ -360,6 +365,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i390.ServiceDetailCubit(
         gh<_i1065.BusinessRepository>(),
         gh<_i390.SavedBusinessRepository>(),
+      ),
+    );
+    gh.factory<_i167.AppointmentPaymentCubit>(
+      () => _i167.AppointmentPaymentCubit(
+        gh<_i567.AppointmentRepository>(),
+        gh<_i363.AppointmentDraftRepository>(),
       ),
     );
     return this;
