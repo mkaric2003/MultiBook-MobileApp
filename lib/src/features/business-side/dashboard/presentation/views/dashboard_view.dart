@@ -7,17 +7,29 @@ import 'package:aquabook/src/features/business-side/dashboard/presentation/widge
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_metric_card.dart';
+import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends HookWidget {
   const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<DashboardCubit>()..load(),
+    final cubit = useMemoized(() => getIt<DashboardCubit>());
+    final selectedBusinessId = useValueListenable(
+      getIt<UserRepository>().selectedBusinessId,
+    );
+    useEffect(() {
+      cubit.load();
+      return null;
+    }, [cubit, selectedBusinessId]);
+    useEffect(() => cubit.close, [cubit]);
+
+    return BlocProvider.value(
+      value: cubit,
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           if (state.isLoading) {

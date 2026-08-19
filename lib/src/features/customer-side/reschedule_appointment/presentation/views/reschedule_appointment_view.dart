@@ -29,9 +29,12 @@ class RescheduleAppointmentView extends HookWidget {
         .where((item) => item.id == arguments.appointment.providerId)
         .firstOrNull;
     final today = DateUtils.dateOnly(DateTime.now());
-    final selectedDate = useState(today);
-    final visibleMonth = useState(DateTime(today.year, today.month));
-    final selectedTime = useState<int?>(null);
+    final appointmentDate = DateUtils.dateOnly(arguments.appointment.date);
+    final selectedDate = useState(appointmentDate);
+    final visibleMonth = useState(
+      DateTime(appointmentDate.year, appointmentDate.month),
+    );
+    final selectedTime = useState<int?>(arguments.appointment.startMinutes);
     final durationMinutes =
         arguments.appointment.endMinutes - arguments.appointment.startMinutes;
     final availabilityCubit = useMemoized(
@@ -75,11 +78,23 @@ class RescheduleAppointmentView extends HookWidget {
               AppointmentAvailabilityState
             >(
               builder: (context, availabilityState) {
+                final bookedStartMinutes = {
+                  ...availabilityState.bookedStartMinutes,
+                };
+                if (DateUtils.isSameDay(selectedDate.value, appointmentDate)) {
+                  for (
+                    var time = arguments.appointment.startMinutes;
+                    time < arguments.appointment.endMinutes;
+                    time += 30
+                  ) {
+                    bookedStartMinutes.remove(time);
+                  }
+                }
                 final availability = _availableTimes(
                   date: selectedDate.value,
                   provider: provider,
                   durationMinutes: durationMinutes,
-                  bookedStartMinutes: availabilityState.bookedStartMinutes,
+                  bookedStartMinutes: bookedStartMinutes,
                 );
                 final canSubmit =
                     provider != null &&

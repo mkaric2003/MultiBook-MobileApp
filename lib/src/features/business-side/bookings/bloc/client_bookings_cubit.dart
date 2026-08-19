@@ -208,28 +208,6 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     await load(filter: state.filter, businessId: business.id);
   }
 
-  Future<void> selectTab(ClientBookingsTab tab) async {
-    if (tab == state.tab) return;
-    final business = state.businesses
-        .where((item) => item.type == tab.businessType)
-        .firstOrNull;
-    if (business == null) {
-      emit(
-        ClientBookingsState(
-          filter: state.filter,
-          businesses: state.businesses,
-          selectedBusiness: state.selectedBusiness,
-          tab: tab,
-          isLoading: false,
-          errorMessage:
-              'You do not have any ${tab.label.toLowerCase()} businesses yet.',
-        ),
-      );
-      return;
-    }
-    await selectBusiness(business);
-  }
-
   Future<bool> cancelBooking(BookingModel booking) async {
     try {
       await _bookingRepository.cancelBooking(bookingId: booking.id);
@@ -264,6 +242,45 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     } on BookingException {
       return false;
     }
+  }
+
+  Future<bool> cancelAppointment(AppointmentModel appointment) async {
+    try {
+      final cancelled = await _appointmentRepository.cancelAppointment(
+        appointment,
+      );
+      _replaceAppointment(cancelled);
+      return true;
+    } on AppointmentException {
+      return false;
+    }
+  }
+
+  void updateAppointment(AppointmentModel appointment) {
+    _replaceAppointment(appointment);
+  }
+
+  void _replaceAppointment(AppointmentModel appointment) {
+    final appointments =
+        state.filter == ClientBookingFilter.all ||
+            state.filter.name == appointment.status
+        ? state.appointments
+              .map((item) => item.id == appointment.id ? appointment : item)
+              .toList()
+        : state.appointments
+              .where((item) => item.id != appointment.id)
+              .toList();
+    emit(
+      ClientBookingsState(
+        filter: state.filter,
+        appointments: appointments,
+        businesses: state.businesses,
+        selectedBusiness: state.selectedBusiness,
+        tab: state.tab,
+        isLoading: false,
+        hasReachedEnd: state.hasReachedEnd,
+      ),
+    );
   }
 
   BusinessModel? _findBusiness(

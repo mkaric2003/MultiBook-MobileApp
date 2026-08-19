@@ -20,33 +20,33 @@ class MyBusinessListTile extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(color: AppColors.surfaceHighlight),
         ),
         child: Row(
           children: [
             Container(
-              height: 70,
-              width: 70,
+              height: 58,
+              width: 58,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 color: accentColor,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(15),
               ),
               child: business.logoUrl == null
                   ? Icon(
                       isStay ? Icons.bed : Icons.content_cut,
                       color: AppColors.white,
-                      size: 39,
+                      size: 30,
                     )
                   : Image.network(business.logoUrl!, fit: BoxFit.cover),
             ),
-            const SizedBox(width: 20),
+            const SizedBox(width: 13),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,19 +56,19 @@ class MyBusinessListTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 22,
+                      fontSize: 17,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 11),
+                  const SizedBox(height: 7),
                   Wrap(
-                    spacing: 10,
+                    spacing: 7,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+                          horizontal: 9,
+                          vertical: 4,
                         ),
                         decoration: BoxDecoration(
                           color: accentColor.withValues(alpha: 0.25),
@@ -78,18 +78,19 @@ class MyBusinessListTile extends StatelessWidget {
                           isStay ? 'Stays' : 'Services',
                           style: TextStyle(
                             color: accentColor,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       SizedBox(
-                        width: 140,
+                        width: 120,
                         child: Row(
                           children: [
                             const Icon(
                               Icons.location_on,
                               color: AppColors.muted,
-                              size: 20,
+                              size: 17,
                             ),
                             const SizedBox(width: 3),
                             Expanded(
@@ -99,7 +100,7 @@ class MyBusinessListTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   color: AppColors.muted,
-                                  fontSize: 16,
+                                  fontSize: 13,
                                 ),
                               ),
                             ),
@@ -111,11 +112,11 @@ class MyBusinessListTile extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 6),
             const Icon(
               Icons.chevron_right,
               color: AppColors.iconMuted,
-              size: 32,
+              size: 24,
             ),
           ],
         ),

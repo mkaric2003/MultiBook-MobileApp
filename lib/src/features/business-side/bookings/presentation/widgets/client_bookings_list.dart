@@ -3,6 +3,11 @@ import 'package:aquabook/src/features/business-side/bookings/bloc/client_booking
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_booking_card.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/manage_booking_sheet.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_appointment_card.dart';
+import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/manage_appointment_sheet.dart';
+import 'package:aquabook/app.dart';
+import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:aquabook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,7 +64,36 @@ class ClientBookingsList extends StatelessWidget {
         }
 
         if (isServices) {
-          return ClientAppointmentCard(appointment: state.appointments[index]);
+          final appointment = state.appointments[index];
+          return ClientAppointmentCard(
+            appointment: appointment,
+            onManage: () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (sheetContext) => ManageAppointmentSheet(
+                appointment: appointment,
+                onCancel: context.read<ClientBookingsCubit>().cancelAppointment,
+                onReschedule: () async {
+                  final business = state.selectedBusiness;
+                  if (business == null) return;
+                  final updated = await context.push<AppointmentModel>(
+                    AppRoutes.RESCHEDULE_APPOINTMENT,
+                    extra: RescheduleAppointmentArguments(
+                      appointment: appointment,
+                      business: business,
+                    ),
+                  );
+                  if (updated != null && context.mounted) {
+                    context.read<ClientBookingsCubit>().updateAppointment(
+                      updated,
+                    );
+                    if (sheetContext.mounted) Navigator.pop(sheetContext);
+                  }
+                },
+              ),
+            ),
+          );
         }
         final booking = state.bookings[index];
         return ClientBookingCard(

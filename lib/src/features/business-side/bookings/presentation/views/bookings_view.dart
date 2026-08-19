@@ -5,7 +5,6 @@ import 'package:aquabook/src/features/business-side/bookings/bloc/client_booking
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_booking_filter_chips.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_bookings_header.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_bookings_list.dart';
-import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_bookings_type_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -49,10 +48,10 @@ class BookingsView extends HookWidget {
           bottom: false,
           child: Column(
             children: [
-              ClientBookingsHeader(selectedBusiness: state.selectedBusiness),
-              ClientBookingsTypeTabs(
-                selected: state.tab,
-                onChanged: cubit.selectTab,
+              ClientBookingsHeader(
+                businesses: state.businesses,
+                selectedBusiness: state.selectedBusiness,
+                onBusinessSelected: cubit.selectBusiness,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 0, 12),

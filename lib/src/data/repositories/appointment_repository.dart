@@ -230,10 +230,12 @@ class AppointmentRepository {
   Future<AppointmentModel> cancelAppointment(
     AppointmentModel appointment,
   ) async {
-    final customerId = _auth.currentUser?.uid;
-    if (customerId == null || customerId != appointment.customerId) {
+    final userId = _auth.currentUser?.uid;
+    final isCustomer = userId == appointment.customerId;
+    final isBusinessOwner = userId == appointment.businessOwnerId;
+    if (userId == null || (!isCustomer && !isBusinessOwner)) {
       throw const AppointmentException(
-        'You can only cancel your own appointment.',
+        'You are not allowed to cancel this appointment.',
       );
     }
     try {
@@ -242,6 +244,17 @@ class AppointmentRepository {
         documentId: appointment.id,
         data: {'status': 'cancelled', 'updatedAt': _firestore.serverTimestamp},
       );
+      final dateKey = _dateKey(appointment.date);
+      for (final slotStart in _slotStarts(
+        start: appointment.startMinutes,
+        end: appointment.endMinutes,
+      )) {
+        await _firestore.deleteDocument(
+          collection: _slotCollection,
+          documentId:
+              '${_availabilityKey(businessId: appointment.businessId, providerId: appointment.providerId, dateKey: dateKey)}-$slotStart',
+        );
+      }
       return appointment.copyWith(status: 'cancelled');
     } catch (error, stackTrace) {
       log(
@@ -284,13 +297,15 @@ class AppointmentRepository {
     required DateTime date,
     required int startMinutes,
   }) async {
-    final customerId = _auth.currentUser?.uid;
-    if (customerId == null || customerId != appointment.customerId) {
+    final userId = _auth.currentUser?.uid;
+    final isCustomer = userId == appointment.customerId;
+    final isBusinessOwner = userId == appointment.businessOwnerId;
+    if (userId == null || (!isCustomer && !isBusinessOwner)) {
       throw const AppointmentException(
-        'You can only reschedule your own appointment.',
+        'You are not allowed to reschedule this appointment.',
       );
     }
-    if (appointment.rescheduleCount >= 1) {
+    if (isCustomer && appointment.rescheduleCount >= 1) {
       throw const AppointmentException(
         'This appointment has already been rescheduled once.',
       );
@@ -329,7 +344,9 @@ class AppointmentRepository {
       date: normalizedDate,
       startMinutes: startMinutes,
       endMinutes: endMinutes,
-      rescheduleCount: appointment.rescheduleCount + 1,
+      rescheduleCount: isCustomer
+          ? appointment.rescheduleCount + 1
+          : appointment.rescheduleCount,
     );
     final newDateKey = _dateKey(normalizedDate);
     final oldDateKey = _dateKey(appointment.date);
@@ -337,7 +354,7 @@ class AppointmentRepository {
         .map(
           (slotStart) => _slotWrite(
             appointment: updated,
-            customerId: customerId,
+            customerId: appointment.customerId,
             dateKey: newDateKey,
             slotStart: slotStart,
           ),
