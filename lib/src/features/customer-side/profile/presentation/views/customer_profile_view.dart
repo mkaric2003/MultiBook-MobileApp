@@ -110,6 +110,12 @@ class CustomerProfileView extends StatelessWidget {
                   label: 'Notifications',
                 ),
                 const SizedBox(height: 10),
+                CustomerProfileMenuItem(
+                  icon: Icons.chat_bubble_outline,
+                  label: 'Messages',
+                  onTap: () => context.push(AppRoutes.CHAT_LIST),
+                ),
+                const SizedBox(height: 10),
                 const CustomerProfileMenuItem(
                   icon: Icons.language,
                   label: 'Language & currency',
