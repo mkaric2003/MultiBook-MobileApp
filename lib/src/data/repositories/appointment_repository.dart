@@ -5,6 +5,7 @@ import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
@@ -22,6 +23,7 @@ class AppointmentRepository {
   AppointmentRepository(this._auth, this._firestore, this._businessRepository);
 
   static const _collection = 'appointments';
+  static const _slotCollection = 'appointment_slots';
 
   final AuthenticationDataSource _auth;
   final FirestoreDataSource _firestore;
@@ -71,9 +73,6 @@ class AppointmentRepository {
       );
     }
 
-    // Existing appointments belong to other customers and must not be exposed
-    // to the current user. Availability locking therefore belongs in a trusted
-    // server-side transaction (for example a Cloud Function), not a client read.
     final dateKey = _dateKey(arguments.review.date);
 
     final id = _firestore.createDocumentId(collection: _collection);
@@ -109,7 +108,7 @@ class AppointmentRepository {
       confirmationCode: _confirmationCode(),
     );
     try {
-      await _firestore.setDocument(
+      final appointmentWrite = FirestoreDocumentWrite(
         collection: _collection,
         documentId: result.id,
         data: {
@@ -142,8 +141,40 @@ class AppointmentRepository {
           'createdAt': _firestore.serverTimestamp,
         },
       );
+      final slotWrites = _slotStarts(start: start, end: end).map((slotStart) {
+        final availabilityKey = _availabilityKey(
+          businessId: business.id,
+          providerId: provider.id,
+          dateKey: dateKey,
+        );
+        return FirestoreDocumentWrite(
+          collection: _slotCollection,
+          documentId: '$availabilityKey-$slotStart',
+          data: {
+            'availabilityKey': availabilityKey,
+            'appointmentId': result.id,
+            'businessId': business.id,
+            'providerId': provider.id,
+            'dateKey': dateKey,
+            'startMinutes': slotStart,
+            'customerId': customerId,
+            'createdAt': _firestore.serverTimestamp,
+          },
+        );
+      }).toList();
+      final didCreate = await _firestore.createDocumentsIfAbsent(
+        documentsToCheck: slotWrites,
+        documentsToCreate: [appointmentWrite, ...slotWrites],
+      );
+      if (!didCreate) {
+        throw const AppointmentException(
+          'One or more selected times were just booked. Please choose another time.',
+        );
+      }
       log('Appointment ${result.id} created.', name: 'AppointmentRepository');
       return result;
+    } on AppointmentException {
+      rethrow;
     } catch (error, stackTrace) {
       log(
         'Could not create appointment.',
@@ -153,6 +184,43 @@ class AppointmentRepository {
       );
       throw const AppointmentException(
         'We could not confirm your appointment. Please try again.',
+      );
+    }
+  }
+
+  Future<Set<int>> getBookedSlotStarts({
+    required String businessId,
+    required String providerId,
+    required DateTime date,
+  }) async {
+    if (_auth.currentUser == null) {
+      throw const AppointmentException(
+        'You need to sign in to view appointment availability.',
+      );
+    }
+    try {
+      final documents = await _firestore.getDocumentsWhere(
+        collection: _slotCollection,
+        field: 'availabilityKey',
+        value: _availabilityKey(
+          businessId: businessId,
+          providerId: providerId,
+          dateKey: _dateKey(date),
+        ),
+      );
+      return documents
+          .map((document) => (document['startMinutes'] as num?)?.toInt())
+          .whereType<int>()
+          .toSet();
+    } catch (error, stackTrace) {
+      log(
+        'Could not load booked appointment slots.',
+        name: 'AppointmentRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const AppointmentException(
+        'We could not load availability. Please try again.',
       );
     }
   }
@@ -263,6 +331,21 @@ class AppointmentRepository {
 
   static String _dateKey(DateTime date) =>
       '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+  static String _availabilityKey({
+    required String businessId,
+    required String providerId,
+    required String dateKey,
+  }) => '$businessId-$providerId-$dateKey';
+
+  static Iterable<int> _slotStarts({
+    required int start,
+    required int end,
+  }) sync* {
+    for (var time = start; time < end; time += 30) {
+      yield time;
+    }
+  }
 
   static String _confirmationCode() => '#AP-${1000 + Random().nextInt(9000)}';
 }

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/data_cursor.dart';
+import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
@@ -25,9 +26,7 @@ abstract class FirestoreDataSource {
     required Object value,
   });
 
-  Future<List<Map<String, dynamic>>> getDocuments({
-    required String collection,
-  });
+  Future<List<Map<String, dynamic>>> getDocuments({required String collection});
 
   Future<List<Map<String, dynamic>>> getDocumentsWhereArrayContains({
     required String collection,
@@ -70,6 +69,13 @@ abstract class FirestoreDataSource {
     required String documentId,
     required Map<String, Object?> data,
     bool merge = false,
+  });
+
+  /// Atomically creates [documentsToCreate] only when every lock document is
+  /// still absent. Returns false when a concurrent write has claimed a lock.
+  Future<bool> createDocumentsIfAbsent({
+    required List<FirestoreDocumentWrite> documentsToCheck,
+    required List<FirestoreDocumentWrite> documentsToCreate,
   });
 
   Future<void> updateDocument({
@@ -231,6 +237,34 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
       .collection(collection)
       .doc(documentId)
       .set(data, SetOptions(merge: merge));
+
+  @override
+  Future<bool> createDocumentsIfAbsent({
+    required List<FirestoreDocumentWrite> documentsToCheck,
+    required List<FirestoreDocumentWrite> documentsToCreate,
+  }) async {
+    if (documentsToCheck.isEmpty) return true;
+
+    return _firestore.runTransaction((transaction) async {
+      final references = documentsToCheck
+          .map(
+            (document) => _firestore
+                .collection(document.collection)
+                .doc(document.documentId),
+          )
+          .toList();
+      final snapshots = await Future.wait(references.map(transaction.get));
+      if (snapshots.any((snapshot) => snapshot.exists)) return false;
+
+      for (final document in documentsToCreate) {
+        transaction.set(
+          _firestore.collection(document.collection).doc(document.documentId),
+          document.data,
+        );
+      }
+      return true;
+    });
+  }
 
   @override
   Future<void> updateDocument({
