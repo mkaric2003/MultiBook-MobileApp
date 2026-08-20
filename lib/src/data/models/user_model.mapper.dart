@@ -84,6 +84,12 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     _$address,
     opt: true,
   );
+  static String? _$city(UserModel v) => v.city;
+  static const Field<UserModel, String> _f$city = Field(
+    'city',
+    _$city,
+    opt: true,
+  );
 
   @override
   final MappableFields<UserModel> fields = const {
@@ -99,6 +105,7 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     #countryCode: _f$countryCode,
     #dateOfBirth: _f$dateOfBirth,
     #address: _f$address,
+    #city: _f$city,
   };
 
   static UserModel _instantiate(DecodingData data) {
@@ -115,6 +122,7 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
       countryCode: data.dec(_f$countryCode),
       dateOfBirth: data.dec(_f$dateOfBirth),
       address: data.dec(_f$address),
+      city: data.dec(_f$city),
     );
   }
 
@@ -190,6 +198,7 @@ abstract class UserModelCopyWith<$R, $In extends UserModel, $Out>
     String? countryCode,
     DateTime? dateOfBirth,
     String? address,
+    String? city,
   });
   UserModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -216,6 +225,7 @@ class _UserModelCopyWithImpl<$R, $Out>
     Object? countryCode = $none,
     Object? dateOfBirth = $none,
     Object? address = $none,
+    Object? city = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -230,6 +240,7 @@ class _UserModelCopyWithImpl<$R, $Out>
       if (countryCode != $none) #countryCode: countryCode,
       if (dateOfBirth != $none) #dateOfBirth: dateOfBirth,
       if (address != $none) #address: address,
+      if (city != $none) #city: city,
     }),
   );
   @override
@@ -249,6 +260,7 @@ class _UserModelCopyWithImpl<$R, $Out>
     countryCode: data.get(#countryCode, or: $value.countryCode),
     dateOfBirth: data.get(#dateOfBirth, or: $value.dateOfBirth),
     address: data.get(#address, or: $value.address),
+    city: data.get(#city, or: $value.city),
   );
 
   @override

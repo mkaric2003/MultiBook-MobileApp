@@ -24,6 +24,7 @@ class CustomerEditProfileForm extends HookWidget {
     final phoneController = useTextEditingController();
     final dateOfBirthController = useTextEditingController();
     final addressController = useTextEditingController();
+    final cityController = useTextEditingController();
     final countryCode = useState('+1');
     final dateOfBirth = useState<DateTime?>(null);
 
@@ -35,6 +36,7 @@ class CustomerEditProfileForm extends HookWidget {
         countryCode: countryCode.value,
         dateOfBirth: dateOfBirth.value,
         address: addressController.text,
+        city: cityController.text,
       ),
     );
 
@@ -49,6 +51,7 @@ class CustomerEditProfileForm extends HookWidget {
           ? ''
           : DateFormat('dd. MM. yyyy.').format(user!.dateOfBirth!);
       addressController.text = user?.address ?? '';
+      cityController.text = user?.city ?? '';
       return null;
     }, [user?.id]);
 
@@ -182,6 +185,15 @@ class CustomerEditProfileForm extends HookWidget {
               prefixIcon: Icons.calendar_today_outlined,
             ),
           ),
+        ),
+        const SizedBox(height: 24),
+        const Text('City (optional)', style: _labelStyle),
+        const SizedBox(height: 10),
+        CustomTextField(
+          controller: cityController,
+          hintText: 'Enter your city',
+          prefixIcon: Icons.location_city_outlined,
+          onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 24),
         const Text('Address (optional)', style: _labelStyle),

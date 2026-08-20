@@ -95,6 +95,26 @@ class UserRepository {
     );
   }
 
+  Future<void> updateCurrentLocation({
+    required String city,
+    required String address,
+  }) async {
+    final userId = _authenticationDataSource.currentUser?.uid;
+    if (userId == null) {
+      throw const UserException('You need to sign in to save your location.');
+    }
+
+    await _firestoreDataSource.updateDocument(
+      collection: _usersCollection,
+      documentId: userId,
+      data: {
+        'city': city,
+        'address': address,
+        'updatedAt': _firestoreDataSource.serverTimestamp,
+      },
+    );
+  }
+
   Future<UserModel> updateProfile({
     required String firstName,
     required String lastName,
@@ -103,6 +123,7 @@ class UserRepository {
     String? countryCode,
     DateTime? dateOfBirth,
     String? address,
+    String? city,
   }) async {
     final currentUser = _authenticationDataSource.currentUser;
     if (currentUser == null) {
@@ -142,20 +163,26 @@ class UserRepository {
         user: currentUser,
         displayName: fullName,
       );
+      final normalizedCity = city?.trim();
+      final data = <String, dynamic>{
+        'firstName': trimmedFirstName,
+        'lastName': trimmedLastName,
+        'fullName': fullName,
+        'phoneNumber': trimmedPhoneNumber.isEmpty ? null : trimmedPhoneNumber,
+        'profileImageUrl': profileImageUrl,
+        'countryCode': countryCode,
+        'dateOfBirth': dateOfBirth,
+        'address': address?.trim().isEmpty ?? true ? null : address!.trim(),
+        'updatedAt': _firestoreDataSource.serverTimestamp,
+      };
+      if (city != null) {
+        data['city'] = normalizedCity?.isEmpty ?? true ? null : normalizedCity;
+      }
+
       await _firestoreDataSource.updateDocument(
         collection: _usersCollection,
         documentId: currentUser.uid,
-        data: {
-          'firstName': trimmedFirstName,
-          'lastName': trimmedLastName,
-          'fullName': fullName,
-          'phoneNumber': trimmedPhoneNumber.isEmpty ? null : trimmedPhoneNumber,
-          'profileImageUrl': profileImageUrl,
-          'countryCode': countryCode,
-          'dateOfBirth': dateOfBirth,
-          'address': address?.trim().isEmpty ?? true ? null : address!.trim(),
-          'updatedAt': _firestoreDataSource.serverTimestamp,
-        },
+        data: data,
       );
 
       return user.copyWith(
@@ -167,6 +194,9 @@ class UserRepository {
         countryCode: countryCode,
         dateOfBirth: dateOfBirth,
         address: address?.trim().isEmpty ?? true ? null : address!.trim(),
+        city: city == null
+            ? user.city
+            : (normalizedCity?.isEmpty ?? true ? null : normalizedCity),
       );
     } on FirebaseException catch (error, stackTrace) {
       log(

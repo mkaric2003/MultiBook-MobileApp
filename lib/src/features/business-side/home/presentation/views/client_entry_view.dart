@@ -5,6 +5,7 @@ import 'package:aquabook/src/features/business-side/home/bloc/client_entry_cubit
 import 'package:aquabook/src/features/business-side/home/bloc/client_entry_state.dart';
 import 'package:aquabook/src/features/business-side/home/presentation/views/home_view.dart';
 import 'package:aquabook/src/features/customer-side/home/presentation/views/customer_home_view.dart';
+import 'package:aquabook/src/features/shared/user_location/presentation/widgets/user_location_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,13 +24,13 @@ class ClientEntryView extends StatelessWidget {
             );
           }
 
-          if (state.userType == UserType.customer) {
-            return const CustomerHomeView();
-          }
-
-          return state.hasExistingBusiness
+          final entryView = state.userType == UserType.customer
+              ? const CustomerHomeView()
+              : state.hasExistingBusiness
               ? const HomeView()
               : const AddBusinessView();
+
+          return UserLocationGate(user: state.user, child: entryView);
         },
       ),
     );

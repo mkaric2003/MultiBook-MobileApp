@@ -20,6 +20,7 @@ class ClientEntryCubit extends Cubit<ClientEntryState> {
         isLoading: false,
         hasExistingBusiness: hasExistingBusiness,
         userType: user?.type,
+        user: user,
       ),
     );
   }

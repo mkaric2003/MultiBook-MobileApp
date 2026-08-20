@@ -1,7 +1,6 @@
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/enums/user_type.dart';
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart';
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_state.dart';
 import 'package:aquabook/src/features/shared/sign_in/presentation/widgets/signin_form.dart';
@@ -31,8 +30,6 @@ class SigninView extends HookWidget {
             context.go(
               state.requiresUserTypeSelection
                   ? AppRoutes.USER_TYPE_CHECKER
-                  : state.userType == UserType.customer
-                  ? AppRoutes.CUSTOMER_HOME
                   : AppRoutes.HOME,
             );
           }

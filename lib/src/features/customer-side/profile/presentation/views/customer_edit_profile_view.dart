@@ -86,6 +86,7 @@ class CustomerEditProfileView extends HookWidget {
                         countryCode: state.user?.countryCode ?? '+1',
                         dateOfBirth: state.user?.dateOfBirth,
                         address: state.user?.address ?? '',
+                        city: state.user?.city ?? '',
                       );
                   await context.read<AccountSettingsCubit>().save(
                     firstName: data.firstName,
@@ -94,6 +95,7 @@ class CustomerEditProfileView extends HookWidget {
                     countryCode: data.countryCode,
                     dateOfBirth: data.dateOfBirth,
                     address: data.address,
+                    city: data.city,
                   );
                 },
               ),

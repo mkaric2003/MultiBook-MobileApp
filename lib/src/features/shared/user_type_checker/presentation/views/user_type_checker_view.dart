@@ -23,11 +23,7 @@ class UserTypeCheckerView extends StatelessWidget {
             previous.errorMessage != current.errorMessage,
         listener: (context, state) {
           if (state.isCompleted) {
-            context.go(
-              state.selectedType == UserType.customer
-                  ? AppRoutes.CUSTOMER_HOME
-                  : AppRoutes.HOME,
-            );
+            context.go(AppRoutes.HOME);
           }
           if (state.errorMessage != null) {
             ScaffoldMessenger.of(

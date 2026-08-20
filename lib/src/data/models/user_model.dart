@@ -18,6 +18,7 @@ class UserModel with UserModelMappable {
     this.countryCode,
     this.dateOfBirth,
     this.address,
+    this.city,
   });
 
   final String id;
@@ -32,4 +33,5 @@ class UserModel with UserModelMappable {
   final String? countryCode;
   final DateTime? dateOfBirth;
   final String? address;
+  final String? city;
 }

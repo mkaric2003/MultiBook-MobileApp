@@ -49,6 +49,7 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
     String? countryCode,
     DateTime? dateOfBirth,
     String? address,
+    String? city,
   }) async {
     if (state.isSaving) {
       return;
@@ -72,6 +73,7 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
         countryCode: countryCode,
         dateOfBirth: dateOfBirth,
         address: address,
+        city: city,
       );
       emit(
         AccountSettingsState(

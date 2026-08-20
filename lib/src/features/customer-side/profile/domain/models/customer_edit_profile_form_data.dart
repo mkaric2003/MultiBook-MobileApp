@@ -6,6 +6,7 @@ class CustomerEditProfileFormData {
     required this.countryCode,
     required this.dateOfBirth,
     required this.address,
+    required this.city,
   });
 
   final String firstName;
@@ -14,4 +15,5 @@ class CustomerEditProfileFormData {
   final String countryCode;
   final DateTime? dateOfBirth;
   final String address;
+  final String city;
 }

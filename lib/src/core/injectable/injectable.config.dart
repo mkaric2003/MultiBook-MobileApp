@@ -15,6 +15,8 @@ import 'package:aquabook/src/core/modules/shared_preferences_module.dart'
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart'
     as _i137;
 import 'package:aquabook/src/data/data_sources/chat_data_source.dart' as _i511;
+import 'package:aquabook/src/data/data_sources/device_location_data_source.dart'
+    as _i986;
 import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart'
     as _i83;
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart'
@@ -57,6 +59,8 @@ import 'package:aquabook/src/data/repositories/service_search_repository.dart'
     as _i760;
 import 'package:aquabook/src/data/repositories/stay_search_repository.dart'
     as _i285;
+import 'package:aquabook/src/data/repositories/user_location_repository.dart'
+    as _i417;
 import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
 import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_cubit.dart'
     as _i57;
@@ -120,6 +124,8 @@ import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart'
     as _i44;
 import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart'
     as _i1028;
+import 'package:aquabook/src/features/shared/user_location/cubit/user_location_cubit.dart'
+    as _i104;
 import 'package:aquabook/src/features/shared/user_type_checker/cubit/user_type_checker_cubit.dart'
     as _i30;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
@@ -154,6 +160,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i1069.ImagePickerDataSource>(
       () => _i1069.ImagePickerDataSourceImpl(),
+    );
+    gh.lazySingleton<_i986.DeviceLocationDataSource>(
+      () => _i986.DeviceLocationDataSourceImpl(),
     );
     gh.lazySingleton<_i366.OnboardingRepository>(
       () => _i366.OnboardingRepository(gh<_i460.SharedPreferences>()),
@@ -238,6 +247,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i908.MyBusinessesCubit>(
       () => _i908.MyBusinessesCubit(
         gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i417.UserLocationRepository>(
+      () => _i417.UserLocationRepository(
+        gh<_i986.DeviceLocationDataSource>(),
+        gh<_i377.NominatimDataSource>(),
         gh<_i747.UserRepository>(),
       ),
     );
@@ -350,6 +366,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
         gh<_i64.BookingDraftRepository>(),
       ),
+    );
+    gh.factory<_i104.UserLocationCubit>(
+      () => _i104.UserLocationCubit(gh<_i417.UserLocationRepository>()),
     );
     gh.factory<_i567.CustomerDashboardCubit>(
       () => _i567.CustomerDashboardCubit(
