@@ -8,15 +8,34 @@ class PopularServicesList extends HookWidget {
   const PopularServicesList({
     required this.services,
     required this.isLoading,
+    required this.isLoadingMore,
+    required this.hasMore,
+    required this.onLoadMore,
     super.key,
   });
 
   final List<ServiceListing> services;
   final bool isLoading;
+  final bool isLoadingMore;
+  final bool hasMore;
+  final Future<void> Function() onLoadMore;
 
   @override
   Widget build(BuildContext context) {
-    final pageController = usePageController();
+    final scrollController = useScrollController();
+
+    useEffect(() {
+      void loadMoreWhenNeeded() {
+        if (!scrollController.hasClients || !hasMore || isLoadingMore) return;
+        if (scrollController.position.pixels >=
+            scrollController.position.maxScrollExtent - 180) {
+          onLoadMore();
+        }
+      }
+
+      scrollController.addListener(loadMoreWhenNeeded);
+      return () => scrollController.removeListener(loadMoreWhenNeeded);
+    }, [scrollController, hasMore, isLoadingMore, onLoadMore]);
 
     if (isLoading) {
       return const SizedBox(
@@ -37,12 +56,24 @@ class PopularServicesList extends HookWidget {
     }
 
     return SizedBox(
-      height: 310,
-      child: PageView.builder(
-        controller: pageController,
-        itemCount: services.length,
-        itemBuilder: (context, index) =>
-            ServiceListingCard(service: services[index]),
+      height: 280,
+      child: ListView.separated(
+        controller: scrollController,
+        scrollDirection: Axis.horizontal,
+        itemCount: services.length + (isLoadingMore ? 1 : 0),
+        separatorBuilder: (_, _) => const SizedBox(width: 14),
+        itemBuilder: (context, index) {
+          if (index == services.length) {
+            return const SizedBox(
+              width: 64,
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          return SizedBox(
+            width: 180,
+            child: ServiceListingCard(service: services[index], compact: true),
+          );
+        },
       ),
     );
   }

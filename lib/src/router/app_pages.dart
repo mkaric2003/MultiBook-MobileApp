@@ -72,6 +72,13 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: AppRoutes.EXPLORE_SERVICE_RESULTS,
+      name: AppRoutes.EXPLORE_SERVICE_RESULTS,
+      builder: (context, state) => ExploreServiceResultsView(
+        arguments: state.extra! as ExploreServiceResultsArguments,
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.STAY_DETAIL,
       name: AppRoutes.STAY_DETAIL,
       builder: (context, state) =>

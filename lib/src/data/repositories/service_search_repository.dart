@@ -18,7 +18,8 @@ class ServiceSearchRepository {
     final page = await _dataSource.search(
       date: filters.date,
       timeMinutes: filters.timeMinutes,
-      serviceName: filters.serviceName,
+      categoryId: filters.categoryId,
+      collectionId: filters.collectionId,
       city: filters.city,
       minPrice: filters.minPrice,
       maxPrice: filters.maxPrice,

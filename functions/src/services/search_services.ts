@@ -2,7 +2,7 @@ import { getFirestore, Timestamp, type Firestore } from "firebase-admin/firestor
 import { HttpsError, onCall } from "firebase-functions/v2/https";
 
 type RequestData = {
-  date?: unknown; timeMinutes?: unknown; serviceName?: unknown; city?: unknown;
+  date?: unknown; timeMinutes?: unknown; categoryId?: unknown; collectionId?: unknown; city?: unknown;
   minPrice?: unknown; maxPrice?: unknown; sortOption?: unknown; cursor?: unknown; pageSize?: unknown;
 };
 type ServiceDocument = { id: string; data: Record<string, unknown> };
@@ -33,7 +33,7 @@ function parseFilters(data: RequestData) {
   const date = parseDate(data.date);
   const timeMinutes = asOptionalMinutes(data.timeMinutes);
   return {
-    date, timeMinutes, city: normalize(data.city), serviceName: normalize(data.serviceName),
+    date, timeMinutes, city: normalize(data.city), categoryId: normalize(data.categoryId), collectionId: normalize(data.collectionId),
     minPrice: nonNegative(data.minPrice, 0), maxPrice: nonNegative(data.maxPrice, Number.MAX_SAFE_INTEGER),
     sortOption: ["recommended", "priceLowToHigh", "priceHighToLow", "rating"].includes(String(data.sortOption)) ? String(data.sortOption) : "recommended",
     cursor: typeof data.cursor === "string" && data.cursor.length > 0 ? data.cursor : null,
@@ -44,17 +44,19 @@ function parseFilters(data: RequestData) {
 function matches(service: ServiceDocument, filters: ReturnType<typeof parseFilters>) {
   const location = map(service.data.location);
   const offerings = list(map(service.data.serviceDetails).offerings).map(map);
+  const collectionIds = list(service.data.featuredCollectionIds).map(String);
   return (filters.city == null || normalize(location.city) === filters.city) &&
+    (filters.categoryId == null || String(service.data.categoryId ?? "") === filters.categoryId) &&
+    (filters.collectionId == null || collectionIds.includes(filters.collectionId)) &&
     offerings.some((offering) => {
-      const name = normalize(offering.name) ?? "";
       const price = number(offering.price);
-      return (filters.serviceName == null || name.includes(filters.serviceName)) && price >= filters.minPrice && price <= filters.maxPrice;
+      return price >= filters.minPrice && price <= filters.maxPrice;
     });
 }
 
 function hasAvailableProvider(service: ServiceDocument, appointments: Record<string, unknown>[], bookedSlots: Record<string, unknown>[], blocks: Record<string, unknown>[], filters: ReturnType<typeof parseFilters>) {
   const details = map(service.data.serviceDetails);
-  const offerings = list(details.offerings).map(map).filter((offering) => filters.serviceName == null || (normalize(offering.name) ?? "").includes(filters.serviceName!));
+  const offerings = list(details.offerings).map(map);
   const weekday = weekdayName(filters.date!);
   const dateKey = dateKeyFor(filters.date!);
   const providers = list(details.providers).map(map);

@@ -1,6 +1,6 @@
 import 'package:aquabook/src/data/data_cursor.dart';
-import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:aquabook/src/data/models/firestore_document_path.dart';
+import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

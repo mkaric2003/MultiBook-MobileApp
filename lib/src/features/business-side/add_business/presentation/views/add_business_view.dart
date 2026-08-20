@@ -19,8 +19,8 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/image_source_picker_sheet.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_offerings_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_providers_section.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_collections_selector.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_inventory_type_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_unit_form.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
@@ -393,7 +393,7 @@ class AddBusinessView extends HookWidget {
                           ],
                           if (state.businessType == BusinessType.services) ...[
                             CustomButton(
-                              buttonName: 'Seed 15 demo services',
+                              buttonName: 'Seed 29 demo services',
                               color: AppColors.surface,
                               textColor: AppColors.primary,
                               borderColor: AppColors.primary,

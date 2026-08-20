@@ -5,11 +5,13 @@ class ServiceFilterOptionPickerSheet extends StatelessWidget {
   const ServiceFilterOptionPickerSheet({
     super.key,
     required this.title,
+    required this.allOptionLabel,
     required this.options,
     required this.selectedOption,
   });
 
   final String title;
+  final String allOptionLabel;
   final List<String> options;
   final String? selectedOption;
 
@@ -58,7 +60,7 @@ class ServiceFilterOptionPickerSheet extends StatelessWidget {
                   children: [
                     ListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('All services'),
+                      title: Text(allOptionLabel),
                       trailing: selectedOption == null
                           ? const Icon(
                               Icons.check_rounded,

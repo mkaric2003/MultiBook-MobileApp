@@ -8,7 +8,8 @@ abstract class ServiceSearchDataSource {
   Future<ServiceSearchPageModel> search({
     DateTime? date,
     int? timeMinutes,
-    String? serviceName,
+    String? categoryId,
+    String? collectionId,
     String? city,
     required double minPrice,
     required double maxPrice,
@@ -26,7 +27,8 @@ class ServiceSearchDataSourceImpl implements ServiceSearchDataSource {
   Future<ServiceSearchPageModel> search({
     DateTime? date,
     int? timeMinutes,
-    String? serviceName,
+    String? categoryId,
+    String? collectionId,
     String? city,
     required double minPrice,
     required double maxPrice,
@@ -39,7 +41,8 @@ class ServiceSearchDataSourceImpl implements ServiceSearchDataSource {
             ? null
             : DateTime.utc(date.year, date.month, date.day).toIso8601String(),
         'timeMinutes': timeMinutes,
-        'serviceName': serviceName,
+        'categoryId': categoryId,
+        'collectionId': collectionId,
         'city': city,
         'minPrice': minPrice,
         'maxPrice': maxPrice,

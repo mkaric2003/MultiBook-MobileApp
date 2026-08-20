@@ -8,6 +8,7 @@ class AppRoutes {
   static const CUSTOMER_HOME = '/customer-home';
   static const CUSTOMER_SEARCH = '/customer-search';
   static const EXPLORE_STAY_RESULTS = '/explore-stay-results';
+  static const EXPLORE_SERVICE_RESULTS = '/explore-service-results';
   static const STAY_DETAIL = '/stay-detail';
   static const SERVICE_DETAIL = '/service-detail';
   static const CREATE_APPOINTMENT = '/create-appointment';

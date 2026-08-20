@@ -7,12 +7,14 @@ class ExploreAppBar extends StatelessWidget {
     required this.selectedCity,
     required this.cities,
     required this.onCityChanged,
+    this.trailing,
     super.key,
   });
 
   final String? selectedCity;
   final List<String> cities;
   final ValueChanged<String?> onCityChanged;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -77,6 +79,8 @@ class ExploreAppBar extends StatelessWidget {
           'Explore',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
         ),
+        const Spacer(),
+        if (trailing != null) trailing!,
       ],
     ),
   );

@@ -6,8 +6,11 @@ import 'package:aquabook/src/features/customer-side/explore/cubit/explore_state.
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_category.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_collection.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
+import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_category.dart';
+import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_collection.dart';
+import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_results_arguments.dart';
 import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_app_bar.dart';
-import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_services_placeholder.dart';
+import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_services_content.dart';
 import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_stays_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,6 +34,12 @@ class ExploreView extends HookWidget {
                 selectedCity: state.selectedCity,
                 cities: state.cities,
                 onCityChanged: context.read<ExploreCubit>().selectCity,
+                trailing: selectedTab.value == CustomerHomeTab.services
+                    ? IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.search_rounded),
+                      )
+                    : null,
               ),
               Expanded(
                 child: selectedTab.value == CustomerHomeTab.stays
@@ -61,9 +70,30 @@ class ExploreView extends HookWidget {
                           );
                         },
                       )
-                    : ExploreServicesPlaceholder(
-                        onBackToStays: () =>
-                            selectedTab.value = CustomerHomeTab.stays,
+                    : ExploreServicesContent(
+                        selectedTab: selectedTab.value,
+                        onTabChanged: (tab) => selectedTab.value = tab,
+                        onCategorySelected: (ExploreServiceCategory category) {
+                          context.push(
+                            AppRoutes.EXPLORE_SERVICE_RESULTS,
+                            extra: ExploreServiceResultsArguments(
+                              city: state.selectedCity,
+                              categoryId: category.id,
+                              categoryTitle: category.title,
+                            ),
+                          );
+                        },
+                        onCollectionSelected:
+                            (ExploreServiceCollection collection) {
+                              context.push(
+                                AppRoutes.EXPLORE_SERVICE_RESULTS,
+                                extra: ExploreServiceResultsArguments(
+                                  city: state.selectedCity,
+                                  collectionId: collection.id,
+                                  categoryTitle: collection.title,
+                                ),
+                              );
+                            },
                       ),
               ),
             ],

@@ -138,6 +138,9 @@ class CustomerDashboardView extends StatelessWidget {
                           popularServices: state.popularServices,
                           isPopularServicesLoading:
                               state.isPopularServicesLoading,
+                          isLoadingMorePopularServices:
+                              state.isLoadingMorePopularServices,
+                          hasMorePopularServices: state.hasMorePopularServices,
                           otherServices: state.otherServices,
                           isOtherServicesLoading: state.isOtherServicesLoading,
                           hasMoreOtherServices: state.hasMoreOtherServices,
@@ -145,6 +148,9 @@ class CustomerDashboardView extends StatelessWidget {
                           onLoadMoreServices: context
                               .read<CustomerDashboardCubit>()
                               .loadMoreServices,
+                          onLoadMorePopularServices: context
+                              .read<CustomerDashboardCubit>()
+                              .loadMorePopularServices,
                           appointmentDraft: state.appointmentDraft,
                           onContinueAppointment: state.appointmentDraft == null
                               ? null

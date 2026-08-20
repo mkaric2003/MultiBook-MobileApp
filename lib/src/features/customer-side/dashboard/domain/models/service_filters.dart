@@ -4,7 +4,8 @@ class ServiceFilters {
   const ServiceFilters({
     this.date,
     this.timeMinutes,
-    this.serviceName,
+    this.categoryId,
+    this.collectionId,
     this.city,
     this.minPrice = 0,
     this.maxPrice = 500,
@@ -13,7 +14,8 @@ class ServiceFilters {
 
   final DateTime? date;
   final int? timeMinutes;
-  final String? serviceName;
+  final String? categoryId;
+  final String? collectionId;
   final String? city;
   final double minPrice;
   final double maxPrice;
@@ -22,7 +24,8 @@ class ServiceFilters {
   bool get hasActiveFilters =>
       date != null ||
       timeMinutes != null ||
-      serviceName != null ||
+      categoryId != null ||
+      collectionId != null ||
       city != null ||
       minPrice > 0 ||
       maxPrice < 500 ||
@@ -31,7 +34,8 @@ class ServiceFilters {
   int get appliedFiltersCount => [
     if (date != null) true,
     if (timeMinutes != null) true,
-    if (serviceName != null) true,
+    if (categoryId != null) true,
+    if (collectionId != null) true,
     if (city != null) true,
     if (minPrice > 0 || maxPrice < 500) true,
     if (sortOption != ServiceSortOption.recommended) true,
@@ -40,11 +44,13 @@ class ServiceFilters {
   ServiceFilters copyWith({
     DateTime? date,
     int? timeMinutes,
-    String? serviceName,
+    String? categoryId,
+    String? collectionId,
     String? city,
     bool clearDate = false,
     bool clearTime = false,
-    bool clearServiceName = false,
+    bool clearCategoryId = false,
+    bool clearCollectionId = false,
     bool clearCity = false,
     double? minPrice,
     double? maxPrice,
@@ -53,7 +59,10 @@ class ServiceFilters {
     return ServiceFilters(
       date: clearDate ? null : date ?? this.date,
       timeMinutes: clearTime ? null : timeMinutes ?? this.timeMinutes,
-      serviceName: clearServiceName ? null : serviceName ?? this.serviceName,
+      categoryId: clearCategoryId ? null : categoryId ?? this.categoryId,
+      collectionId: clearCollectionId
+          ? null
+          : collectionId ?? this.collectionId,
       city: clearCity ? null : city ?? this.city,
       minPrice: minPrice ?? this.minPrice,
       maxPrice: maxPrice ?? this.maxPrice,

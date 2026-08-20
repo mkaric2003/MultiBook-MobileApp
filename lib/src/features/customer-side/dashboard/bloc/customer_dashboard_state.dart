@@ -22,7 +22,9 @@ class CustomerDashboardState {
     this.stayCities = const [],
     this.serviceFilters = const ServiceFilters(),
     this.isPopularServicesLoading = true,
+    this.isLoadingMorePopularServices = false,
     this.popularServices = const [],
+    this.hasMorePopularServices = true,
     this.isOtherServicesLoading = false,
     this.otherServices = const [],
     this.hasMoreOtherServices = true,
@@ -44,7 +46,9 @@ class CustomerDashboardState {
   final List<String> stayCities;
   final ServiceFilters serviceFilters;
   final bool isPopularServicesLoading;
+  final bool isLoadingMorePopularServices;
   final List<ServiceListing> popularServices;
+  final bool hasMorePopularServices;
   final bool isOtherServicesLoading;
   final List<ServiceListing> otherServices;
   final bool hasMoreOtherServices;
@@ -66,7 +70,9 @@ class CustomerDashboardState {
     List<String>? stayCities,
     ServiceFilters? serviceFilters,
     bool? isPopularServicesLoading,
+    bool? isLoadingMorePopularServices,
     List<ServiceListing>? popularServices,
+    bool? hasMorePopularServices,
     bool? isOtherServicesLoading,
     List<ServiceListing>? otherServices,
     bool? hasMoreOtherServices,
@@ -91,7 +97,11 @@ class CustomerDashboardState {
       serviceFilters: serviceFilters ?? this.serviceFilters,
       isPopularServicesLoading:
           isPopularServicesLoading ?? this.isPopularServicesLoading,
+      isLoadingMorePopularServices:
+          isLoadingMorePopularServices ?? this.isLoadingMorePopularServices,
       popularServices: popularServices ?? this.popularServices,
+      hasMorePopularServices:
+          hasMorePopularServices ?? this.hasMorePopularServices,
       isOtherServicesLoading:
           isOtherServicesLoading ?? this.isOtherServicesLoading,
       otherServices: otherServices ?? this.otherServices,

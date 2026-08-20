@@ -40,6 +40,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   final UserLocationRepository _userLocationRepository;
   StreamSubscription<String>? _locationCitySubscription;
   DataCursor<BusinessModel>? _nearbyStaysCursor;
+  DataCursor<BusinessModel>? _nearbyServicesCursor;
   DataCursor<BusinessModel>? _staysCursor;
   String? _staysNextCursor;
   DataCursor<BusinessModel>? _servicesCursor;
@@ -52,9 +53,12 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
 
   Future<void> observeUserLocation() async {
     await _locationCitySubscription?.cancel();
-    _locationCitySubscription = _userLocationRepository.cityUpdates.listen(
-      (city) => loadPopularNearbyStays(city: city),
-    );
+    _locationCitySubscription = _userLocationRepository.cityUpdates.listen((
+      city,
+    ) async {
+      await loadPopularNearbyStays(city: city);
+      await loadPopularServices(city: city);
+    });
   }
 
   Future<void> loadPopularNearbyStays({String? city}) async {
@@ -299,21 +303,82 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     }
   }
 
-  Future<void> loadPopularServices() async {
+  Future<void> loadPopularServices({String? city}) async {
     if (state.serviceFilters.hasActiveFilters) {
       await _loadFilteredServices();
       return;
     }
-    final popularBusinesses = await _businessRepository.getPopularServices();
+
+    final customerCity = city?.trim().isNotEmpty == true
+        ? city!.trim()
+        : (await _userRepository.getCurrentUser())?.city?.trim() ?? '';
+    if (customerCity.isEmpty) {
+      emit(
+        state.copyWith(
+          isPopularServicesLoading: false,
+          popularServices: const [],
+          hasMorePopularServices: false,
+        ),
+      );
+      return;
+    }
+
+    _nearbyServicesCursor = _businessRepository.getServicesNearCityCursor(
+      city: customerCity,
+    );
     emit(
       state.copyWith(
-        isPopularServicesLoading: false,
-        popularServices: popularBusinesses
-            .map(ServiceListing.fromBusiness)
-            .toList(),
+        isPopularServicesLoading: true,
+        isLoadingMorePopularServices: false,
+        popularServices: const [],
+        hasMorePopularServices: _nearbyServicesCursor != null,
       ),
     );
     await loadMoreServices();
+    await loadMorePopularServices(isInitialLoad: true);
+  }
+
+  Future<void> loadMorePopularServices({bool isInitialLoad = false}) async {
+    final cursor = _nearbyServicesCursor;
+    if (cursor == null ||
+        (!isInitialLoad &&
+            (state.isLoadingMorePopularServices ||
+                !state.hasMorePopularServices))) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isPopularServicesLoading: isInitialLoad,
+        isLoadingMorePopularServices: !isInitialLoad,
+      ),
+    );
+    try {
+      final page = await cursor.fetchNextPage();
+      final knownIds = state.popularServices
+          .map((service) => service.id)
+          .toSet();
+      final services = page
+          .where((business) => business.isActive && knownIds.add(business.id))
+          .map(ServiceListing.fromBusiness)
+          .toList();
+      emit(
+        state.copyWith(
+          isPopularServicesLoading: false,
+          isLoadingMorePopularServices: false,
+          popularServices: [...state.popularServices, ...services],
+          hasMorePopularServices: !cursor.isEverythingLoaded,
+        ),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isPopularServicesLoading: false,
+          isLoadingMorePopularServices: false,
+          hasMorePopularServices: false,
+        ),
+      );
+    }
   }
 
   Future<void> loadMoreServices() async {

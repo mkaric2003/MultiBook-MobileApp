@@ -102,6 +102,16 @@ abstract final class AddBusinessCategories {
       type: BusinessType.services,
     ),
     BusinessCategoryModel(
+      id: 'massage_therapy',
+      name: 'Massage therapy',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'spa_wellness',
+      name: 'Spa & wellness',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
       id: 'personal_training',
       name: 'Personal training',
       type: BusinessType.services,
@@ -129,6 +139,51 @@ abstract final class AddBusinessCategories {
     BusinessCategoryModel(
       id: 'automotive_service',
       name: 'Automotive service',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'car_wash_detailing',
+      name: 'Car wash & detailing',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'tattoo_piercing',
+      name: 'Tattoo & piercing studio',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'veterinary_pet_care',
+      name: 'Veterinary & pet care',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'photography_videography',
+      name: 'Photography & videography',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'locksmith',
+      name: 'Locksmith',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'hvac_service',
+      name: 'Heating & air conditioning',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'painter_decorator',
+      name: 'Painter & decorator',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'legal_consultation',
+      name: 'Legal consultation',
+      type: BusinessType.services,
+    ),
+    BusinessCategoryModel(
+      id: 'accounting_consultation',
+      name: 'Accounting consultation',
       type: BusinessType.services,
     ),
     BusinessCategoryModel(

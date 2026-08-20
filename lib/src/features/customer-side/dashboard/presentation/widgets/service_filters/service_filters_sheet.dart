@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_category_filter_options.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/service_filters/service_city_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/service_filters/service_filter_date_picker_sheet.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/service_filters/service_filter_option_picker_sheet.dart';
@@ -23,16 +24,17 @@ class ServiceFiltersSheet extends HookWidget {
     'Zenica',
     'Bihać',
     'Trebinje',
+    'Neum',
+    'Ilidža',
     'Jajce',
-  ];
-
-  static const _services = [
-    'Haircut',
-    'Hair coloring',
-    'Dental cleaning',
-    'Massage',
-    'Manicure',
-    'Electrical repair',
+    'Travnik',
+    'Konjic',
+    'Visoko',
+    'Prijedor',
+    'Brčko',
+    'Bijeljina',
+    'Doboj',
+    'San Francisco',
   ];
 
   final ServiceFilters initialFilters;
@@ -69,20 +71,27 @@ class ServiceFiltersSheet extends HookWidget {
       }
     }
 
-    Future<void> selectService() async {
+    Future<void> selectCategory() async {
       final selected = await showModalBottomSheet<String>(
         context: context,
         backgroundColor: Colors.transparent,
         builder: (_) => ServiceFilterOptionPickerSheet(
-          title: 'Select service',
-          options: _services,
-          selectedOption: filters.value.serviceName,
+          title: 'Select category',
+          allOptionLabel: 'All categories',
+          options: ServiceCategoryFilterOptions.all
+              .map((category) => category.label)
+              .toList(),
+          selectedOption: ServiceCategoryFilterOptions.byId(
+            filters.value.categoryId,
+          )?.label,
         ),
       );
       if (selected != null) {
         filters.value = selected.isEmpty
-            ? filters.value.copyWith(clearServiceName: true)
-            : filters.value.copyWith(serviceName: selected);
+            ? filters.value.copyWith(clearCategoryId: true)
+            : filters.value.copyWith(
+                categoryId: ServiceCategoryFilterOptions.byLabel(selected)?.id,
+              );
       }
     }
 
@@ -181,13 +190,17 @@ class ServiceFiltersSheet extends HookWidget {
                     ),
                     const ServiceFilterSectionHeader(
                       icon: Icons.content_cut_rounded,
-                      title: 'Service',
+                      title: 'Business category',
                     ),
                     const SizedBox(height: 16),
                     ServiceFilterValueField(
-                      label: 'Service type',
-                      value: filters.value.serviceName ?? 'All services',
-                      onTap: selectService,
+                      label: 'Category',
+                      value:
+                          ServiceCategoryFilterOptions.byId(
+                            filters.value.categoryId,
+                          )?.label ??
+                          'All categories',
+                      onTap: selectCategory,
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),

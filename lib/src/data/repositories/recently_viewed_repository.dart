@@ -5,6 +5,7 @@ import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:injectable/injectable.dart';
 
@@ -40,6 +41,9 @@ class RecentlyViewedRepository {
           'location': business.location.city,
           'imageUrl': business.coverPhotoUrl ?? business.logoUrl ?? '',
           'pricePerNight': business.stayDetails?.pricePerNight,
+          'servicePrice': business.serviceDetails?.offerings.firstOrNull?.price,
+          'serviceDurationMinutes':
+              business.serviceDetails?.offerings.firstOrNull?.durationMinutes,
           'rating': business.averageRating,
           'reviewCount': business.reviewCount,
           'viewedAt': _firestore.serverTimestamp,
@@ -88,6 +92,45 @@ class RecentlyViewedRepository {
     } catch (error, stackTrace) {
       log(
         'Could not load recently viewed stays.',
+        name: 'RecentlyViewedRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
+  Future<List<ServiceListing>> getRecentServices({int limit = 10}) async {
+    final userId = _userId;
+    if (userId == null) return const [];
+
+    try {
+      final documents = await _firestore.getDocumentsOrdered(
+        collection: _collectionFor(userId),
+        orderBy: 'viewedAtMillis',
+        descending: true,
+      );
+      return documents
+          .where((item) => item['type'] == BusinessType.services.name)
+          .take(limit)
+          .map(
+            (item) => ServiceListing(
+              id: item['businessId'] as String? ?? '',
+              name: item['name'] as String? ?? '',
+              location: item['location'] as String? ?? '',
+              price: (item['servicePrice'] as num?)?.toInt(),
+              durationMinutes: (item['serviceDurationMinutes'] as num?)
+                  ?.toInt(),
+              rating: (item['rating'] as num?)?.toDouble() ?? 0,
+              reviewCount: (item['reviewCount'] as num?)?.toInt() ?? 0,
+              imageUrl: item['imageUrl'] as String? ?? '',
+            ),
+          )
+          .where((service) => service.id.isNotEmpty)
+          .toList();
+    } catch (error, stackTrace) {
+      log(
+        'Could not load recently viewed services.',
         name: 'RecentlyViewedRepository',
         error: error,
         stackTrace: stackTrace,

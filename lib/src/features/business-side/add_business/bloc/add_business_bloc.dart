@@ -58,7 +58,13 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     BusinessTypeChanged event,
     Emitter<AddBusinessState> emit,
   ) {
-    emit(state.copyWith(businessType: event.type, categoryId: null));
+    emit(
+      state.copyWith(
+        businessType: event.type,
+        categoryId: null,
+        selectedCollectionIds: const [],
+      ),
+    );
   }
 
   void _onBusinessCategoryChanged(

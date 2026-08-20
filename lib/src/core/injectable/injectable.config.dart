@@ -100,6 +100,8 @@ import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dash
     as _i567;
 import 'package:aquabook/src/features/customer-side/explore/cubit/explore_cubit.dart'
     as _i830;
+import 'package:aquabook/src/features/customer-side/explore/cubit/explore_service_results_cubit.dart'
+    as _i255;
 import 'package:aquabook/src/features/customer-side/explore/cubit/explore_stay_results_cubit.dart'
     as _i931;
 import 'package:aquabook/src/features/customer-side/payment/cubit/payment_cubit.dart'
@@ -128,6 +130,8 @@ import 'package:aquabook/src/features/shared/onboarding/cubit/onboarding_cubit.d
     as _i680;
 import 'package:aquabook/src/features/shared/recently_viewed/cubit/recently_viewed_cubit.dart'
     as _i749;
+import 'package:aquabook/src/features/shared/recently_viewed/cubit/recently_viewed_services_cubit.dart'
+    as _i1013;
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart'
     as _i44;
 import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart'
@@ -360,6 +364,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i749.RecentlyViewedCubit>(
       () => _i749.RecentlyViewedCubit(gh<_i744.RecentlyViewedRepository>()),
     );
+    gh.factory<_i1013.RecentlyViewedServicesCubit>(
+      () => _i1013.RecentlyViewedServicesCubit(
+        gh<_i744.RecentlyViewedRepository>(),
+      ),
+    );
     gh.factory<_i451.AppointmentDraftCubit>(
       () => _i451.AppointmentDraftCubit(gh<_i363.AppointmentDraftRepository>()),
     );
@@ -471,6 +480,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
         gh<_i113.NotificationRepository>(),
       ),
+    );
+    gh.factory<_i255.ExploreServiceResultsCubit>(
+      () =>
+          _i255.ExploreServiceResultsCubit(gh<_i760.ServiceSearchRepository>()),
     );
     gh.factory<_i492.AppointmentAvailabilityCubit>(
       () => _i492.AppointmentAvailabilityCubit(

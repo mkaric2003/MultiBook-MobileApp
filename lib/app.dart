@@ -23,6 +23,8 @@ import 'package:aquabook/src/features/customer-side/stay_detail/presentation/vie
 import 'package:aquabook/src/features/customer-side/service_detail/presentation/views/service_detail_view.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
 import 'package:aquabook/src/features/customer-side/explore/presentation/views/explore_stay_results_view.dart';
+import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_results_arguments.dart';
+import 'package:aquabook/src/features/customer-side/explore/presentation/views/explore_service_results_view.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/create_appointment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/presentation/views/create_appointment_view.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';

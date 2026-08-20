@@ -1,11 +1,10 @@
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
 import 'package:aquabook/src/data/models/booking_draft_model.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/continue_booking_card.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_section_title.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/nearby_stays_list.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/other_stays_grid.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/promotion_banner.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/quick_filter_chips.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/recommended_stays_list.dart';
 import 'package:flutter/material.dart';
@@ -89,8 +88,8 @@ class StaysContent extends HookWidget {
               emptyMessage: 'No stays match your filters.',
             ),
           ] else ...[
-            const PromotionBanner(),
-            const SizedBox(height: 28),
+            // const PromotionBanner(),
+            // const SizedBox(height: 28),
             if (bookingDraft != null) ...[
               const CustomerSectionTitle(title: 'Continue booking'),
               const SizedBox(height: 14),
