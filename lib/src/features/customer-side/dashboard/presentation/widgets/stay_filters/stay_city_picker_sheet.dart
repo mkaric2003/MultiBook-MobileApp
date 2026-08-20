@@ -1,0 +1,135 @@
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+
+class StayCityPickerSheet extends HookWidget {
+  const StayCityPickerSheet({
+    super.key,
+    required this.cities,
+    required this.selectedCity,
+  });
+
+  final List<String> cities;
+  final String? selectedCity;
+
+  @override
+  Widget build(BuildContext context) {
+    final query = useState('');
+    final controller = useTextEditingController();
+    final normalizedQuery = query.value.trim().toLowerCase();
+    final filteredCities = cities
+        .where((city) => city.toLowerCase().contains(normalizedQuery))
+        .toList();
+
+    return Material(
+      color: AppColors.background,
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 480,
+          child: Column(
+            children: [
+              Container(
+                height: 64,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: AppColors.surfaceHighlight),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: Text(
+                        'Select city',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                child: TextField(
+                  controller: controller,
+                  autofocus: true,
+                  onChanged: (value) => query.value = value,
+                  style: const TextStyle(color: AppColors.white),
+                  decoration: InputDecoration(
+                    hintText: 'Search cities',
+                    prefixIcon: const Icon(
+                      Icons.search_rounded,
+                      color: AppColors.muted,
+                    ),
+                    suffixIcon: query.value.isEmpty
+                        ? null
+                        : IconButton(
+                            onPressed: () {
+                              controller.clear();
+                              query.value = '';
+                            },
+                            icon: const Icon(Icons.close_rounded),
+                          ),
+                    filled: true,
+                    fillColor: AppColors.surface,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+                  children: [
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: const Text('All cities'),
+                      trailing: selectedCity == null
+                          ? const Icon(
+                              Icons.check_rounded,
+                              color: AppColors.primary,
+                            )
+                          : null,
+                      onTap: () => Navigator.of(context).pop(''),
+                    ),
+                    if (filteredCities.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: Center(
+                          child: Text(
+                            'No cities found',
+                            style: TextStyle(color: AppColors.muted),
+                          ),
+                        ),
+                      ),
+                    for (final city in filteredCities)
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(city),
+                        trailing: city == selectedCity
+                            ? const Icon(
+                                Icons.check_rounded,
+                                color: AppColors.primary,
+                              )
+                            : null,
+                        onTap: () => Navigator.of(context).pop(city),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

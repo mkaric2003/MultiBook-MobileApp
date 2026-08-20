@@ -27,6 +27,8 @@ import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart'
     as _i377;
 import 'package:aquabook/src/data/data_sources/notification_data_source.dart'
     as _i805;
+import 'package:aquabook/src/data/data_sources/stay_search_data_source.dart'
+    as _i873;
 import 'package:aquabook/src/data/models/booking_model.dart' as _i405;
 import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart'
     as _i363;
@@ -49,6 +51,8 @@ import 'package:aquabook/src/data/repositories/saved_business_repository.dart'
     as _i390;
 import 'package:aquabook/src/data/repositories/service_availability_repository.dart'
     as _i1064;
+import 'package:aquabook/src/data/repositories/stay_search_repository.dart'
+    as _i285;
 import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
 import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_cubit.dart'
     as _i57;
@@ -115,6 +119,7 @@ import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart'
 import 'package:aquabook/src/features/shared/user_type_checker/cubit/user_type_checker_cubit.dart'
     as _i30;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
+import 'package:cloud_functions/cloud_functions.dart' as _i809;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:firebase_core/firebase_core.dart' as _i982;
 import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
@@ -161,6 +166,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i892.FirebaseMessaging>(
       () => firebaseModule.firebaseMessaging(gh<_i982.FirebaseApp>()),
     );
+    gh.singleton<_i809.FirebaseFunctions>(
+      () => firebaseModule.firebaseFunctions(gh<_i982.FirebaseApp>()),
+    );
     gh.factory<_i680.OnboardingCubit>(
       () => _i680.OnboardingCubit(gh<_i366.OnboardingRepository>()),
     );
@@ -175,6 +183,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i83.FirebaseStorageDataSource>(
       () => _i83.FirebaseStorageDataSourceImpl(gh<_i457.FirebaseStorage>()),
+    );
+    gh.lazySingleton<_i873.StaySearchDataSource>(
+      () => _i873.StaySearchDataSourceImpl(gh<_i809.FirebaseFunctions>()),
     );
     gh.lazySingleton<_i137.AuthenticationDataSource>(
       () => _i137.AuthenticationDataSourceImpl(gh<_i59.FirebaseAuth>()),
@@ -315,6 +326,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
       ),
     );
+    gh.lazySingleton<_i285.StaySearchRepository>(
+      () => _i285.StaySearchRepository(
+        gh<_i873.StaySearchDataSource>(),
+        gh<_i1065.BusinessRepository>(),
+      ),
+    );
     gh.factory<_i192.ReviewStayCubit>(
       () => _i192.ReviewStayCubit(
         gh<_i1065.BusinessRepository>(),
@@ -351,13 +368,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i961.BookingRepository>(),
         gh<_i1065.BusinessRepository>(),
         gh<_i747.UserRepository>(),
-      ),
-    );
-    gh.factory<_i567.CustomerDashboardCubit>(
-      () => _i567.CustomerDashboardCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i64.BookingDraftRepository>(),
-        gh<_i363.AppointmentDraftRepository>(),
       ),
     );
     gh.factory<_i274.CustomerBookingsCubit>(
@@ -411,6 +421,14 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i952.HomeBloc>(
       () => _i952.HomeBloc(gh<_i472.AuthenticationRepository>()),
+    );
+    gh.factory<_i567.CustomerDashboardCubit>(
+      () => _i567.CustomerDashboardCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i285.StaySearchRepository>(),
+        gh<_i64.BookingDraftRepository>(),
+        gh<_i363.AppointmentDraftRepository>(),
+      ),
     );
     gh.factory<_i897.CustomerProfileCubit>(
       () => _i897.CustomerProfileCubit(

@@ -19,6 +19,7 @@ class StaysContent extends HookWidget {
     required this.otherStays,
     required this.isOtherStaysLoading,
     required this.hasMoreOtherStays,
+    required this.isFiltering,
     required this.onLoadMoreStays,
     this.bookingDraft,
   });
@@ -29,6 +30,7 @@ class StaysContent extends HookWidget {
   final List<StayListing> otherStays;
   final bool isOtherStaysLoading;
   final bool hasMoreOtherStays;
+  final bool isFiltering;
   final Future<void> Function() onLoadMoreStays;
   final BookingDraftModel? bookingDraft;
 
@@ -57,38 +59,48 @@ class StaysContent extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const QuickFilterChips(),
-          const SizedBox(height: 28),
-          const PromotionBanner(),
-          const SizedBox(height: 28),
-          if (bookingDraft != null) ...[
-            const CustomerSectionTitle(title: 'Continue booking'),
+          if (isFiltering) ...[
+            const CustomerSectionTitle(title: 'Search results'),
             const SizedBox(height: 14),
-            ContinueBookingCard(draft: bookingDraft!),
+            OtherStaysGrid(
+              stays: otherStays,
+              isLoading: isOtherStaysLoading || isRecommendedStaysLoading,
+              emptyMessage: 'No stays match your filters.',
+            ),
+          ] else ...[
+            const QuickFilterChips(),
             const SizedBox(height: 28),
-          ],
-          const CustomerSectionTitle(title: 'Popular near you'),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              Expanded(
-                child: StayListingCard(stay: nearbyStays[0], compact: true),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: StayListingCard(stay: nearbyStays[1], compact: true),
-              ),
+            const PromotionBanner(),
+            const SizedBox(height: 28),
+            if (bookingDraft != null) ...[
+              const CustomerSectionTitle(title: 'Continue booking'),
+              const SizedBox(height: 14),
+              ContinueBookingCard(draft: bookingDraft!),
+              const SizedBox(height: 28),
             ],
-          ),
-          const SizedBox(height: 28),
-          const CustomerSectionTitle(title: 'Recommended for you'),
-          const SizedBox(height: 14),
-          RecommendedStaysList(
-            stays: recommendedStays,
-            isLoading: isRecommendedStaysLoading,
-          ),
-          const SizedBox(height: 28),
-          OtherStaysGrid(stays: otherStays, isLoading: isOtherStaysLoading),
+            const CustomerSectionTitle(title: 'Popular near you'),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: StayListingCard(stay: nearbyStays[0], compact: true),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: StayListingCard(stay: nearbyStays[1], compact: true),
+                ),
+              ],
+            ),
+            const SizedBox(height: 28),
+            const CustomerSectionTitle(title: 'Recommended for you'),
+            const SizedBox(height: 14),
+            RecommendedStaysList(
+              stays: recommendedStays,
+              isLoading: isRecommendedStaysLoading,
+            ),
+            const SizedBox(height: 28),
+            OtherStaysGrid(stays: otherStays, isLoading: isOtherStaysLoading),
+          ],
         ],
       ),
     );

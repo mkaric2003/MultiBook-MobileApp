@@ -329,6 +329,56 @@ class BusinessRepository {
     }
   }
 
+  Future<List<BusinessModel>> getStays() async {
+    try {
+      final businessesData = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.stays.name,
+      );
+      return businessesData
+          .map(_businessFromData)
+          .where((business) => business.isActive)
+          .toList();
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not load stays: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
+  Future<List<String>> getStayCities() async {
+    try {
+      final businessesData = await _firestoreDataSource.getDocumentsWhere(
+        collection: _businessesCollection,
+        field: 'type',
+        value: BusinessType.stays.name,
+      );
+      final cities =
+          businessesData
+              .map(_businessFromData)
+              .where((business) => business.isActive)
+              .map((business) => business.location.city.trim())
+              .where((city) => city.isNotEmpty)
+              .toSet()
+              .toList()
+            ..sort();
+      return cities;
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Could not load stay cities: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return const [];
+    }
+  }
+
   Future<List<BusinessModel>> getPopularServices({int limit = 3}) async {
     try {
       final businessesData = await _firestoreDataSource.getDocumentsWhere(
@@ -555,6 +605,15 @@ class BusinessRepository {
             'name': _demoStayNames[index],
             'categoryId': categoryId,
             'nameLowercase': _normalizeSearchValue(_demoStayNames[index]),
+            'cityLowercase': _normalizeSearchValue(city),
+            'stayPricePerNight': pricePerNight,
+            'maxGuestCapacity': rooms.isEmpty
+                ? 99
+                : rooms
+                      .map((room) => room['maxGuests'] as int)
+                      .reduce(
+                        (first, second) => first > second ? first : second,
+                      ),
             'location': {
               'address': '${index + 1} Demo Street, $city',
               'city': city,
@@ -983,6 +1042,15 @@ class BusinessRepository {
           'type': business.type.name,
           'name': business.name,
           'nameLowercase': _normalizeSearchValue(business.name),
+          'cityLowercase': _normalizeSearchValue(business.location.city),
+          'stayPricePerNight': business.stayDetails?.pricePerNight,
+          'maxGuestCapacity': business.stayDetails == null
+              ? null
+              : business.stayDetails!.rooms.isEmpty
+              ? 99
+              : business.stayDetails!.rooms
+                    .map((room) => room.maxGuests)
+                    .reduce((first, second) => first > second ? first : second),
           'categoryId': business.categoryId,
           'location': {
             'city': business.location.city,
@@ -1273,6 +1341,9 @@ class BusinessRepository {
           : null,
     );
   }
+
+  BusinessModel deserializeBusiness(Map<String, dynamic> data) =>
+      _businessFromData(data);
 
   Future<void> _setSelectedBusiness(String businessId) async {
     try {
