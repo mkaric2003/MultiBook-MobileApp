@@ -26,6 +26,18 @@ class ChatRepository {
     return _dataSource.watchConversations(userId);
   }
 
+  Stream<int> watchUnreadMessagesCount() {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return Stream.value(0);
+    return _dataSource.watchUnreadMessagesCount(userId);
+  }
+
+  Future<void> ensureUnreadMessagesCount() async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return;
+    await _dataSource.ensureUnreadMessagesCount(userId);
+  }
+
   Future<ChatConversationModel> getOrCreateConversation({
     required String businessId,
     required String businessOwnerId,

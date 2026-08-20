@@ -412,16 +412,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i952.HomeBloc>(
       () => _i952.HomeBloc(gh<_i472.AuthenticationRepository>()),
     );
-    gh.factory<_i167.AppointmentPaymentCubit>(
-      () => _i167.AppointmentPaymentCubit(
-        gh<_i567.AppointmentRepository>(),
-        gh<_i363.AppointmentDraftRepository>(),
-      ),
-    );
     gh.factory<_i897.CustomerProfileCubit>(
       () => _i897.CustomerProfileCubit(
         gh<_i472.AuthenticationRepository>(),
         gh<_i747.UserRepository>(),
+        gh<_i525.ChatRepository>(),
+      ),
+    );
+    gh.factory<_i167.AppointmentPaymentCubit>(
+      () => _i167.AppointmentPaymentCubit(
+        gh<_i567.AppointmentRepository>(),
+        gh<_i363.AppointmentDraftRepository>(),
       ),
     );
     gh.factory<_i44.SigninCubit>(

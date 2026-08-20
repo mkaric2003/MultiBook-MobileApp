@@ -114,6 +114,9 @@ class CustomerProfileView extends StatelessWidget {
                 CustomerProfileMenuItem(
                   icon: Icons.chat_bubble_outline,
                   label: 'Messages',
+                  badgeCount: state.unreadMessagesCount > 0
+                      ? state.unreadMessagesCount
+                      : null,
                   onTap: () => context.push(AppRoutes.CHAT_LIST),
                 ),
                 const SizedBox(height: 10),

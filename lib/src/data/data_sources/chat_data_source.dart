@@ -9,6 +9,8 @@ abstract class ChatDataSource {
   );
 
   Stream<List<ChatConversationModel>> watchConversations(String userId);
+  Stream<int> watchUnreadMessagesCount(String userId);
+  Future<void> ensureUnreadMessagesCount(String userId);
   Stream<List<ChatMessageModel>> watchMessages(String conversationId);
   Stream<ChatConversationModel?> watchConversation(String conversationId);
   Future<void> sendMessage({
@@ -77,6 +79,40 @@ class ChatDataSourceImpl implements ChatDataSource {
                 )
                 .toList(),
           );
+
+  @override
+  Stream<int> watchUnreadMessagesCount(String userId) => _firestore
+      .collection('users')
+      .doc(userId)
+      .snapshots()
+      .map(
+        (snapshot) =>
+            (snapshot.data()?['unreadMessagesCount'] as num?)?.toInt() ?? 0,
+      );
+
+  @override
+  Future<void> ensureUnreadMessagesCount(String userId) async {
+    final userReference = _firestore.collection('users').doc(userId);
+    final conversations = await _firestore
+        .collection(_conversations)
+        .where('participantIds', arrayContains: userId)
+        .get();
+    final unreadCount = conversations.docs.fold<int>(0, (total, document) {
+      final data = document.data();
+      final isCustomer = data['customerId'] == userId;
+      final count = isCustomer
+          ? (data['unreadCustomerCount'] as num?)?.toInt() ?? 0
+          : (data['unreadBusinessCount'] as num?)?.toInt() ?? 0;
+      return total + count;
+    });
+    await _firestore.runTransaction((transaction) async {
+      final user = await transaction.get(userReference);
+      if (user.data()?.containsKey('unreadMessagesCount') ?? false) return;
+      transaction.set(userReference, {
+        'unreadMessagesCount': unreadCount,
+      }, SetOptions(merge: true));
+    });
+  }
 
   @override
   Stream<List<ChatMessageModel>> watchMessages(String conversationId) =>
@@ -157,11 +193,33 @@ class ChatDataSourceImpl implements ChatDataSource {
     required String conversationId,
     required String userId,
     required bool isCustomer,
-  }) => _firestore.collection(_conversations).doc(conversationId).update({
-    isCustomer ? 'unreadCustomerCount' : 'unreadBusinessCount': 0,
-    isCustomer ? 'lastReadAtCustomer' : 'lastReadAtBusiness':
-        FieldValue.serverTimestamp(),
-  });
+  }) async {
+    final conversationReference = _firestore
+        .collection(_conversations)
+        .doc(conversationId);
+    final userReference = _firestore.collection('users').doc(userId);
+    await _firestore.runTransaction((transaction) async {
+      final conversation = await transaction.get(conversationReference);
+      if (!conversation.exists) return;
+      final unreadField = isCustomer
+          ? 'unreadCustomerCount'
+          : 'unreadBusinessCount';
+      final unreadCount =
+          (conversation.data()?[unreadField] as num?)?.toInt() ?? 0;
+      if (unreadCount == 0) return;
+      final user = await transaction.get(userReference);
+      final aggregateCount =
+          (user.data()?['unreadMessagesCount'] as num?)?.toInt() ?? 0;
+      transaction.update(conversationReference, {
+        unreadField: 0,
+        isCustomer ? 'lastReadAtCustomer' : 'lastReadAtBusiness':
+            FieldValue.serverTimestamp(),
+      });
+      transaction.set(userReference, {
+        'unreadMessagesCount': (aggregateCount - unreadCount).clamp(0, 1 << 31),
+      }, SetOptions(merge: true));
+    });
+  }
 
   @override
   Future<void> setTyping({

@@ -42,17 +42,11 @@ class MoreCubit extends Cubit<MoreState> {
         selectedBusiness: selectedBusiness,
       ),
     );
+    await _chatRepository.ensureUnreadMessagesCount();
     await _conversationsSubscription?.cancel();
-    _conversationsSubscription = _chatRepository.watchConversations().listen(
-      (conversations) => emit(
-        state.copyWith(
-          unreadMessagesCount: conversations.fold<int>(
-            0,
-            (total, conversation) => total + conversation.unreadBusinessCount,
-          ),
-        ),
-      ),
-    );
+    _conversationsSubscription = _chatRepository
+        .watchUnreadMessagesCount()
+        .listen((count) => emit(state.copyWith(unreadMessagesCount: count)));
   }
 
   @override

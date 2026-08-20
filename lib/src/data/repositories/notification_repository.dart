@@ -48,9 +48,20 @@ class NotificationRepository {
 
     final initialMessage = await _notificationDataSource.getInitialMessage();
     if (initialMessage != null) _handleOpenedMessage(initialMessage);
+    try {
+      await ensureUnreadInAppNotificationsCount();
+    } catch (error, stackTrace) {
+      log(
+        'Could not initialize the unread notification count.',
+        name: 'NotificationRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   Future<void> registerCurrentDevice() async {
+    await ensureUnreadInAppNotificationsCount();
     final token = await _notificationDataSource.requestDeviceToken();
     if (token == null || token.isEmpty) return;
     await _saveToken(token);
@@ -73,9 +84,17 @@ class NotificationRepository {
   }
 
   Stream<int> watchUnreadInAppNotificationsCount() =>
-      watchInAppNotifications().map(
-        (notifications) => notifications.where((item) => !item.isRead).length,
-      );
+      _authenticationDataSource.currentUser == null
+      ? Stream.value(0)
+      : _inAppNotificationDataSource.watchUnreadCount(
+          _authenticationDataSource.currentUser!.uid,
+        );
+
+  Future<void> ensureUnreadInAppNotificationsCount() async {
+    final userId = _authenticationDataSource.currentUser?.uid;
+    if (userId == null) return;
+    await _inAppNotificationDataSource.ensureUnreadCount(userId);
+  }
 
   Future<void> markInAppNotificationAsRead(String notificationId) async {
     final userId = _authenticationDataSource.currentUser?.uid;

@@ -1,7 +1,7 @@
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { Timestamp } from "firebase-admin/firestore";
 
-import { createAndDeliverNotification } from "./notification_dispatcher.js";
+import { deliverChatPushNotification } from "./notification_dispatcher.js";
 
 export const notifyOnChatMessageCreated = onDocumentCreated(
   "conversations/{conversationId}/messages/{messageId}",
@@ -27,7 +27,7 @@ export const notifyOnChatMessageCreated = onDocumentCreated(
       ? (conversationData.customerName as string)
       : (conversationData.businessName as string);
 
-    await createAndDeliverNotification({
+    await deliverChatPushNotification({
       id: `chat_${event.params.messageId}`,
       recipientId,
       kind: "chat_message",
