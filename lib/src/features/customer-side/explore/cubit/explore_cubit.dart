@@ -29,8 +29,8 @@ class ExploreCubit extends Cubit<ExploreState> {
     );
   }
 
-  void selectCity(String city) {
-    final trimmedCity = city.trim();
+  void selectCity(String? city) {
+    final trimmedCity = city?.trim() ?? '';
     final cities = {
       ...state.cities,
       if (trimmedCity.isNotEmpty) trimmedCity,

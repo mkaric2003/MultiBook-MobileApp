@@ -12,7 +12,7 @@ class ExploreAppBar extends StatelessWidget {
 
   final String? selectedCity;
   final List<String> cities;
-  final ValueChanged<String> onCityChanged;
+  final ValueChanged<String?> onCityChanged;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -36,7 +36,7 @@ class ExploreAppBar extends StatelessWidget {
                 selectedCity: selectedCity,
               ),
             );
-            if (context.mounted && city != null && city.trim().isNotEmpty) {
+            if (context.mounted && city != null) {
               onCityChanged(city);
             }
           },
@@ -52,7 +52,9 @@ class ExploreAppBar extends StatelessWidget {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 94),
                 child: Text(
-                  selectedCity?.isNotEmpty == true ? selectedCity! : 'City',
+                  selectedCity?.isNotEmpty == true
+                      ? selectedCity!
+                      : 'All cities',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(

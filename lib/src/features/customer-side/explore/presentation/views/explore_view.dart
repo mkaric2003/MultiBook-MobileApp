@@ -39,14 +39,6 @@ class ExploreView extends HookWidget {
                         onTabChanged: (tab) => selectedTab.value = tab,
                         onCategorySelected: (ExploreCategory category) {
                           final city = state.selectedCity;
-                          if (city == null || city.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Select a city to browse stays.'),
-                              ),
-                            );
-                            return;
-                          }
                           context.push(
                             AppRoutes.EXPLORE_STAY_RESULTS,
                             extra: ExploreStayResultsArguments(
@@ -58,14 +50,6 @@ class ExploreView extends HookWidget {
                         },
                         onCollectionSelected: (ExploreCollection collection) {
                           final city = state.selectedCity;
-                          if (city == null || city.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Select a city to browse stays.'),
-                              ),
-                            );
-                            return;
-                          }
                           context.push(
                             AppRoutes.EXPLORE_STAY_RESULTS,
                             extra: ExploreStayResultsArguments(

@@ -22,34 +22,45 @@ class ExploreStayResultsView extends StatelessWidget {
             children: [
               CustomAppBar(title: arguments.categoryTitle),
               Expanded(
-                child:
-                    BlocBuilder<
-                      ExploreStayResultsCubit,
-                      ExploreStayResultsState
-                    >(
-                      builder: (context, state) => SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${arguments.categoryTitle} in ${arguments.city}',
-                              style: const TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.w800,
-                              ),
+                child: BlocBuilder<ExploreStayResultsCubit, ExploreStayResultsState>(
+                  builder: (context, state) => NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification.metrics.extentAfter < 240) {
+                        context.read<ExploreStayResultsCubit>().loadMore();
+                      }
+                      return false;
+                    },
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            arguments.city == null
+                                ? arguments.categoryTitle
+                                : '${arguments.categoryTitle} in ${arguments.city}',
+                            style: const TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w800,
                             ),
-                            const SizedBox(height: 18),
-                            OtherStaysGrid(
-                              stays: state.stays,
-                              isLoading: state.isLoading,
-                              emptyMessage:
-                                  'No ${arguments.categoryTitle.toLowerCase()} are available in ${arguments.city}.',
-                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          OtherStaysGrid(
+                            stays: state.stays,
+                            isLoading: state.isLoading,
+                            emptyMessage: arguments.city == null
+                                ? 'No ${arguments.categoryTitle.toLowerCase()} are available.'
+                                : 'No ${arguments.categoryTitle.toLowerCase()} are available in ${arguments.city}.',
+                          ),
+                          if (state.isLoadingMore) ...[
+                            const SizedBox(height: 20),
+                            const Center(child: CircularProgressIndicator()),
                           ],
-                        ),
+                        ],
                       ),
                     ),
+                  ),
+                ),
               ),
             ],
           ),
