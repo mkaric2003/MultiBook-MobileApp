@@ -2,8 +2,8 @@ import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class StayCityPickerSheet extends HookWidget {
-  const StayCityPickerSheet({
+class SearchableCityPickerSheet extends HookWidget {
+  const SearchableCityPickerSheet({
     super.key,
     required this.cities,
     required this.selectedCity,

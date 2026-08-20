@@ -2,8 +2,8 @@ import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/global_widgets/searchable_city_picker_sheet.dart';
 import 'package:flutter/material.dart';
 
-class StayCitySelector extends StatelessWidget {
-  const StayCitySelector({
+class ServiceCitySelector extends StatelessWidget {
+  const ServiceCitySelector({
     super.key,
     required this.cities,
     required this.selectedCity,

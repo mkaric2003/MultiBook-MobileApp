@@ -10,6 +10,7 @@ import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/custo
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -40,6 +41,10 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     if (tab == CustomerHomeTab.services && state.isPopularServicesLoading) {
       loadPopularServices();
     }
+  }
+
+  void applyServiceFilters(ServiceFilters filters) {
+    emit(state.copyWith(serviceFilters: filters));
   }
 
   Future<void> loadDraft() async {
