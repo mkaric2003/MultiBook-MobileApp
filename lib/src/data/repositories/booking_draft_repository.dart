@@ -41,6 +41,7 @@ class BookingDraftRepository {
               type: StayExtraType.values.byName(extra['type'] as String),
               price: (extra['price'] as num?)?.toInt() ?? 0,
               isPerNight: extra['isPerNight'] as bool? ?? false,
+              isPerHour: extra['isPerHour'] as bool? ?? false,
             ),
           )
           .toList(),
@@ -72,6 +73,7 @@ class BookingDraftRepository {
                 'type': extra.type.name,
                 'price': extra.price,
                 'isPerNight': extra.isPerNight,
+                'isPerHour': extra.isPerHour,
               },
             )
             .toList(),

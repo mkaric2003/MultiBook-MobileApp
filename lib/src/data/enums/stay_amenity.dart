@@ -19,6 +19,10 @@ enum StayAmenity {
   mountainView,
   workspace,
   elevator,
+  skiInSkiOut,
+  skiStorage,
+  skiRental,
+  skiShuttle,
 }
 
 extension StayAmenityLabel on StayAmenity {
@@ -38,5 +42,9 @@ extension StayAmenityLabel on StayAmenity {
     StayAmenity.mountainView => 'Mountain view',
     StayAmenity.workspace => 'Workspace',
     StayAmenity.elevator => 'Elevator',
+    StayAmenity.skiInSkiOut => 'Ski-in / ski-out',
+    StayAmenity.skiStorage => 'Ski storage',
+    StayAmenity.skiRental => 'Ski rental',
+    StayAmenity.skiShuttle => 'Ski shuttle',
   };
 }

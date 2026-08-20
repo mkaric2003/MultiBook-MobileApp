@@ -74,6 +74,15 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     opt: true,
     def: const [],
   );
+  static List<String> _$featuredCollectionIds(BusinessModel v) =>
+      v.featuredCollectionIds;
+  static const Field<BusinessModel, List<String>> _f$featuredCollectionIds =
+      Field(
+        'featuredCollectionIds',
+        _$featuredCollectionIds,
+        opt: true,
+        def: const [],
+      );
   static bool _$isActive(BusinessModel v) => v.isActive;
   static const Field<BusinessModel, bool> _f$isActive = Field(
     'isActive',
@@ -130,6 +139,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     #logoUrl: _f$logoUrl,
     #coverPhotoUrl: _f$coverPhotoUrl,
     #photoUrls: _f$photoUrls,
+    #featuredCollectionIds: _f$featuredCollectionIds,
     #isActive: _f$isActive,
     #averageRating: _f$averageRating,
     #reviewCount: _f$reviewCount,
@@ -151,6 +161,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       logoUrl: data.dec(_f$logoUrl),
       coverPhotoUrl: data.dec(_f$coverPhotoUrl),
       photoUrls: data.dec(_f$photoUrls),
+      featuredCollectionIds: data.dec(_f$featuredCollectionIds),
       isActive: data.dec(_f$isActive),
       averageRating: data.dec(_f$averageRating),
       reviewCount: data.dec(_f$reviewCount),
@@ -230,6 +241,8 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
   >
   get location;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>> get photoUrls;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+  get featuredCollectionIds;
   StayDetailsModelCopyWith<$R, StayDetailsModel, StayDetailsModel>?
   get stayDetails;
   ServiceDetailsModelCopyWith<$R, ServiceDetailsModel, ServiceDetailsModel>?
@@ -245,6 +258,7 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
     String? logoUrl,
     String? coverPhotoUrl,
     List<String>? photoUrls,
+    List<String>? featuredCollectionIds,
     bool? isActive,
     double? averageRating,
     int? reviewCount,
@@ -279,6 +293,13 @@ class _BusinessModelCopyWithImpl<$R, $Out>
         (v) => call(photoUrls: v),
       );
   @override
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+  get featuredCollectionIds => ListCopyWith(
+    $value.featuredCollectionIds,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(featuredCollectionIds: v),
+  );
+  @override
   StayDetailsModelCopyWith<$R, StayDetailsModel, StayDetailsModel>?
   get stayDetails =>
       $value.stayDetails?.copyWith.$chain((v) => call(stayDetails: v));
@@ -298,6 +319,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     Object? logoUrl = $none,
     Object? coverPhotoUrl = $none,
     List<String>? photoUrls,
+    List<String>? featuredCollectionIds,
     bool? isActive,
     double? averageRating,
     int? reviewCount,
@@ -317,6 +339,8 @@ class _BusinessModelCopyWithImpl<$R, $Out>
       if (logoUrl != $none) #logoUrl: logoUrl,
       if (coverPhotoUrl != $none) #coverPhotoUrl: coverPhotoUrl,
       if (photoUrls != null) #photoUrls: photoUrls,
+      if (featuredCollectionIds != null)
+        #featuredCollectionIds: featuredCollectionIds,
       if (isActive != null) #isActive: isActive,
       if (averageRating != null) #averageRating: averageRating,
       if (reviewCount != null) #reviewCount: reviewCount,
@@ -338,6 +362,10 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     logoUrl: data.get(#logoUrl, or: $value.logoUrl),
     coverPhotoUrl: data.get(#coverPhotoUrl, or: $value.coverPhotoUrl),
     photoUrls: data.get(#photoUrls, or: $value.photoUrls),
+    featuredCollectionIds: data.get(
+      #featuredCollectionIds,
+      or: $value.featuredCollectionIds,
+    ),
     isActive: data.get(#isActive, or: $value.isActive),
     averageRating: data.get(#averageRating, or: $value.averageRating),
     reviewCount: data.get(#reviewCount, or: $value.reviewCount),

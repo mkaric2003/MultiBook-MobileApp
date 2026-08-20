@@ -29,6 +29,12 @@ abstract class FirestoreDataSource {
 
   Future<List<Map<String, dynamic>>> getDocuments({required String collection});
 
+  Future<List<Map<String, dynamic>>> getDocumentsOrdered({
+    required String collection,
+    required String orderBy,
+    bool descending = false,
+  });
+
   Future<List<Map<String, dynamic>>> getDocumentsWhereArrayContains({
     required String collection,
     required String field,
@@ -152,6 +158,19 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
     required String collection,
   }) async {
     final query = await _firestore.collection(collection).get();
+    return query.docs.map((document) => document.data()).toList();
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getDocumentsOrdered({
+    required String collection,
+    required String orderBy,
+    bool descending = false,
+  }) async {
+    final query = await _firestore
+        .collection(collection)
+        .orderBy(orderBy, descending: descending)
+        .get();
     return query.docs.map((document) => document.data()).toList();
   }
 

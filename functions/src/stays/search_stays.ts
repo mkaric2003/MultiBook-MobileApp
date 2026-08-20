@@ -15,6 +15,7 @@ type SearchStaysRequest = {
   maxPrice?: unknown;
   minimumRating?: unknown;
   categoryIds?: unknown;
+  collectionIds?: unknown;
   amenities?: unknown;
   inventoryType?: unknown;
   cursor?: unknown;
@@ -86,6 +87,7 @@ function parseFilters(data: SearchStaysRequest) {
     maxPrice: nonNegativeNumber(data.maxPrice, Number.MAX_SAFE_INTEGER),
     minimumRating: nonNegativeNumber(data.minimumRating, 0),
     categoryIds: stringList(data.categoryIds),
+    collectionIds: stringList(data.collectionIds),
     amenities: stringList(data.amenities),
     inventoryType: optionalEnum(data.inventoryType, ["singleUnit", "multipleUnits"]),
     cursor: typeof data.cursor === "string" && data.cursor.length > 0 ? data.cursor : null,
@@ -108,6 +110,9 @@ function matchesStayFilters(
   const requestedGuests = filters.adults + filters.children;
   const rooms = asList(stayDetails.rooms).map(asMap);
   const amenities = asList(stayDetails.amenities).map(String);
+  const featuredCollectionIds = stay.data.featuredCollectionIds == null
+    ? inferredCollectionIds(String(stay.data.categoryId ?? ""), amenities)
+    : asList(stay.data.featuredCollectionIds).map(String);
   const hasSuitableRoom = rooms.length === 0 || rooms.some(
     (room) => asNumber(room.maxGuests) >= requestedGuests,
   );
@@ -118,10 +123,36 @@ function matchesStayFilters(
     price <= filters.maxPrice &&
     rating >= filters.minimumRating &&
     (filters.categoryIds.length === 0 || filters.categoryIds.includes(String(stay.data.categoryId ?? ""))) &&
+    (filters.collectionIds.length === 0 || filters.collectionIds.some((id) => featuredCollectionIds.includes(id))) &&
     (filters.inventoryType == null || String(stayDetails.inventoryType ?? (rooms.length > 0 ? "multipleUnits" : "singleUnit")) === filters.inventoryType) &&
     filters.amenities.every((amenity) => amenities.includes(amenity)) &&
     hasSuitableRoom
   );
+}
+
+function inferredCollectionIds(categoryId: string, amenities: string[]) {
+  const collectionIds = new Set<string>();
+  if (["beach_villa", "villa", "pool_villa"].includes(categoryId) || amenities.includes("seaView")) {
+    collectionIds.add("beachfront_stays");
+  }
+  if (["cabin", "mountain_cabin", "cottage", "vacation_home"].includes(categoryId)) {
+    collectionIds.add("weekend_escapes");
+  }
+  if (["hotel", "resort", "villa"].includes(categoryId) || amenities.includes("spa")) {
+    collectionIds.add("romantic_getaways");
+  }
+  if (["hotel", "resort", "apartment", "aparthotel"].includes(categoryId) || amenities.includes("pool")) {
+    collectionIds.add("family_friendly");
+  }
+  if (amenities.includes("petFriendly")) collectionIds.add("pet_friendly");
+  if (amenities.includes("pool")) collectionIds.add("pool_stays");
+  if (["cabin", "mountain_cabin", "cottage", "glamping"].includes(categoryId) || amenities.includes("mountainView")) {
+    collectionIds.add("mountain_escapes");
+  }
+  if (["hotel", "apartment", "aparthotel", "hostel"].includes(categoryId)) {
+    collectionIds.add("city_breaks");
+  }
+  return [...collectionIds];
 }
 
 async function loadActiveBookings(
@@ -187,6 +218,7 @@ function serializeStay(stay: StayDocument) {
     logoUrl: data.logoUrl ?? null,
     coverPhotoUrl: data.coverPhotoUrl ?? null,
     photoUrls: sanitizeList(asList(data.photoUrls)),
+    featuredCollectionIds: sanitizeList(asList(data.featuredCollectionIds)),
     isActive: true,
     averageRating: asNumber(data.averageRating),
     reviewCount: asNumber(data.reviewCount),

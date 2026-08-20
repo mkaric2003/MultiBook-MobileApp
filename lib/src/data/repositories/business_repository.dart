@@ -310,6 +310,45 @@ class BusinessRepository {
       'description':
           'Private hilltop home with an infinity pool, sunset terrace and room for the whole family.',
     },
+    {
+      'name': 'Golden Gate View Hotel',
+      'categoryId': 'hotel',
+      'city': 'San Francisco',
+      'address': '2700 Jones Street',
+      'latitude': 37.8078,
+      'longitude': -122.4206,
+      'price': 268,
+      'rating': 4.8,
+      'reviews': 524,
+      'description':
+          'Boutique waterfront hotel near Fisherman’s Wharf with Golden Gate Bridge views, breakfast and a rooftop lounge.',
+    },
+    {
+      'name': 'Mission District Loft',
+      'categoryId': 'apartment',
+      'city': 'San Francisco',
+      'address': '3288 21st Street',
+      'latitude': 37.7577,
+      'longitude': -122.4192,
+      'price': 214,
+      'rating': 4.7,
+      'reviews': 167,
+      'description':
+          'Sunlit designer loft in the Mission with a full kitchen, workspace and easy access to cafes and Dolores Park.',
+    },
+    {
+      'name': 'Pacific Heights Garden Villa',
+      'categoryId': 'villa',
+      'city': 'San Francisco',
+      'address': '2460 Broadway',
+      'latitude': 37.7957,
+      'longitude': -122.4387,
+      'price': 486,
+      'rating': 4.9,
+      'reviews': 93,
+      'description':
+          'Elegant Pacific Heights villa with a private garden, bay views and generous space for family or group stays.',
+    },
   ];
   static const _demoServices = <Map<String, String>>[
     {
@@ -867,6 +906,7 @@ class BusinessRepository {
             'logoUrl': coverPhotoUrl,
             'coverPhotoUrl': coverPhotoUrl,
             'photoUrls': photoUrls,
+            'featuredCollectionIds': _demoStayCollectionIds(categoryId, index),
             'isActive': true,
             'averageRating': rating,
             'reviewCount': reviewCount,
@@ -879,8 +919,9 @@ class BusinessRepository {
                   .map(
                     (extra) => {
                       'type': extra.name,
-                      'price': extra.defaultPrice,
+                      'price': _demoExtraPrice(extra, index),
                       'isPerNight': extra.isPerNight,
+                      'isPerHour': extra.isPerHour,
                     },
                   )
                   .toList(),
@@ -1174,6 +1215,7 @@ class BusinessRepository {
     List<StayAmenity> amenities = const [],
     List<StayRoomModel> rooms = const [],
     List<StayExtraModel> extras = const [],
+    List<String> featuredCollectionIds = const [],
     List<ServiceOfferingModel> serviceOfferings = const [],
     List<ServiceAvailabilitySlotModel> availabilitySlots = const [],
     String? serviceProviderName,
@@ -1281,6 +1323,7 @@ class BusinessRepository {
         logoUrl: logoUrl,
         coverPhotoUrl: coverPhotoUrl,
         photoUrls: photoUrls,
+        featuredCollectionIds: featuredCollectionIds,
         stayDetails: type == BusinessType.stays
             ? StayDetailsModel(
                 pricePerNight: stayPricePerNight,
@@ -1330,6 +1373,7 @@ class BusinessRepository {
           'logoUrl': business.logoUrl,
           'coverPhotoUrl': business.coverPhotoUrl,
           'photoUrls': business.photoUrls,
+          'featuredCollectionIds': business.featuredCollectionIds,
           'isActive': business.isActive,
           'averageRating': business.averageRating,
           'reviewCount': business.reviewCount,
@@ -1359,6 +1403,7 @@ class BusinessRepository {
                           'type': extra.type.name,
                           'price': extra.price,
                           'isPerNight': extra.isPerNight,
+                          'isPerHour': extra.isPerHour,
                         },
                       )
                       .toList(),
@@ -1477,6 +1522,9 @@ class BusinessRepository {
       logoUrl: data['logoUrl'] as String?,
       coverPhotoUrl: data['coverPhotoUrl'] as String?,
       photoUrls: List<String>.from(data['photoUrls'] as List? ?? const []),
+      featuredCollectionIds: List<String>.from(
+        data['featuredCollectionIds'] as List? ?? const [],
+      ),
       isActive: data['isActive'] as bool? ?? true,
       averageRating: (data['averageRating'] as num?)?.toDouble() ?? 0,
       reviewCount: (data['reviewCount'] as num?)?.toInt() ?? 0,
@@ -1531,6 +1579,7 @@ class BusinessRepository {
                       type: types.first,
                       price: (extra['price'] as num?)?.toInt() ?? 0,
                       isPerNight: extra['isPerNight'] as bool? ?? false,
+                      isPerHour: extra['isPerHour'] as bool? ?? false,
                     );
                   })
                   .whereType<StayExtraModel>()
@@ -1675,7 +1724,16 @@ class BusinessRepository {
       'cottage',
       'glamping',
     }.contains(categoryId)) {
-      amenities.addAll({StayAmenity.heating, StayAmenity.mountainView});
+      amenities.addAll({
+        StayAmenity.heating,
+        StayAmenity.mountainView,
+        StayAmenity.skiStorage,
+      });
+      if (index.isEven) amenities.add(StayAmenity.skiShuttle);
+      if (index % 3 == 0) amenities.add(StayAmenity.skiRental);
+      if (categoryId == 'mountain_cabin' && index.isEven) {
+        amenities.add(StayAmenity.skiInSkiOut);
+      }
     }
     if ({
       'apartment',
@@ -1689,6 +1747,44 @@ class BusinessRepository {
     if (index % 3 == 0) amenities.add(StayAmenity.petFriendly);
     if (index % 4 == 0) amenities.add(StayAmenity.spa);
     return amenities.toList();
+  }
+
+  List<String> _demoStayCollectionIds(String categoryId, int index) {
+    final collections = <String>{};
+    if ({'beach_villa', 'villa', 'pool_villa'}.contains(categoryId)) {
+      collections.add('beachfront_stays');
+    }
+    if ({'villa', 'beach_villa', 'pool_villa', 'resort'}.contains(categoryId)) {
+      collections.add('pool_stays');
+    }
+    if ({
+      'cabin',
+      'mountain_cabin',
+      'cottage',
+      'glamping',
+    }.contains(categoryId)) {
+      collections.add('mountain_escapes');
+    }
+    if ({'hotel', 'apartment', 'aparthotel', 'hostel'}.contains(categoryId)) {
+      collections.add('city_breaks');
+    }
+    if (index % 3 == 0) collections.add('pet_friendly');
+    if ({
+      'cabin',
+      'mountain_cabin',
+      'cottage',
+      'vacation_home',
+    }.contains(categoryId)) {
+      collections.add('weekend_escapes');
+    }
+    if (index.isEven || {'villa', 'resort', 'hotel'}.contains(categoryId)) {
+      collections.add('romantic_getaways');
+    }
+    if (index % 3 != 0 ||
+        {'apartment', 'hotel', 'resort'}.contains(categoryId)) {
+      collections.add('family_friendly');
+    }
+    return collections.toList();
   }
 
   List<StayExtraType> _demoStayExtras(String categoryId, int index) {
@@ -1711,7 +1807,30 @@ class BusinessRepository {
     if (index.isEven) extras.add(StayExtraType.extraBed);
     if (index % 3 == 0) extras.add(StayExtraType.petStay);
     if (index % 4 == 0) extras.add(StayExtraType.laundryService);
+    if ({
+      'cabin',
+      'mountain_cabin',
+      'cottage',
+      'glamping',
+    }.contains(categoryId)) {
+      extras.addAll([StayExtraType.quadBikeRental, StayExtraType.hikingGuide]);
+    }
+    if ({'beach_villa', 'villa', 'pool_villa', 'resort'}.contains(categoryId)) {
+      extras.add(StayExtraType.boatTour);
+    }
+    if (index.isEven) extras.add(StayExtraType.guidedTour);
     return extras;
+  }
+
+  int _demoExtraPrice(StayExtraType extra, int index) {
+    final variation = (index % 4) * 5;
+    return switch (extra) {
+      StayExtraType.quadBikeRental => 45 + variation,
+      StayExtraType.guidedTour => 30 + variation,
+      StayExtraType.hikingGuide => 35 + variation,
+      StayExtraType.boatTour => 80 + (variation * 2),
+      _ => extra.defaultPrice,
+    };
   }
 
   List<Map<String, Object>> _demoStayUnits(String categoryId, int price) {

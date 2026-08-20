@@ -9,9 +9,11 @@ class StayExtraModel with StayExtraModelMappable {
     required this.type,
     required this.price,
     this.isPerNight = false,
+    this.isPerHour = false,
   });
 
   final StayExtraType type;
   final int price;
   final bool isPerNight;
+  final bool isPerHour;
 }

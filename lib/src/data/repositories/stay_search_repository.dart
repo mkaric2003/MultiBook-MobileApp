@@ -29,6 +29,7 @@ class StaySearchRepository {
         maxPrice: filters.maxPrice,
         minimumRating: filters.minimumRating,
         categoryIds: filters.categoryIds,
+        collectionIds: filters.collectionIds,
         amenities: filters.amenities.map((amenity) => amenity.name).toList(),
         inventoryType: filters.inventoryType?.name,
         cursor: cursor,

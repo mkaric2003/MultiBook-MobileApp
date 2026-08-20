@@ -35,7 +35,11 @@ class StayExtraPriceField extends StatelessWidget {
               ),
               const SizedBox(height: 3),
               Text(
-                extra.isPerNight ? 'Charged per night' : 'One-time charge',
+                extra.isPerHour
+                    ? 'Charged per hour'
+                    : extra.isPerNight
+                    ? 'Charged per night'
+                    : 'One-time charge',
                 style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],

@@ -54,6 +54,15 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       v.selectedAmenities;
   static const Field<AddBusinessState, List<StayAmenity>> _f$selectedAmenities =
       Field('selectedAmenities', _$selectedAmenities, opt: true, def: const []);
+  static List<String> _$selectedCollectionIds(AddBusinessState v) =>
+      v.selectedCollectionIds;
+  static const Field<AddBusinessState, List<String>> _f$selectedCollectionIds =
+      Field(
+        'selectedCollectionIds',
+        _$selectedCollectionIds,
+        opt: true,
+        def: const [],
+      );
   static List<StayExtraType> _$selectedExtras(AddBusinessState v) =>
       v.selectedExtras;
   static const Field<AddBusinessState, List<StayExtraType>> _f$selectedExtras =
@@ -187,6 +196,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #categoryId: _f$categoryId,
     #stayInventoryType: _f$stayInventoryType,
     #selectedAmenities: _f$selectedAmenities,
+    #selectedCollectionIds: _f$selectedCollectionIds,
     #selectedExtras: _f$selectedExtras,
     #extraPrices: _f$extraPrices,
     #serviceOfferings: _f$serviceOfferings,
@@ -213,6 +223,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       categoryId: data.dec(_f$categoryId),
       stayInventoryType: data.dec(_f$stayInventoryType),
       selectedAmenities: data.dec(_f$selectedAmenities),
+      selectedCollectionIds: data.dec(_f$selectedCollectionIds),
       selectedExtras: data.dec(_f$selectedExtras),
       extraPrices: data.dec(_f$extraPrices),
       serviceOfferings: data.dec(_f$serviceOfferings),
@@ -298,6 +309,8 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, StayAmenity, ObjectCopyWith<$R, StayAmenity, StayAmenity>>
   get selectedAmenities;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+  get selectedCollectionIds;
   ListCopyWith<
     $R,
     StayExtraType,
@@ -334,6 +347,7 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     String? categoryId,
     StayInventoryType? stayInventoryType,
     List<StayAmenity>? selectedAmenities,
+    List<String>? selectedCollectionIds,
     List<StayExtraType>? selectedExtras,
     Map<String, int>? extraPrices,
     List<ServiceOfferingModel>? serviceOfferings,
@@ -372,6 +386,13 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     $value.selectedAmenities,
     (v, t) => ObjectCopyWith(v, $identity, t),
     (v) => call(selectedAmenities: v),
+  );
+  @override
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+  get selectedCollectionIds => ListCopyWith(
+    $value.selectedCollectionIds,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(selectedCollectionIds: v),
   );
   @override
   ListCopyWith<
@@ -441,6 +462,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     Object? categoryId = $none,
     StayInventoryType? stayInventoryType,
     List<StayAmenity>? selectedAmenities,
+    List<String>? selectedCollectionIds,
     List<StayExtraType>? selectedExtras,
     Map<String, int>? extraPrices,
     List<ServiceOfferingModel>? serviceOfferings,
@@ -465,6 +487,8 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       if (categoryId != $none) #categoryId: categoryId,
       if (stayInventoryType != null) #stayInventoryType: stayInventoryType,
       if (selectedAmenities != null) #selectedAmenities: selectedAmenities,
+      if (selectedCollectionIds != null)
+        #selectedCollectionIds: selectedCollectionIds,
       if (selectedExtras != null) #selectedExtras: selectedExtras,
       if (extraPrices != null) #extraPrices: extraPrices,
       if (serviceOfferings != null) #serviceOfferings: serviceOfferings,
@@ -498,6 +522,10 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     selectedAmenities: data.get(
       #selectedAmenities,
       or: $value.selectedAmenities,
+    ),
+    selectedCollectionIds: data.get(
+      #selectedCollectionIds,
+      or: $value.selectedCollectionIds,
     ),
     selectedExtras: data.get(#selectedExtras, or: $value.selectedExtras),
     extraPrices: data.get(#extraPrices, or: $value.extraPrices),

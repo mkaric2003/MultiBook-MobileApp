@@ -1,5 +1,6 @@
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/saved_business_repository.dart';
+import 'package:aquabook/src/data/repositories/recently_viewed_repository.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/cubit/stay_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +8,15 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class StayDetailCubit extends Cubit<StayDetailState> {
-  StayDetailCubit(this._businessRepository, this._savedRepository)
-    : super(const StayDetailState());
+  StayDetailCubit(
+    this._businessRepository,
+    this._savedRepository,
+    this._recentlyViewedRepository,
+  ) : super(const StayDetailState());
 
   final BusinessRepository _businessRepository;
   final SavedBusinessRepository _savedRepository;
+  final RecentlyViewedRepository _recentlyViewedRepository;
 
   Future<void> loadStay(String businessId) async {
     emit(const StayDetailState(isLoading: true));
@@ -23,6 +28,7 @@ class StayDetailCubit extends Cubit<StayDetailState> {
         emit(const StayDetailState(errorMessage: 'This stay is unavailable.'));
         return;
       }
+      await _recentlyViewedRepository.recordBusinessView(business);
       emit(
         StayDetailState(
           business: business,

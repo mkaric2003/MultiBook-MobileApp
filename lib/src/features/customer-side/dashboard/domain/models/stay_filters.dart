@@ -12,6 +12,7 @@ class StayFilters {
     this.maxPrice = 500,
     this.minimumRating = 0,
     this.categoryIds = const [],
+    this.collectionIds = const [],
     this.amenities = const [],
     this.inventoryType,
   });
@@ -25,6 +26,7 @@ class StayFilters {
   final double maxPrice;
   final double minimumRating;
   final List<String> categoryIds;
+  final List<String> collectionIds;
   final List<StayAmenity> amenities;
   final StayInventoryType? inventoryType;
 
@@ -40,6 +42,7 @@ class StayFilters {
       maxPrice < 500 ||
       minimumRating > 0 ||
       categoryIds.isNotEmpty ||
+      collectionIds.isNotEmpty ||
       amenities.isNotEmpty ||
       inventoryType != null;
 
@@ -50,6 +53,7 @@ class StayFilters {
     if (minPrice > 50 || maxPrice < 500) true,
     if (minimumRating > 0) true,
     if (categoryIds.isNotEmpty) true,
+    if (collectionIds.isNotEmpty) true,
     if (amenities.isNotEmpty) true,
     if (inventoryType != null) true,
   ].length;
@@ -67,6 +71,7 @@ class StayFilters {
     double? maxPrice,
     double? minimumRating,
     List<String>? categoryIds,
+    List<String>? collectionIds,
     List<StayAmenity>? amenities,
     StayInventoryType? inventoryType,
     bool clearInventoryType = false,
@@ -81,6 +86,7 @@ class StayFilters {
       maxPrice: maxPrice ?? this.maxPrice,
       minimumRating: minimumRating ?? this.minimumRating,
       categoryIds: categoryIds ?? this.categoryIds,
+      collectionIds: collectionIds ?? this.collectionIds,
       amenities: amenities ?? this.amenities,
       inventoryType: clearInventoryType
           ? null

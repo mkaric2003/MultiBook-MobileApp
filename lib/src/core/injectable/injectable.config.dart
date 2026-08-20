@@ -51,6 +51,8 @@ import 'package:aquabook/src/data/repositories/notification_repository.dart'
     as _i113;
 import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
     as _i366;
+import 'package:aquabook/src/data/repositories/recently_viewed_repository.dart'
+    as _i744;
 import 'package:aquabook/src/data/repositories/saved_business_repository.dart'
     as _i390;
 import 'package:aquabook/src/data/repositories/service_availability_repository.dart'
@@ -124,6 +126,8 @@ import 'package:aquabook/src/features/shared/notifications/cubit/notifications_c
     as _i600;
 import 'package:aquabook/src/features/shared/onboarding/cubit/onboarding_cubit.dart'
     as _i680;
+import 'package:aquabook/src/features/shared/recently_viewed/cubit/recently_viewed_cubit.dart'
+    as _i749;
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart'
     as _i44;
 import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart'
@@ -330,6 +334,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
       ),
     );
+    gh.lazySingleton<_i744.RecentlyViewedRepository>(
+      () => _i744.RecentlyViewedRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+      ),
+    );
     gh.factoryParam<
       _i690.CustomerBookingDetailsCubit,
       _i405.BookingModel,
@@ -346,6 +356,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
         gh<_i525.ChatRepository>(),
       ),
+    );
+    gh.factory<_i749.RecentlyViewedCubit>(
+      () => _i749.RecentlyViewedCubit(gh<_i744.RecentlyViewedRepository>()),
     );
     gh.factory<_i451.AppointmentDraftCubit>(
       () => _i451.AppointmentDraftCubit(gh<_i363.AppointmentDraftRepository>()),
@@ -369,6 +382,20 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i285.StaySearchRepository(
         gh<_i873.StaySearchDataSource>(),
         gh<_i1065.BusinessRepository>(),
+      ),
+    );
+    gh.factory<_i390.ServiceDetailCubit>(
+      () => _i390.ServiceDetailCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i390.SavedBusinessRepository>(),
+        gh<_i744.RecentlyViewedRepository>(),
+      ),
+    );
+    gh.factory<_i386.StayDetailCubit>(
+      () => _i386.StayDetailCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i390.SavedBusinessRepository>(),
+        gh<_i744.RecentlyViewedRepository>(),
       ),
     );
     gh.factory<_i192.ReviewStayCubit>(
@@ -458,18 +485,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i259.BookingDetailsCubit(
         gh<_i961.BookingRepository>(),
         gh<_i64.BookingDraftRepository>(),
-      ),
-    );
-    gh.factory<_i390.ServiceDetailCubit>(
-      () => _i390.ServiceDetailCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i390.SavedBusinessRepository>(),
-      ),
-    );
-    gh.factory<_i386.StayDetailCubit>(
-      () => _i386.StayDetailCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i390.SavedBusinessRepository>(),
       ),
     );
     gh.factory<_i1028.SignupCubit>(

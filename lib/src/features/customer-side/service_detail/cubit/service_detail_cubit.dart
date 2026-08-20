@@ -1,5 +1,6 @@
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/saved_business_repository.dart';
+import 'package:aquabook/src/data/repositories/recently_viewed_repository.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/service_detail/cubit/service_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,11 +8,15 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class ServiceDetailCubit extends Cubit<ServiceDetailState> {
-  ServiceDetailCubit(this._businessRepository, this._savedRepository)
-    : super(const ServiceDetailState());
+  ServiceDetailCubit(
+    this._businessRepository,
+    this._savedRepository,
+    this._recentlyViewedRepository,
+  ) : super(const ServiceDetailState());
 
   final BusinessRepository _businessRepository;
   final SavedBusinessRepository _savedRepository;
+  final RecentlyViewedRepository _recentlyViewedRepository;
 
   Future<void> loadService(String businessId) async {
     emit(const ServiceDetailState(isLoading: true));
@@ -27,6 +32,7 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
         );
         return;
       }
+      await _recentlyViewedRepository.recordBusinessView(business);
       emit(
         ServiceDetailState(
           business: business,

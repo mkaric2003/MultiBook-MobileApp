@@ -4,6 +4,7 @@ import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/custo
 import 'package:aquabook/src/features/customer-side/explore/cubit/explore_cubit.dart';
 import 'package:aquabook/src/features/customer-side/explore/cubit/explore_state.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_category.dart';
+import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_collection.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
 import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_app_bar.dart';
 import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_services_placeholder.dart';
@@ -52,6 +53,26 @@ class ExploreView extends HookWidget {
                               city: city,
                               categoryId: category.id,
                               categoryTitle: category.title,
+                            ),
+                          );
+                        },
+                        onCollectionSelected: (ExploreCollection collection) {
+                          final city = state.selectedCity;
+                          if (city == null || city.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Select a city to browse stays.'),
+                              ),
+                            );
+                            return;
+                          }
+                          context.push(
+                            AppRoutes.EXPLORE_STAY_RESULTS,
+                            extra: ExploreStayResultsArguments(
+                              city: city,
+                              categoryId: '',
+                              categoryTitle: collection.title,
+                              collectionId: collection.id,
                             ),
                           );
                         },

@@ -20,6 +20,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     on<BusinessCategoryChanged>(_onBusinessCategoryChanged);
     on<StayInventoryTypeChanged>(_onStayInventoryTypeChanged);
     on<BusinessAmenityToggled>(_onBusinessAmenityToggled);
+    on<StayCollectionToggled>(_onStayCollectionToggled);
     on<BusinessExtraToggled>(_onBusinessExtraToggled);
     on<BusinessExtraPriceChanged>(_onBusinessExtraPriceChanged);
     on<ServiceOfferingAdded>(_onServiceOfferingAdded);
@@ -83,6 +84,19 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       amenities.add(event.amenity);
     }
     emit(state.copyWith(selectedAmenities: amenities));
+  }
+
+  void _onStayCollectionToggled(
+    StayCollectionToggled event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    final collectionIds = [...state.selectedCollectionIds];
+    if (collectionIds.contains(event.collection.id)) {
+      collectionIds.remove(event.collection.id);
+    } else {
+      collectionIds.add(event.collection.id);
+    }
+    emit(state.copyWith(selectedCollectionIds: collectionIds));
   }
 
   void _onBusinessExtraToggled(
@@ -370,6 +384,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         amenities: event.amenities,
         rooms: event.rooms,
         extras: event.extras,
+        featuredCollectionIds: state.selectedCollectionIds,
         serviceOfferings: event.serviceOfferings,
         availabilitySlots: event.availabilitySlots,
         serviceProviderName: event.serviceProviderName,

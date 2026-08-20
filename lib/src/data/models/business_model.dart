@@ -24,6 +24,7 @@ class BusinessModel with BusinessModelMappable {
   final String? logoUrl;
   final String? coverPhotoUrl;
   final List<String> photoUrls;
+  final List<String> featuredCollectionIds;
 
   final bool isActive;
   final double averageRating;
@@ -45,6 +46,7 @@ class BusinessModel with BusinessModelMappable {
     this.logoUrl,
     this.coverPhotoUrl,
     this.photoUrls = const [],
+    this.featuredCollectionIds = const [],
     this.isActive = true,
     this.averageRating = 0,
     this.reviewCount = 0,

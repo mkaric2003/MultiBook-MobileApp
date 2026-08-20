@@ -52,7 +52,11 @@ class ReviewExtraTile extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                '+\$${extra.price}${extra.isPerNight ? '/day' : ''}',
+                '+\$${extra.price}${extra.isPerHour
+                    ? '/hour'
+                    : extra.isPerNight
+                    ? '/day'
+                    : ''}',
                 style: const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w800,
@@ -78,5 +82,9 @@ class ReviewExtraTile extends StatelessWidget {
     StayExtraType.petStay => Icons.pets_rounded,
     StayExtraType.extraBed => Icons.bed_rounded,
     StayExtraType.laundryService => Icons.local_laundry_service_rounded,
+    StayExtraType.quadBikeRental => Icons.directions_car_filled_rounded,
+    StayExtraType.guidedTour => Icons.tour_rounded,
+    StayExtraType.hikingGuide => Icons.hiking_rounded,
+    StayExtraType.boatTour => Icons.directions_boat_rounded,
   };
 }

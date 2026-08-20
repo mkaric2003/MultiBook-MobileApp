@@ -20,6 +20,7 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_offerings_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_providers_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_collections_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_inventory_type_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_unit_form.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
@@ -262,6 +263,16 @@ class AddBusinessView extends HookWidget {
                                     ),
                                   ),
                             ),
+                            const SizedBox(height: 26),
+                            const FormFieldLabel('Featured collections'),
+                            const SizedBox(height: 10),
+                            StayCollectionsSelector(
+                              selectedCollectionIds:
+                                  state.selectedCollectionIds,
+                              onChanged: (collection) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(StayCollectionToggled(collection)),
+                            ),
                             const SizedBox(height: 28),
                             if (state.stayInventoryType ==
                                 StayInventoryType.multipleUnits) ...[
@@ -445,6 +456,7 @@ class AddBusinessView extends HookWidget {
                                                       .name] ??
                                                   extra.defaultPrice,
                                               isPerNight: extra.isPerNight,
+                                              isPerHour: extra.isPerHour,
                                             ),
                                           )
                                           .toList(),

@@ -18,7 +18,12 @@ class ExploreStayResultsCubit extends Cubit<ExploreStayResultsState> {
       final results = await _staySearchRepository.search(
         filters: StayFilters(
           city: arguments.city,
-          categoryIds: [arguments.categoryId],
+          categoryIds: arguments.categoryId.isEmpty
+              ? const []
+              : [arguments.categoryId],
+          collectionIds: arguments.collectionId == null
+              ? const []
+              : [arguments.collectionId!],
         ),
       );
       emit(

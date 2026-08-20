@@ -56,6 +56,14 @@ class StayAmenityMapper extends EnumMapper<StayAmenity> {
         return StayAmenity.workspace;
       case r'elevator':
         return StayAmenity.elevator;
+      case r'skiInSkiOut':
+        return StayAmenity.skiInSkiOut;
+      case r'skiStorage':
+        return StayAmenity.skiStorage;
+      case r'skiRental':
+        return StayAmenity.skiRental;
+      case r'skiShuttle':
+        return StayAmenity.skiShuttle;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -94,6 +102,14 @@ class StayAmenityMapper extends EnumMapper<StayAmenity> {
         return r'workspace';
       case StayAmenity.elevator:
         return r'elevator';
+      case StayAmenity.skiInSkiOut:
+        return r'skiInSkiOut';
+      case StayAmenity.skiStorage:
+        return r'skiStorage';
+      case StayAmenity.skiRental:
+        return r'skiRental';
+      case StayAmenity.skiShuttle:
+        return r'skiShuttle';
     }
   }
 }

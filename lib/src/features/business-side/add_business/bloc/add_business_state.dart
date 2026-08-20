@@ -16,6 +16,7 @@ class AddBusinessState with AddBusinessStateMappable {
     this.categoryId,
     this.stayInventoryType = StayInventoryType.singleUnit,
     this.selectedAmenities = const [],
+    this.selectedCollectionIds = const [],
     this.selectedExtras = const [],
     this.extraPrices = const {},
     this.serviceOfferings = const [],
@@ -40,6 +41,7 @@ class AddBusinessState with AddBusinessStateMappable {
   final String? categoryId;
   final StayInventoryType stayInventoryType;
   final List<StayAmenity> selectedAmenities;
+  final List<String> selectedCollectionIds;
   final List<StayExtraType> selectedExtras;
   final Map<String, int> extraPrices;
   final List<ServiceOfferingModel> serviceOfferings;

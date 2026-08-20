@@ -66,5 +66,9 @@ class AmenitiesSection extends StatelessWidget {
     StayAmenity.mountainView => Icons.terrain_rounded,
     StayAmenity.workspace => Icons.desk_rounded,
     StayAmenity.elevator => Icons.elevator_rounded,
+    StayAmenity.skiInSkiOut => Icons.downhill_skiing_rounded,
+    StayAmenity.skiStorage => Icons.inventory_2_rounded,
+    StayAmenity.skiRental => Icons.snowshoeing_rounded,
+    StayAmenity.skiShuttle => Icons.airport_shuttle_rounded,
   };
 }

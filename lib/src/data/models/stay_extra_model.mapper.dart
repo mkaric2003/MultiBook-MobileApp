@@ -36,12 +36,20 @@ class StayExtraModelMapper extends ClassMapperBase<StayExtraModel> {
     opt: true,
     def: false,
   );
+  static bool _$isPerHour(StayExtraModel v) => v.isPerHour;
+  static const Field<StayExtraModel, bool> _f$isPerHour = Field(
+    'isPerHour',
+    _$isPerHour,
+    opt: true,
+    def: false,
+  );
 
   @override
   final MappableFields<StayExtraModel> fields = const {
     #type: _f$type,
     #price: _f$price,
     #isPerNight: _f$isPerNight,
+    #isPerHour: _f$isPerHour,
   };
 
   static StayExtraModel _instantiate(DecodingData data) {
@@ -49,6 +57,7 @@ class StayExtraModelMapper extends ClassMapperBase<StayExtraModel> {
       type: data.dec(_f$type),
       price: data.dec(_f$price),
       isPerNight: data.dec(_f$isPerNight),
+      isPerHour: data.dec(_f$isPerHour),
     );
   }
 
@@ -114,7 +123,7 @@ extension StayExtraModelValueCopy<$R, $Out>
 
 abstract class StayExtraModelCopyWith<$R, $In extends StayExtraModel, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({StayExtraType? type, int? price, bool? isPerNight});
+  $R call({StayExtraType? type, int? price, bool? isPerNight, bool? isPerHour});
   StayExtraModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -129,11 +138,17 @@ class _StayExtraModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<StayExtraModel> $mapper =
       StayExtraModelMapper.ensureInitialized();
   @override
-  $R call({StayExtraType? type, int? price, bool? isPerNight}) => $apply(
+  $R call({
+    StayExtraType? type,
+    int? price,
+    bool? isPerNight,
+    bool? isPerHour,
+  }) => $apply(
     FieldCopyWithData({
       if (type != null) #type: type,
       if (price != null) #price: price,
       if (isPerNight != null) #isPerNight: isPerNight,
+      if (isPerHour != null) #isPerHour: isPerHour,
     }),
   );
   @override
@@ -141,6 +156,7 @@ class _StayExtraModelCopyWithImpl<$R, $Out>
     type: data.get(#type, or: $value.type),
     price: data.get(#price, or: $value.price),
     isPerNight: data.get(#isPerNight, or: $value.isPerNight),
+    isPerHour: data.get(#isPerHour, or: $value.isPerHour),
   );
 
   @override

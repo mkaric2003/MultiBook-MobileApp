@@ -42,6 +42,14 @@ class StayExtraTypeMapper extends EnumMapper<StayExtraType> {
         return StayExtraType.extraBed;
       case r'laundryService':
         return StayExtraType.laundryService;
+      case r'quadBikeRental':
+        return StayExtraType.quadBikeRental;
+      case r'guidedTour':
+        return StayExtraType.guidedTour;
+      case r'hikingGuide':
+        return StayExtraType.hikingGuide;
+      case r'boatTour':
+        return StayExtraType.boatTour;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -66,6 +74,14 @@ class StayExtraTypeMapper extends EnumMapper<StayExtraType> {
         return r'extraBed';
       case StayExtraType.laundryService:
         return r'laundryService';
+      case StayExtraType.quadBikeRental:
+        return r'quadBikeRental';
+      case StayExtraType.guidedTour:
+        return r'guidedTour';
+      case StayExtraType.hikingGuide:
+        return r'hikingGuide';
+      case StayExtraType.boatTour:
+        return r'boatTour';
     }
   }
 }
