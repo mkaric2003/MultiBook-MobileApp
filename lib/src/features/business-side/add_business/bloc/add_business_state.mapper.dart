@@ -15,6 +15,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = AddBusinessStateMapper._());
       BusinessTypeMapper.ensureInitialized();
+      StayInventoryTypeMapper.ensureInitialized();
       StayAmenityMapper.ensureInitialized();
       StayExtraTypeMapper.ensureInitialized();
       ServiceOfferingModelMapper.ensureInitialized();
@@ -40,6 +41,15 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     _$categoryId,
     opt: true,
   );
+  static StayInventoryType _$stayInventoryType(AddBusinessState v) =>
+      v.stayInventoryType;
+  static const Field<AddBusinessState, StayInventoryType> _f$stayInventoryType =
+      Field(
+        'stayInventoryType',
+        _$stayInventoryType,
+        opt: true,
+        def: StayInventoryType.singleUnit,
+      );
   static List<StayAmenity> _$selectedAmenities(AddBusinessState v) =>
       v.selectedAmenities;
   static const Field<AddBusinessState, List<StayAmenity>> _f$selectedAmenities =
@@ -48,6 +58,13 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       v.selectedExtras;
   static const Field<AddBusinessState, List<StayExtraType>> _f$selectedExtras =
       Field('selectedExtras', _$selectedExtras, opt: true, def: const []);
+  static Map<String, int> _$extraPrices(AddBusinessState v) => v.extraPrices;
+  static const Field<AddBusinessState, Map<String, int>> _f$extraPrices = Field(
+    'extraPrices',
+    _$extraPrices,
+    opt: true,
+    def: const {},
+  );
   static List<ServiceOfferingModel> _$serviceOfferings(AddBusinessState v) =>
       v.serviceOfferings;
   static const Field<AddBusinessState, List<ServiceOfferingModel>>
@@ -120,6 +137,15 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     _$coverPhotoPath,
     opt: true,
   );
+  static List<String> _$businessPhotoPaths(AddBusinessState v) =>
+      v.businessPhotoPaths;
+  static const Field<AddBusinessState, List<String>> _f$businessPhotoPaths =
+      Field(
+        'businessPhotoPaths',
+        _$businessPhotoPaths,
+        opt: true,
+        def: const [],
+      );
   static bool _$isLoading(AddBusinessState v) => v.isLoading;
   static const Field<AddBusinessState, bool> _f$isLoading = Field(
     'isLoading',
@@ -159,8 +185,10 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
   final MappableFields<AddBusinessState> fields = const {
     #businessType: _f$businessType,
     #categoryId: _f$categoryId,
+    #stayInventoryType: _f$stayInventoryType,
     #selectedAmenities: _f$selectedAmenities,
     #selectedExtras: _f$selectedExtras,
+    #extraPrices: _f$extraPrices,
     #serviceOfferings: _f$serviceOfferings,
     #availabilitySlots: _f$availabilitySlots,
     #serviceProviders: _f$serviceProviders,
@@ -171,6 +199,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #isResolvingLocation: _f$isResolvingLocation,
     #logoPath: _f$logoPath,
     #coverPhotoPath: _f$coverPhotoPath,
+    #businessPhotoPaths: _f$businessPhotoPaths,
     #isLoading: _f$isLoading,
     #isSuccess: _f$isSuccess,
     #errorMessage: _f$errorMessage,
@@ -182,8 +211,10 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     return AddBusinessState(
       businessType: data.dec(_f$businessType),
       categoryId: data.dec(_f$categoryId),
+      stayInventoryType: data.dec(_f$stayInventoryType),
       selectedAmenities: data.dec(_f$selectedAmenities),
       selectedExtras: data.dec(_f$selectedExtras),
+      extraPrices: data.dec(_f$extraPrices),
       serviceOfferings: data.dec(_f$serviceOfferings),
       availabilitySlots: data.dec(_f$availabilitySlots),
       serviceProviders: data.dec(_f$serviceProviders),
@@ -194,6 +225,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       isResolvingLocation: data.dec(_f$isResolvingLocation),
       logoPath: data.dec(_f$logoPath),
       coverPhotoPath: data.dec(_f$coverPhotoPath),
+      businessPhotoPaths: data.dec(_f$businessPhotoPaths),
       isLoading: data.dec(_f$isLoading),
       isSuccess: data.dec(_f$isSuccess),
       errorMessage: data.dec(_f$errorMessage),
@@ -272,6 +304,7 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     ObjectCopyWith<$R, StayExtraType, StayExtraType>
   >
   get selectedExtras;
+  MapCopyWith<$R, String, int, ObjectCopyWith<$R, int, int>> get extraPrices;
   ListCopyWith<
     $R,
     ServiceOfferingModel,
@@ -294,11 +327,15 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     ServiceProviderModelCopyWith<$R, ServiceProviderModel, ServiceProviderModel>
   >
   get serviceProviders;
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+  get businessPhotoPaths;
   $R call({
     BusinessType? businessType,
     String? categoryId,
+    StayInventoryType? stayInventoryType,
     List<StayAmenity>? selectedAmenities,
     List<StayExtraType>? selectedExtras,
+    Map<String, int>? extraPrices,
     List<ServiceOfferingModel>? serviceOfferings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
     List<ServiceProviderModel>? serviceProviders,
@@ -309,6 +346,7 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     bool? isResolvingLocation,
     String? logoPath,
     String? coverPhotoPath,
+    List<String>? businessPhotoPaths,
     bool? isLoading,
     bool? isSuccess,
     String? errorMessage,
@@ -347,6 +385,13 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     (v) => call(selectedExtras: v),
   );
   @override
+  MapCopyWith<$R, String, int, ObjectCopyWith<$R, int, int>> get extraPrices =>
+      MapCopyWith(
+        $value.extraPrices,
+        (v, t) => ObjectCopyWith(v, $identity, t),
+        (v) => call(extraPrices: v),
+      );
+  @override
   ListCopyWith<
     $R,
     ServiceOfferingModel,
@@ -384,11 +429,20 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     (v) => call(serviceProviders: v),
   );
   @override
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
+  get businessPhotoPaths => ListCopyWith(
+    $value.businessPhotoPaths,
+    (v, t) => ObjectCopyWith(v, $identity, t),
+    (v) => call(businessPhotoPaths: v),
+  );
+  @override
   $R call({
     BusinessType? businessType,
     Object? categoryId = $none,
+    StayInventoryType? stayInventoryType,
     List<StayAmenity>? selectedAmenities,
     List<StayExtraType>? selectedExtras,
+    Map<String, int>? extraPrices,
     List<ServiceOfferingModel>? serviceOfferings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
     List<ServiceProviderModel>? serviceProviders,
@@ -399,6 +453,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     bool? isResolvingLocation,
     Object? logoPath = $none,
     Object? coverPhotoPath = $none,
+    List<String>? businessPhotoPaths,
     bool? isLoading,
     bool? isSuccess,
     Object? errorMessage = $none,
@@ -408,8 +463,10 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     FieldCopyWithData({
       if (businessType != null) #businessType: businessType,
       if (categoryId != $none) #categoryId: categoryId,
+      if (stayInventoryType != null) #stayInventoryType: stayInventoryType,
       if (selectedAmenities != null) #selectedAmenities: selectedAmenities,
       if (selectedExtras != null) #selectedExtras: selectedExtras,
+      if (extraPrices != null) #extraPrices: extraPrices,
       if (serviceOfferings != null) #serviceOfferings: serviceOfferings,
       if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
       if (serviceProviders != null) #serviceProviders: serviceProviders,
@@ -421,6 +478,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
         #isResolvingLocation: isResolvingLocation,
       if (logoPath != $none) #logoPath: logoPath,
       if (coverPhotoPath != $none) #coverPhotoPath: coverPhotoPath,
+      if (businessPhotoPaths != null) #businessPhotoPaths: businessPhotoPaths,
       if (isLoading != null) #isLoading: isLoading,
       if (isSuccess != null) #isSuccess: isSuccess,
       if (errorMessage != $none) #errorMessage: errorMessage,
@@ -433,11 +491,16 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
   AddBusinessState $make(CopyWithData data) => AddBusinessState(
     businessType: data.get(#businessType, or: $value.businessType),
     categoryId: data.get(#categoryId, or: $value.categoryId),
+    stayInventoryType: data.get(
+      #stayInventoryType,
+      or: $value.stayInventoryType,
+    ),
     selectedAmenities: data.get(
       #selectedAmenities,
       or: $value.selectedAmenities,
     ),
     selectedExtras: data.get(#selectedExtras, or: $value.selectedExtras),
+    extraPrices: data.get(#extraPrices, or: $value.extraPrices),
     serviceOfferings: data.get(#serviceOfferings, or: $value.serviceOfferings),
     availabilitySlots: data.get(
       #availabilitySlots,
@@ -454,6 +517,10 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     ),
     logoPath: data.get(#logoPath, or: $value.logoPath),
     coverPhotoPath: data.get(#coverPhotoPath, or: $value.coverPhotoPath),
+    businessPhotoPaths: data.get(
+      #businessPhotoPaths,
+      or: $value.businessPhotoPaths,
+    ),
     isLoading: data.get(#isLoading, or: $value.isLoading),
     isSuccess: data.get(#isSuccess, or: $value.isSuccess),
     errorMessage: data.get(#errorMessage, or: $value.errorMessage),

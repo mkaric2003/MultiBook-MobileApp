@@ -3,6 +3,7 @@ import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart';
@@ -15,11 +16,12 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_media_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_type_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/hotel_room_form.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/image_source_picker_sheet.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_offerings_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_providers_section.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_inventory_type_selector.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_unit_form.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
@@ -98,19 +100,22 @@ class AddBusinessView extends HookWidget {
               state.longitude != null &&
               state.categoryId != null &&
               (state.businessType != BusinessType.stays ||
-                  (int.tryParse(priceController.text) ?? 0) > 0) &&
+                  (state.stayInventoryType == StayInventoryType.singleUnit
+                      ? (int.tryParse(priceController.text) ?? 0) > 0
+                      : (roomNameController.text.trim().isNotEmpty &&
+                            (int.tryParse(roomGuestsController.text) ?? 0) >
+                                0 &&
+                            (int.tryParse(roomSizeController.text) ?? 0) > 0 &&
+                            (int.tryParse(roomPriceController.text) ?? 0) > 0 &&
+                            (int.tryParse(roomQuantityController.text) ?? 0) >
+                                0))) &&
               (state.businessType != BusinessType.services ||
                   (state.serviceOfferings.isNotEmpty &&
                       state.serviceProviders.isNotEmpty &&
                       state.serviceProviders.every(
                         (provider) => provider.availabilitySlots.isNotEmpty,
                       ))) &&
-              (state.categoryId != 'hotel' ||
-                  (roomNameController.text.trim().isNotEmpty &&
-                      (int.tryParse(roomGuestsController.text) ?? 0) > 0 &&
-                      (int.tryParse(roomSizeController.text) ?? 0) > 0 &&
-                      (int.tryParse(roomPriceController.text) ?? 0) > 0 &&
-                      (int.tryParse(roomQuantityController.text) ?? 0) > 0));
+              true;
 
           void selectImage(BusinessImageType imageType) {
             showModalBottomSheet<void>(
@@ -209,17 +214,29 @@ class AddBusinessView extends HookWidget {
                           ),
                           const SizedBox(height: 26),
                           if (state.businessType == BusinessType.stays) ...[
-                            const FormFieldLabel('Price per night*'),
+                            const FormFieldLabel('Stay inventory*'),
                             const SizedBox(height: 10),
-                            CustomTextField(
-                              hintText: 'Enter price per night',
-                              controller: priceController,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
+                            StayInventoryTypeSelector(
+                              selectedType: state.stayInventoryType,
+                              onChanged: (inventoryType) => context
+                                  .read<AddBusinessBloc>()
+                                  .add(StayInventoryTypeChanged(inventoryType)),
                             ),
                             const SizedBox(height: 26),
+                            if (state.stayInventoryType ==
+                                StayInventoryType.singleUnit) ...[
+                              const FormFieldLabel('Price per night*'),
+                              const SizedBox(height: 10),
+                              CustomTextField(
+                                hintText: 'Enter price per night',
+                                controller: priceController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
+                              ),
+                              const SizedBox(height: 26),
+                            ],
                             const FormFieldLabel('Amenities'),
                             const SizedBox(height: 10),
                             AmenitiesSelector(
@@ -233,15 +250,24 @@ class AddBusinessView extends HookWidget {
                             const SizedBox(height: 10),
                             StayExtrasSelector(
                               selectedExtras: state.selectedExtras,
+                              extraPrices: state.extraPrices,
                               onChanged: (extra) => context
                                   .read<AddBusinessBloc>()
                                   .add(BusinessExtraToggled(extra)),
+                              onPriceChanged: (extra, price) =>
+                                  context.read<AddBusinessBloc>().add(
+                                    BusinessExtraPriceChanged(
+                                      extra: extra,
+                                      price: price,
+                                    ),
+                                  ),
                             ),
                             const SizedBox(height: 28),
-                            if (state.categoryId == 'hotel') ...[
-                              const FormFieldLabel('Rooms'),
+                            if (state.stayInventoryType ==
+                                StayInventoryType.multipleUnits) ...[
+                              const FormFieldLabel('Bookable units'),
                               const SizedBox(height: 10),
-                              HotelRoomForm(
+                              StayUnitForm(
                                 nameController: roomNameController,
                                 guestsController: roomGuestsController,
                                 sizeController: roomSizeController,
@@ -327,10 +353,16 @@ class AddBusinessView extends HookWidget {
                             businessType: state.businessType,
                             logoPath: state.logoPath,
                             coverPhotoPath: state.coverPhotoPath,
+                            businessPhotoPaths: state.businessPhotoPaths,
                             onLogoTap: () =>
                                 selectImage(BusinessImageType.logo),
                             onCoverPhotoTap: () =>
                                 selectImage(BusinessImageType.coverPhoto),
+                            onBusinessPhotosTap: () =>
+                                selectImage(BusinessImageType.businessPhotos),
+                            onBusinessPhotoRemoved: (imagePath) => context
+                                .read<AddBusinessBloc>()
+                                .add(BusinessPhotoRemoved(imagePath)),
                           ),
                           const SizedBox(height: 30),
                           if (state.businessType == BusinessType.stays) ...[
@@ -375,11 +407,15 @@ class AddBusinessView extends HookWidget {
                                           descriptionController.text,
                                       pricePerNight:
                                           state.businessType ==
-                                              BusinessType.stays
+                                                  BusinessType.stays &&
+                                              state.stayInventoryType ==
+                                                  StayInventoryType.singleUnit
                                           ? int.tryParse(priceController.text)
                                           : null,
                                       amenities: state.selectedAmenities,
-                                      rooms: state.categoryId == 'hotel'
+                                      rooms:
+                                          state.stayInventoryType ==
+                                              StayInventoryType.multipleUnits
                                           ? [
                                               StayRoomModel(
                                                 id: 'room-${DateTime.now().microsecondsSinceEpoch}',
@@ -404,14 +440,11 @@ class AddBusinessView extends HookWidget {
                                           .map(
                                             (extra) => StayExtraModel(
                                               type: extra,
-                                              price: switch (extra) {
-                                                StayExtraType.breakfast => 20,
-                                                StayExtraType.parking => 15,
-                                                StayExtraType.spaAccess => 40,
-                                              },
-                                              isPerNight:
-                                                  extra !=
-                                                  StayExtraType.spaAccess,
+                                              price:
+                                                  state.extraPrices[extra
+                                                      .name] ??
+                                                  extra.defaultPrice,
+                                              isPerNight: extra.isPerNight,
                                             ),
                                           )
                                           .toList(),

@@ -14,6 +14,7 @@ class StayDetailsModelMapper extends ClassMapperBase<StayDetailsModel> {
   static StayDetailsModelMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = StayDetailsModelMapper._());
+      StayInventoryTypeMapper.ensureInitialized();
       StayAmenityMapper.ensureInitialized();
       StayRoomModelMapper.ensureInitialized();
       StayExtraModelMapper.ensureInitialized();
@@ -30,6 +31,15 @@ class StayDetailsModelMapper extends ClassMapperBase<StayDetailsModel> {
     _$pricePerNight,
     opt: true,
   );
+  static StayInventoryType _$inventoryType(StayDetailsModel v) =>
+      v.inventoryType;
+  static const Field<StayDetailsModel, StayInventoryType> _f$inventoryType =
+      Field(
+        'inventoryType',
+        _$inventoryType,
+        opt: true,
+        def: StayInventoryType.singleUnit,
+      );
   static List<StayAmenity> _$amenities(StayDetailsModel v) => v.amenities;
   static const Field<StayDetailsModel, List<StayAmenity>> _f$amenities = Field(
     'amenities',
@@ -55,6 +65,7 @@ class StayDetailsModelMapper extends ClassMapperBase<StayDetailsModel> {
   @override
   final MappableFields<StayDetailsModel> fields = const {
     #pricePerNight: _f$pricePerNight,
+    #inventoryType: _f$inventoryType,
     #amenities: _f$amenities,
     #rooms: _f$rooms,
     #extras: _f$extras,
@@ -63,6 +74,7 @@ class StayDetailsModelMapper extends ClassMapperBase<StayDetailsModel> {
   static StayDetailsModel _instantiate(DecodingData data) {
     return StayDetailsModel(
       pricePerNight: data.dec(_f$pricePerNight),
+      inventoryType: data.dec(_f$inventoryType),
       amenities: data.dec(_f$amenities),
       rooms: data.dec(_f$rooms),
       extras: data.dec(_f$extras),
@@ -147,6 +159,7 @@ abstract class StayDetailsModelCopyWith<$R, $In extends StayDetailsModel, $Out>
   get extras;
   $R call({
     int? pricePerNight,
+    StayInventoryType? inventoryType,
     List<StayAmenity>? amenities,
     List<StayRoomModel>? rooms,
     List<StayExtraModel>? extras,
@@ -196,12 +209,14 @@ class _StayDetailsModelCopyWithImpl<$R, $Out>
   @override
   $R call({
     Object? pricePerNight = $none,
+    StayInventoryType? inventoryType,
     List<StayAmenity>? amenities,
     List<StayRoomModel>? rooms,
     List<StayExtraModel>? extras,
   }) => $apply(
     FieldCopyWithData({
       if (pricePerNight != $none) #pricePerNight: pricePerNight,
+      if (inventoryType != null) #inventoryType: inventoryType,
       if (amenities != null) #amenities: amenities,
       if (rooms != null) #rooms: rooms,
       if (extras != null) #extras: extras,
@@ -210,6 +225,7 @@ class _StayDetailsModelCopyWithImpl<$R, $Out>
   @override
   StayDetailsModel $make(CopyWithData data) => StayDetailsModel(
     pricePerNight: data.get(#pricePerNight, or: $value.pricePerNight),
+    inventoryType: data.get(#inventoryType, or: $value.inventoryType),
     amenities: data.get(#amenities, or: $value.amenities),
     rooms: data.get(#rooms, or: $value.rooms),
     extras: data.get(#extras, or: $value.extras),

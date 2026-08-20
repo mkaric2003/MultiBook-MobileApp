@@ -57,5 +57,14 @@ class AmenitiesSection extends StatelessWidget {
     StayAmenity.spa => Icons.spa,
     StayAmenity.petFriendly => Icons.pets,
     StayAmenity.gym => Icons.fitness_center,
+    StayAmenity.airConditioning => Icons.ac_unit_rounded,
+    StayAmenity.heating => Icons.thermostat_rounded,
+    StayAmenity.kitchen => Icons.kitchen_rounded,
+    StayAmenity.washer => Icons.local_laundry_service_rounded,
+    StayAmenity.balcony => Icons.balcony_rounded,
+    StayAmenity.seaView => Icons.waves_rounded,
+    StayAmenity.mountainView => Icons.terrain_rounded,
+    StayAmenity.workspace => Icons.desk_rounded,
+    StayAmenity.elevator => Icons.elevator_rounded,
   };
 }

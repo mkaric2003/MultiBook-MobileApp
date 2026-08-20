@@ -1,6 +1,7 @@
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
@@ -25,6 +26,12 @@ class BusinessCategoryChanged extends AddBusinessEvent {
   final String? categoryId;
 }
 
+class StayInventoryTypeChanged extends AddBusinessEvent {
+  const StayInventoryTypeChanged(this.inventoryType);
+
+  final StayInventoryType inventoryType;
+}
+
 class BusinessAmenityToggled extends AddBusinessEvent {
   const BusinessAmenityToggled(this.amenity);
 
@@ -34,6 +41,13 @@ class BusinessAmenityToggled extends AddBusinessEvent {
 class BusinessExtraToggled extends AddBusinessEvent {
   const BusinessExtraToggled(this.extra);
   final StayExtraType extra;
+}
+
+class BusinessExtraPriceChanged extends AddBusinessEvent {
+  const BusinessExtraPriceChanged({required this.extra, required this.price});
+
+  final StayExtraType extra;
+  final int price;
 }
 
 class ServiceOfferingAdded extends AddBusinessEvent {
@@ -110,6 +124,12 @@ class BusinessImagePickRequested extends AddBusinessEvent {
 
   final BusinessImageType imageType;
   final ImageSource source;
+}
+
+class BusinessPhotoRemoved extends AddBusinessEvent {
+  const BusinessPhotoRemoved(this.imagePath);
+
+  final String imagePath;
 }
 
 class LostBusinessImageRestoreRequested extends AddBusinessEvent {

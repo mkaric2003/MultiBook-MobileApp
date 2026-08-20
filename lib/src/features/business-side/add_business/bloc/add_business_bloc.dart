@@ -1,10 +1,12 @@
 import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart';
+import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_event.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_state.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @injectable
@@ -16,8 +18,10 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   ) : super(const AddBusinessState()) {
     on<BusinessTypeChanged>(_onBusinessTypeChanged);
     on<BusinessCategoryChanged>(_onBusinessCategoryChanged);
+    on<StayInventoryTypeChanged>(_onStayInventoryTypeChanged);
     on<BusinessAmenityToggled>(_onBusinessAmenityToggled);
     on<BusinessExtraToggled>(_onBusinessExtraToggled);
+    on<BusinessExtraPriceChanged>(_onBusinessExtraPriceChanged);
     on<ServiceOfferingAdded>(_onServiceOfferingAdded);
     on<ServiceOfferingRemoved>(_onServiceOfferingRemoved);
     on<ServiceAvailabilitySlotAdded>(_onServiceAvailabilitySlotAdded);
@@ -32,6 +36,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     );
     on<BusinessLocationChanged>(_onBusinessLocationChanged);
     on<BusinessImagePickRequested>(_onBusinessImagePickRequested);
+    on<BusinessPhotoRemoved>(_onBusinessPhotoRemoved);
     on<LostBusinessImageRestoreRequested>(_onLostBusinessImageRestoreRequested);
     on<ExistingBusinessesLoadRequested>(_onExistingBusinessesLoadRequested);
     on<DemoStaysSeedRequested>(_onDemoStaysSeedRequested);
@@ -62,6 +67,11 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     emit(state.copyWith(categoryId: event.categoryId));
   }
 
+  void _onStayInventoryTypeChanged(
+    StayInventoryTypeChanged event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(state.copyWith(stayInventoryType: event.inventoryType));
+
   void _onBusinessAmenityToggled(
     BusinessAmenityToggled event,
     Emitter<AddBusinessState> emit,
@@ -80,11 +90,25 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     Emitter<AddBusinessState> emit,
   ) {
     final extras = [...state.selectedExtras];
-    extras.contains(event.extra)
-        ? extras.remove(event.extra)
-        : extras.add(event.extra);
-    emit(state.copyWith(selectedExtras: extras));
+    final prices = {...state.extraPrices};
+    if (extras.contains(event.extra)) {
+      extras.remove(event.extra);
+      prices.remove(event.extra.name);
+    } else {
+      extras.add(event.extra);
+      prices[event.extra.name] = event.extra.defaultPrice;
+    }
+    emit(state.copyWith(selectedExtras: extras, extraPrices: prices));
   }
+
+  void _onBusinessExtraPriceChanged(
+    BusinessExtraPriceChanged event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      extraPrices: {...state.extraPrices, event.extra.name: event.price},
+    ),
+  );
 
   void _onServiceOfferingAdded(
     ServiceOfferingAdded event,
@@ -223,6 +247,22 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     BusinessImagePickRequested event,
     Emitter<AddBusinessState> emit,
   ) async {
+    if (event.imageType == BusinessImageType.businessPhotos &&
+        event.source == ImageSource.gallery) {
+      final images = await _imagePickerDataSource.pickImages();
+      final availableSlots = 7 - state.businessPhotoPaths.length;
+      if (availableSlots <= 0 || images.isEmpty) return;
+      emit(
+        state.copyWith(
+          businessPhotoPaths: [
+            ...state.businessPhotoPaths,
+            ...images.take(availableSlots).map((image) => image.path),
+          ],
+        ),
+      );
+      return;
+    }
+
     await _sharedPreferences.setString(
       _pendingImageTypeKey,
       event.imageType.name,
@@ -271,8 +311,27 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       case BusinessImageType.coverPhoto:
         emit(state.copyWith(coverPhotoPath: imagePath));
         return;
+      case BusinessImageType.businessPhotos:
+        if (state.businessPhotoPaths.length >= 7) return;
+        emit(
+          state.copyWith(
+            businessPhotoPaths: [...state.businessPhotoPaths, imagePath],
+          ),
+        );
+        return;
     }
   }
+
+  void _onBusinessPhotoRemoved(
+    BusinessPhotoRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      businessPhotoPaths: state.businessPhotoPaths
+          .where((path) => path != event.imagePath)
+          .toList(),
+    ),
+  );
 
   Future<void> _onExistingBusinessesLoadRequested(
     ExistingBusinessesLoadRequested event,
@@ -307,6 +366,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         address: event.address,
         shortDescription: event.shortDescription,
         pricePerNight: event.pricePerNight,
+        stayInventoryType: state.stayInventoryType,
         amenities: event.amenities,
         rooms: event.rooms,
         extras: event.extras,
@@ -318,6 +378,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         longitude: state.longitude,
         logoPath: state.logoPath,
         coverPhotoPath: state.coverPhotoPath,
+        photoPaths: state.businessPhotoPaths,
       );
       emit(
         state.copyWith(

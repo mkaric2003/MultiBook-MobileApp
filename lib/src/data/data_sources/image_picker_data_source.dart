@@ -4,6 +4,8 @@ import 'package:injectable/injectable.dart';
 abstract class ImagePickerDataSource {
   Future<XFile?> pickImage({required ImageSource source});
 
+  Future<List<XFile>> pickImages();
+
   Future<XFile?> retrieveLostImage();
 }
 
@@ -17,6 +19,9 @@ class ImagePickerDataSourceImpl implements ImagePickerDataSource {
   Future<XFile?> pickImage({required ImageSource source}) {
     return _imagePicker.pickImage(source: source);
   }
+
+  @override
+  Future<List<XFile>> pickImages() => _imagePicker.pickMultiImage();
 
   @override
   Future<XFile?> retrieveLostImage() async {

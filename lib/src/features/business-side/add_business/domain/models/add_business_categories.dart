@@ -10,6 +10,57 @@ abstract final class AddBusinessCategories {
       type: BusinessType.stays,
     ),
     BusinessCategoryModel(id: 'cabin', name: 'Cabin', type: BusinessType.stays),
+    BusinessCategoryModel(id: 'villa', name: 'Villa', type: BusinessType.stays),
+    BusinessCategoryModel(
+      id: 'beach_villa',
+      name: 'Beach villa',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'mountain_cabin',
+      name: 'Mountain cabin',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'cottage',
+      name: 'Cottage / weekend house',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'pool_villa',
+      name: 'Pool villa',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'resort',
+      name: 'Resort',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'guesthouse',
+      name: 'Guesthouse',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'hostel',
+      name: 'Hostel',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'aparthotel',
+      name: 'Aparthotel',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'glamping',
+      name: 'Glamping',
+      type: BusinessType.stays,
+    ),
+    BusinessCategoryModel(
+      id: 'vacation_home',
+      name: 'Vacation home',
+      type: BusinessType.stays,
+    ),
     BusinessCategoryModel(
       id: 'hair_salon',
       name: 'Hair salon',

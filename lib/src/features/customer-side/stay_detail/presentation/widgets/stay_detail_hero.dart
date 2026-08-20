@@ -3,8 +3,9 @@ import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_detail_action_button.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_detail_page_dot.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class StayDetailHero extends StatelessWidget {
+class StayDetailHero extends HookWidget {
   const StayDetailHero({
     super.key,
     required this.stay,
@@ -23,23 +24,33 @@ class StayDetailHero extends StatelessWidget {
     final galleryImages = stay.imageUrls.isEmpty
         ? [stay.imageUrl]
         : stay.imageUrls;
+    final activePage = useState(0);
+    final pageController = usePageController();
+
     return SizedBox(
       height: 362,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            galleryImages.first,
-            fit: BoxFit.cover,
-            errorBuilder: (_, _, _) =>
-                const ColoredBox(color: AppColors.surfaceHighlight),
+          PageView.builder(
+            controller: pageController,
+            itemCount: galleryImages.length,
+            onPageChanged: (page) => activePage.value = page,
+            itemBuilder: (_, index) => Image.network(
+              galleryImages[index],
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) =>
+                  const ColoredBox(color: AppColors.surfaceHighlight),
+            ),
           ),
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.black38, Colors.transparent, Colors.black54],
+          const IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.black38, Colors.transparent, Colors.black54],
+                ),
               ),
             ),
           ),
@@ -74,7 +85,7 @@ class StayDetailHero extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   for (var index = 0; index < galleryImages.length; index++)
-                    StayDetailPageDot(active: index == 0),
+                    StayDetailPageDot(active: index == activePage.value),
                 ],
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
 import 'package:aquabook/src/data/models/service_provider_model.dart';
@@ -13,8 +14,10 @@ class AddBusinessState with AddBusinessStateMappable {
   const AddBusinessState({
     this.businessType = BusinessType.stays,
     this.categoryId,
+    this.stayInventoryType = StayInventoryType.singleUnit,
     this.selectedAmenities = const [],
     this.selectedExtras = const [],
+    this.extraPrices = const {},
     this.serviceOfferings = const [],
     this.availabilitySlots = const [],
     this.serviceProviders = const [],
@@ -25,6 +28,7 @@ class AddBusinessState with AddBusinessStateMappable {
     this.isResolvingLocation = false,
     this.logoPath,
     this.coverPhotoPath,
+    this.businessPhotoPaths = const [],
     this.isLoading = false,
     this.isSuccess = false,
     this.errorMessage,
@@ -34,8 +38,10 @@ class AddBusinessState with AddBusinessStateMappable {
 
   final BusinessType businessType;
   final String? categoryId;
+  final StayInventoryType stayInventoryType;
   final List<StayAmenity> selectedAmenities;
   final List<StayExtraType> selectedExtras;
+  final Map<String, int> extraPrices;
   final List<ServiceOfferingModel> serviceOfferings;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
   final List<ServiceProviderModel> serviceProviders;
@@ -46,6 +52,7 @@ class AddBusinessState with AddBusinessStateMappable {
   final bool isResolvingLocation;
   final String? logoPath;
   final String? coverPhotoPath;
+  final List<String> businessPhotoPaths;
   final bool isLoading;
   final bool isSuccess;
   final String? errorMessage;

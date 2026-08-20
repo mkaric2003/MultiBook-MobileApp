@@ -32,6 +32,16 @@ class StayExtraTypeMapper extends EnumMapper<StayExtraType> {
         return StayExtraType.parking;
       case r'spaAccess':
         return StayExtraType.spaAccess;
+      case r'airportTransfer':
+        return StayExtraType.airportTransfer;
+      case r'lateCheckout':
+        return StayExtraType.lateCheckout;
+      case r'petStay':
+        return StayExtraType.petStay;
+      case r'extraBed':
+        return StayExtraType.extraBed;
+      case r'laundryService':
+        return StayExtraType.laundryService;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -46,6 +56,16 @@ class StayExtraTypeMapper extends EnumMapper<StayExtraType> {
         return r'parking';
       case StayExtraType.spaAccess:
         return r'spaAccess';
+      case StayExtraType.airportTransfer:
+        return r'airportTransfer';
+      case StayExtraType.lateCheckout:
+        return r'lateCheckout';
+      case StayExtraType.petStay:
+        return r'petStay';
+      case StayExtraType.extraBed:
+        return r'extraBed';
+      case StayExtraType.laundryService:
+        return r'laundryService';
     }
   }
 }

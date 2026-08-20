@@ -1,1 +1,1 @@
-enum BusinessImageType { logo, coverPhoto }
+enum BusinessImageType { logo, coverPhoto, businessPhotos }

@@ -36,8 +36,9 @@ class StayListing {
       imageUrl: business.coverPhotoUrl ?? business.logoUrl ?? '',
       imageUrls: {
         if (business.coverPhotoUrl != null) business.coverPhotoUrl!,
-        if (business.logoUrl != null) business.logoUrl!,
         ...business.photoUrls,
+        if (business.coverPhotoUrl == null && business.logoUrl != null)
+          business.logoUrl!,
       }.toList(),
     );
   }

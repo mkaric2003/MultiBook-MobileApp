@@ -73,5 +73,10 @@ class ReviewExtraTile extends StatelessWidget {
     StayExtraType.breakfast => Icons.restaurant,
     StayExtraType.parking => Icons.local_parking,
     StayExtraType.spaAccess => Icons.spa,
+    StayExtraType.airportTransfer => Icons.local_taxi_rounded,
+    StayExtraType.lateCheckout => Icons.schedule_rounded,
+    StayExtraType.petStay => Icons.pets_rounded,
+    StayExtraType.extraBed => Icons.bed_rounded,
+    StayExtraType.laundryService => Icons.local_laundry_service_rounded,
   };
 }

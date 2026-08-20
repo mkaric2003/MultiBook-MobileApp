@@ -1,0 +1,46 @@
+import 'dart:io';
+
+import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
+
+class BusinessPhotoThumbnail extends StatelessWidget {
+  const BusinessPhotoThumbnail({
+    super.key,
+    required this.imagePath,
+    required this.onRemove,
+  });
+
+  final String imagePath;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: 86,
+    width: 86,
+    child: Stack(
+      fit: StackFit.expand,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.file(File(imagePath), fit: BoxFit.cover),
+        ),
+        Positioned(
+          top: 3,
+          right: 3,
+          child: InkWell(
+            onTap: onRemove,
+            borderRadius: BorderRadius.circular(14),
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close_rounded, size: 16),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}

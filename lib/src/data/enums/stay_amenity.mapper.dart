@@ -38,6 +38,24 @@ class StayAmenityMapper extends EnumMapper<StayAmenity> {
         return StayAmenity.petFriendly;
       case r'gym':
         return StayAmenity.gym;
+      case r'airConditioning':
+        return StayAmenity.airConditioning;
+      case r'heating':
+        return StayAmenity.heating;
+      case r'kitchen':
+        return StayAmenity.kitchen;
+      case r'washer':
+        return StayAmenity.washer;
+      case r'balcony':
+        return StayAmenity.balcony;
+      case r'seaView':
+        return StayAmenity.seaView;
+      case r'mountainView':
+        return StayAmenity.mountainView;
+      case r'workspace':
+        return StayAmenity.workspace;
+      case r'elevator':
+        return StayAmenity.elevator;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -58,6 +76,24 @@ class StayAmenityMapper extends EnumMapper<StayAmenity> {
         return r'petFriendly';
       case StayAmenity.gym:
         return r'gym';
+      case StayAmenity.airConditioning:
+        return r'airConditioning';
+      case StayAmenity.heating:
+        return r'heating';
+      case StayAmenity.kitchen:
+        return r'kitchen';
+      case StayAmenity.washer:
+        return r'washer';
+      case StayAmenity.balcony:
+        return r'balcony';
+      case StayAmenity.seaView:
+        return r'seaView';
+      case StayAmenity.mountainView:
+        return r'mountainView';
+      case StayAmenity.workspace:
+        return r'workspace';
+      case StayAmenity.elevator:
+        return r'elevator';
     }
   }
 }

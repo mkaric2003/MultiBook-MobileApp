@@ -1,6 +1,7 @@
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_cover_photo_upload.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_logo_upload.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_photos_upload.dart';
 import 'package:flutter/material.dart';
 
 class BusinessMediaSection extends StatelessWidget {
@@ -9,15 +10,21 @@ class BusinessMediaSection extends StatelessWidget {
     required this.businessType,
     required this.logoPath,
     required this.coverPhotoPath,
+    required this.businessPhotoPaths,
     required this.onLogoTap,
     required this.onCoverPhotoTap,
+    required this.onBusinessPhotosTap,
+    required this.onBusinessPhotoRemoved,
   });
 
   final BusinessType businessType;
   final String? logoPath;
   final String? coverPhotoPath;
+  final List<String> businessPhotoPaths;
   final VoidCallback onLogoTap;
   final VoidCallback onCoverPhotoTap;
+  final VoidCallback onBusinessPhotosTap;
+  final ValueChanged<String> onBusinessPhotoRemoved;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +57,12 @@ class BusinessMediaSection extends StatelessWidget {
         BusinessCoverPhotoUpload(
           imagePath: coverPhotoPath,
           onTap: onCoverPhotoTap,
+        ),
+        const SizedBox(height: 22),
+        BusinessPhotosUpload(
+          imagePaths: businessPhotoPaths,
+          onAdd: onBusinessPhotosTap,
+          onRemove: onBusinessPhotoRemoved,
         ),
       ],
     );

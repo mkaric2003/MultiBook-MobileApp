@@ -9,6 +9,7 @@ import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/data/enums/service_weekday.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
 import 'package:aquabook/src/data/models/business_location_model.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
@@ -41,28 +42,6 @@ class BusinessRepository {
   );
 
   static const _businessesCollection = 'businesses';
-  static const _demoStayNames = [
-    'Oceanview Resort',
-    'Mountain Cabin Retreat',
-    'City Center Hotel',
-    'Sunset Beach Villa',
-    'Old Town Apartment',
-    'Pinewood Lodge',
-    'Riverside Guesthouse',
-    'Azure Bay Hotel',
-    'Golden Peak Chalet',
-    'Harbor View Suites',
-    'Lakehouse Escape',
-    'Downtown Loft',
-    'Seaside Boutique Hotel',
-    'Forest Edge Cabin',
-    'Skyline Residence',
-    'Meadowbrook Villa',
-    'Coastal Breeze Apartment',
-    'Alpine Hideaway',
-    'The Grand Terrace',
-    'Palm Grove Resort',
-  ];
   static const _demoStayImageUrls = [
     'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=85',
     'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=85',
@@ -70,27 +49,267 @@ class BusinessRepository {
     'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=85',
     'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=85',
   ];
-  static const _demoStayCities = [
-    'Sarajevo',
-    'Mostar',
-    'Banja Luka',
-    'Tuzla',
-    'Zenica',
-    'Bihać',
-    'Trebinje',
-    'Neum',
-    'Jajce',
-    'Travnik',
-    'Konjic',
-    'Visoko',
-    'Prijedor',
-    'Brčko',
-    'Bijeljina',
-    'Goražde',
-    'Livno',
-    'Foča',
-    'Jahorina',
-    'Srebrenik',
+  static const _demoStayListings = <Map<String, Object>>[
+    {
+      'name': 'Hotel Europe Sarajevo',
+      'categoryId': 'hotel',
+      'city': 'Sarajevo',
+      'address': 'Vladislava Skarića 5',
+      'latitude': 43.8591,
+      'longitude': 18.4215,
+      'price': 189,
+      'rating': 4.8,
+      'reviews': 486,
+      'description':
+          'Historic hotel in the heart of Sarajevo, minutes from Baščaršija and the Latin Bridge.',
+    },
+    {
+      'name': 'Riverside Loft',
+      'categoryId': 'apartment',
+      'city': 'Sarajevo',
+      'address': 'Obala Kulina bana 14',
+      'latitude': 43.8587,
+      'longitude': 18.4246,
+      'price': 112,
+      'rating': 4.7,
+      'reviews': 134,
+      'description':
+          'Bright riverfront apartment with a private balcony, full kitchen and old-town views.',
+    },
+    {
+      'name': 'Pine Peak Cabin',
+      'categoryId': 'mountain_cabin',
+      'city': 'Jahorina',
+      'address': 'Poljice bb',
+      'latitude': 43.7351,
+      'longitude': 18.5698,
+      'price': 156,
+      'rating': 4.9,
+      'reviews': 92,
+      'description':
+          'Cozy mountain cabin with a fireplace, ski storage and panoramic pine-forest views.',
+    },
+    {
+      'name': 'Villa Neretva',
+      'categoryId': 'villa',
+      'city': 'Mostar',
+      'address': 'Bulevar 24',
+      'latitude': 43.3438,
+      'longitude': 17.8078,
+      'price': 245,
+      'rating': 4.8,
+      'reviews': 178,
+      'description':
+          'Elegant private villa close to the Old Bridge with a garden, outdoor dining and pool.',
+    },
+    {
+      'name': 'Azure Bay Retreat',
+      'categoryId': 'beach_villa',
+      'city': 'Neum',
+      'address': 'Mimoza 12',
+      'latitude': 42.9234,
+      'longitude': 17.6151,
+      'price': 320,
+      'rating': 4.9,
+      'reviews': 211,
+      'description':
+          'Modern waterfront villa with private sea access, sun terrace and sunset views.',
+    },
+    {
+      'name': 'Pliva Lakeside Cottage',
+      'categoryId': 'cottage',
+      'city': 'Jajce',
+      'address': 'Veliko Plivsko Jezero 7',
+      'latitude': 44.3398,
+      'longitude': 17.2422,
+      'price': 138,
+      'rating': 4.7,
+      'reviews': 67,
+      'description':
+          'Peaceful lakeside cottage with a wood deck, barbecue area and complimentary kayaks.',
+    },
+    {
+      'name': 'Sunset Pool Villa',
+      'categoryId': 'pool_villa',
+      'city': 'Trebinje',
+      'address': 'Tvrdoš Road 19',
+      'latitude': 42.7124,
+      'longitude': 18.3456,
+      'price': 279,
+      'rating': 4.8,
+      'reviews': 119,
+      'description':
+          'Mediterranean pool villa among vineyards, ideal for relaxed family holidays.',
+    },
+    {
+      'name': 'Banja Luka City Suites',
+      'categoryId': 'aparthotel',
+      'city': 'Banja Luka',
+      'address': 'Kralja Petra I Karađorđevića 68',
+      'latitude': 44.7722,
+      'longitude': 17.1910,
+      'price': 96,
+      'rating': 4.6,
+      'reviews': 203,
+      'description':
+          'Contemporary serviced suites with hotel comfort and apartment-style living.',
+    },
+    {
+      'name': 'Una Riverside Resort',
+      'categoryId': 'resort',
+      'city': 'Bihać',
+      'address': 'Bosanska Otoka 32',
+      'latitude': 44.8161,
+      'longitude': 15.8708,
+      'price': 174,
+      'rating': 4.7,
+      'reviews': 356,
+      'description':
+          'Nature resort on the Una river with wellness facilities, restaurant and family activities.',
+    },
+    {
+      'name': 'Old Town Guesthouse',
+      'categoryId': 'guesthouse',
+      'city': 'Travnik',
+      'address': 'Bosanska 41',
+      'latitude': 44.2268,
+      'longitude': 17.6655,
+      'price': 74,
+      'rating': 4.5,
+      'reviews': 88,
+      'description':
+          'Warm family-run guesthouse beneath Travnik Fortress with homemade breakfast.',
+    },
+    {
+      'name': 'Hostel Bridge House',
+      'categoryId': 'hostel',
+      'city': 'Mostar',
+      'address': 'Kujundžiluk 9',
+      'latitude': 43.3371,
+      'longitude': 17.8140,
+      'price': 42,
+      'rating': 4.4,
+      'reviews': 274,
+      'description':
+          'Social boutique hostel steps from Stari Most, with shared kitchen and private rooms.',
+    },
+    {
+      'name': 'Glamping Drina',
+      'categoryId': 'glamping',
+      'city': 'Foča',
+      'address': 'Tjentište 18',
+      'latitude': 43.3564,
+      'longitude': 18.6921,
+      'price': 128,
+      'rating': 4.8,
+      'reviews': 76,
+      'description':
+          'Luxury safari tents beside the Drina with breakfast baskets and guided adventures.',
+    },
+    {
+      'name': 'Panorama Vacation Home',
+      'categoryId': 'vacation_home',
+      'city': 'Zenica',
+      'address': 'Smetovi 6',
+      'latitude': 44.2141,
+      'longitude': 17.9136,
+      'price': 149,
+      'rating': 4.6,
+      'reviews': 54,
+      'description':
+          'Spacious hillside home with a fireplace, large terrace and city panorama.',
+    },
+    {
+      'name': 'Coastal Breeze Apartment',
+      'categoryId': 'apartment',
+      'city': 'Neum',
+      'address': 'Zagrebačka 31',
+      'latitude': 42.9246,
+      'longitude': 17.6131,
+      'price': 109,
+      'rating': 4.5,
+      'reviews': 103,
+      'description':
+          'Sea-view apartment with a balcony, private parking and an easy walk to the beach.',
+    },
+    {
+      'name': 'Vlašić Alpine Lodge',
+      'categoryId': 'cabin',
+      'city': 'Travnik',
+      'address': 'Babanovac 56',
+      'latitude': 44.3127,
+      'longitude': 17.5742,
+      'price': 164,
+      'rating': 4.8,
+      'reviews': 145,
+      'description':
+          'Timber alpine lodge with sauna, fireplace and direct access to mountain trails.',
+    },
+    {
+      'name': 'The Grand Tuzla',
+      'categoryId': 'hotel',
+      'city': 'Tuzla',
+      'address': 'Trg Slobode 2',
+      'latitude': 44.5384,
+      'longitude': 18.6735,
+      'price': 121,
+      'rating': 4.6,
+      'reviews': 317,
+      'description':
+          'Central full-service hotel near Pannonian Lakes with a rooftop restaurant and spa.',
+    },
+    {
+      'name': 'Herzegovina Garden Villa',
+      'categoryId': 'villa',
+      'city': 'Ljubuški',
+      'address': 'Kravica Road 8',
+      'latitude': 43.1964,
+      'longitude': 17.5456,
+      'price': 218,
+      'rating': 4.9,
+      'reviews': 81,
+      'description':
+          'Stone garden villa near Kravica Waterfalls with a pool, orchard and outdoor kitchen.',
+    },
+    {
+      'name': 'Jahorina Forest Chalet',
+      'categoryId': 'mountain_cabin',
+      'city': 'Jahorina',
+      'address': 'Ogorjelica 22',
+      'latitude': 43.7281,
+      'longitude': 18.5723,
+      'price': 192,
+      'rating': 4.8,
+      'reviews': 128,
+      'description':
+          'Refined ski chalet with heated floors, a sauna and woodland views.',
+    },
+    {
+      'name': 'Bijeljina Wellness Hotel',
+      'categoryId': 'hotel',
+      'city': 'Bijeljina',
+      'address': 'Kneza Miloša 45',
+      'latitude': 44.7587,
+      'longitude': 19.2146,
+      'price': 104,
+      'rating': 4.5,
+      'reviews': 196,
+      'description':
+          'Relaxed wellness hotel with indoor pool, gym and a generous breakfast buffet.',
+    },
+    {
+      'name': 'Srebrenik Hilltop Home',
+      'categoryId': 'pool_villa',
+      'city': 'Srebrenik',
+      'address': 'Gradina 11',
+      'latitude': 44.7080,
+      'longitude': 18.4884,
+      'price': 184,
+      'rating': 4.7,
+      'reviews': 63,
+      'description':
+          'Private hilltop home with an infinity pool, sunset terrace and room for the whole family.',
+    },
   ];
   static const _demoServices = <Map<String, String>>[
     {
@@ -560,39 +779,43 @@ class BusinessRepository {
 
     String? firstBusinessId;
     try {
-      for (var index = 0; index < _demoStayNames.length; index++) {
+      for (var index = 0; index < _demoStayListings.length; index++) {
+        final listing = _demoStayListings[index];
         final businessId = _firestoreDataSource.createDocumentId(
           collection: _businessesCollection,
         );
         firstBusinessId ??= businessId;
-        final pricePerNight = 80 + (index * 15);
-        final rating = index.isEven ? 4.1 + ((index % 5) * 0.18) : 0.0;
-        final imageUrl = _demoStayImageUrls[index % _demoStayImageUrls.length];
-        final city = _demoStayCities[index % _demoStayCities.length];
-        final categoryId = ['hotel', 'apartment', 'cabin'][index % 3];
-        final amenities = StayAmenity.values
-            .take(2 + (index % 5))
-            .map((amenity) => amenity.name)
-            .toList();
-        final rooms = categoryId == 'hotel'
-            ? [
-                {
-                  'id': 'deluxe-room',
-                  'name': 'Deluxe Room',
-                  'maxGuests': 2,
-                  'sizeSquareMeters': 32,
-                  'pricePerNight': pricePerNight,
-                  'quantity': 12,
-                },
-                {
-                  'id': 'executive-suite',
-                  'name': 'Executive Suite',
-                  'maxGuests': 4,
-                  'sizeSquareMeters': 55,
-                  'pricePerNight': pricePerNight + 90,
-                  'quantity': 6,
-                },
-              ]
+        final name = listing['name']! as String;
+        final categoryId = listing['categoryId']! as String;
+        final city = listing['city']! as String;
+        final pricePerNight = listing['price']! as int;
+        final rating = listing['rating']! as double;
+        final reviewCount = listing['reviews']! as int;
+        final coverPhotoUrl =
+            _demoStayImageUrls[index % _demoStayImageUrls.length];
+        final photoUrls = List<String>.generate(
+          3,
+          (photoIndex) =>
+              _demoStayImageUrls[(index + photoIndex + 1) %
+                  _demoStayImageUrls.length],
+        );
+        final inventoryType =
+            [
+              'hotel',
+              'resort',
+              'guesthouse',
+              'hostel',
+              'aparthotel',
+              'glamping',
+            ].contains(categoryId)
+            ? StayInventoryType.multipleUnits
+            : StayInventoryType.singleUnit;
+        final amenities = _demoStayAmenities(
+          categoryId,
+          index,
+        ).map((amenity) => amenity.name).toList();
+        final rooms = inventoryType == StayInventoryType.multipleUnits
+            ? _demoStayUnits(categoryId, pricePerNight)
             : const <Map<String, Object>>[];
 
         await _firestoreDataSource.setDocument(
@@ -602,9 +825,9 @@ class BusinessRepository {
             'id': businessId,
             'ownerId': ownerId,
             'type': BusinessType.stays.name,
-            'name': _demoStayNames[index],
+            'name': name,
             'categoryId': categoryId,
-            'nameLowercase': _normalizeSearchValue(_demoStayNames[index]),
+            'nameLowercase': _normalizeSearchValue(name),
             'cityLowercase': _normalizeSearchValue(city),
             'stayPricePerNight': pricePerNight,
             'maxGuestCapacity': rooms.isEmpty
@@ -615,40 +838,33 @@ class BusinessRepository {
                         (first, second) => first > second ? first : second,
                       ),
             'location': {
-              'address': '${index + 1} Demo Street, $city',
+              'address': listing['address'],
               'city': city,
               'cityLowercase': _normalizeSearchValue(city),
-              'latitude': 43.8563 + (index * 0.002),
-              'longitude': 18.4131 + (index * 0.002),
+              'latitude': listing['latitude'],
+              'longitude': listing['longitude'],
             },
-            'shortDescription': 'A comfortable stay for your next trip.',
-            'logoUrl': imageUrl,
-            'coverPhotoUrl': imageUrl,
-            'photoUrls': [imageUrl],
+            'shortDescription': listing['description'],
+            'logoUrl': coverPhotoUrl,
+            'coverPhotoUrl': coverPhotoUrl,
+            'photoUrls': photoUrls,
             'isActive': true,
             'averageRating': rating,
-            'reviewCount': rating > 0 ? 40 + (index * 11) : 0,
+            'reviewCount': reviewCount,
             'stayDetails': {
               'pricePerNight': pricePerNight,
+              'inventoryType': inventoryType.name,
               'amenities': amenities,
               'rooms': rooms,
-              'extras': [
-                {
-                  'type': StayExtraType.breakfast.name,
-                  'price': 20,
-                  'isPerNight': true,
-                },
-                {
-                  'type': StayExtraType.parking.name,
-                  'price': 15,
-                  'isPerNight': true,
-                },
-                {
-                  'type': StayExtraType.spaAccess.name,
-                  'price': 40,
-                  'isPerNight': false,
-                },
-              ],
+              'extras': _demoStayExtras(categoryId, index)
+                  .map(
+                    (extra) => {
+                      'type': extra.name,
+                      'price': extra.defaultPrice,
+                      'isPerNight': extra.isPerNight,
+                    },
+                  )
+                  .toList(),
             },
             'createdAt': _firestoreDataSource.serverTimestamp,
             'updatedAt': _firestoreDataSource.serverTimestamp,
@@ -659,10 +875,10 @@ class BusinessRepository {
         await _setSelectedBusiness(firstBusinessId);
       }
       log(
-        'Created ${_demoStayNames.length} demo stays.',
+        'Created ${_demoStayListings.length} demo stays.',
         name: 'BusinessRepository',
       );
-      return _demoStayNames.length;
+      return _demoStayListings.length;
     } on FirebaseException catch (error, stackTrace) {
       log(
         'Could not seed demo stays: ${error.code}',
@@ -935,6 +1151,7 @@ class BusinessRepository {
     required double? latitude,
     required double? longitude,
     int? pricePerNight,
+    StayInventoryType stayInventoryType = StayInventoryType.singleUnit,
     List<StayAmenity> amenities = const [],
     List<StayRoomModel> rooms = const [],
     List<StayExtraModel> extras = const [],
@@ -944,6 +1161,7 @@ class BusinessRepository {
     List<ServiceProviderModel> serviceProviders = const [],
     String? logoPath,
     String? coverPhotoPath,
+    List<String> photoPaths = const [],
   }) async {
     final ownerId = _authenticationDataSource.currentUser?.uid;
     if (ownerId == null) {
@@ -952,8 +1170,12 @@ class BusinessRepository {
       );
     }
     if (type == BusinessType.stays &&
+        stayInventoryType == StayInventoryType.singleUnit &&
         (pricePerNight == null || pricePerNight <= 0)) {
       throw const BusinessException('Please enter a valid price per night.');
+    }
+    if (photoPaths.length > 7) {
+      throw const BusinessException('You can upload up to 7 business photos.');
     }
     if (type == BusinessType.services && serviceOfferings.isEmpty) {
       throw const BusinessException('Please add at least one service.');
@@ -976,6 +1198,19 @@ class BusinessRepository {
         'Please select your business location on the map.',
       );
     }
+    if (type == BusinessType.stays &&
+        stayInventoryType == StayInventoryType.multipleUnits &&
+        rooms.isEmpty) {
+      throw const BusinessException('Please add at least one stay unit.');
+    }
+
+    final stayPricePerNight =
+        type == BusinessType.stays &&
+            stayInventoryType == StayInventoryType.multipleUnits
+        ? rooms
+              .map((room) => room.pricePerNight)
+              .reduce((first, second) => first < second ? first : second)
+        : pricePerNight;
 
     final businessId = _firestoreDataSource.createDocumentId(
       collection: _businessesCollection,
@@ -998,6 +1233,17 @@ class BusinessRepository {
         fileName: 'cover_photo',
         uploadedStoragePaths: uploadedStoragePaths,
       );
+      final photoUrls = <String>[];
+      for (var index = 0; index < photoPaths.length; index++) {
+        final photoUrl = await _uploadImage(
+          ownerId: ownerId,
+          businessId: businessId,
+          imagePath: photoPaths[index],
+          fileName: 'photo_$index',
+          uploadedStoragePaths: uploadedStoragePaths,
+        );
+        if (photoUrl != null) photoUrls.add(photoUrl);
+      }
       final business = BusinessModel(
         id: businessId,
         ownerId: ownerId,
@@ -1015,9 +1261,11 @@ class BusinessRepository {
             : shortDescription.trim(),
         logoUrl: logoUrl,
         coverPhotoUrl: coverPhotoUrl,
+        photoUrls: photoUrls,
         stayDetails: type == BusinessType.stays
             ? StayDetailsModel(
-                pricePerNight: pricePerNight,
+                pricePerNight: stayPricePerNight,
+                inventoryType: stayInventoryType,
                 amenities: amenities,
                 rooms: rooms,
                 extras: extras,
@@ -1070,6 +1318,7 @@ class BusinessRepository {
               ? null
               : {
                   'pricePerNight': business.stayDetails!.pricePerNight,
+                  'inventoryType': business.stayDetails!.inventoryType.name,
                   'amenities': business.stayDetails!.amenities
                       .map((amenity) => amenity.name)
                       .toList(),
@@ -1216,6 +1465,15 @@ class BusinessRepository {
           ? StayDetailsModel(
               pricePerNight: (stayDetailsData['pricePerNight'] as num?)
                   ?.toInt(),
+              inventoryType:
+                  StayInventoryType.values
+                      .where(
+                        (type) => type.name == stayDetailsData['inventoryType'],
+                      )
+                      .firstOrNull ??
+                  ((stayDetailsData['rooms'] as List? ?? const []).isNotEmpty
+                      ? StayInventoryType.multipleUnits
+                      : StayInventoryType.singleUnit),
               amenities: (stayDetailsData['amenities'] as List? ?? const [])
                   .map(
                     (name) => StayAmenity.values.where(
@@ -1368,6 +1626,110 @@ class BusinessRepository {
         .replaceAll('ž', 'z')
         .replaceAll(RegExp(r'[^a-z0-9 ]'), '')
         .replaceAll(RegExp(r'\s+'), ' ');
+  }
+
+  List<StayAmenity> _demoStayAmenities(String categoryId, int index) {
+    final amenities = <StayAmenity>{
+      StayAmenity.wifi,
+      StayAmenity.parking,
+      StayAmenity.airConditioning,
+    };
+    if (index.isEven) amenities.add(StayAmenity.workspace);
+    if ({
+      'hotel',
+      'resort',
+      'guesthouse',
+      'hostel',
+      'aparthotel',
+    }.contains(categoryId)) {
+      amenities.addAll({StayAmenity.elevator, StayAmenity.gym});
+    }
+    if ({'villa', 'beach_villa', 'pool_villa', 'resort'}.contains(categoryId)) {
+      amenities.addAll({StayAmenity.pool, StayAmenity.balcony});
+    }
+    if ({'beach_villa', 'apartment'}.contains(categoryId)) {
+      amenities.add(StayAmenity.seaView);
+    }
+    if ({
+      'cabin',
+      'mountain_cabin',
+      'cottage',
+      'glamping',
+    }.contains(categoryId)) {
+      amenities.addAll({StayAmenity.heating, StayAmenity.mountainView});
+    }
+    if ({
+      'apartment',
+      'villa',
+      'cottage',
+      'vacation_home',
+      'aparthotel',
+    }.contains(categoryId)) {
+      amenities.addAll({StayAmenity.kitchen, StayAmenity.washer});
+    }
+    if (index % 3 == 0) amenities.add(StayAmenity.petFriendly);
+    if (index % 4 == 0) amenities.add(StayAmenity.spa);
+    return amenities.toList();
+  }
+
+  List<StayExtraType> _demoStayExtras(String categoryId, int index) {
+    final extras = <StayExtraType>[
+      StayExtraType.breakfast,
+      StayExtraType.parking,
+    ];
+    if ({
+      'hotel',
+      'resort',
+      'villa',
+      'beach_villa',
+      'pool_villa',
+    }.contains(categoryId)) {
+      extras.add(StayExtraType.airportTransfer);
+    }
+    if ({'hotel', 'resort', 'guesthouse'}.contains(categoryId)) {
+      extras.addAll([StayExtraType.spaAccess, StayExtraType.lateCheckout]);
+    }
+    if (index.isEven) extras.add(StayExtraType.extraBed);
+    if (index % 3 == 0) extras.add(StayExtraType.petStay);
+    if (index % 4 == 0) extras.add(StayExtraType.laundryService);
+    return extras;
+  }
+
+  List<Map<String, Object>> _demoStayUnits(String categoryId, int price) {
+    final primaryName = switch (categoryId) {
+      'hostel' => 'Private Double Room',
+      'glamping' => 'Luxury Safari Tent',
+      'aparthotel' => 'One-bedroom Suite',
+      'resort' => 'Garden View Room',
+      'guesthouse' => 'Comfort Double Room',
+      _ => 'Deluxe King Room',
+    };
+    final secondaryName = switch (categoryId) {
+      'hostel' => 'Four-bed Dormitory',
+      'glamping' => 'Family Glamping Tent',
+      'aparthotel' => 'Two-bedroom Apartment',
+      'resort' => 'Sea View Suite',
+      'guesthouse' => 'Family Suite',
+      _ => 'Executive Suite',
+    };
+    return [
+      {
+        'id': 'standard-unit',
+        'name': primaryName,
+        'maxGuests': 2,
+        'sizeSquareMeters': 30,
+        'pricePerNight': price,
+        'quantity': categoryId == 'hostel' ? 8 : 12,
+      },
+      {
+        'id': 'premium-unit',
+        'name': secondaryName,
+        'maxGuests': 4,
+        'sizeSquareMeters': 55,
+        'pricePerNight': price + 65,
+        'quantity': categoryId == 'hostel' ? 4 : 6,
+      },
+    ];
   }
 
   Future<String?> _uploadImage({
