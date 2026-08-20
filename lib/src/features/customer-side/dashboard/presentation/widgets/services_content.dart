@@ -16,6 +16,7 @@ class ServicesContent extends HookWidget {
     required this.otherServices,
     required this.isOtherServicesLoading,
     required this.hasMoreOtherServices,
+    required this.isFiltering,
     required this.onLoadMoreServices,
     this.appointmentDraft,
     this.onContinueAppointment,
@@ -27,6 +28,7 @@ class ServicesContent extends HookWidget {
   final List<ServiceListing> otherServices;
   final bool isOtherServicesLoading;
   final bool hasMoreOtherServices;
+  final bool isFiltering;
   final Future<void> Function() onLoadMoreServices;
   final AppointmentDraftModel? appointmentDraft;
   final VoidCallback? onContinueAppointment;
@@ -54,30 +56,40 @@ class ServicesContent extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const QuickFilterChips(),
-          const SizedBox(height: 28),
-          const PromotionBanner(),
-          const SizedBox(height: 28),
-          if (appointmentDraft != null && onContinueAppointment != null) ...[
-            const CustomerSectionTitle(title: 'Continue appointment'),
+          if (isFiltering) ...[
+            const CustomerSectionTitle(title: 'Search results'),
             const SizedBox(height: 14),
-            ContinueAppointmentCard(
-              draft: appointmentDraft!,
-              onTap: onContinueAppointment!,
+            OtherServicesGrid(
+              services: otherServices,
+              isLoading: isOtherServicesLoading || isPopularServicesLoading,
+              emptyMessage: 'No services match your filters.',
+            ),
+          ] else ...[
+            const QuickFilterChips(),
+            const SizedBox(height: 28),
+            const PromotionBanner(),
+            const SizedBox(height: 28),
+            if (appointmentDraft != null && onContinueAppointment != null) ...[
+              const CustomerSectionTitle(title: 'Continue appointment'),
+              const SizedBox(height: 14),
+              ContinueAppointmentCard(
+                draft: appointmentDraft!,
+                onTap: onContinueAppointment!,
+              ),
+              const SizedBox(height: 28),
+            ],
+            const CustomerSectionTitle(title: 'Popular near you'),
+            const SizedBox(height: 14),
+            PopularServicesList(
+              services: popularServices,
+              isLoading: isPopularServicesLoading,
             ),
             const SizedBox(height: 28),
+            OtherServicesGrid(
+              services: otherServices,
+              isLoading: isOtherServicesLoading,
+            ),
           ],
-          const CustomerSectionTitle(title: 'Popular near you'),
-          const SizedBox(height: 14),
-          PopularServicesList(
-            services: popularServices,
-            isLoading: isPopularServicesLoading,
-          ),
-          const SizedBox(height: 28),
-          OtherServicesGrid(
-            services: otherServices,
-            isLoading: isOtherServicesLoading,
-          ),
         ],
       ),
     );

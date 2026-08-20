@@ -11,6 +11,7 @@ class ClientAppointmentStatusLabel extends StatelessWidget {
     final color = switch (status) {
       'confirmed' => AppColors.success,
       'cancelled' => Colors.redAccent,
+      'declined' => const Color(0xFFF59E0B),
       'completed' => AppColors.iconMuted,
       _ => AppColors.primary,
     };

@@ -39,7 +39,6 @@ class CustomerProfileView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Icon(Icons.settings, color: AppColors.muted),
                   ],
                 ),
                 const SizedBox(height: 32),
@@ -105,9 +104,19 @@ class CustomerProfileView extends StatelessWidget {
                   label: 'Payment methods',
                 ),
                 const SizedBox(height: 10),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.notifications,
                   label: 'Notifications',
+                  onTap: () => context.push(AppRoutes.NOTIFICATIONS),
+                ),
+                const SizedBox(height: 10),
+                CustomerProfileMenuItem(
+                  icon: Icons.chat_bubble_outline,
+                  label: 'Messages',
+                  badgeCount: state.unreadMessagesCount > 0
+                      ? state.unreadMessagesCount
+                      : null,
+                  onTap: () => context.push(AppRoutes.CHAT_LIST),
                 ),
                 const SizedBox(height: 10),
                 const CustomerProfileMenuItem(

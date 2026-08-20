@@ -127,6 +127,9 @@ class UserRepository {
       if (profileImagePath != null) {
         final compressedImageBytes = await compressImage(
           XFile(profileImagePath),
+          minWidth: 512,
+          minHeight: 512,
+          quality: 38,
         );
         profileImageUrl = await _storageDataSource.uploadImage(
           storagePath: 'profiles/${currentUser.uid}/profile.webp',

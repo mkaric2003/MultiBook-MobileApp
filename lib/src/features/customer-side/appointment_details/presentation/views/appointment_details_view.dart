@@ -10,6 +10,7 @@ import 'package:aquabook/src/features/customer-side/appointment_details/presenta
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_information_card.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_price_card.dart';
 import 'package:aquabook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
+import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,6 +107,16 @@ class AppointmentDetailsView extends StatelessWidget {
                             if (updated != null && context.mounted) {
                               context.pop(updated);
                             }
+                          },
+                          onMessageProvider: () {
+                            final business = state.business;
+                            if (business == null) return;
+                            context.push(
+                              AppRoutes.CHAT_CONVERSATION,
+                              extra: ChatConversationArguments.fromBusiness(
+                                business,
+                              ),
+                            );
                           },
                         ),
                       ],

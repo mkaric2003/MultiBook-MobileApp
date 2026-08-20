@@ -25,7 +25,7 @@ class DashboardMetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
@@ -38,16 +38,16 @@ class DashboardMetricCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 17),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 14),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 3),
                 Row(
                   children: [
                     Text(
                       value,
                       style: TextStyle(
                         color: valueColor,
-                        fontSize: 31,
+                        fontSize: 25,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -58,13 +58,13 @@ class DashboardMetricCard extends StatelessWidget {
             ),
           ),
           Container(
-            height: 60,
-            width: 60,
+            height: 48,
+            width: 48,
             decoration: BoxDecoration(
               color: iconBackgroundColor,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: iconColor, size: 30),
+            child: Icon(icon, color: iconColor, size: 24),
           ),
         ],
       ),

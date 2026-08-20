@@ -57,7 +57,7 @@ class MoreView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 25),
-                    const MoreMenuSection(
+                    MoreMenuSection(
                       title: 'Financials',
                       items: [
                         MoreMenuItem(
@@ -75,17 +75,21 @@ class MoreView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 25),
-                    const MoreMenuSection(
+                    MoreMenuSection(
                       title: 'Notifications & Communication',
                       items: [
                         MoreMenuItem(
                           label: 'Notifications',
                           icon: Icons.notifications_rounded,
+                          onTap: () => context.push(AppRoutes.NOTIFICATIONS),
                         ),
                         MoreMenuItem(
                           label: 'Messages',
                           icon: Icons.chat_bubble_rounded,
-                          badgeCount: 3,
+                          badgeCount: state.unreadMessagesCount > 0
+                              ? state.unreadMessagesCount
+                              : null,
+                          onTap: () => context.push(AppRoutes.CHAT_LIST),
                         ),
                       ],
                     ),

@@ -3,6 +3,8 @@ import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/data/models/booking_draft_model.dart';
 import 'package:aquabook/src/data/models/appointment_draft_model.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
 
 class CustomerDashboardState {
   const CustomerDashboardState({
@@ -12,6 +14,9 @@ class CustomerDashboardState {
     this.isOtherStaysLoading = false,
     this.otherStays = const [],
     this.hasMoreOtherStays = true,
+    this.stayFilters = const StayFilters(),
+    this.stayCities = const [],
+    this.serviceFilters = const ServiceFilters(),
     this.isPopularServicesLoading = true,
     this.popularServices = const [],
     this.isOtherServicesLoading = false,
@@ -27,6 +32,9 @@ class CustomerDashboardState {
   final bool isOtherStaysLoading;
   final List<StayListing> otherStays;
   final bool hasMoreOtherStays;
+  final StayFilters stayFilters;
+  final List<String> stayCities;
+  final ServiceFilters serviceFilters;
   final bool isPopularServicesLoading;
   final List<ServiceListing> popularServices;
   final bool isOtherServicesLoading;
@@ -42,6 +50,9 @@ class CustomerDashboardState {
     bool? isOtherStaysLoading,
     List<StayListing>? otherStays,
     bool? hasMoreOtherStays,
+    StayFilters? stayFilters,
+    List<String>? stayCities,
+    ServiceFilters? serviceFilters,
     bool? isPopularServicesLoading,
     List<ServiceListing>? popularServices,
     bool? isOtherServicesLoading,
@@ -58,6 +69,9 @@ class CustomerDashboardState {
       isOtherStaysLoading: isOtherStaysLoading ?? this.isOtherStaysLoading,
       otherStays: otherStays ?? this.otherStays,
       hasMoreOtherStays: hasMoreOtherStays ?? this.hasMoreOtherStays,
+      stayFilters: stayFilters ?? this.stayFilters,
+      stayCities: stayCities ?? this.stayCities,
+      serviceFilters: serviceFilters ?? this.serviceFilters,
       isPopularServicesLoading:
           isPopularServicesLoading ?? this.isPopularServicesLoading,
       popularServices: popularServices ?? this.popularServices,

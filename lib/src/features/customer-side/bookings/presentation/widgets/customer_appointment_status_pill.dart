@@ -13,6 +13,7 @@ class CustomerAppointmentStatusPill extends StatelessWidget {
       'confirmed' => AppColors.success,
       'completed' => AppColors.iconMuted,
       'cancelled' => Colors.redAccent,
+      'declined' => const Color(0xFFF59E0B),
       _ => AppColors.primary,
     };
     return Container(

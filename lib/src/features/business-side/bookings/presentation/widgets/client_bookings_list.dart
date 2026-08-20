@@ -73,7 +73,9 @@ class ClientBookingsList extends StatelessWidget {
               backgroundColor: Colors.transparent,
               builder: (sheetContext) => ManageAppointmentSheet(
                 appointment: appointment,
-                onCancel: context.read<ClientBookingsCubit>().cancelAppointment,
+                onDecline: context
+                    .read<ClientBookingsCubit>()
+                    .declineAppointment,
                 onReschedule: () async {
                   final business = state.selectedBusiness;
                   if (business == null) return;
@@ -104,7 +106,7 @@ class ClientBookingsList extends StatelessWidget {
             backgroundColor: Colors.transparent,
             builder: (_) => ManageBookingSheet(
               booking: booking,
-              onCancel: context.read<ClientBookingsCubit>().cancelBooking,
+              onDecline: context.read<ClientBookingsCubit>().declineBooking,
             ),
           ),
         );

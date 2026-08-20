@@ -235,8 +235,8 @@ class BookingRepository {
   }
 
   Future<void> cancelBooking({required String bookingId}) async {
-    final ownerId = _auth.currentUser?.uid;
-    if (ownerId == null) {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) {
       throw const BookingException('You need to sign in to cancel a booking.');
     }
 
@@ -250,7 +250,7 @@ class BookingRepository {
         },
       );
       log(
-        'Booking $bookingId cancelled by business owner.',
+        'Booking $bookingId cancelled by customer.',
         name: 'BookingRepository',
       );
     } catch (error, stack) {
@@ -262,6 +262,37 @@ class BookingRepository {
       );
       throw const BookingException(
         'We could not cancel this booking. Please try again.',
+      );
+    }
+  }
+
+  Future<void> declineBooking({required String bookingId}) async {
+    if (_auth.currentUser?.uid == null) {
+      throw const BookingException('You need to sign in to decline a booking.');
+    }
+
+    try {
+      await _firestore.updateDocument(
+        collection: _collection,
+        documentId: bookingId,
+        data: {
+          'status': BookingStatus.declined.name,
+          'updatedAt': _firestore.serverTimestamp,
+        },
+      );
+      log(
+        'Booking $bookingId declined by business owner.',
+        name: 'BookingRepository',
+      );
+    } catch (error, stack) {
+      log(
+        'Could not decline booking $bookingId.',
+        name: 'BookingRepository',
+        error: error,
+        stackTrace: stack,
+      );
+      throw const BookingException(
+        'We could not decline this booking. Please try again.',
       );
     }
   }

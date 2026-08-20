@@ -5,11 +5,15 @@ class DestinationSearchField extends StatelessWidget {
   const DestinationSearchField({
     required this.onTap,
     required this.hintText,
+    this.onFilterTap,
+    this.hasActiveFilters = false,
     super.key,
   });
 
   final VoidCallback onTap;
+  final VoidCallback? onFilterTap;
   final String hintText;
+  final bool hasActiveFilters;
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +40,17 @@ class DestinationSearchField extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.location_on_rounded, color: AppColors.muted, size: 20),
-            SizedBox(width: 12),
-            Icon(Icons.filter_alt_rounded, color: AppColors.muted, size: 20),
-            SizedBox(width: 12),
-            Icon(Icons.mic_none_rounded, color: AppColors.muted, size: 20),
+            if (onFilterTap != null)
+              IconButton(
+                onPressed: onFilterTap,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: Icon(
+                  Icons.tune_rounded,
+                  color: hasActiveFilters ? AppColors.primary : AppColors.muted,
+                  size: 22,
+                ),
+              ),
           ],
         ),
       ),

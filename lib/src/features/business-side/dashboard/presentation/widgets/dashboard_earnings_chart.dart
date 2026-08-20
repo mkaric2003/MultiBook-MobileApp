@@ -37,24 +37,24 @@ class DashboardEarningsChart extends StatelessWidget {
                 interval: 500,
                 getTitlesWidget: (value, meta) => Text(
                   value.toInt().toString(),
-                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 11),
                 ),
               ),
             ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 30,
+                reservedSize: 25,
                 interval: 1,
                 getTitlesWidget: (value, meta) {
                   const labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
                   return Padding(
-                    padding: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 6),
                     child: Text(
                       labels[value.toInt()],
                       style: const TextStyle(
                         color: AppColors.muted,
-                        fontSize: 13,
+                        fontSize: 11,
                       ),
                     ),
                   );

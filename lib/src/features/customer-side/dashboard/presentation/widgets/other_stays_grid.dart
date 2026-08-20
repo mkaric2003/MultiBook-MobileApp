@@ -7,15 +7,26 @@ class OtherStaysGrid extends StatelessWidget {
     super.key,
     required this.stays,
     required this.isLoading,
+    this.emptyMessage,
   });
 
   final List<StayListing> stays;
   final bool isLoading;
+  final String? emptyMessage;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        if (stays.isEmpty && !isLoading && emptyMessage != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 48),
+            child: Text(
+              emptyMessage!,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Color(0xFF9CA3AF)),
+            ),
+          ),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

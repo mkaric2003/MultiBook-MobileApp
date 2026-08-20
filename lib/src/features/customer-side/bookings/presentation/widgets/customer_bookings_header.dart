@@ -20,7 +20,6 @@ class CustomerBookingsHeader extends StatelessWidget {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
           ),
         ),
-        Icon(Icons.calendar_month_outlined, color: AppColors.muted),
       ],
     ),
   );

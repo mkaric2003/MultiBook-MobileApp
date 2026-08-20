@@ -30,7 +30,7 @@ class ClientBottomNavigation extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Container(
-          height: 68,
+          height: 58,
           decoration: const BoxDecoration(
             color: AppColors.surfaceHighlight,
             border: Border(top: BorderSide(color: Color(0xFF46465C))),
@@ -53,14 +53,14 @@ class ClientBottomNavigation extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(item.icon, color: color, size: 31),
-                        const SizedBox(height: 9),
+                        Icon(item.icon, color: color, size: 25),
+                        const SizedBox(height: 5),
                         FittedBox(
                           child: Text(
                             item.label,
                             style: TextStyle(
                               color: color,
-                              fontSize: 15,
+                              fontSize: 12,
                               fontWeight: isSelected
                                   ? FontWeight.w700
                                   : FontWeight.w500,

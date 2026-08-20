@@ -5,11 +5,15 @@ import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dash
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_top_bar.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/destination_search_field.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/services_content.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stays_content.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_filters_sheet.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/service_filters/service_filters_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +50,7 @@ class CustomerDashboardView extends StatelessWidget {
       create: (_) {
         final cubit = getIt<CustomerDashboardCubit>();
         cubit.loadRecommendedStays();
+        cubit.loadStayCities();
         cubit.loadDraft();
         cubit.loadAppointmentDraft();
         return cubit;
@@ -69,6 +74,50 @@ class CustomerDashboardView extends StatelessWidget {
                           AppRoutes.CUSTOMER_SEARCH,
                           extra: state.selectedTab,
                         ),
+                        onFilterTap: () async {
+                          if (state.selectedTab == CustomerHomeTab.stays) {
+                            final filters =
+                                await showModalBottomSheet<StayFilters>(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (_) => FractionallySizedBox(
+                                    heightFactor: 0.94,
+                                    child: StayFiltersSheet(
+                                      initialFilters: state.stayFilters,
+                                      cities: state.stayCities,
+                                    ),
+                                  ),
+                                );
+                            if (context.mounted && filters != null) {
+                              await context
+                                  .read<CustomerDashboardCubit>()
+                                  .applyStayFilters(filters);
+                            }
+                            return;
+                          }
+                          final filters =
+                              await showModalBottomSheet<ServiceFilters>(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => FractionallySizedBox(
+                                  heightFactor: 0.94,
+                                  child: ServiceFiltersSheet(
+                                    initialFilters: state.serviceFilters,
+                                  ),
+                                ),
+                              );
+                          if (context.mounted && filters != null) {
+                            await context
+                                .read<CustomerDashboardCubit>()
+                                .applyServiceFilters(filters);
+                          }
+                        },
+                        hasActiveFilters:
+                            state.selectedTab == CustomerHomeTab.stays
+                            ? state.stayFilters.hasActiveFilters
+                            : state.serviceFilters.hasActiveFilters,
                       ),
                       const SizedBox(height: 16),
                       CustomerHomeTabSelector(
@@ -90,6 +139,7 @@ class CustomerDashboardView extends StatelessWidget {
                           otherStays: state.otherStays,
                           isOtherStaysLoading: state.isOtherStaysLoading,
                           hasMoreOtherStays: state.hasMoreOtherStays,
+                          isFiltering: state.stayFilters.hasActiveFilters,
                           onLoadMoreStays: context
                               .read<CustomerDashboardCubit>()
                               .loadMoreStays,
@@ -102,6 +152,7 @@ class CustomerDashboardView extends StatelessWidget {
                           otherServices: state.otherServices,
                           isOtherServicesLoading: state.isOtherServicesLoading,
                           hasMoreOtherServices: state.hasMoreOtherServices,
+                          isFiltering: state.serviceFilters.hasActiveFilters,
                           onLoadMoreServices: context
                               .read<CustomerDashboardCubit>()
                               .loadMoreServices,

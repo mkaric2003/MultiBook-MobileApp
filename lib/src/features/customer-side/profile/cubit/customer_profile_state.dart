@@ -6,10 +6,12 @@ class CustomerProfileState {
     this.isSignedOut = false,
     this.errorMessage,
     this.user,
+    this.unreadMessagesCount = 0,
   });
 
   final bool isLoading;
   final bool isSignedOut;
   final String? errorMessage;
   final UserModel? user;
+  final int unreadMessagesCount;
 }

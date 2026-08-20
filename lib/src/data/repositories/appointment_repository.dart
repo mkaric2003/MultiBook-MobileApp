@@ -260,10 +260,11 @@ class AppointmentRepository {
       );
     }
     try {
+      final status = isCustomer ? 'cancelled' : 'declined';
       await _firestore.updateDocument(
         collection: _collection,
         documentId: appointment.id,
-        data: {'status': 'cancelled', 'updatedAt': _firestore.serverTimestamp},
+        data: {'status': status, 'updatedAt': _firestore.serverTimestamp},
       );
       final dateKey = _dateKey(appointment.date);
       for (final slotStart in _slotStarts(
@@ -276,7 +277,11 @@ class AppointmentRepository {
               '${_availabilityKey(businessId: appointment.businessId, providerId: appointment.providerId, dateKey: dateKey)}-$slotStart',
         );
       }
-      return appointment.copyWith(status: 'cancelled');
+      log(
+        'Appointment ${appointment.id} $status by ${isCustomer ? 'customer' : 'business owner'}.',
+        name: 'AppointmentRepository',
+      );
+      return appointment.copyWith(status: status);
     } catch (error, stackTrace) {
       log(
         'Could not cancel appointment.',
@@ -285,7 +290,7 @@ class AppointmentRepository {
         stackTrace: stackTrace,
       );
       throw const AppointmentException(
-        'We could not cancel your appointment. Please try again.',
+        'We could not update this appointment. Please try again.',
       );
     }
   }

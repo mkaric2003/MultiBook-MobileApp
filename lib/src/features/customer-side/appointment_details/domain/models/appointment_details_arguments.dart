@@ -7,6 +7,7 @@ class AppointmentDetailsArguments {
 
   bool get isFinished {
     if (appointment.status == 'cancelled' ||
+        appointment.status == 'declined' ||
         appointment.status == 'completed') {
       return true;
     }
