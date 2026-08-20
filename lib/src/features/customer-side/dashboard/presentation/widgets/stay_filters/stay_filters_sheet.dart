@@ -1,10 +1,13 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_amenities_selector.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_category_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/filter_section_header.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_city_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_filter_date_field.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_filter_date_picker_sheet.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_guest_stepper.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_inventory_type_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_price_range.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_rating_selector.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
@@ -181,6 +184,51 @@ class StayFiltersSheet extends HookWidget {
                       ),
                     ),
                     const FilterSectionHeader(
+                      icon: Icons.home_work_rounded,
+                      title: 'Property type',
+                    ),
+                    const SizedBox(height: 16),
+                    StayCategorySelector(
+                      selectedCategoryIds: filters.value.categoryIds,
+                      onChanged: (categoryId) {
+                        final selected = [...filters.value.categoryIds];
+                        selected.contains(categoryId)
+                            ? selected.remove(categoryId)
+                            : selected.add(categoryId);
+                        filters.value = filters.value.copyWith(
+                          categoryIds: selected,
+                        );
+                      },
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Divider(
+                        height: 1,
+                        color: AppColors.surfaceHighlight,
+                      ),
+                    ),
+                    const FilterSectionHeader(
+                      icon: Icons.key_rounded,
+                      title: 'Stay type',
+                    ),
+                    const SizedBox(height: 16),
+                    StayInventoryTypeSelector(
+                      selectedInventoryType: filters.value.inventoryType,
+                      onChanged: (inventoryType) => filters.value =
+                          filters.value.inventoryType == inventoryType
+                          ? filters.value.copyWith(clearInventoryType: true)
+                          : filters.value.copyWith(
+                              inventoryType: inventoryType,
+                            ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Divider(
+                        height: 1,
+                        color: AppColors.surfaceHighlight,
+                      ),
+                    ),
+                    const FilterSectionHeader(
                       icon: Icons.attach_money_rounded,
                       title: 'Price range',
                     ),
@@ -212,6 +260,30 @@ class StayFiltersSheet extends HookWidget {
                       minimumRating: filters.value.minimumRating,
                       onChanged: (value) => filters.value = filters.value
                           .copyWith(minimumRating: value),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Divider(
+                        height: 1,
+                        color: AppColors.surfaceHighlight,
+                      ),
+                    ),
+                    const FilterSectionHeader(
+                      icon: Icons.auto_awesome_rounded,
+                      title: 'Amenities',
+                    ),
+                    const SizedBox(height: 16),
+                    StayAmenitiesSelector(
+                      selectedAmenities: filters.value.amenities,
+                      onChanged: (amenity) {
+                        final selected = [...filters.value.amenities];
+                        selected.contains(amenity)
+                            ? selected.remove(amenity)
+                            : selected.add(amenity);
+                        filters.value = filters.value.copyWith(
+                          amenities: selected,
+                        );
+                      },
                     ),
                   ],
                 ),

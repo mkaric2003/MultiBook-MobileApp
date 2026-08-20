@@ -14,6 +14,9 @@ abstract class StaySearchDataSource {
     required double minPrice,
     required double maxPrice,
     required double minimumRating,
+    required List<String> categoryIds,
+    required List<String> amenities,
+    String? inventoryType,
     String? cursor,
     int pageSize = 8,
   });
@@ -35,6 +38,9 @@ class StaySearchDataSourceImpl implements StaySearchDataSource {
     required double minPrice,
     required double maxPrice,
     required double minimumRating,
+    required List<String> categoryIds,
+    required List<String> amenities,
+    String? inventoryType,
     String? cursor,
     int pageSize = 8,
   }) async {
@@ -52,6 +58,9 @@ class StaySearchDataSourceImpl implements StaySearchDataSource {
         'minPrice': minPrice,
         'maxPrice': maxPrice,
         'minimumRating': minimumRating,
+        'categoryIds': categoryIds,
+        'amenities': amenities,
+        'inventoryType': inventoryType,
         'cursor': cursor,
         'pageSize': pageSize,
       });

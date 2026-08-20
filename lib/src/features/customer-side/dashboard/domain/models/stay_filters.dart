@@ -1,3 +1,6 @@
+import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
+
 class StayFilters {
   const StayFilters({
     this.checkIn,
@@ -8,6 +11,9 @@ class StayFilters {
     this.minPrice = 50,
     this.maxPrice = 500,
     this.minimumRating = 0,
+    this.categoryIds = const [],
+    this.amenities = const [],
+    this.inventoryType,
   });
 
   final DateTime? checkIn;
@@ -18,6 +24,9 @@ class StayFilters {
   final double minPrice;
   final double maxPrice;
   final double minimumRating;
+  final List<String> categoryIds;
+  final List<StayAmenity> amenities;
+  final StayInventoryType? inventoryType;
 
   int get guestCount => adults + children;
 
@@ -29,7 +38,10 @@ class StayFilters {
       city != null ||
       minPrice > 50 ||
       maxPrice < 500 ||
-      minimumRating > 0;
+      minimumRating > 0 ||
+      categoryIds.isNotEmpty ||
+      amenities.isNotEmpty ||
+      inventoryType != null;
 
   int get appliedFiltersCount => [
     if (checkIn != null || checkOut != null) true,
@@ -37,6 +49,9 @@ class StayFilters {
     if (city != null) true,
     if (minPrice > 50 || maxPrice < 500) true,
     if (minimumRating > 0) true,
+    if (categoryIds.isNotEmpty) true,
+    if (amenities.isNotEmpty) true,
+    if (inventoryType != null) true,
   ].length;
 
   StayFilters copyWith({
@@ -50,6 +65,10 @@ class StayFilters {
     double? minPrice,
     double? maxPrice,
     double? minimumRating,
+    List<String>? categoryIds,
+    List<StayAmenity>? amenities,
+    StayInventoryType? inventoryType,
+    bool clearInventoryType = false,
   }) {
     return StayFilters(
       checkIn: checkIn ?? this.checkIn,
@@ -60,6 +79,11 @@ class StayFilters {
       minPrice: minPrice ?? this.minPrice,
       maxPrice: maxPrice ?? this.maxPrice,
       minimumRating: minimumRating ?? this.minimumRating,
+      categoryIds: categoryIds ?? this.categoryIds,
+      amenities: amenities ?? this.amenities,
+      inventoryType: clearInventoryType
+          ? null
+          : inventoryType ?? this.inventoryType,
     );
   }
 }

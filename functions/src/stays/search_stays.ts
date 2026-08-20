@@ -14,6 +14,9 @@ type SearchStaysRequest = {
   minPrice?: unknown;
   maxPrice?: unknown;
   minimumRating?: unknown;
+  categoryIds?: unknown;
+  amenities?: unknown;
+  inventoryType?: unknown;
   cursor?: unknown;
   pageSize?: unknown;
 };
@@ -82,6 +85,9 @@ function parseFilters(data: SearchStaysRequest) {
     minPrice: nonNegativeNumber(data.minPrice, 0),
     maxPrice: nonNegativeNumber(data.maxPrice, Number.MAX_SAFE_INTEGER),
     minimumRating: nonNegativeNumber(data.minimumRating, 0),
+    categoryIds: stringList(data.categoryIds),
+    amenities: stringList(data.amenities),
+    inventoryType: optionalEnum(data.inventoryType, ["singleUnit", "multipleUnits"]),
     cursor: typeof data.cursor === "string" && data.cursor.length > 0 ? data.cursor : null,
     pageSize: Math.min(
       maximumPageSize,
@@ -101,6 +107,7 @@ function matchesStayFilters(
   const rating = asNumber(stay.data.averageRating);
   const requestedGuests = filters.adults + filters.children;
   const rooms = asList(stayDetails.rooms).map(asMap);
+  const amenities = asList(stayDetails.amenities).map(String);
   const hasSuitableRoom = rooms.length === 0 || rooms.some(
     (room) => asNumber(room.maxGuests) >= requestedGuests,
   );
@@ -110,6 +117,9 @@ function matchesStayFilters(
     price >= filters.minPrice &&
     price <= filters.maxPrice &&
     rating >= filters.minimumRating &&
+    (filters.categoryIds.length === 0 || filters.categoryIds.includes(String(stay.data.categoryId ?? ""))) &&
+    (filters.inventoryType == null || String(stayDetails.inventoryType ?? (rooms.length > 0 ? "multipleUnits" : "singleUnit")) === filters.inventoryType) &&
+    filters.amenities.every((amenity) => amenities.includes(amenity)) &&
     hasSuitableRoom
   );
 }
@@ -248,6 +258,15 @@ function normalizeText(value: unknown) {
   if (typeof value !== "string") return null;
   const normalized = value.trim().toLowerCase();
   return normalized.length === 0 ? null : normalized;
+}
+
+function stringList(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.filter((item): item is string => typeof item === "string").map((item) => item.trim()).filter(Boolean))];
+}
+
+function optionalEnum(value: unknown, values: string[]) {
+  return typeof value === "string" && values.includes(value) ? value : null;
 }
 
 function asMap(value: unknown): Record<string, unknown> {

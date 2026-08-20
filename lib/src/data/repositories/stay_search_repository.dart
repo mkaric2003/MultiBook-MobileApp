@@ -28,6 +28,9 @@ class StaySearchRepository {
         minPrice: filters.minPrice,
         maxPrice: filters.maxPrice,
         minimumRating: filters.minimumRating,
+        categoryIds: filters.categoryIds,
+        amenities: filters.amenities.map((amenity) => amenity.name).toList(),
+        inventoryType: filters.inventoryType?.name,
         cursor: cursor,
       );
       return _mapPage(page);
