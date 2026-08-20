@@ -39,7 +39,6 @@ class CustomerProfileView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Icon(Icons.settings, color: AppColors.muted),
                   ],
                 ),
                 const SizedBox(height: 32),
