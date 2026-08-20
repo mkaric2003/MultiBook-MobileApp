@@ -21,8 +21,12 @@ import 'package:aquabook/src/data/data_sources/firestore_data_source.dart'
     as _i151;
 import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart'
     as _i1069;
+import 'package:aquabook/src/data/data_sources/in_app_notification_data_source.dart'
+    as _i763;
 import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart'
     as _i377;
+import 'package:aquabook/src/data/data_sources/notification_data_source.dart'
+    as _i805;
 import 'package:aquabook/src/data/models/booking_model.dart' as _i405;
 import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart'
     as _i363;
@@ -37,6 +41,8 @@ import 'package:aquabook/src/data/repositories/booking_repository.dart'
 import 'package:aquabook/src/data/repositories/business_repository.dart'
     as _i1065;
 import 'package:aquabook/src/data/repositories/chat_repository.dart' as _i525;
+import 'package:aquabook/src/data/repositories/notification_repository.dart'
+    as _i113;
 import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
     as _i366;
 import 'package:aquabook/src/data/repositories/saved_business_repository.dart'
@@ -98,6 +104,8 @@ import 'package:aquabook/src/features/shared/chat/cubit/chat_conversation_cubit.
     as _i1047;
 import 'package:aquabook/src/features/shared/chat/cubit/chat_list_cubit.dart'
     as _i409;
+import 'package:aquabook/src/features/shared/notifications/cubit/notifications_cubit.dart'
+    as _i600;
 import 'package:aquabook/src/features/shared/onboarding/cubit/onboarding_cubit.dart'
     as _i680;
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart'
@@ -109,6 +117,7 @@ import 'package:aquabook/src/features/shared/user_type_checker/cubit/user_type_c
 import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:firebase_core/firebase_core.dart' as _i982;
+import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
 import 'package:firebase_storage/firebase_storage.dart' as _i457;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -149,6 +158,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i974.FirebaseFirestore>(
       () => firebaseModule.firebaseFirestore(gh<_i982.FirebaseApp>()),
     );
+    gh.singleton<_i892.FirebaseMessaging>(
+      () => firebaseModule.firebaseMessaging(gh<_i982.FirebaseApp>()),
+    );
     gh.factory<_i680.OnboardingCubit>(
       () => _i680.OnboardingCubit(gh<_i366.OnboardingRepository>()),
     );
@@ -157,6 +169,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i151.FirestoreDataSource>(
       () => _i151.FirestoreDataSourceImpl(gh<_i974.FirebaseFirestore>()),
+    );
+    gh.lazySingleton<_i805.NotificationDataSource>(
+      () => _i805.NotificationDataSourceImpl(gh<_i892.FirebaseMessaging>()),
     );
     gh.lazySingleton<_i83.FirebaseStorageDataSource>(
       () => _i83.FirebaseStorageDataSourceImpl(gh<_i457.FirebaseStorage>()),
@@ -169,6 +184,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i137.AuthenticationDataSource>(),
         gh<_i511.ChatDataSource>(),
       ),
+    );
+    gh.lazySingleton<_i763.InAppNotificationDataSource>(
+      () =>
+          _i763.InAppNotificationDataSourceImpl(gh<_i974.FirebaseFirestore>()),
     );
     gh.lazySingleton<_i747.UserRepository>(
       () => _i747.UserRepository(
@@ -207,6 +226,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i409.ChatListCubit>(
       () => _i409.ChatListCubit(gh<_i525.ChatRepository>()),
     );
+    gh.lazySingleton<_i113.NotificationRepository>(
+      () => _i113.NotificationRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i805.NotificationDataSource>(),
+        gh<_i763.InAppNotificationDataSource>(),
+      ),
+      dispose: (i) => i.dispose(),
+    );
     gh.lazySingleton<_i961.BookingRepository>(
       () => _i961.BookingRepository(
         gh<_i137.AuthenticationDataSource>(),
@@ -219,12 +247,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
         gh<_i1069.ImagePickerDataSource>(),
         gh<_i460.SharedPreferences>(),
-      ),
-    );
-    gh.lazySingleton<_i472.AuthenticationRepository>(
-      () => _i472.AuthenticationRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
       ),
     );
     gh.factory<_i458.AddBusinessBloc>(
@@ -240,6 +262,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
       ),
     );
+    gh.lazySingleton<_i363.AppointmentDraftRepository>(
+      () => _i363.AppointmentDraftRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i390.SavedBusinessRepository>(
       () => _i390.SavedBusinessRepository(
         gh<_i137.AuthenticationDataSource>(),
@@ -248,12 +276,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i64.BookingDraftRepository>(
       () => _i64.BookingDraftRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
-      ),
-    );
-    gh.lazySingleton<_i363.AppointmentDraftRepository>(
-      () => _i363.AppointmentDraftRepository(
         gh<_i137.AuthenticationDataSource>(),
         gh<_i151.FirestoreDataSource>(),
       ),
@@ -274,12 +296,6 @@ extension GetItInjectableX on _i174.GetIt {
         booking,
       ),
     );
-    gh.factory<_i1028.SignupCubit>(
-      () => _i1028.SignupCubit(gh<_i472.AuthenticationRepository>()),
-    );
-    gh.factory<_i952.HomeBloc>(
-      () => _i952.HomeBloc(gh<_i472.AuthenticationRepository>()),
-    );
     gh.factory<_i556.MoreCubit>(
       () => _i556.MoreCubit(
         gh<_i1065.BusinessRepository>(),
@@ -289,6 +305,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i451.AppointmentDraftCubit>(
       () => _i451.AppointmentDraftCubit(gh<_i363.AppointmentDraftRepository>()),
+    );
+    gh.factory<_i600.NotificationsCubit>(
+      () => _i600.NotificationsCubit(gh<_i113.NotificationRepository>()),
     );
     gh.factory<_i758.DashboardCubit>(
       () => _i758.DashboardCubit(
@@ -356,16 +375,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i64.BookingDraftRepository>(),
       ),
     );
-    gh.factory<_i897.CustomerProfileCubit>(
-      () => _i897.CustomerProfileCubit(
-        gh<_i472.AuthenticationRepository>(),
-        gh<_i747.UserRepository>(),
-      ),
-    );
-    gh.factory<_i44.SigninCubit>(
-      () => _i44.SigninCubit(
-        gh<_i472.AuthenticationRepository>(),
-        gh<_i747.UserRepository>(),
+    gh.lazySingleton<_i472.AuthenticationRepository>(
+      () => _i472.AuthenticationRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i113.NotificationRepository>(),
       ),
     );
     gh.factory<_i492.AppointmentAvailabilityCubit>(
@@ -380,22 +394,40 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i64.BookingDraftRepository>(),
       ),
     );
-    gh.factory<_i386.StayDetailCubit>(
-      () => _i386.StayDetailCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i390.SavedBusinessRepository>(),
-      ),
-    );
     gh.factory<_i390.ServiceDetailCubit>(
       () => _i390.ServiceDetailCubit(
         gh<_i1065.BusinessRepository>(),
         gh<_i390.SavedBusinessRepository>(),
       ),
     );
+    gh.factory<_i386.StayDetailCubit>(
+      () => _i386.StayDetailCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i390.SavedBusinessRepository>(),
+      ),
+    );
+    gh.factory<_i1028.SignupCubit>(
+      () => _i1028.SignupCubit(gh<_i472.AuthenticationRepository>()),
+    );
+    gh.factory<_i952.HomeBloc>(
+      () => _i952.HomeBloc(gh<_i472.AuthenticationRepository>()),
+    );
     gh.factory<_i167.AppointmentPaymentCubit>(
       () => _i167.AppointmentPaymentCubit(
         gh<_i567.AppointmentRepository>(),
         gh<_i363.AppointmentDraftRepository>(),
+      ),
+    );
+    gh.factory<_i897.CustomerProfileCubit>(
+      () => _i897.CustomerProfileCubit(
+        gh<_i472.AuthenticationRepository>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
+    gh.factory<_i44.SigninCubit>(
+      () => _i44.SigninCubit(
+        gh<_i472.AuthenticationRepository>(),
+        gh<_i747.UserRepository>(),
       ),
     );
     return this;

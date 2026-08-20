@@ -5,6 +5,25 @@ service cloud.firestore {
     match /users/{userId} {
       allow create: if request.auth != null && request.auth.uid == userId;
       allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+
+      match /devices/{deviceId} {
+        allow read, delete: if request.auth != null && request.auth.uid == userId;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.userId == userId;
+        allow update: if request.auth != null
+          && request.auth.uid == userId
+          && resource.data.userId == userId
+          && request.resource.data.userId == resource.data.userId;
+      }
+
+      match /notifications/{notificationId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow update: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['readAt']);
+      }
     }
 
     match /businesses/{businessId} {

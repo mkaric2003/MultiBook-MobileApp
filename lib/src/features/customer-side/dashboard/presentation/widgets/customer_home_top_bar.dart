@@ -1,5 +1,7 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/app.dart';
+import 'package:aquabook/src/features/shared/notifications/presentation/widgets/notification_bell.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomerHomeTopBar extends StatelessWidget {
   const CustomerHomeTopBar({super.key});
@@ -14,29 +16,7 @@ class CustomerHomeTopBar extends StatelessWidget {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
         ),
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            const Icon(Icons.notifications_none_rounded, size: 27),
-            Positioned(
-              right: -4,
-              top: -6,
-              child: Container(
-                height: 19,
-                width: 19,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: const Text(
-                  '2',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
-          ],
-        ),
+        NotificationBell(onTap: () => context.push(AppRoutes.NOTIFICATIONS)),
         const SizedBox(width: 20),
         const Icon(Icons.help_outline_rounded, size: 23),
       ],

@@ -6,11 +6,13 @@ import 'package:aquabook/src/data/repositories/chat_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/shared/chat/cubit/chat_conversation_state.dart';
 import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class ChatConversationCubit extends Cubit<ChatConversationState> {
+class ChatConversationCubit extends Cubit<ChatConversationState>
+    with WidgetsBindingObserver {
   ChatConversationCubit(this._chatRepository, this._userRepository)
     : super(const ChatConversationState());
 
@@ -19,6 +21,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
   StreamSubscription? _messagesSubscription;
   StreamSubscription? _conversationSubscription;
   Timer? _typingDebounce;
+  Timer? _activeViewerHeartbeat;
   bool _isTyping = false;
   DateTime? _lastTypingUpdate;
 
@@ -54,6 +57,12 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           currentUserId: currentUser.id,
           conversation: conversation,
         ),
+      );
+      WidgetsBinding.instance.addObserver(this);
+      await _updateActiveViewer(true);
+      _activeViewerHeartbeat = Timer.periodic(
+        const Duration(seconds: 20),
+        (_) => _updateActiveViewer(true),
       );
       await _messagesSubscription?.cancel();
       await _conversationSubscription?.cancel();
@@ -104,6 +113,37 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
           errorMessage:
               'We could not open this conversation. Please try again.',
         ),
+      );
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _updateActiveViewer(true);
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        _updateActiveViewer(false);
+    }
+  }
+
+  Future<void> _updateActiveViewer(bool isActive) async {
+    final conversation = state.conversation;
+    if (conversation == null) return;
+    try {
+      await _chatRepository.setActiveViewer(
+        conversationId: conversation.id,
+        isActive: isActive,
+      );
+    } catch (error, stackTrace) {
+      log(
+        'Could not update active chat state for ${conversation.id}.',
+        name: 'ChatConversationCubit',
+        error: error,
+        stackTrace: stackTrace,
       );
     }
   }
@@ -189,6 +229,9 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
 
   @override
   Future<void> close() async {
+    WidgetsBinding.instance.removeObserver(this);
+    _activeViewerHeartbeat?.cancel();
+    await _updateActiveViewer(false);
     _typingDebounce?.cancel();
     await _updateTyping(false);
     await _messagesSubscription?.cancel();

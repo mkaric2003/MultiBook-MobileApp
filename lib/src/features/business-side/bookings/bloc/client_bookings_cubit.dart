@@ -208,19 +208,17 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     await load(filter: state.filter, businessId: business.id);
   }
 
-  Future<bool> cancelBooking(BookingModel booking) async {
+  Future<bool> declineBooking(BookingModel booking) async {
     try {
-      await _bookingRepository.cancelBooking(bookingId: booking.id);
-      final cancelledBooking = booking.copyWith(
-        status: BookingStatus.cancelled,
-      );
+      await _bookingRepository.declineBooking(bookingId: booking.id);
+      final declinedBooking = booking.copyWith(status: BookingStatus.declined);
       final updatedBookings =
           state.filter == ClientBookingFilter.all ||
-              state.filter == ClientBookingFilter.cancelled
+              state.filter == ClientBookingFilter.declined
           ? state.bookings
                 .map(
                   (currentBooking) => currentBooking.id == booking.id
-                      ? cancelledBooking
+                      ? declinedBooking
                       : currentBooking,
                 )
                 .toList()
@@ -244,12 +242,12 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     }
   }
 
-  Future<bool> cancelAppointment(AppointmentModel appointment) async {
+  Future<bool> declineAppointment(AppointmentModel appointment) async {
     try {
-      final cancelled = await _appointmentRepository.cancelAppointment(
+      final declined = await _appointmentRepository.cancelAppointment(
         appointment,
       );
-      _replaceAppointment(cancelled);
+      _replaceAppointment(declined);
       return true;
     } on AppointmentException {
       return false;

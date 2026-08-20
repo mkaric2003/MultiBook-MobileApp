@@ -28,6 +28,10 @@
 	<string>MultiBook needs camera access so you can take business images.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>MultiBook needs photo library access so you can upload business images.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

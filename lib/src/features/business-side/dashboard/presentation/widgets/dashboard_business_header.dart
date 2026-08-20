@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/features/shared/notifications/presentation/widgets/notification_bell.dart';
 import 'package:flutter/material.dart';
 
 class DashboardBusinessHeader extends StatelessWidget {
@@ -7,18 +8,20 @@ class DashboardBusinessHeader extends StatelessWidget {
     super.key,
     required this.business,
     required this.onSwitchBusiness,
+    required this.onNotificationsPressed,
   });
 
   final BusinessModel business;
   final VoidCallback onSwitchBusiness;
+  final VoidCallback onNotificationsPressed;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Container(
-          height: 45,
-          width: 50,
+          height: 40,
+          width: 44,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: AppColors.border,
@@ -33,7 +36,7 @@ class DashboardBusinessHeader extends StatelessWidget {
                       const Icon(Icons.storefront, color: AppColors.white),
                 ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,11 +46,11 @@ class DashboardBusinessHeader extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 23,
+                  fontSize: 19,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               InkWell(
                 onTap: onSwitchBusiness,
                 child: const Row(
@@ -55,34 +58,21 @@ class DashboardBusinessHeader extends StatelessWidget {
                   children: [
                     Text(
                       'Switch business',
-                      style: TextStyle(color: AppColors.muted, fontSize: 16),
+                      style: TextStyle(color: AppColors.muted, fontSize: 13),
                     ),
                     SizedBox(width: 4),
-                    Icon(Icons.keyboard_arrow_down, color: AppColors.muted),
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      color: AppColors.muted,
+                      size: 19,
+                    ),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            const Icon(Icons.notifications, size: 29),
-            Positioned(
-              top: -2,
-              right: -2,
-              child: Container(
-                height: 15,
-                width: 15,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF05252),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          ],
-        ),
+        NotificationBell(size: 25, onTap: onNotificationsPressed),
       ],
     );
   }

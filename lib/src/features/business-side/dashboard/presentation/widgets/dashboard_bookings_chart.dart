@@ -35,23 +35,23 @@ class DashboardBookingsChart extends StatelessWidget {
                 interval: 10,
                 getTitlesWidget: (value, meta) => Text(
                   value.toInt().toString(),
-                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                  style: const TextStyle(color: AppColors.muted, fontSize: 11),
                 ),
               ),
             ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                reservedSize: 30,
+                reservedSize: 25,
                 getTitlesWidget: (value, meta) {
                   const labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
                   return Padding(
-                    padding: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 6),
                     child: Text(
                       labels[value.toInt()],
                       style: const TextStyle(
                         color: AppColors.muted,
-                        fontSize: 13,
+                        fontSize: 11,
                       ),
                     ),
                   );
@@ -66,7 +66,7 @@ class DashboardBookingsChart extends StatelessWidget {
                 BarChartRodData(
                   toY: 17,
                   color: AppColors.primary,
-                  width: 40,
+                  width: 30,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
               ],
@@ -77,7 +77,7 @@ class DashboardBookingsChart extends StatelessWidget {
                 BarChartRodData(
                   toY: 22,
                   color: AppColors.primary,
-                  width: 40,
+                  width: 30,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
               ],
@@ -88,7 +88,7 @@ class DashboardBookingsChart extends StatelessWidget {
                 BarChartRodData(
                   toY: 26,
                   color: AppColors.primary,
-                  width: 40,
+                  width: 30,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
               ],
@@ -99,7 +99,7 @@ class DashboardBookingsChart extends StatelessWidget {
                 BarChartRodData(
                   toY: 19,
                   color: AppColors.primary,
-                  width: 40,
+                  width: 30,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
               ],

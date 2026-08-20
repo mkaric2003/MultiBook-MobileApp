@@ -54,6 +54,7 @@ class CustomerBookingsState {
           (appointment) =>
               !appointment.date.isBefore(today) &&
               appointment.status != 'cancelled' &&
+              appointment.status != 'declined' &&
               appointment.status != 'completed',
         )
         .toList()

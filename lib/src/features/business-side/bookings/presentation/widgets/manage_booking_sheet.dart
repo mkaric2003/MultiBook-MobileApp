@@ -13,20 +13,20 @@ class ManageBookingSheet extends StatelessWidget {
   const ManageBookingSheet({
     super.key,
     required this.booking,
-    required this.onCancel,
+    required this.onDecline,
   });
   final BookingModel booking;
-  final Future<bool> Function(BookingModel booking) onCancel;
+  final Future<bool> Function(BookingModel booking) onDecline;
   @override
   Widget build(BuildContext context) => Container(
     decoration: const BoxDecoration(
       color: Color(0xFF1A1A2E),
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
     ),
     child: SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 26, 24, 5),
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +36,7 @@ class ManageBookingSheet extends StatelessWidget {
                 const Expanded(
                   child: Text(
                     'Manage Booking',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                 ),
                 IconButton(
@@ -48,12 +48,12 @@ class ManageBookingSheet extends StatelessWidget {
                 ),
               ],
             ),
-            const Divider(height: 34, color: AppColors.surfaceHighlight),
+            const Divider(height: 26, color: AppColors.surfaceHighlight),
             Container(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: const Color(0xFF172554),
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(14),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class ManageBookingSheet extends StatelessWidget {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: 29,
+                        radius: 23,
                         backgroundImage:
                             (booking.customerAvatarUrl ?? '').isEmpty
                             ? null
@@ -70,37 +70,37 @@ class ManageBookingSheet extends StatelessWidget {
                             ? const Icon(Icons.person, color: AppColors.muted)
                             : null,
                       ),
-                      const SizedBox(width: 16),
+                      const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             booking.customerName,
                             style: const TextStyle(
-                              fontSize: 19,
+                              fontSize: 16,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
-                          const SizedBox(height: 7),
+                          const SizedBox(height: 4),
                           ClientBookingStatusPill(status: booking.status),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 27),
+                  const SizedBox(height: 18),
                   Row(
                     children: [
                       const Icon(
                         Icons.bed_rounded,
                         color: AppColors.primary,
-                        size: 25,
+                        size: 21,
                       ),
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           booking.roomType ?? 'Stay booking',
                           style: const TextStyle(
-                            fontSize: 17,
+                            fontSize: 15,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -108,25 +108,25 @@ class ManageBookingSheet extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 39, top: 4),
+                    padding: EdgeInsets.only(left: 31, top: 3),
                     child: Text(
                       'Stay reservation',
                       style: const TextStyle(
                         color: AppColors.muted,
-                        fontSize: 14,
+                        fontSize: 12,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 18),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Icon(
                         Icons.calendar_month,
                         color: AppColors.primary,
-                        size: 25,
+                        size: 21,
                       ),
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +134,7 @@ class ManageBookingSheet extends StatelessWidget {
                             Text(
                               '${DateFormat('MMM d, y').format(booking.checkIn)} – ${DateFormat('MMM d, y').format(booking.checkOut)}',
                               style: const TextStyle(
-                                fontSize: 17,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -143,7 +143,7 @@ class ManageBookingSheet extends StatelessWidget {
                               'Check-in: 3:00 PM • Check-out: 11:00 AM',
                               style: TextStyle(
                                 color: AppColors.muted,
-                                fontSize: 14,
+                                fontSize: 12,
                               ),
                             ),
                           ],
@@ -151,37 +151,37 @@ class ManageBookingSheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 18),
                   Row(
                     children: [
                       const Icon(
                         Icons.groups,
                         color: AppColors.primary,
-                        size: 26,
+                        size: 21,
                       ),
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 10),
                       Text(
                         '$_totalGuests ${_totalGuests == 1 ? 'Guest' : 'Guests'}',
                         style: const TextStyle(
-                          fontSize: 17,
+                          fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 18),
                   Row(
                     children: [
                       const Icon(
                         Icons.attach_money,
                         color: AppColors.primary,
-                        size: 26,
+                        size: 21,
                       ),
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 10),
                       Text(
                         '\$${booking.total}.00',
                         style: const TextStyle(
-                          fontSize: 21,
+                          fontSize: 18,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -191,35 +191,35 @@ class ManageBookingSheet extends StatelessWidget {
               ),
             ),
             if (booking.status == BookingStatus.confirmed) ...[
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               CustomButton(
-                buttonName: '×  Cancel Booking',
-                height: 70,
+                buttonName: '×  Decline Booking',
+                height: 52,
                 color: Colors.transparent,
                 textColor: const Color(0xFFFB4B4B),
                 borderColor: const Color(0xFFFB4B4B),
                 onPressed: () async {
-                  final wasCancelled = await onCancel(booking);
+                  final wasDeclined = await onDecline(booking);
                   if (!context.mounted) {
                     return;
                   }
-                  if (wasCancelled) {
+                  if (wasDeclined) {
                     Navigator.of(context).pop();
                     return;
                   }
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('We could not cancel this booking.'),
+                      content: Text('We could not decline this booking.'),
                     ),
                   );
                 },
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 12),
             ],
             CustomButton(
               buttonName: 'Message customer',
               color: AppColors.surfaceHighlight,
-              height: 70,
+              height: 52,
               onPressed: () {
                 Navigator.of(context).pop();
                 context.push(

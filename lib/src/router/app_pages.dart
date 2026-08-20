@@ -183,6 +183,11 @@ final router = GoRouter(
       builder: (context, state) => const ChatListView(),
     ),
     GoRoute(
+      path: AppRoutes.NOTIFICATIONS,
+      name: AppRoutes.NOTIFICATIONS,
+      builder: (context, state) => const NotificationsView(),
+    ),
+    GoRoute(
       path: AppRoutes.CHAT_CONVERSATION,
       name: AppRoutes.CHAT_CONVERSATION,
       builder: (context, state) => ChatConversationView(

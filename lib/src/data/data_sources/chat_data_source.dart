@@ -26,6 +26,11 @@ abstract class ChatDataSource {
     required String userId,
     required bool isTyping,
   });
+  Future<void> setActiveViewer({
+    required String conversationId,
+    required String userId,
+    required bool isActive,
+  });
 }
 
 @LazySingleton(as: ChatDataSource)
@@ -118,6 +123,16 @@ class ChatDataSourceImpl implements ChatDataSource {
       final data = conversation.data()!;
       final customerId = data['customerId'] as String;
       final isCustomerSender = senderId == customerId;
+      final recipientId = isCustomerSender
+          ? data['businessOwnerId'] as String
+          : customerId;
+      final activeViewers = Map<String, dynamic>.from(
+        data['activeParticipantExpiresAt'] as Map? ?? const {},
+      );
+      final recipientActiveUntil = activeViewers[recipientId];
+      final recipientIsViewing =
+          recipientActiveUntil is Timestamp &&
+          recipientActiveUntil.toDate().isAfter(DateTime.now());
       transaction.set(messageReference, {
         'id': messageReference.id,
         'conversationId': conversationId,
@@ -129,8 +144,10 @@ class ChatDataSourceImpl implements ChatDataSource {
         'lastMessageText': text,
         'lastMessageAt': FieldValue.serverTimestamp(),
         'lastSenderId': senderId,
-        if (isCustomerSender) 'unreadBusinessCount': FieldValue.increment(1),
-        if (!isCustomerSender) 'unreadCustomerCount': FieldValue.increment(1),
+        if (!recipientIsViewing && isCustomerSender)
+          'unreadBusinessCount': FieldValue.increment(1),
+        if (!recipientIsViewing && !isCustomerSender)
+          'unreadCustomerCount': FieldValue.increment(1),
       });
     });
   }
@@ -157,4 +174,30 @@ class ChatDataSourceImpl implements ChatDataSource {
         ? DateTime.now().add(const Duration(seconds: 4))
         : null,
   });
+
+  @override
+  Future<void> setActiveViewer({
+    required String conversationId,
+    required String userId,
+    required bool isActive,
+  }) async {
+    final reference = _firestore.collection(_conversations).doc(conversationId);
+    await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(reference);
+      if (!snapshot.exists) return;
+      final activeViewers = Map<String, dynamic>.from(
+        snapshot.data()?['activeParticipantExpiresAt'] as Map? ?? const {},
+      );
+      if (isActive) {
+        activeViewers[userId] = Timestamp.fromDate(
+          DateTime.now().add(const Duration(seconds: 45)),
+        );
+      } else {
+        activeViewers.remove(userId);
+      }
+      transaction.update(reference, {
+        'activeParticipantExpiresAt': activeViewers,
+      });
+    });
+  }
 }

@@ -14,9 +14,9 @@ class DashboardChartCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 338,
+      height: 270,
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(20, 22, 20, 14),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
@@ -26,9 +26,9 @@ class DashboardChartCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
           Expanded(child: child),
         ],
       ),

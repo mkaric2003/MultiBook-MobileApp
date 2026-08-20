@@ -1,5 +1,6 @@
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart';
 import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_bookings_chart.dart';
@@ -7,7 +8,6 @@ import 'package:aquabook/src/features/business-side/dashboard/presentation/widge
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_metric_card.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -45,12 +45,14 @@ class DashboardView extends HookWidget {
 
           return SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(25, 22, 25, 32),
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DashboardBusinessHeader(
                     business: business,
+                    onNotificationsPressed: () =>
+                        context.push(AppRoutes.NOTIFICATIONS),
                     onSwitchBusiness: () async {
                       await context.push(AppRoutes.MY_BUSINESSES);
                       if (context.mounted) {
@@ -58,14 +60,14 @@ class DashboardView extends HookWidget {
                       }
                     },
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   const DashboardMetricCard(
                     title: 'Active Bookings',
                     value: '24',
                     icon: Icons.event_available,
                     iconBackgroundColor: Color(0xFF3F315E),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 14),
                   const DashboardMetricCard(
                     title: 'Earnings This Month',
                     value: '\$12,450',
@@ -74,7 +76,7 @@ class DashboardView extends HookWidget {
                     iconBackgroundColor: Color(0xFF164A4A),
                     iconColor: Color(0xFF24E5C5),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 14),
                   DashboardMetricCard(
                     title: 'Average Rating',
                     value: '4.8',
@@ -82,13 +84,13 @@ class DashboardView extends HookWidget {
                     iconBackgroundColor: const Color(0xFF55472A),
                     suffix: const Text(
                       '★★★★★',
-                      style: TextStyle(color: Color(0xFFFBBF24), fontSize: 22),
+                      style: TextStyle(color: Color(0xFFFBBF24), fontSize: 18),
                     ),
                     iconColor: Color(0xFFFBBF24),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   const DashboardEarningsChart(),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   const DashboardBookingsChart(),
                 ],
               ),

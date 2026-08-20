@@ -105,9 +105,10 @@ class CustomerProfileView extends StatelessWidget {
                   label: 'Payment methods',
                 ),
                 const SizedBox(height: 10),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.notifications,
                   label: 'Notifications',
+                  onTap: () => context.push(AppRoutes.NOTIFICATIONS),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(

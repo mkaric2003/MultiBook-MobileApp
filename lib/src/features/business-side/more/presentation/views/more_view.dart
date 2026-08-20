@@ -81,6 +81,7 @@ class MoreView extends StatelessWidget {
                         MoreMenuItem(
                           label: 'Notifications',
                           icon: Icons.notifications_rounded,
+                          onTap: () => context.push(AppRoutes.NOTIFICATIONS),
                         ),
                         MoreMenuItem(
                           label: 'Messages',

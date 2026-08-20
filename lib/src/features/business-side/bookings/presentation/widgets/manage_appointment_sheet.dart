@@ -12,13 +12,13 @@ import 'package:go_router/go_router.dart';
 class ManageAppointmentSheet extends StatelessWidget {
   const ManageAppointmentSheet({
     required this.appointment,
-    required this.onCancel,
+    required this.onDecline,
     required this.onReschedule,
     super.key,
   });
 
   final AppointmentModel appointment;
-  final Future<bool> Function(AppointmentModel appointment) onCancel;
+  final Future<bool> Function(AppointmentModel appointment) onDecline;
   final Future<void> Function() onReschedule;
 
   @override
@@ -134,13 +134,13 @@ class ManageAppointmentSheet extends StatelessWidget {
               if (canManage) ...[
                 const SizedBox(height: 20),
                 CustomButton(
-                  buttonName: 'Cancel Booking',
+                  buttonName: 'Decline Appointment',
                   color: Colors.redAccent,
                   height: 48,
                   fontSize: 16,
                   onPressed: () async {
-                    final didCancel = await onCancel(appointment);
-                    if (didCancel && context.mounted) {
+                    final didDecline = await onDecline(appointment);
+                    if (didDecline && context.mounted) {
                       Navigator.of(context).pop();
                     }
                   },

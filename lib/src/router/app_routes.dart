@@ -27,6 +27,7 @@ class AppRoutes {
   static const AVAILABILITY_CALENDAR = '/availability-calendar';
   static const CHAT_LIST = '/messages';
   static const CHAT_CONVERSATION = '/conversation';
+  static const NOTIFICATIONS = '/notifications';
   static const ONBOARDING = '/onboarding';
   static const USER_TYPE_CHECKER = '/user-type-checker';
   static const SIGNIN = '/sign-in';

@@ -107,4 +107,17 @@ class ChatRepository {
       isTyping: isTyping,
     );
   }
+
+  Future<void> setActiveViewer({
+    required String conversationId,
+    required bool isActive,
+  }) async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return;
+    await _dataSource.setActiveViewer(
+      conversationId: conversationId,
+      userId: userId,
+      isActive: isActive,
+    );
+  }
 }

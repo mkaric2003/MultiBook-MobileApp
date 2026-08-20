@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/user_type.dart';
+import 'package:aquabook/src/data/repositories/notification_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
@@ -22,10 +23,12 @@ class AuthenticationRepository {
   AuthenticationRepository(
     this._authenticationDataSource,
     this._firestoreDataSource,
+    this._notificationRepository,
   );
 
   final AuthenticationDataSource _authenticationDataSource;
   final FirestoreDataSource _firestoreDataSource;
+  final NotificationRepository _notificationRepository;
 
   bool get isSignedIn => _authenticationDataSource.currentUser != null;
 
@@ -67,6 +70,7 @@ class AuthenticationRepository {
       );
 
       log('Firestore user profile created.', name: 'AuthenticationRepository');
+      await _registerNotificationDevice();
     } on FirebaseAuthException catch (error, stackTrace) {
       log(
         'Firebase Auth sign-up failed: ${error.code}',
@@ -136,6 +140,7 @@ class AuthenticationRepository {
       }
 
       log('Google sign-in completed.', name: 'AuthenticationRepository');
+      await _registerNotificationDevice();
       return isNewUser;
     } on GoogleSignInException catch (error, stackTrace) {
       if (error.code == GoogleSignInExceptionCode.canceled) {
@@ -198,6 +203,7 @@ class AuthenticationRepository {
         email: email.trim(),
         password: password,
       );
+      await _registerNotificationDevice();
       log('Email sign-in completed.', name: 'AuthenticationRepository');
     } on FirebaseAuthException catch (error, stackTrace) {
       log(
@@ -256,6 +262,7 @@ class AuthenticationRepository {
 
   Future<void> signOut() async {
     try {
+      await _unregisterNotificationDevice();
       await _authenticationDataSource.signOut();
       log('User signed out.', name: 'AuthenticationRepository');
     } on FirebaseAuthException catch (error, stackTrace) {
@@ -291,6 +298,32 @@ class AuthenticationRepository {
     } catch (error, stackTrace) {
       log(
         'Failed to remove incomplete Firebase Auth account.',
+        name: 'AuthenticationRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  Future<void> _registerNotificationDevice() async {
+    try {
+      await _notificationRepository.registerCurrentDevice();
+    } catch (error, stackTrace) {
+      log(
+        'Notification device registration failed.',
+        name: 'AuthenticationRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  Future<void> _unregisterNotificationDevice() async {
+    try {
+      await _notificationRepository.unregisterCurrentDevice();
+    } catch (error, stackTrace) {
+      log(
+        'Notification device removal failed.',
         name: 'AuthenticationRepository',
         error: error,
         stackTrace: stackTrace,
