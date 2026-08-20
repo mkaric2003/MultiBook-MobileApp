@@ -36,11 +36,20 @@ class StayListingCard extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                '⭐ ${stay.rating.toStringAsFixed(1)} (${stay.reviewCount})${stay.location.isEmpty ? '' : '  •  ${stay.location}'}',
+                '⭐ ${stay.rating.toStringAsFixed(1)} (${stay.reviewCount})',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: AppColors.muted, fontSize: 13),
               ),
+              if (stay.location.isNotEmpty) ...[
+                const SizedBox(height: 3),
+                Text(
+                  stay.location,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                ),
+              ],
               if (stay.pricePerNight != null) ...[
                 if (pinPriceToBottom)
                   const Spacer()

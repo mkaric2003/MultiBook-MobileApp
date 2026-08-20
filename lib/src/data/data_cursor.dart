@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DataCursor<T> {
-  DataCursor(this._query, this._listSerializer);
+  DataCursor(this._query, this._listSerializer, {int? pageSize})
+    : _pageSize = pageSize;
 
   bool isLoading = false;
   bool isEverythingLoaded = false;
@@ -11,6 +12,7 @@ class DataCursor<T> {
   final Query<Map<String, dynamic>> _query;
   final FutureOr<List<T>> Function(List<Map<String, dynamic>> documents)
   _listSerializer;
+  final int? _pageSize;
   DocumentSnapshot? _lastVisible;
 
   Future<List<T>> fetchNextPage() async {
@@ -31,6 +33,9 @@ class DataCursor<T> {
       }
 
       _lastVisible = response.docs.last;
+      if (_pageSize != null && response.docs.length < _pageSize) {
+        isEverythingLoaded = true;
+      }
       return _listSerializer(
         response.docs.map((document) => document.data()).toList(),
       );

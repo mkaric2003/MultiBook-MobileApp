@@ -61,6 +61,7 @@ class StayFilters {
     int? children,
     String? city,
     bool clearCity = false,
+    bool clearCheckIn = false,
     bool clearCheckOut = false,
     double? minPrice,
     double? maxPrice,
@@ -71,7 +72,7 @@ class StayFilters {
     bool clearInventoryType = false,
   }) {
     return StayFilters(
-      checkIn: checkIn ?? this.checkIn,
+      checkIn: clearCheckIn ? null : checkIn ?? this.checkIn,
       checkOut: clearCheckOut ? null : checkOut ?? this.checkOut,
       adults: adults ?? this.adults,
       children: children ?? this.children,

@@ -10,6 +10,10 @@ class CustomerDashboardState {
   const CustomerDashboardState({
     this.selectedTab = CustomerHomeTab.stays,
     this.isRecommendedStaysLoading = true,
+    this.isNearbyStaysLoading = true,
+    this.isLoadingMoreNearbyStays = false,
+    this.nearbyStays = const [],
+    this.hasMoreNearbyStays = true,
     this.recommendedStays = const [],
     this.isOtherStaysLoading = false,
     this.otherStays = const [],
@@ -28,6 +32,10 @@ class CustomerDashboardState {
 
   final CustomerHomeTab selectedTab;
   final bool isRecommendedStaysLoading;
+  final bool isNearbyStaysLoading;
+  final bool isLoadingMoreNearbyStays;
+  final List<StayListing> nearbyStays;
+  final bool hasMoreNearbyStays;
   final List<StayListing> recommendedStays;
   final bool isOtherStaysLoading;
   final List<StayListing> otherStays;
@@ -46,6 +54,10 @@ class CustomerDashboardState {
   CustomerDashboardState copyWith({
     CustomerHomeTab? selectedTab,
     bool? isRecommendedStaysLoading,
+    bool? isNearbyStaysLoading,
+    bool? isLoadingMoreNearbyStays,
+    List<StayListing>? nearbyStays,
+    bool? hasMoreNearbyStays,
     List<StayListing>? recommendedStays,
     bool? isOtherStaysLoading,
     List<StayListing>? otherStays,
@@ -65,6 +77,11 @@ class CustomerDashboardState {
       selectedTab: selectedTab ?? this.selectedTab,
       isRecommendedStaysLoading:
           isRecommendedStaysLoading ?? this.isRecommendedStaysLoading,
+      isNearbyStaysLoading: isNearbyStaysLoading ?? this.isNearbyStaysLoading,
+      isLoadingMoreNearbyStays:
+          isLoadingMoreNearbyStays ?? this.isLoadingMoreNearbyStays,
+      nearbyStays: nearbyStays ?? this.nearbyStays,
+      hasMoreNearbyStays: hasMoreNearbyStays ?? this.hasMoreNearbyStays,
       recommendedStays: recommendedStays ?? this.recommendedStays,
       isOtherStaysLoading: isOtherStaysLoading ?? this.isOtherStaysLoading,
       otherStays: otherStays ?? this.otherStays,

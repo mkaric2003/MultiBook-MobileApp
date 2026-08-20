@@ -548,6 +548,25 @@ class BusinessRepository {
     }
   }
 
+  DataCursor<BusinessModel>? getStaysNearCityCursor({
+    required String city,
+    int pageSize = 10,
+  }) {
+    final normalizedCity = _normalizeSearchValue(city);
+    if (normalizedCity.isEmpty) {
+      return null;
+    }
+    return _firestoreDataSource.createCursorWhereAll<BusinessModel>(
+      collection: _businessesCollection,
+      filters: {
+        'type': BusinessType.stays.name,
+        'location.cityLowercase': normalizedCity,
+      },
+      pageSize: pageSize,
+      listSerializer: (documents) => documents.map(_businessFromData).toList(),
+    );
+  }
+
   Future<List<BusinessModel>> getStays() async {
     try {
       final businessesData = await _firestoreDataSource.getDocumentsWhere(

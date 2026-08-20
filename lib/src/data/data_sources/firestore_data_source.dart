@@ -199,7 +199,7 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
         .collection(collection)
         .where(field, isEqualTo: value)
         .limit(pageSize);
-    return DataCursor<T>(query, listSerializer);
+    return DataCursor<T>(query, listSerializer, pageSize: pageSize);
   }
 
   @override
@@ -215,7 +215,11 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
       query = query.where(filter.key, isEqualTo: filter.value);
     }
 
-    return DataCursor<T>(query.limit(pageSize), listSerializer);
+    return DataCursor<T>(
+      query.limit(pageSize),
+      listSerializer,
+      pageSize: pageSize,
+    );
   }
 
   @override

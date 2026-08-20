@@ -370,6 +370,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i104.UserLocationCubit>(
       () => _i104.UserLocationCubit(gh<_i417.UserLocationRepository>()),
     );
+    gh.lazySingleton<_i567.AppointmentRepository>(
+      () => _i567.AppointmentRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i1065.BusinessRepository>(),
+        gh<_i1064.ServiceAvailabilityRepository>(),
+      ),
+    );
     gh.factory<_i567.CustomerDashboardCubit>(
       () => _i567.CustomerDashboardCubit(
         gh<_i1065.BusinessRepository>(),
@@ -377,14 +385,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i760.ServiceSearchRepository>(),
         gh<_i64.BookingDraftRepository>(),
         gh<_i363.AppointmentDraftRepository>(),
-      ),
-    );
-    gh.lazySingleton<_i567.AppointmentRepository>(
-      () => _i567.AppointmentRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
-        gh<_i1065.BusinessRepository>(),
-        gh<_i1064.ServiceAvailabilityRepository>(),
+        gh<_i747.UserRepository>(),
+        gh<_i417.UserLocationRepository>(),
       ),
     );
     gh.factory<_i270.AppointmentDetailsCubit>(

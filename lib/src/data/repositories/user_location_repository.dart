@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:aquabook/src/data/data_sources/device_location_data_source.dart';
 import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart';
 import 'package:aquabook/src/data/enums/device_location_status.dart';
@@ -22,6 +24,9 @@ class UserLocationRepository {
   final DeviceLocationDataSource _deviceLocationDataSource;
   final NominatimDataSource _nominatimDataSource;
   final UserRepository _userRepository;
+  final _cityUpdates = StreamController<String>.broadcast();
+
+  Stream<String> get cityUpdates => _cityUpdates.stream;
 
   Future<bool> hasLocationPermission() =>
       _deviceLocationDataSource.hasLocationPermission();
@@ -58,5 +63,6 @@ class UserLocationRepository {
       city: location.city,
       address: location.address,
     );
+    _cityUpdates.add(location.city);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
@@ -5,6 +7,8 @@ import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
 import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart';
 import 'package:aquabook/src/data/repositories/stay_search_repository.dart';
 import 'package:aquabook/src/data/repositories/service_search_repository.dart';
+import 'package:aquabook/src/data/repositories/user_location_repository.dart';
+import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/data/models/appointment_draft_model.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
@@ -23,6 +27,8 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     this._serviceSearchRepository,
     this._draftRepository,
     this._appointmentDraftRepository,
+    this._userRepository,
+    this._userLocationRepository,
   ) : super(const CustomerDashboardState());
 
   final BusinessRepository _businessRepository;
@@ -30,6 +36,10 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   final ServiceSearchRepository _serviceSearchRepository;
   final BookingDraftRepository _draftRepository;
   final AppointmentDraftRepository _appointmentDraftRepository;
+  final UserRepository _userRepository;
+  final UserLocationRepository _userLocationRepository;
+  StreamSubscription<String>? _locationCitySubscription;
+  DataCursor<BusinessModel>? _nearbyStaysCursor;
   DataCursor<BusinessModel>? _staysCursor;
   String? _staysNextCursor;
   DataCursor<BusinessModel>? _servicesCursor;
@@ -38,6 +48,84 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   Future<void> loadStayCities() async {
     final cities = await _businessRepository.getStayCities();
     emit(state.copyWith(stayCities: cities));
+  }
+
+  Future<void> observeUserLocation() async {
+    await _locationCitySubscription?.cancel();
+    _locationCitySubscription = _userLocationRepository.cityUpdates.listen(
+      (city) => loadPopularNearbyStays(city: city),
+    );
+  }
+
+  Future<void> loadPopularNearbyStays({String? city}) async {
+    final customerCity = city?.trim().isNotEmpty == true
+        ? city!.trim()
+        : (await _userRepository.getCurrentUser())?.city?.trim() ?? '';
+    if (customerCity.isEmpty) {
+      emit(
+        state.copyWith(
+          isNearbyStaysLoading: false,
+          nearbyStays: const [],
+          hasMoreNearbyStays: false,
+        ),
+      );
+      return;
+    }
+
+    _nearbyStaysCursor = _businessRepository.getStaysNearCityCursor(
+      city: customerCity,
+    );
+    emit(
+      state.copyWith(
+        isNearbyStaysLoading: true,
+        isLoadingMoreNearbyStays: false,
+        nearbyStays: const [],
+        hasMoreNearbyStays: _nearbyStaysCursor != null,
+      ),
+    );
+    await loadMoreNearbyStays(isInitialLoad: true);
+  }
+
+  Future<void> loadMoreNearbyStays({bool isInitialLoad = false}) async {
+    final cursor = _nearbyStaysCursor;
+    if (cursor == null ||
+        (!isInitialLoad &&
+            (state.isLoadingMoreNearbyStays || !state.hasMoreNearbyStays))) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isNearbyStaysLoading: isInitialLoad,
+        isLoadingMoreNearbyStays: !isInitialLoad,
+      ),
+    );
+    try {
+      final page = await cursor.fetchNextPage();
+      final knownIds = state.nearbyStays.map((stay) => stay.id).toSet();
+      final newStays = page
+          .where(
+            (business) => business.isActive && !knownIds.contains(business.id),
+          )
+          .map(StayListing.fromBusiness)
+          .toList();
+      emit(
+        state.copyWith(
+          isNearbyStaysLoading: false,
+          isLoadingMoreNearbyStays: false,
+          nearbyStays: [...state.nearbyStays, ...newStays],
+          hasMoreNearbyStays: !cursor.isEverythingLoaded,
+        ),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isNearbyStaysLoading: false,
+          isLoadingMoreNearbyStays: false,
+          hasMoreNearbyStays: false,
+        ),
+      );
+    }
   }
 
   void selectTab(CustomerHomeTab tab) {
@@ -324,5 +412,11 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         ),
       );
     }
+  }
+
+  @override
+  Future<void> close() async {
+    await _locationCitySubscription?.cancel();
+    return super.close();
   }
 }

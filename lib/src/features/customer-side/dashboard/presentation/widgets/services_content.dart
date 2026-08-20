@@ -3,7 +3,6 @@ import 'package:aquabook/src/features/customer-side/dashboard/presentation/widge
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/other_services_grid.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/popular_services_list.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/promotion_banner.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/quick_filter_chips.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/continue_appointment_card.dart';
 import 'package:aquabook/src/data/models/appointment_draft_model.dart';
 import 'package:flutter/material.dart';
@@ -65,8 +64,6 @@ class ServicesContent extends HookWidget {
               emptyMessage: 'No services match your filters.',
             ),
           ] else ...[
-            const QuickFilterChips(),
-            const SizedBox(height: 28),
             const PromotionBanner(),
             const SizedBox(height: 28),
             if (appointmentDraft != null && onContinueAppointment != null) ...[

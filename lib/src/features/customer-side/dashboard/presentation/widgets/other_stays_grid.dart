@@ -35,7 +35,7 @@ class OtherStaysGrid extends StatelessWidget {
             crossAxisCount: 2,
             mainAxisSpacing: 14,
             crossAxisSpacing: 14,
-            mainAxisExtent: 260,
+            mainAxisExtent: 280,
           ),
           itemBuilder: (context, index) =>
               StayListingCard(stay: stays[index], compact: true),
