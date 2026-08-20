@@ -20,6 +20,9 @@ class SearchableCityPickerSheet extends HookWidget {
     final filteredCities = cities
         .where((city) => city.toLowerCase().contains(normalizedQuery))
         .toList();
+    final canUseTypedCity =
+        normalizedQuery.isNotEmpty &&
+        !cities.any((city) => city.toLowerCase() == normalizedQuery);
 
     return Material(
       color: AppColors.background,
@@ -110,6 +113,17 @@ class SearchableCityPickerSheet extends HookWidget {
                             style: TextStyle(color: AppColors.muted),
                           ),
                         ),
+                      ),
+                    if (canUseTypedCity)
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(
+                          Icons.add_location_alt_outlined,
+                          color: AppColors.primary,
+                        ),
+                        title: Text('Use "${query.value.trim()}"'),
+                        onTap: () =>
+                            Navigator.of(context).pop(query.value.trim()),
                       ),
                     for (final city in filteredCities)
                       ListTile(

@@ -21,6 +21,8 @@ import 'package:aquabook/src/features/customer-side/booking_details/presentation
 import 'package:aquabook/src/features/customer-side/search/presentation/views/customer_search_view.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/views/stay_detail_view.dart';
 import 'package:aquabook/src/features/customer-side/service_detail/presentation/views/service_detail_view.dart';
+import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
+import 'package:aquabook/src/features/customer-side/explore/presentation/views/explore_stay_results_view.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/create_appointment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/presentation/views/create_appointment_view.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';

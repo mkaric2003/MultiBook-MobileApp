@@ -3,17 +3,43 @@ import 'package:aquabook/src/features/customer-side/explore/domain/models/explor
 import 'package:flutter/material.dart';
 
 class ExploreStayCategoryGrid extends StatelessWidget {
-  const ExploreStayCategoryGrid({super.key});
+  const ExploreStayCategoryGrid({required this.onSelected, super.key});
+
+  final ValueChanged<ExploreCategory> onSelected;
 
   static const _categories = [
-    ExploreCategory(title: 'Hotels', icon: Icons.hotel_rounded),
-    ExploreCategory(title: 'Apartments', icon: Icons.home_rounded),
-    ExploreCategory(title: 'Villas', icon: Icons.villa_rounded),
-    ExploreCategory(title: 'Beach villas', icon: Icons.beach_access_rounded),
-    ExploreCategory(title: 'Mountain cabins', icon: Icons.forest_rounded),
-    ExploreCategory(title: 'Weekend homes', icon: Icons.cottage_rounded),
-    ExploreCategory(title: 'Pool villas', icon: Icons.pool_rounded),
-    ExploreCategory(title: 'Resorts', icon: Icons.holiday_village_rounded),
+    ExploreCategory(id: 'hotel', title: 'Hotels', icon: Icons.hotel_rounded),
+    ExploreCategory(
+      id: 'apartment',
+      title: 'Apartments',
+      icon: Icons.home_rounded,
+    ),
+    ExploreCategory(id: 'villa', title: 'Villas', icon: Icons.villa_rounded),
+    ExploreCategory(
+      id: 'beach_villa',
+      title: 'Beach villas',
+      icon: Icons.beach_access_rounded,
+    ),
+    ExploreCategory(
+      id: 'mountain_cabin',
+      title: 'Mountain cabins',
+      icon: Icons.forest_rounded,
+    ),
+    ExploreCategory(
+      id: 'cottage',
+      title: 'Weekend homes',
+      icon: Icons.cottage_rounded,
+    ),
+    ExploreCategory(
+      id: 'pool_villa',
+      title: 'Pool villas',
+      icon: Icons.pool_rounded,
+    ),
+    ExploreCategory(
+      id: 'resort',
+      title: 'Resorts',
+      icon: Icons.holiday_village_rounded,
+    ),
   ];
 
   @override
@@ -29,29 +55,33 @@ class ExploreStayCategoryGrid extends StatelessWidget {
     ),
     itemBuilder: (_, index) {
       final category = _categories[index];
-      return Container(
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 55,
-              width: 55,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(15),
+      return InkWell(
+        onTap: () => onSelected(category),
+        borderRadius: BorderRadius.circular(18),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 55,
+                width: 55,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Icon(category.icon, color: AppColors.white, size: 27),
               ),
-              child: Icon(category.icon, color: AppColors.white, size: 27),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              category.title,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                category.title,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
         ),
       );
     },

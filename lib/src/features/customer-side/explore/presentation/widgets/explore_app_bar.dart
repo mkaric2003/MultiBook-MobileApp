@@ -1,8 +1,18 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/global_widgets/searchable_city_picker_sheet.dart';
 import 'package:flutter/material.dart';
 
 class ExploreAppBar extends StatelessWidget {
-  const ExploreAppBar({super.key});
+  const ExploreAppBar({
+    required this.selectedCity,
+    required this.cities,
+    required this.onCityChanged,
+    super.key,
+  });
+
+  final String? selectedCity;
+  final List<String> cities;
+  final ValueChanged<String> onCityChanged;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -12,9 +22,60 @@ class ExploreAppBar extends StatelessWidget {
     decoration: const BoxDecoration(
       border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
     ),
-    child: const Text(
-      'Explore',
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+    child: Row(
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () async {
+            final city = await showModalBottomSheet<String>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (_) => SearchableCityPickerSheet(
+                cities: cities,
+                selectedCity: selectedCity,
+              ),
+            );
+            if (context.mounted && city != null && city.trim().isNotEmpty) {
+              onCityChanged(city);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.location_on_rounded,
+                color: AppColors.primary,
+                size: 18,
+              ),
+              const SizedBox(width: 4),
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 94),
+                child: Text(
+                  selectedCity?.isNotEmpty == true ? selectedCity! : 'City',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppColors.muted,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: AppColors.muted,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 16),
+        const Text(
+          'Explore',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+        ),
+      ],
     ),
   );
 }

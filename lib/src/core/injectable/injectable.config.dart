@@ -96,6 +96,10 @@ import 'package:aquabook/src/features/customer-side/customer_booking_details/cub
     as _i690;
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart'
     as _i567;
+import 'package:aquabook/src/features/customer-side/explore/cubit/explore_cubit.dart'
+    as _i830;
+import 'package:aquabook/src/features/customer-side/explore/cubit/explore_stay_results_cubit.dart'
+    as _i931;
 import 'package:aquabook/src/features/customer-side/payment/cubit/payment_cubit.dart'
     as _i415;
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_cubit.dart'
@@ -355,6 +359,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1065.BusinessRepository>(),
       ),
     );
+    gh.factory<_i830.ExploreCubit>(
+      () => _i830.ExploreCubit(
+        gh<_i747.UserRepository>(),
+        gh<_i1065.BusinessRepository>(),
+      ),
+    );
     gh.lazySingleton<_i285.StaySearchRepository>(
       () => _i285.StaySearchRepository(
         gh<_i873.StaySearchDataSource>(),
@@ -440,6 +450,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i567.AppointmentRepository>(),
         gh<_i1064.ServiceAvailabilityRepository>(),
       ),
+    );
+    gh.factory<_i931.ExploreStayResultsCubit>(
+      () => _i931.ExploreStayResultsCubit(gh<_i285.StaySearchRepository>()),
     );
     gh.factory<_i259.BookingDetailsCubit>(
       () => _i259.BookingDetailsCubit(

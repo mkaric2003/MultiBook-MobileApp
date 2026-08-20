@@ -1,4 +1,5 @@
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_category.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
 import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_destinations_list.dart';
 import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_featured_collections.dart';
@@ -12,10 +13,12 @@ class ExploreStaysContent extends StatelessWidget {
     super.key,
     required this.selectedTab,
     required this.onTabChanged,
+    required this.onCategorySelected,
   });
 
   final CustomerHomeTab selectedTab;
   final ValueChanged<CustomerHomeTab> onTabChanged;
+  final ValueChanged<ExploreCategory> onCategorySelected;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -33,7 +36,7 @@ class ExploreStaysContent extends StatelessWidget {
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
       ),
       const SizedBox(height: 18),
-      const ExploreStayCategoryGrid(),
+      ExploreStayCategoryGrid(onSelected: onCategorySelected),
       const SizedBox(height: 42),
       const Text(
         'Top destinations',
