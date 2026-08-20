@@ -4,6 +4,7 @@ import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
 import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart';
 import 'package:aquabook/src/data/repositories/stay_search_repository.dart';
+import 'package:aquabook/src/data/repositories/service_search_repository.dart';
 import 'package:aquabook/src/data/models/appointment_draft_model.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
@@ -19,17 +20,20 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   CustomerDashboardCubit(
     this._businessRepository,
     this._staySearchRepository,
+    this._serviceSearchRepository,
     this._draftRepository,
     this._appointmentDraftRepository,
   ) : super(const CustomerDashboardState());
 
   final BusinessRepository _businessRepository;
   final StaySearchRepository _staySearchRepository;
+  final ServiceSearchRepository _serviceSearchRepository;
   final BookingDraftRepository _draftRepository;
   final AppointmentDraftRepository _appointmentDraftRepository;
   DataCursor<BusinessModel>? _staysCursor;
   String? _staysNextCursor;
   DataCursor<BusinessModel>? _servicesCursor;
+  String? _servicesNextCursor;
 
   Future<void> loadStayCities() async {
     final cities = await _businessRepository.getStayCities();
@@ -43,8 +47,19 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     }
   }
 
-  void applyServiceFilters(ServiceFilters filters) {
-    emit(state.copyWith(serviceFilters: filters));
+  Future<void> applyServiceFilters(ServiceFilters filters) async {
+    _servicesCursor = null;
+    _servicesNextCursor = null;
+    emit(
+      state.copyWith(
+        serviceFilters: filters,
+        isPopularServicesLoading: true,
+        popularServices: const [],
+        otherServices: const [],
+        hasMoreOtherServices: true,
+      ),
+    );
+    await loadPopularServices();
   }
 
   Future<void> loadDraft() async {
@@ -197,6 +212,10 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   }
 
   Future<void> loadPopularServices() async {
+    if (state.serviceFilters.hasActiveFilters) {
+      await _loadFilteredServices();
+      return;
+    }
     final popularBusinesses = await _businessRepository.getPopularServices();
     emit(
       state.copyWith(
@@ -211,6 +230,11 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
 
   Future<void> loadMoreServices() async {
     if (state.isOtherServicesLoading || !state.hasMoreOtherServices) {
+      return;
+    }
+
+    if (state.serviceFilters.hasActiveFilters) {
+      await _loadMoreFilteredServices();
       return;
     }
 
@@ -234,6 +258,62 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
           isOtherServicesLoading: false,
           otherServices: [...state.otherServices, ...newServices],
           hasMoreOtherServices: !_servicesCursor!.isEverythingLoaded,
+        ),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isOtherServicesLoading: false,
+          hasMoreOtherServices: false,
+        ),
+      );
+    }
+  }
+
+  Future<void> _loadFilteredServices() async {
+    try {
+      final page = await _serviceSearchRepository.search(
+        filters: state.serviceFilters,
+      );
+      _servicesNextCursor = page.nextCursor;
+      emit(
+        state.copyWith(
+          isPopularServicesLoading: false,
+          isOtherServicesLoading: false,
+          popularServices: const [],
+          otherServices: page.services
+              .map(ServiceListing.fromBusiness)
+              .toList(),
+          hasMoreOtherServices: _servicesNextCursor != null,
+        ),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isPopularServicesLoading: false,
+          isOtherServicesLoading: false,
+          hasMoreOtherServices: false,
+        ),
+      );
+    }
+  }
+
+  Future<void> _loadMoreFilteredServices() async {
+    emit(state.copyWith(isOtherServicesLoading: true));
+    try {
+      final page = await _serviceSearchRepository.search(
+        filters: state.serviceFilters,
+        cursor: _servicesNextCursor,
+      );
+      _servicesNextCursor = page.nextCursor;
+      emit(
+        state.copyWith(
+          isOtherServicesLoading: false,
+          otherServices: [
+            ...state.otherServices,
+            ...page.services.map(ServiceListing.fromBusiness),
+          ],
+          hasMoreOtherServices: _servicesNextCursor != null,
         ),
       );
     } catch (_) {

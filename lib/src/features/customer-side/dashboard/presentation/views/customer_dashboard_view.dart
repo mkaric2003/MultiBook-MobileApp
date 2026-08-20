@@ -109,7 +109,7 @@ class CustomerDashboardView extends StatelessWidget {
                                 ),
                               );
                           if (context.mounted && filters != null) {
-                            context
+                            await context
                                 .read<CustomerDashboardCubit>()
                                 .applyServiceFilters(filters);
                           }
@@ -152,6 +152,7 @@ class CustomerDashboardView extends StatelessWidget {
                           otherServices: state.otherServices,
                           isOtherServicesLoading: state.isOtherServicesLoading,
                           hasMoreOtherServices: state.hasMoreOtherServices,
+                          isFiltering: state.serviceFilters.hasActiveFilters,
                           onLoadMoreServices: context
                               .read<CustomerDashboardCubit>()
                               .loadMoreServices,
