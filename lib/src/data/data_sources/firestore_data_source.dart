@@ -54,6 +54,8 @@ abstract class FirestoreDataSource {
     required String field,
     required Object value,
     required int pageSize,
+    String? orderBy,
+    bool descending = false,
     required List<T> Function(List<Map<String, dynamic>> documents)
     listSerializer,
   });
@@ -62,6 +64,8 @@ abstract class FirestoreDataSource {
     required String collection,
     required Map<String, Object> filters,
     required int pageSize,
+    String? orderBy,
+    bool descending = false,
     required List<T> Function(List<Map<String, dynamic>> documents)
     listSerializer,
   });
@@ -211,14 +215,22 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
     required String field,
     required Object value,
     required int pageSize,
+    String? orderBy,
+    bool descending = false,
     required List<T> Function(List<Map<String, dynamic>> documents)
     listSerializer,
   }) {
-    final query = _firestore
+    Query<Map<String, dynamic>> query = _firestore
         .collection(collection)
-        .where(field, isEqualTo: value)
-        .limit(pageSize);
-    return DataCursor<T>(query, listSerializer, pageSize: pageSize);
+        .where(field, isEqualTo: value);
+    if (orderBy != null) {
+      query = query.orderBy(orderBy, descending: descending);
+    }
+    return DataCursor<T>(
+      query.limit(pageSize),
+      listSerializer,
+      pageSize: pageSize,
+    );
   }
 
   @override
@@ -226,12 +238,17 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
     required String collection,
     required Map<String, Object> filters,
     required int pageSize,
+    String? orderBy,
+    bool descending = false,
     required List<T> Function(List<Map<String, dynamic>> documents)
     listSerializer,
   }) {
     Query<Map<String, dynamic>> query = _firestore.collection(collection);
     for (final filter in filters.entries) {
       query = query.where(filter.key, isEqualTo: filter.value);
+    }
+    if (orderBy != null) {
+      query = query.orderBy(orderBy, descending: descending);
     }
 
     return DataCursor<T>(

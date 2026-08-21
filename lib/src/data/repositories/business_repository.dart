@@ -972,9 +972,12 @@ class BusinessRepository {
       collection: _businessesCollection,
       filters: {
         'type': BusinessType.stays.name,
+        'isActive': true,
         'location.cityLowercase': normalizedCity,
       },
       pageSize: pageSize,
+      orderBy: 'averageRating',
+      descending: true,
       listSerializer: (documents) => documents.map(_businessFromData).toList(),
     );
   }
@@ -991,9 +994,12 @@ class BusinessRepository {
       collection: _businessesCollection,
       filters: {
         'type': BusinessType.services.name,
+        'isActive': true,
         'location.cityLowercase': normalizedCity,
       },
       pageSize: pageSize,
+      orderBy: 'averageRating',
+      descending: true,
       listSerializer: (documents) => documents.map(_businessFromData).toList(),
     );
   }
@@ -1200,21 +1206,23 @@ class BusinessRepository {
   }
 
   DataCursor<BusinessModel> getStaysCursor({int pageSize = 6}) {
-    return _firestoreDataSource.createCursorWhere<BusinessModel>(
+    return _firestoreDataSource.createCursorWhereAll<BusinessModel>(
       collection: _businessesCollection,
-      field: 'type',
-      value: BusinessType.stays.name,
+      filters: {'type': BusinessType.stays.name, 'isActive': true},
       pageSize: pageSize,
+      orderBy: 'averageRating',
+      descending: true,
       listSerializer: (documents) => documents.map(_businessFromData).toList(),
     );
   }
 
   DataCursor<BusinessModel> getServicesCursor({int pageSize = 6}) {
-    return _firestoreDataSource.createCursorWhere<BusinessModel>(
+    return _firestoreDataSource.createCursorWhereAll<BusinessModel>(
       collection: _businessesCollection,
-      field: 'type',
-      value: BusinessType.services.name,
+      filters: {'type': BusinessType.services.name, 'isActive': true},
       pageSize: pageSize,
+      orderBy: 'averageRating',
+      descending: true,
       listSerializer: (documents) => documents.map(_businessFromData).toList(),
     );
   }
@@ -1379,6 +1387,7 @@ class BusinessRepository {
             'type': BusinessType.services.name,
             'name': name,
             'nameLowercase': _normalizeSearchValue(name),
+            'cityLowercase': _normalizeSearchValue(city),
             'categoryId': categoryId,
             'location': {
               'address': service['address'],
