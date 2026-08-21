@@ -1,5 +1,8 @@
+import 'package:aquabook/src/data/data_cursor.dart';
+import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/explore/cubit/explore_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -11,6 +14,7 @@ class ExploreCubit extends Cubit<ExploreState> {
 
   final UserRepository _userRepository;
   final BusinessRepository _businessRepository;
+  DataCursor<BusinessModel>? _trendingServicesCursor;
 
   Future<void> load() async {
     final user = await _userRepository.getCurrentUser();
@@ -27,9 +31,10 @@ class ExploreCubit extends Cubit<ExploreState> {
         cities: allCities,
       ),
     );
+    await loadTrendingServices(city: currentCity);
   }
 
-  void selectCity(String? city) {
+  Future<void> selectCity(String? city) async {
     final trimmedCity = city?.trim() ?? '';
     final cities = {
       ...state.cities,
@@ -42,5 +47,78 @@ class ExploreCubit extends Cubit<ExploreState> {
         cities: cities,
       ),
     );
+    await loadTrendingServices(city: trimmedCity);
+  }
+
+  Future<void> loadTrendingServices({String? city}) async {
+    final selectedCity = city?.trim() ?? state.selectedCity?.trim() ?? '';
+    if (selectedCity.isEmpty) {
+      _trendingServicesCursor = null;
+      emit(
+        state.copyWith(
+          trendingServices: const [],
+          isTrendingServicesLoading: false,
+          isLoadingMoreTrendingServices: false,
+          hasMoreTrendingServices: false,
+        ),
+      );
+      return;
+    }
+
+    _trendingServicesCursor = _businessRepository.getServicesNearCityCursor(
+      city: selectedCity,
+    );
+    emit(
+      state.copyWith(
+        trendingServices: const [],
+        isTrendingServicesLoading: true,
+        isLoadingMoreTrendingServices: false,
+        hasMoreTrendingServices: _trendingServicesCursor != null,
+      ),
+    );
+    await loadMoreTrendingServices(isInitialLoad: true);
+  }
+
+  Future<void> loadMoreTrendingServices({bool isInitialLoad = false}) async {
+    final cursor = _trendingServicesCursor;
+    if (cursor == null ||
+        (!isInitialLoad &&
+            (state.isLoadingMoreTrendingServices ||
+                !state.hasMoreTrendingServices))) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isTrendingServicesLoading: isInitialLoad,
+        isLoadingMoreTrendingServices: !isInitialLoad,
+      ),
+    );
+    try {
+      final page = await cursor.fetchNextPage();
+      final knownIds = state.trendingServices
+          .map((service) => service.id)
+          .toSet();
+      final newServices = page
+          .where((business) => business.isActive && knownIds.add(business.id))
+          .map(ServiceListing.fromBusiness)
+          .toList();
+      emit(
+        state.copyWith(
+          trendingServices: [...state.trendingServices, ...newServices],
+          isTrendingServicesLoading: false,
+          isLoadingMoreTrendingServices: false,
+          hasMoreTrendingServices: !cursor.isEverythingLoaded,
+        ),
+      );
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isTrendingServicesLoading: false,
+          isLoadingMoreTrendingServices: false,
+          hasMoreTrendingServices: false,
+        ),
+      );
+    }
   }
 }

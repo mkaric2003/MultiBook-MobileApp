@@ -16,13 +16,16 @@ class ServiceListingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageHeight = compact ? 134.0 : 175.0;
+    final imageHeight = compact ? 116.0 : 175.0;
+    final detailsPadding = compact
+        ? const EdgeInsets.fromLTRB(13, 10, 13, 10)
+        : const EdgeInsets.fromLTRB(13, 12, 13, 13);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final pinPriceToBottom = constraints.hasBoundedHeight;
         final details = Padding(
-          padding: const EdgeInsets.fromLTRB(13, 12, 13, 13),
+          padding: detailsPadding,
           child: Column(
             mainAxisSize: pinPriceToBottom
                 ? MainAxisSize.max
@@ -40,11 +43,20 @@ class ServiceListingCard extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                '⭐ ${service.rating.toStringAsFixed(1)} (${service.reviewCount})${service.location.isEmpty ? '' : '  •  ${service.location}'}',
+                '⭐ ${service.rating.toStringAsFixed(1)} (${service.reviewCount})',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: AppColors.muted, fontSize: 13),
               ),
+              if (service.location.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  service.location,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                ),
+              ],
               if (service.durationMinutes != null) ...[
                 const SizedBox(height: 5),
                 Text(

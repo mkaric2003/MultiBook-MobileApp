@@ -1,4 +1,5 @@
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_category_catalog.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_category.dart';
@@ -18,6 +19,11 @@ class ExploreServicesContent extends HookWidget {
     required this.onTabChanged,
     required this.onCategorySelected,
     required this.onCollectionSelected,
+    required this.trendingServices,
+    required this.isTrendingServicesLoading,
+    required this.isLoadingMoreTrendingServices,
+    required this.hasMoreTrendingServices,
+    required this.onLoadMoreTrendingServices,
     super.key,
   });
 
@@ -25,6 +31,11 @@ class ExploreServicesContent extends HookWidget {
   final ValueChanged<CustomerHomeTab> onTabChanged;
   final ValueChanged<ExploreServiceCategory> onCategorySelected;
   final ValueChanged<ExploreServiceCollection> onCollectionSelected;
+  final List<ServiceListing> trendingServices;
+  final bool isTrendingServicesLoading;
+  final bool isLoadingMoreTrendingServices;
+  final bool hasMoreTrendingServices;
+  final Future<void> Function() onLoadMoreTrendingServices;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +74,13 @@ class ExploreServicesContent extends HookWidget {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 18),
-        const ExploreTrendingServicesList(),
+        ExploreTrendingServicesList(
+          services: trendingServices,
+          isLoading: isTrendingServicesLoading,
+          isLoadingMore: isLoadingMoreTrendingServices,
+          hasMore: hasMoreTrendingServices,
+          onLoadMore: onLoadMoreTrendingServices,
+        ),
         const SizedBox(height: 38),
         const Text(
           'Featured collections',

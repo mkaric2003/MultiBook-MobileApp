@@ -94,6 +94,15 @@ class ExploreView extends HookWidget {
                                 ),
                               );
                             },
+                        trendingServices: state.trendingServices,
+                        isTrendingServicesLoading:
+                            state.isTrendingServicesLoading,
+                        isLoadingMoreTrendingServices:
+                            state.isLoadingMoreTrendingServices,
+                        hasMoreTrendingServices: state.hasMoreTrendingServices,
+                        onLoadMoreTrendingServices: context
+                            .read<ExploreCubit>()
+                            .loadMoreTrendingServices,
                       ),
               ),
             ],
