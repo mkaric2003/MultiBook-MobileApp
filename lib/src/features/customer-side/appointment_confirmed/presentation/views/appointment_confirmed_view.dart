@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/appointment_confirmed/domain/models/appointment_confirmed_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_code_card.dart';
@@ -36,7 +37,7 @@ class AppointmentConfirmedView extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             CustomButton(
-              buttonName: 'Back to Home',
+              buttonName: context.l10n.backToHome,
               color: AppColors.surfaceHighlight,
               onPressed: () => context.go(AppRoutes.CUSTOMER_HOME),
             ),

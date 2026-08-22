@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/presentation/widgets/appointment_summary_row.dart';
@@ -77,7 +78,7 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      '⭐ ${arguments.business.averageRating.toStringAsFixed(1)} (${arguments.business.reviewCount})',
+                      '⭐ ${arguments.business.averageRating.toStringAsFixed(1)} (${context.l10n.reviews(arguments.business.reviewCount)})',
                       style: const TextStyle(fontWeight: FontWeight.w700),
                     ),
                   ],
@@ -87,22 +88,22 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           AppointmentSummaryRow(
-            label: 'Duration',
-            value: '$totalDuration minutes',
+            label: context.l10n.duration,
+            value: context.l10n.serviceDuration(totalDuration),
           ),
           const SizedBox(height: 12),
           AppointmentSummaryRow(
-            label: 'Provider',
+            label: context.l10n.provider,
             value: arguments.provider.name,
           ),
           const SizedBox(height: 12),
           AppointmentSummaryRow(
-            label: 'Date',
+            label: context.l10n.date,
             value: DateFormat('EEE, MMM d').format(arguments.date),
           ),
           const SizedBox(height: 12),
           AppointmentSummaryRow(
-            label: 'Time',
+            label: context.l10n.time,
             value:
                 '${DateFormat('h:mm a').format(start)} - ${DateFormat('h:mm a').format(end)}',
           ),
@@ -111,12 +112,12 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
             child: Divider(color: AppColors.surfaceHighlight),
           ),
           AppointmentSummaryRow(
-            label: 'Price per session',
+            label: context.l10n.pricePerSession,
             value: '\$$basePrice',
           ),
           const SizedBox(height: 12),
           AppointmentSummaryRow(
-            label: 'Total',
+            label: context.l10n.total,
             value: '\$$basePrice',
             emphasized: true,
           ),

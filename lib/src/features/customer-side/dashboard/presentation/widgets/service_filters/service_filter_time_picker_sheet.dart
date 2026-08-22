@@ -44,8 +44,8 @@ class ServiceFilterTimePickerSheet extends HookWidget {
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(context.l10n.cancel),
                     ),
-                    const Text(
-                      'Select time',
+                    Text(
+                      context.l10n.selectTime,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
@@ -55,8 +55,8 @@ class ServiceFilterTimePickerSheet extends HookWidget {
                       padding: EdgeInsets.zero,
                       onPressed: () =>
                           Navigator.of(context).pop(selectedMinutes.value),
-                      child: const Text(
-                        'Done',
+                      child: Text(
+                        context.l10n.done,
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),

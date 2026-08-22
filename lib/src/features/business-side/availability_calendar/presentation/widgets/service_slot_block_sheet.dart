@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,9 @@ class ServiceSlotBlockSheet extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           CustomButton(
-            buttonName: isBlocked ? 'Unblock slot' : 'Block slot',
+            buttonName: isBlocked
+                ? context.l10n.unblockSlot
+                : context.l10n.blockSlot,
             color: isBlocked ? AppColors.surfaceHighlight : AppColors.primary,
             onPressed: () => _submit(context),
           ),

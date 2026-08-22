@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/business-side/my_businesses/bloc/my_businesses_cubit.dart';
@@ -33,8 +34,8 @@ class MyBusinessesView extends StatelessWidget {
                         : ListView(
                             padding: const EdgeInsets.fromLTRB(25, 32, 25, 24),
                             children: [
-                              const Text(
-                                'Select a business to manage or add a new one.',
+                              Text(
+                                context.l10n.selectBusinessToManage,
                                 style: TextStyle(
                                   color: AppColors.muted,
                                   fontSize: 18,
@@ -42,9 +43,9 @@ class MyBusinessesView extends StatelessWidget {
                               ),
                               const SizedBox(height: 40),
                               if (state.businesses.isEmpty)
-                                const Center(
+                                Center(
                                   child: Text(
-                                    'No businesses yet.',
+                                    '${context.l10n.noBusinessesYet}.',
                                     style: TextStyle(color: AppColors.muted),
                                   ),
                                 )
@@ -110,7 +111,7 @@ class MyBusinessesView extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(25, 12, 25, 5),
                 child: CustomButton(
-                  buttonName: 'Add New Business',
+                  buttonName: context.l10n.addNewBusiness,
                   leadingIcon: const Icon(Icons.add),
                   onPressed: () => context.push(AppRoutes.ADD_BUSINESS),
                 ),

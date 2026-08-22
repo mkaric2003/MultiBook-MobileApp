@@ -131,8 +131,8 @@ class RescheduleAppointmentView extends HookWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 26),
-                                const Text(
-                                  'Select a new date',
+                                Text(
+                                  context.l10n.selectNewDate,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
@@ -164,8 +164,8 @@ class RescheduleAppointmentView extends HookWidget {
                                   },
                                 ),
                                 const SizedBox(height: 26),
-                                const Text(
-                                  'Available times',
+                                Text(
+                                  context.l10n.availableTimes,
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
@@ -173,8 +173,8 @@ class RescheduleAppointmentView extends HookWidget {
                                 ),
                                 const SizedBox(height: 16),
                                 if (provider == null)
-                                  const Text(
-                                    'This provider is no longer available.',
+                                  Text(
+                                    context.l10n.providerNoLongerAvailable,
                                     style: TextStyle(color: AppColors.muted),
                                   )
                                 else if (availabilityState.isLoading)
@@ -213,8 +213,8 @@ class RescheduleAppointmentView extends HookWidget {
                           ),
                           child: CustomButton(
                             buttonName: rescheduleState.isSubmitting
-                                ? 'Rescheduling...'
-                                : 'Confirm reschedule',
+                                ? context.l10n.rescheduling
+                                : context.l10n.confirmReschedule,
                             enabled: canSubmit,
                             onPressed: !canSubmit
                                 ? null

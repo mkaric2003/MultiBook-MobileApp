@@ -44,6 +44,13 @@ class ServiceFiltersSheet extends HookWidget {
   Widget build(BuildContext context) {
     final filters = useState(initialFilters);
 
+    String? categoryNameForId(String? id) {
+      final category = ServiceCategoryFilterOptions.byId(id);
+      return category == null
+          ? null
+          : context.l10n.businessCategoryName(category.id);
+    }
+
     Future<void> selectDate() async {
       final selected = await showModalBottomSheet<DateTime>(
         context: context,
@@ -80,18 +87,23 @@ class ServiceFiltersSheet extends HookWidget {
           title: context.l10n.category,
           allOptionLabel: context.l10n.allCategories,
           options: ServiceCategoryFilterOptions.all
-              .map((category) => category.label)
+              .map((category) => context.l10n.businessCategoryName(category.id))
               .toList(),
-          selectedOption: ServiceCategoryFilterOptions.byId(
-            filters.value.categoryId,
-          )?.label,
+          selectedOption: categoryNameForId(filters.value.categoryId),
         ),
       );
       if (selected != null) {
         filters.value = selected.isEmpty
             ? filters.value.copyWith(clearCategoryId: true)
             : filters.value.copyWith(
-                categoryId: ServiceCategoryFilterOptions.byLabel(selected)?.id,
+                categoryId: ServiceCategoryFilterOptions.all
+                    .where(
+                      (category) =>
+                          context.l10n.businessCategoryName(category.id) ==
+                          selected,
+                    )
+                    .firstOrNull
+                    ?.id,
               );
       }
     }
@@ -200,9 +212,7 @@ class ServiceFiltersSheet extends HookWidget {
                     ServiceFilterValueField(
                       label: context.l10n.category,
                       value:
-                          ServiceCategoryFilterOptions.byId(
-                            filters.value.categoryId,
-                          )?.label ??
+                          categoryNameForId(filters.value.categoryId) ??
                           context.l10n.allCategories,
                       onTap: selectCategory,
                     ),

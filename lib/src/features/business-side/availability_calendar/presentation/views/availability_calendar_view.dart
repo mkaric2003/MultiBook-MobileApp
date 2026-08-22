@@ -121,8 +121,8 @@ class AvailabilityCalendarView extends HookWidget {
                               const SizedBox(height: 24),
                               const AvailabilityCalendarLegend(),
                               const SizedBox(height: 38),
-                              const Text(
-                                "Today's Bookings",
+                              Text(
+                                context.l10n.todaysBookings,
                                 style: TextStyle(
                                   fontSize: 23,
                                   fontWeight: FontWeight.w800,

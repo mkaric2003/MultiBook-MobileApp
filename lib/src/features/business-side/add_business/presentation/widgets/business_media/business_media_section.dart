@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_cover_photo_upload.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_logo_upload.dart';
@@ -38,8 +39,8 @@ class BusinessMediaSection extends StatelessWidget {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'Business logo',
+        Text(
+          context.l10n.businessLogo,
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 12),
@@ -49,8 +50,8 @@ class BusinessMediaSection extends StatelessWidget {
           onTap: onLogoTap,
         ),
         const SizedBox(height: 22),
-        const Text(
-          'Cover photo',
+        Text(
+          context.l10n.coverPhoto,
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 12),

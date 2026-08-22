@@ -43,8 +43,8 @@ class AccountSettingsView extends HookWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'Personal Information',
+                              Text(
+                                context.l10n.personalInformation,
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w800,
@@ -73,8 +73,8 @@ class AccountSettingsView extends HookWidget {
                                 onChanged: (data) => formData.value = data,
                               ),
                               const SizedBox(height: 55),
-                              const Text(
-                                'Security',
+                              Text(
+                                context.l10n.security,
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.w800,
@@ -94,7 +94,7 @@ class AccountSettingsView extends HookWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(35, 16, 35, 24),
               child: CustomButton(
-                buttonName: 'Save Changes',
+                buttonName: context.l10n.saveChanges,
                 enabled: !state.isSaving,
                 onPressed: () async {
                   final data =

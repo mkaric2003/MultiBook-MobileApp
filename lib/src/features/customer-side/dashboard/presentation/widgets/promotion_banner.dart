@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +15,8 @@ class PromotionBanner extends StatelessWidget {
         color: AppColors.primary,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Text(
-        '🍂 Autumn discounts up to 30%',
+      child: Text(
+        context.l10n.autumnDiscounts,
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AmenitiesSelector extends StatelessWidget {
@@ -20,7 +21,7 @@ class AmenitiesSelector extends StatelessWidget {
       children: [
         for (final amenity in StayAmenity.values)
           FilterChip(
-            label: Text(amenity.label),
+            label: Text(context.l10n.stayAmenity(amenity)),
             selected: selectedAmenities.contains(amenity),
             onSelected: (_) => onChanged(amenity),
             selectedColor: AppColors.primary,

@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,7 @@ class CustomerSearchResultTile extends StatelessWidget {
                   if (stay.pricePerNight != null) ...[
                     const SizedBox(height: 6),
                     Text(
-                      '\$${stay.pricePerNight}/night',
+                      '\$${stay.pricePerNight}${context.l10n.perNight}',
                       style: const TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,

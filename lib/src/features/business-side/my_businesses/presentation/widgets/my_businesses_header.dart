@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,8 @@ class MyBusinessesHeader extends StatelessWidget {
           icon: const Icon(CupertinoIcons.back, size: 20),
         ),
         const SizedBox(width: 14),
-        const Text(
-          'My Businesses',
+        Text(
+          context.l10n.myBusinesses,
           style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800),
         ),
       ],

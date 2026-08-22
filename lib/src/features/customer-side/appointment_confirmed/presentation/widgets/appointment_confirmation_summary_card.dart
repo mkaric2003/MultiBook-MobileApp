@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/appointment_confirmed/domain/models/appointment_confirmed_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_info.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,7 @@ class AppointmentConfirmationSummaryCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      '⭐ ${business.averageRating.toStringAsFixed(1)} • ${business.reviewCount} reviews',
+                      '⭐ ${business.averageRating.toStringAsFixed(1)} • ${context.l10n.reviews(business.reviewCount)}',
                     ),
                   ],
                 ),

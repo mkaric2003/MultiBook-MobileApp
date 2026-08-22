@@ -186,7 +186,7 @@ class ReviewStayView extends StatelessWidget {
                     ),
                   ),
                   child: CustomButton(
-                    buttonName: 'Proceed to payment',
+                    buttonName: context.l10n.proceedToPayment,
                     onPressed: () async => context.push(
                       AppRoutes.PAYMENT,
                       extra: PaymentArguments(

@@ -21,13 +21,13 @@ class BookingConfirmationDetails extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Confirmation Details',
+        Text(
+          context.l10n.confirmationDetails,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 18),
-        const Text(
-          'Confirmation Code',
+        Text(
+          context.l10n.confirmationCode,
           style: TextStyle(color: AppColors.muted),
         ),
         const SizedBox(height: 8),
@@ -55,7 +55,10 @@ class BookingConfirmationDetails extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 18),
-        Text(context.l10n.totalPaid, style: const TextStyle(color: AppColors.muted)),
+        Text(
+          context.l10n.totalPaid,
+          style: const TextStyle(color: AppColors.muted),
+        ),
         const SizedBox(height: 5),
         Text(
           '\$$total',

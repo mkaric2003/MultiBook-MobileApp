@@ -26,17 +26,20 @@ class SavedView extends StatelessWidget {
                   bottom: BorderSide(color: AppColors.surfaceHighlight),
                 ),
               ),
-              child: const Text(
-                'Saved',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+              child: Text(
+                context.l10n.saved,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             Expanded(
               child: state.stays.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
-                        'No saved stays yet.',
-                        style: TextStyle(color: AppColors.muted),
+                        context.l10n.noSavedStaysYet,
+                        style: const TextStyle(color: AppColors.muted),
                       ),
                     )
                   : ListView.separated(
@@ -62,7 +65,9 @@ class SavedView extends StatelessWidget {
                                       ),
                                       type: ToastificationType.warning,
                                       alignment: Alignment.bottomCenter,
-                                      title: Text(context.l10n.removedFromSaved),
+                                      title: Text(
+                                        context.l10n.removedFromSaved,
+                                      ),
                                     );
                                   },
                                   background: const ColoredBox(
@@ -79,7 +84,9 @@ class SavedView extends StatelessWidget {
                                         ),
                                         type: ToastificationType.warning,
                                         alignment: Alignment.bottomCenter,
-                                        title: Text(context.l10n.removedFromSaved),
+                                        title: Text(
+                                          context.l10n.removedFromSaved,
+                                        ),
                                       );
                                     },
                                   ),

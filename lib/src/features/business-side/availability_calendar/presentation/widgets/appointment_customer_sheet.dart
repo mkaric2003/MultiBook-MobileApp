@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/customer_contact_row.dart';
@@ -32,8 +33,8 @@ class AppointmentCustomerSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Appointment customer',
+            Text(
+              context.l10n.appointmentCustomer,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 20),
@@ -79,7 +80,7 @@ class AppointmentCustomerSheet extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             CustomButton(
-              buttonName: 'Contact customer',
+              buttonName: context.l10n.contactCustomer,
               leadingIcon: const Icon(Icons.email_outlined),
               enabled:
                   appointment.customerEmail.isNotEmpty ||

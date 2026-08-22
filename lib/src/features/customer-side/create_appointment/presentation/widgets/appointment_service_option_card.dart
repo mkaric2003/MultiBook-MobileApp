@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentServiceOptionCard extends StatelessWidget {
@@ -44,7 +45,7 @@ class AppointmentServiceOptionCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    '${offering.durationMinutes} min',
+                    context.l10n.serviceDuration(offering.durationMinutes),
                     style: const TextStyle(color: AppColors.muted),
                   ),
                   const SizedBox(height: 7),

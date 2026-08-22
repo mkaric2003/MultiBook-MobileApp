@@ -70,7 +70,9 @@ class AppointmentDetailsView extends StatelessWidget {
                             final confirmed = await showDialog<bool>(
                               context: context,
                               builder: (dialogContext) => AlertDialog(
-                                title: Text(context.l10n.cancelAppointmentQuestion),
+                                title: Text(
+                                  context.l10n.cancelAppointmentQuestion,
+                                ),
                                 content: Text(context.l10n.cannotBeUndone),
                                 actions: [
                                   TextButton(

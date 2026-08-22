@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/features/customer-side/customer_booking_details/presentation/widgets/customer_booking_price_row.dart';
@@ -17,8 +18,8 @@ class CustomerBookingPriceCard extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Price Breakdown',
+        Text(
+          context.l10n.priceBreakdown,
           style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 20),

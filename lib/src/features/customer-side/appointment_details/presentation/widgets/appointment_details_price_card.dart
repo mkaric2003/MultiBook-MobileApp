@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/domain/models/appointment_details_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/domain/utils/appointment_details_formatters.dart';
@@ -23,8 +24,8 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Price breakdown',
+          Text(
+            context.l10n.priceBreakdown,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 20),

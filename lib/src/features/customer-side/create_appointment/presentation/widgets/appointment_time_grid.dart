@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -21,9 +22,9 @@ class AppointmentTimeGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (times.isEmpty) {
-      return const Text(
-        'No appointment slots are available for this date.',
-        style: TextStyle(color: AppColors.muted),
+      return Text(
+        context.l10n.noAppointmentSlotsAvailable,
+        style: const TextStyle(color: AppColors.muted),
       );
     }
     return GridView.builder(

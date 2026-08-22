@@ -75,7 +75,7 @@ class CustomerEditProfileView extends HookWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(35, 16, 35, 24),
               child: CustomButton(
-                buttonName: 'Save changes',
+                buttonName: context.l10n.saveChanges,
                 enabled: !state.isSaving,
                 onPressed: () async {
                   final data =

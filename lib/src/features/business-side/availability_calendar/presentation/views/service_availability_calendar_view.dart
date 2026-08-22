@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
@@ -111,8 +112,8 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Service provider',
+                          Text(
+                            context.l10n.serviceProvider,
                             style: TextStyle(fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 10),
@@ -145,8 +146,8 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                             ),
                           ),
                           const SizedBox(height: 28),
-                          const Text(
-                            'Select a day to check which appointment slots are free or booked.',
+                          Text(
+                            context.l10n.selectDayForSlots,
                             style: TextStyle(
                               color: AppColors.muted,
                               fontSize: 14,
@@ -202,8 +203,8 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                                   ),
                             ),
                           const SizedBox(height: 38),
-                          const Text(
-                            "Today's appointments",
+                          Text(
+                            context.l10n.todaysAppointments,
                             style: TextStyle(
                               fontSize: 23,
                               fontWeight: FontWeight.w800,

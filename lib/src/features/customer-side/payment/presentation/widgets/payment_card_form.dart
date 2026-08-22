@@ -89,7 +89,10 @@ class PaymentCardForm extends StatelessWidget {
         const SizedBox(height: 18),
         Text(context.l10n.nameOnCard),
         const SizedBox(height: 8),
-        CustomTextField(hintText: context.l10n.cardholderNameExample, controller: cardholder),
+        CustomTextField(
+          hintText: context.l10n.cardholderNameExample,
+          controller: cardholder,
+        ),
       ],
     ),
   );

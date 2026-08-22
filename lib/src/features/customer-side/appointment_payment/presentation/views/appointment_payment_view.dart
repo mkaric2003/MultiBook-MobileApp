@@ -90,8 +90,8 @@ class AppointmentPaymentView extends HookWidget {
                       children: [
                         AppointmentPaymentPriceBreakdown(arguments: arguments),
                         const SizedBox(height: 26),
-                        const Text(
-                          'Payment method',
+                        Text(
+                          context.l10n.payment,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -121,8 +121,8 @@ class AppointmentPaymentView extends HookWidget {
                           ),
                         ),
                         const SizedBox(height: 26),
-                        const Text(
-                          'Customer information',
+                        Text(
+                          context.l10n.customerInformation,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -146,12 +146,14 @@ class AppointmentPaymentView extends HookWidget {
                                   agreed.value = value ?? false,
                               activeColor: AppColors.primary,
                             ),
-                            const Expanded(
+                            Expanded(
                               child: Padding(
-                                padding: EdgeInsets.only(top: 11),
+                                padding: const EdgeInsets.only(top: 11),
                                 child: Text(
-                                  'I agree to the Terms of Service and Privacy Policy',
-                                  style: TextStyle(color: AppColors.muted),
+                                  context.l10n.agreeToTermsAndPrivacy,
+                                  style: const TextStyle(
+                                    color: AppColors.muted,
+                                  ),
                                 ),
                               ),
                             ),
@@ -168,24 +170,30 @@ class AppointmentPaymentView extends HookWidget {
                       top: BorderSide(color: AppColors.surfaceHighlight),
                     ),
                   ),
-                  child: BlocBuilder<AppointmentPaymentCubit, AppointmentPaymentState>(
-                    builder: (context, state) => CustomButton(
-                      buttonName: state.isProcessing
-                          ? 'Processing payment...'
-                          : 'Confirm & Pay \$${arguments.total.toStringAsFixed(2)}',
-                      enabled: canPay && !state.isProcessing,
-                      onPressed: () => paymentCubit.confirm(
-                        arguments: arguments,
-                        request: AppointmentPaymentRequest(
-                          customerName: name.text,
-                          customerEmail: email.text,
-                          customerPhone: phone.text,
-                          paymentMethod:
-                              'Card ending in ${cardNumber.text.replaceAll(' ', '').substring(12)}',
+                  child:
+                      BlocBuilder<
+                        AppointmentPaymentCubit,
+                        AppointmentPaymentState
+                      >(
+                        builder: (context, state) => CustomButton(
+                          buttonName: state.isProcessing
+                              ? context.l10n.processingPayment
+                              : context.l10n.confirmAndPay(
+                                  '\$${arguments.total.toStringAsFixed(2)}',
+                                ),
+                          enabled: canPay && !state.isProcessing,
+                          onPressed: () => paymentCubit.confirm(
+                            arguments: arguments,
+                            request: AppointmentPaymentRequest(
+                              customerName: name.text,
+                              customerEmail: email.text,
+                              customerPhone: phone.text,
+                              paymentMethod:
+                                  'Card ending in ${cardNumber.text.replaceAll(' ', '').substring(12)}',
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
                 ),
               ],
             ),

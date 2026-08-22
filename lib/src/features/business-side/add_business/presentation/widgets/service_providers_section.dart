@@ -37,8 +37,8 @@ class ServiceProvidersSection extends HookWidget {
       children: [
         const FormFieldLabel('Service providers*'),
         const SizedBox(height: 8),
-        const Text(
-          'Add each person who performs appointments and configure their own recurring availability.',
+        Text(
+          context.l10n.serviceProvidersDescription,
           style: TextStyle(color: AppColors.muted, fontSize: 13),
         ),
         const SizedBox(height: 14),
@@ -48,7 +48,7 @@ class ServiceProvidersSection extends HookWidget {
         ),
         const SizedBox(height: 12),
         CustomButton(
-          buttonName: 'Add provider',
+          buttonName: context.l10n.addProvider,
           color: AppColors.surface,
           textColor: AppColors.primary,
           borderColor: AppColors.primary,

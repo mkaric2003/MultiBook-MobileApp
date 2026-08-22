@@ -43,8 +43,8 @@ class CustomerDateOfBirthPickerSheet extends HookWidget {
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(context.l10n.cancel),
                     ),
-                    const Text(
-                      'Date of birth',
+                    Text(
+                      context.l10n.dateOfBirth,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 17,
@@ -57,8 +57,8 @@ class CustomerDateOfBirthPickerSheet extends HookWidget {
                         onDateSelected(selectedDate.value);
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        'Done',
+                      child: Text(
+                        context.l10n.done,
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),

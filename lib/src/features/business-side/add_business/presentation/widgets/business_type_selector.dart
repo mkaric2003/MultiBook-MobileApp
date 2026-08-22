@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class BusinessTypeSelector extends StatelessWidget {
@@ -24,12 +25,12 @@ class BusinessTypeSelector extends StatelessWidget {
       child: Row(
         children: [
           _BusinessTypeOption(
-            label: 'Stays',
+            label: context.l10n.stays,
             isSelected: selectedType == BusinessType.stays,
             onTap: () => onChanged(BusinessType.stays),
           ),
           _BusinessTypeOption(
-            label: 'Services',
+            label: context.l10n.services,
             isSelected: selectedType == BusinessType.services,
             onTap: () => onChanged(BusinessType.services),
           ),

@@ -25,8 +25,8 @@ class ImageSourcePickerSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Add business image',
+            Text(
+              context.l10n.addBusinessImage,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 12),

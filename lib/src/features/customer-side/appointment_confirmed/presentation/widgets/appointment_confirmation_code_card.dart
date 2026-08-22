@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/appointment_confirmed/domain/models/appointment_confirmed_arguments.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +23,8 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const Text(
-                'CONFIRMATION CODE',
+              Text(
+                context.l10n.confirmationCode.toUpperCase(),
                 style: TextStyle(color: AppColors.muted, fontSize: 13),
               ),
               const SizedBox(height: 10),
@@ -35,8 +36,8 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Show this code to your provider',
+              Text(
+                context.l10n.showCodeToProvider,
                 style: TextStyle(color: AppColors.muted),
               ),
             ],
@@ -54,16 +55,16 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Quick info',
+              Text(
+                context.l10n.quickInfo,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Service provider',
+                  Text(
+                    context.l10n.serviceProvider,
                     style: TextStyle(color: AppColors.muted),
                   ),
                   Flexible(

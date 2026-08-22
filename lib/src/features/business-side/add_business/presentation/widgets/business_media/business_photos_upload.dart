@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_photo_thumbnail.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +71,8 @@ class BusinessPhotosUpload extends StatelessWidget {
         ],
       ),
       const SizedBox(height: 6),
-      const Text(
-        'Add up to 7 JPG or PNG photos.',
+      Text(
+        context.l10n.addPhotosUpToSeven,
         style: TextStyle(color: AppColors.muted, fontSize: 12),
       ),
     ],

@@ -1057,4 +1057,433 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get couldNotDeclineBooking => 'We could not decline this booking.';
+
+  @override
+  String get amenityWifi => 'Wi-Fi';
+
+  @override
+  String get amenityParking => 'Parking';
+
+  @override
+  String get amenityPool => 'Pool';
+
+  @override
+  String get amenitySpa => 'Spa';
+
+  @override
+  String get amenityPetFriendly => 'Pet-friendly';
+
+  @override
+  String get amenityGym => 'Gym';
+
+  @override
+  String get amenityAirConditioning => 'Air conditioning';
+
+  @override
+  String get amenityHeating => 'Heating';
+
+  @override
+  String get amenityKitchen => 'Kitchen';
+
+  @override
+  String get amenityWasher => 'Washer';
+
+  @override
+  String get amenityBalcony => 'Balcony';
+
+  @override
+  String get amenitySeaView => 'Sea view';
+
+  @override
+  String get amenityMountainView => 'Mountain view';
+
+  @override
+  String get amenityWorkspace => 'Workspace';
+
+  @override
+  String get amenityElevator => 'Elevator';
+
+  @override
+  String get amenitySkiInSkiOut => 'Ski-in / ski-out';
+
+  @override
+  String get amenitySkiStorage => 'Ski storage';
+
+  @override
+  String get amenitySkiRental => 'Ski rental';
+
+  @override
+  String get amenitySkiShuttle => 'Ski shuttle';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get singleUnit => 'Single unit';
+
+  @override
+  String get oneBookableStay => 'One bookable stay';
+
+  @override
+  String get multipleUnits => 'Multiple units';
+
+  @override
+  String get roomsOrUnits => 'Rooms or units';
+
+  @override
+  String get categoryHotel => 'Hotel';
+
+  @override
+  String get categoryApartment => 'Apartment';
+
+  @override
+  String get categoryVilla => 'Villa';
+
+  @override
+  String get categoryBeachVilla => 'Beach villa';
+
+  @override
+  String get categoryPoolVilla => 'Pool villa';
+
+  @override
+  String get categoryCabin => 'Cabin';
+
+  @override
+  String get categoryMountainCabin => 'Mountain cabin';
+
+  @override
+  String get categoryCottage => 'Cottage / weekend house';
+
+  @override
+  String get categoryResort => 'Resort';
+
+  @override
+  String get categoryGuesthouse => 'Guesthouse';
+
+  @override
+  String get categoryHostel => 'Hostel';
+
+  @override
+  String get categoryAparthotel => 'Aparthotel';
+
+  @override
+  String get categoryGlamping => 'Glamping';
+
+  @override
+  String get categoryVacationHome => 'Vacation home';
+
+  @override
+  String get categoryHairSalon => 'Hair salon';
+
+  @override
+  String get categoryBarbershop => 'Barbershop';
+
+  @override
+  String get categoryBeautySalon => 'Beauty salon';
+
+  @override
+  String get categoryNailSalon => 'Nail & pedicure salon';
+
+  @override
+  String get categoryDentalClinic => 'Dental clinic';
+
+  @override
+  String get categoryMedicalClinic => 'Medical clinic';
+
+  @override
+  String get categoryPhysiotherapy => 'Physiotherapy';
+
+  @override
+  String get categoryMassageSpa => 'Massage & spa';
+
+  @override
+  String get categoryMassageTherapy => 'Massage therapy';
+
+  @override
+  String get categorySpaWellness => 'Spa & wellness';
+
+  @override
+  String get categoryPersonalTraining => 'Personal training';
+
+  @override
+  String get categoryTutoring => 'Tutoring & lessons';
+
+  @override
+  String get categoryElectrician => 'Electrician';
+
+  @override
+  String get categoryPlumber => 'Plumber';
+
+  @override
+  String get categoryCleaningService => 'Cleaning service';
+
+  @override
+  String get categoryAutomotiveService => 'Automotive service';
+
+  @override
+  String get categoryCarWashDetailing => 'Car wash & detailing';
+
+  @override
+  String get categoryTattooPiercing => 'Tattoo & piercing studio';
+
+  @override
+  String get categoryVeterinaryPetCare => 'Veterinary & pet care';
+
+  @override
+  String get categoryPhotographyVideography => 'Photography & videography';
+
+  @override
+  String get categoryLocksmith => 'Locksmith';
+
+  @override
+  String get categoryHvacService => 'Heating & air conditioning';
+
+  @override
+  String get categoryPainterDecorator => 'Painter & decorator';
+
+  @override
+  String get categoryLegalConsultation => 'Legal consultation';
+
+  @override
+  String get categoryAccountingConsultation => 'Accounting consultation';
+
+  @override
+  String get categoryProfessionalService => 'Professional services';
+
+  @override
+  String get noSavedStaysYet => 'No saved stays yet.';
+
+  @override
+  String get createAppointment => 'Create appointment';
+
+  @override
+  String get continueAppointmentLater =>
+      'You can continue this appointment later from Home.';
+
+  @override
+  String get selectService => 'Select a service';
+
+  @override
+  String get selectProvider => 'Select provider';
+
+  @override
+  String get noServiceProvidersAvailable =>
+      'No service providers are available yet.';
+
+  @override
+  String get selectDate => 'Select date';
+
+  @override
+  String get availableTimes => 'Available times';
+
+  @override
+  String get noAppointmentSlotsAvailable =>
+      'No appointment slots are available for this date.';
+
+  @override
+  String get updateProfileImage => 'Update profile image';
+
+  @override
+  String get myBusinesses => 'My Businesses';
+
+  @override
+  String get selectBusinessToManage =>
+      'Select a business to manage or add a new one.';
+
+  @override
+  String get noBusinessesYet => 'No businesses yet';
+
+  @override
+  String get createBusinessToStart =>
+      'Create a business to start managing bookings and earnings.';
+
+  @override
+  String get appointmentCustomer => 'Appointment customer';
+
+  @override
+  String get todaysBookings => 'Today\'s Bookings';
+
+  @override
+  String get todaysAppointments => 'Today\'s appointments';
+
+  @override
+  String get serviceProvider => 'Service provider';
+
+  @override
+  String get selectDayForSlots =>
+      'Select a day to check which appointment slots are free or booked.';
+
+  @override
+  String get slotColorsExplanation =>
+      'Purple slots are booked or blocked. Dark slots are available.';
+
+  @override
+  String get noProviderHoursSelectedDay =>
+      'This provider has no working hours on the selected day.';
+
+  @override
+  String get personalInformation => 'Personal Information';
+
+  @override
+  String get security => 'Security';
+
+  @override
+  String get addBusinessImage => 'Add business image';
+
+  @override
+  String get addEveryBookableService =>
+      'Add every service your customers can book.';
+
+  @override
+  String get serviceProvidersDescription =>
+      'Add each person who performs appointments and configure their own recurring availability.';
+
+  @override
+  String get recurringSlotsDescription =>
+      'Create your recurring weekly slots. Customers will only see available appointment times.';
+
+  @override
+  String get endTimeAfterStart => 'End time must be after start time.';
+
+  @override
+  String get addPhotosUpToSeven => 'Add up to 7 JPG or PNG photos.';
+
+  @override
+  String get businessLogo => 'Business logo';
+
+  @override
+  String get coverPhoto => 'Cover photo';
+
+  @override
+  String get customerInformation => 'Customer information';
+
+  @override
+  String get confirmationDetails => 'Confirmation Details';
+
+  @override
+  String get confirmationCode => 'Confirmation Code';
+
+  @override
+  String get showCodeToProvider => 'Show this code to your provider';
+
+  @override
+  String get quickInfo => 'Quick info';
+
+  @override
+  String get priceBreakdown => 'Price breakdown';
+
+  @override
+  String get billingInformation => 'Billing information';
+
+  @override
+  String get selectNewDate => 'Select a new date';
+
+  @override
+  String get providerNoLongerAvailable =>
+      'This provider is no longer available.';
+
+  @override
+  String get availableAddOns => 'Available add-ons';
+
+  @override
+  String get autumnDiscounts => '🍂 Autumn discounts up to 30%';
+
+  @override
+  String get selectTime => 'Select time';
+
+  @override
+  String get bookingInformation => 'Booking Information';
+
+  @override
+  String get checkInOutTimes => 'Check-in: 3:00 PM • Check-out: 11:00 AM';
+
+  @override
+  String get priceSummary => 'Price summary';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get pricePerSession => 'Price per session';
+
+  @override
+  String get addNewBusiness => 'Add New Business';
+
+  @override
+  String get backToHome => 'Back to Home';
+
+  @override
+  String confirmAndPay(String total) {
+    return 'Confirm & Pay $total';
+  }
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get manage => 'Manage';
+
+  @override
+  String get contactCustomer => 'Contact customer';
+
+  @override
+  String get declineBooking => 'Decline Booking';
+
+  @override
+  String get messageCustomer => 'Message customer';
+
+  @override
+  String get declineAppointment => 'Decline Appointment';
+
+  @override
+  String get rescheduleBooking => 'Reschedule Booking';
+
+  @override
+  String get proceedToPayment => 'Proceed to payment';
+
+  @override
+  String get cancelBooking => 'Cancel Booking';
+
+  @override
+  String get seedDemoStays => 'Seed 20 demo stays';
+
+  @override
+  String get seedDemoServices => 'Seed 29 demo services';
+
+  @override
+  String get createBusiness => 'Create business';
+
+  @override
+  String get addService => 'Add service';
+
+  @override
+  String get addProvider => 'Add provider';
+
+  @override
+  String get addAvailabilitySlot => 'Add availability slot';
+
+  @override
+  String get reviewAppointment => 'Review appointment';
+
+  @override
+  String get blockSlot => 'Block slot';
+
+  @override
+  String get unblockSlot => 'Unblock slot';
+
+  @override
+  String get processingPayment => 'Processing payment...';
+
+  @override
+  String get rescheduling => 'Rescheduling...';
+
+  @override
+  String get confirmReschedule => 'Confirm reschedule';
+
+  @override
+  String get agreeToTermsAndPrivacy =>
+      'I agree to the Terms of Service and Privacy Policy';
+
+  @override
+  String get acceptTermsToContinue => 'Accept the terms to continue.';
 }

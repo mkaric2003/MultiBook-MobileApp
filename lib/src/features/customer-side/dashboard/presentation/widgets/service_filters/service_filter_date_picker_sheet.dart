@@ -41,8 +41,8 @@ class ServiceFilterDatePickerSheet extends HookWidget {
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(context.l10n.cancel),
                     ),
-                    const Text(
-                      'Select date',
+                    Text(
+                      context.l10n.selectDate,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
@@ -52,8 +52,8 @@ class ServiceFilterDatePickerSheet extends HookWidget {
                       padding: EdgeInsets.zero,
                       onPressed: () =>
                           Navigator.of(context).pop(selectedDate.value),
-                      child: const Text(
-                        'Done',
+                      child: Text(
+                        context.l10n.done,
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),

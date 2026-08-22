@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
@@ -29,8 +30,8 @@ class PaymentPriceBreakdown extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Price breakdown',
+          Text(
+            context.l10n.priceBreakdown,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 22),

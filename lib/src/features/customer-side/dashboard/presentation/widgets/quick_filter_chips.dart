@@ -81,7 +81,7 @@ class QuickFilterChips extends HookWidget {
 
           final amenity = _quickAmenities[index - 2];
           return QuickFilterChip(
-            label: amenity.label,
+            label: context.l10n.stayAmenity(amenity),
             isSelected: filters.amenities.contains(amenity),
             onTap: () => toggleAmenity(amenity),
           );

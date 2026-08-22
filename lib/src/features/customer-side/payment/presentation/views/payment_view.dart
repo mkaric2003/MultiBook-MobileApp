@@ -85,8 +85,8 @@ class PaymentView extends HookWidget {
                           pricePerNight: price,
                         ),
                         const SizedBox(height: 30),
-                        const Text(
-                          'Payment method',
+                        Text(
+                          context.l10n.payment,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -116,8 +116,8 @@ class PaymentView extends HookWidget {
                           ),
                         ),
                         const SizedBox(height: 30),
-                        const Text(
-                          'Billing information',
+                        Text(
+                          context.l10n.billingInformation,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w800,
@@ -139,10 +139,10 @@ class PaymentView extends HookWidget {
                                   agreed.value = value ?? false,
                               activeColor: AppColors.primary,
                             ),
-                            const Expanded(
+                            Expanded(
                               child: Text(
-                                'I agree to the Terms of Service and Privacy Policy',
-                                style: TextStyle(color: AppColors.muted),
+                                context.l10n.agreeToTermsAndPrivacy,
+                                style: const TextStyle(color: AppColors.muted),
                               ),
                             ),
                           ],
@@ -165,7 +165,7 @@ class PaymentView extends HookWidget {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             !agreed.value
-                                ? 'Accept the terms to continue.'
+                                ? context.l10n.acceptTermsToContinue
                                 : 'Enter a valid 16-digit card, MM/YY and CVV.',
                             style: const TextStyle(
                               color: AppColors.muted,
@@ -174,7 +174,7 @@ class PaymentView extends HookWidget {
                           ),
                         ),
                       CustomButton(
-                        buttonName: 'Confirm & Pay \$$total',
+                        buttonName: context.l10n.confirmAndPay('\$$total'),
                         enabled: agreed.value && isCardValid,
                         onPressed: () async => paymentCubit.confirm(arguments),
                       ),

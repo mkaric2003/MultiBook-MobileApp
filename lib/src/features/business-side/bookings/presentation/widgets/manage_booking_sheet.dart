@@ -140,8 +140,8 @@ class ManageBookingSheet extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            const Text(
-                              'Check-in: 3:00 PM • Check-out: 11:00 AM',
+                            Text(
+                              context.l10n.checkInOutTimes,
                               style: TextStyle(
                                 color: AppColors.muted,
                                 fontSize: 12,
@@ -194,7 +194,7 @@ class ManageBookingSheet extends StatelessWidget {
             if (booking.status == BookingStatus.confirmed) ...[
               const SizedBox(height: 20),
               CustomButton(
-                buttonName: '×  Decline Booking',
+                buttonName: '×  ${context.l10n.declineBooking}',
                 height: 52,
                 color: Colors.transparent,
                 textColor: const Color(0xFFFB4B4B),
@@ -218,7 +218,7 @@ class ManageBookingSheet extends StatelessWidget {
               const SizedBox(height: 12),
             ],
             CustomButton(
-              buttonName: 'Message customer',
+              buttonName: context.l10n.messageCustomer,
               color: AppColors.surfaceHighlight,
               height: 52,
               onPressed: () {

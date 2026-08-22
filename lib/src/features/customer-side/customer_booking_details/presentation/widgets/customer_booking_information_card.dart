@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_booking_status_pill.dart';
@@ -19,8 +20,8 @@ class CustomerBookingInformationCard extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Booking Information',
+        Text(
+          context.l10n.bookingInformation,
           style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 20),

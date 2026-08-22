@@ -121,7 +121,7 @@ class AppointmentRepository {
       startMinutes: start,
       endMinutes: end,
       serviceCost: arguments.serviceCost,
-      addOnsCost: arguments.addOnsCost,
+      addOnsCost: 0,
       serviceFee: arguments.serviceFee,
       taxes: arguments.taxes,
       total: arguments.total,

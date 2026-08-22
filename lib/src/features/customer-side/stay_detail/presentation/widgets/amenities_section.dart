@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +25,9 @@ class AmenitiesSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Amenities',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.amenities,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 22),
           GridView.count(
@@ -40,7 +41,7 @@ class AmenitiesSection extends StatelessWidget {
                   children: [
                     Icon(_iconFor(amenity), color: AppColors.primary, size: 30),
                     const SizedBox(height: 8),
-                    Text(amenity.label),
+                    Text(context.l10n.stayAmenity(amenity)),
                   ],
                 ),
             ],

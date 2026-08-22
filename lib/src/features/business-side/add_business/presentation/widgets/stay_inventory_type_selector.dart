@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_inventory_type_option.dart';
 import 'package:flutter/material.dart';
 
@@ -25,16 +26,16 @@ class StayInventoryTypeSelector extends StatelessWidget {
       children: [
         Expanded(
           child: StayInventoryTypeOption(
-            title: 'Single unit',
-            subtitle: 'One bookable stay',
+            title: context.l10n.singleUnit,
+            subtitle: context.l10n.oneBookableStay,
             isSelected: selectedType == StayInventoryType.singleUnit,
             onTap: () => onChanged(StayInventoryType.singleUnit),
           ),
         ),
         Expanded(
           child: StayInventoryTypeOption(
-            title: 'Multiple units',
-            subtitle: 'Rooms or units',
+            title: context.l10n.multipleUnits,
+            subtitle: context.l10n.roomsOrUnits,
             isSelected: selectedType == StayInventoryType.multipleUnits,
             onTap: () => onChanged(StayInventoryType.multipleUnits),
           ),

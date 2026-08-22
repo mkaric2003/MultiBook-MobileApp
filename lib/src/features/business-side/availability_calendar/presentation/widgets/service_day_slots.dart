@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/service_weekday.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
@@ -38,14 +39,14 @@ class ServiceDaySlots extends StatelessWidget {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 6),
-        const Text(
-          'Purple slots are booked or blocked. Dark slots are available.',
+        Text(
+          context.l10n.slotColorsExplanation,
           style: TextStyle(color: AppColors.muted, fontSize: 14),
         ),
         const SizedBox(height: 16),
         if (slots.isEmpty)
-          const Text(
-            'This provider has no working hours on the selected day.',
+          Text(
+            context.l10n.noProviderHoursSelectedDay,
             style: TextStyle(color: AppColors.muted),
           )
         else

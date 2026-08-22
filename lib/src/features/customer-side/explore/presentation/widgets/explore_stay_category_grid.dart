@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_category.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ExploreStayCategoryGrid extends StatelessWidget {
@@ -77,7 +78,7 @@ class ExploreStayCategoryGrid extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                category.title,
+                context.l10n.businessCategoryName(category.id),
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
             ],

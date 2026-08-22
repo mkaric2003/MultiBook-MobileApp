@@ -49,8 +49,8 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
       children: [
         const FormFieldLabel('Availability*'),
         const SizedBox(height: 8),
-        const Text(
-          'Create your recurring weekly slots. Customers will only see available appointment times.',
+        Text(
+          context.l10n.recurringSlotsDescription,
           style: TextStyle(color: AppColors.muted, fontSize: 13),
         ),
         const SizedBox(height: 14),
@@ -90,14 +90,14 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
         ),
         if (!isValid) ...[
           const SizedBox(height: 8),
-          const Text(
-            'End time must be after start time.',
+          Text(
+            context.l10n.endTimeAfterStart,
             style: TextStyle(color: Colors.redAccent, fontSize: 13),
           ),
         ],
         const SizedBox(height: 12),
         CustomButton(
-          buttonName: 'Add availability slot',
+          buttonName: context.l10n.addAvailabilitySlot,
           color: AppColors.surface,
           textColor: AppColors.primary,
           borderColor: AppColors.primary,

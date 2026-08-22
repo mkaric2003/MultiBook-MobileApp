@@ -70,14 +70,14 @@ class SavedBusinessCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '⭐ ${stay.rating.toStringAsFixed(1)} (${stay.reviewCount} reviews)',
+                '⭐ ${stay.rating.toStringAsFixed(1)} (${context.l10n.reviews(stay.reviewCount)})',
                 style: const TextStyle(color: AppColors.muted),
               ),
               const SizedBox(height: 14),
               Row(
                 children: [
                   Text(
-                    '\$${stay.pricePerNight ?? 0}/night',
+                    '\$${stay.pricePerNight ?? 0}${context.l10n.perNight}',
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w800,

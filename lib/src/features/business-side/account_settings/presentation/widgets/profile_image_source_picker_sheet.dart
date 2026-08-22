@@ -27,8 +27,8 @@ class ProfileImageSourcePickerSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Update profile image',
+          Text(
+            context.l10n.updateProfileImage,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
           ),
           ListTile(

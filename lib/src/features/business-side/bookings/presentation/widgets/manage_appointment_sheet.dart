@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_appointment_status_label.dart';
@@ -134,7 +135,7 @@ class ManageAppointmentSheet extends StatelessWidget {
               if (canManage) ...[
                 const SizedBox(height: 20),
                 CustomButton(
-                  buttonName: 'Decline Appointment',
+                  buttonName: context.l10n.declineAppointment,
                   color: Colors.redAccent,
                   height: 48,
                   fontSize: 16,
@@ -147,7 +148,7 @@ class ManageAppointmentSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 CustomButton(
-                  buttonName: 'Reschedule Booking',
+                  buttonName: context.l10n.rescheduleBooking,
                   height: 48,
                   fontSize: 16,
                   onPressed: onReschedule,
@@ -155,7 +156,7 @@ class ManageAppointmentSheet extends StatelessWidget {
               ],
               const SizedBox(height: 10),
               CustomButton(
-                buttonName: 'Contact customer',
+                buttonName: context.l10n.contactCustomer,
                 color: AppColors.surfaceHighlight,
                 height: 48,
                 fontSize: 16,

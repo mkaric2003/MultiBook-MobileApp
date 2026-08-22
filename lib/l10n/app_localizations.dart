@@ -2059,6 +2059,834 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Nije bilo moguće odbiti ovu rezervaciju.'**
   String get couldNotDeclineBooking;
+
+  /// No description provided for @amenityWifi.
+  ///
+  /// In bs, this message translates to:
+  /// **'Wi-Fi'**
+  String get amenityWifi;
+
+  /// No description provided for @amenityParking.
+  ///
+  /// In bs, this message translates to:
+  /// **'Parking'**
+  String get amenityParking;
+
+  /// No description provided for @amenityPool.
+  ///
+  /// In bs, this message translates to:
+  /// **'Bazen'**
+  String get amenityPool;
+
+  /// No description provided for @amenitySpa.
+  ///
+  /// In bs, this message translates to:
+  /// **'Spa'**
+  String get amenitySpa;
+
+  /// No description provided for @amenityPetFriendly.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dozvoljeni ljubimci'**
+  String get amenityPetFriendly;
+
+  /// No description provided for @amenityGym.
+  ///
+  /// In bs, this message translates to:
+  /// **'Teretana'**
+  String get amenityGym;
+
+  /// No description provided for @amenityAirConditioning.
+  ///
+  /// In bs, this message translates to:
+  /// **'Klima uređaj'**
+  String get amenityAirConditioning;
+
+  /// No description provided for @amenityHeating.
+  ///
+  /// In bs, this message translates to:
+  /// **'Grijanje'**
+  String get amenityHeating;
+
+  /// No description provided for @amenityKitchen.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kuhinja'**
+  String get amenityKitchen;
+
+  /// No description provided for @amenityWasher.
+  ///
+  /// In bs, this message translates to:
+  /// **'Veš mašina'**
+  String get amenityWasher;
+
+  /// No description provided for @amenityBalcony.
+  ///
+  /// In bs, this message translates to:
+  /// **'Balkon'**
+  String get amenityBalcony;
+
+  /// No description provided for @amenitySeaView.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pogled na more'**
+  String get amenitySeaView;
+
+  /// No description provided for @amenityMountainView.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pogled na planine'**
+  String get amenityMountainView;
+
+  /// No description provided for @amenityWorkspace.
+  ///
+  /// In bs, this message translates to:
+  /// **'Radni prostor'**
+  String get amenityWorkspace;
+
+  /// No description provided for @amenityElevator.
+  ///
+  /// In bs, this message translates to:
+  /// **'Lift'**
+  String get amenityElevator;
+
+  /// No description provided for @amenitySkiInSkiOut.
+  ///
+  /// In bs, this message translates to:
+  /// **'Skijanje do i od objekta'**
+  String get amenitySkiInSkiOut;
+
+  /// No description provided for @amenitySkiStorage.
+  ///
+  /// In bs, this message translates to:
+  /// **'Spremište za skije'**
+  String get amenitySkiStorage;
+
+  /// No description provided for @amenitySkiRental.
+  ///
+  /// In bs, this message translates to:
+  /// **'Iznajmljivanje skija'**
+  String get amenitySkiRental;
+
+  /// No description provided for @amenitySkiShuttle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prijevoz do skijališta'**
+  String get amenitySkiShuttle;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite kategoriju'**
+  String get selectCategory;
+
+  /// No description provided for @singleUnit.
+  ///
+  /// In bs, this message translates to:
+  /// **'Jedna jedinica'**
+  String get singleUnit;
+
+  /// No description provided for @oneBookableStay.
+  ///
+  /// In bs, this message translates to:
+  /// **'Jedan smještaj za rezervaciju'**
+  String get oneBookableStay;
+
+  /// No description provided for @multipleUnits.
+  ///
+  /// In bs, this message translates to:
+  /// **'Više jedinica'**
+  String get multipleUnits;
+
+  /// No description provided for @roomsOrUnits.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sobe ili jedinice'**
+  String get roomsOrUnits;
+
+  /// No description provided for @categoryHotel.
+  ///
+  /// In bs, this message translates to:
+  /// **'Hotel'**
+  String get categoryHotel;
+
+  /// No description provided for @categoryApartment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Apartman'**
+  String get categoryApartment;
+
+  /// No description provided for @categoryVilla.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vila'**
+  String get categoryVilla;
+
+  /// No description provided for @categoryBeachVilla.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vila na plaži'**
+  String get categoryBeachVilla;
+
+  /// No description provided for @categoryPoolVilla.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vila s bazenom'**
+  String get categoryPoolVilla;
+
+  /// No description provided for @categoryCabin.
+  ///
+  /// In bs, this message translates to:
+  /// **'Koliba'**
+  String get categoryCabin;
+
+  /// No description provided for @categoryMountainCabin.
+  ///
+  /// In bs, this message translates to:
+  /// **'Planinska koliba'**
+  String get categoryMountainCabin;
+
+  /// No description provided for @categoryCottage.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vikendica'**
+  String get categoryCottage;
+
+  /// No description provided for @categoryResort.
+  ///
+  /// In bs, this message translates to:
+  /// **'Resort'**
+  String get categoryResort;
+
+  /// No description provided for @categoryGuesthouse.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pansion'**
+  String get categoryGuesthouse;
+
+  /// No description provided for @categoryHostel.
+  ///
+  /// In bs, this message translates to:
+  /// **'Hostel'**
+  String get categoryHostel;
+
+  /// No description provided for @categoryAparthotel.
+  ///
+  /// In bs, this message translates to:
+  /// **'Aparthotel'**
+  String get categoryAparthotel;
+
+  /// No description provided for @categoryGlamping.
+  ///
+  /// In bs, this message translates to:
+  /// **'Glamping'**
+  String get categoryGlamping;
+
+  /// No description provided for @categoryVacationHome.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kuća za odmor'**
+  String get categoryVacationHome;
+
+  /// No description provided for @categoryHairSalon.
+  ///
+  /// In bs, this message translates to:
+  /// **'Frizerski salon'**
+  String get categoryHairSalon;
+
+  /// No description provided for @categoryBarbershop.
+  ///
+  /// In bs, this message translates to:
+  /// **'Berbernica'**
+  String get categoryBarbershop;
+
+  /// No description provided for @categoryBeautySalon.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kozmetički salon'**
+  String get categoryBeautySalon;
+
+  /// No description provided for @categoryNailSalon.
+  ///
+  /// In bs, this message translates to:
+  /// **'Salon za nokte i pedikuru'**
+  String get categoryNailSalon;
+
+  /// No description provided for @categoryDentalClinic.
+  ///
+  /// In bs, this message translates to:
+  /// **'Stomatološka ordinacija'**
+  String get categoryDentalClinic;
+
+  /// No description provided for @categoryMedicalClinic.
+  ///
+  /// In bs, this message translates to:
+  /// **'Medicinska klinika'**
+  String get categoryMedicalClinic;
+
+  /// No description provided for @categoryPhysiotherapy.
+  ///
+  /// In bs, this message translates to:
+  /// **'Fizioterapija'**
+  String get categoryPhysiotherapy;
+
+  /// No description provided for @categoryMassageSpa.
+  ///
+  /// In bs, this message translates to:
+  /// **'Masaža i spa'**
+  String get categoryMassageSpa;
+
+  /// No description provided for @categoryMassageTherapy.
+  ///
+  /// In bs, this message translates to:
+  /// **'Terapijska masaža'**
+  String get categoryMassageTherapy;
+
+  /// No description provided for @categorySpaWellness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Spa i wellness'**
+  String get categorySpaWellness;
+
+  /// No description provided for @categoryPersonalTraining.
+  ///
+  /// In bs, this message translates to:
+  /// **'Personalni trening'**
+  String get categoryPersonalTraining;
+
+  /// No description provided for @categoryTutoring.
+  ///
+  /// In bs, this message translates to:
+  /// **'Instrukcije i podučavanje'**
+  String get categoryTutoring;
+
+  /// No description provided for @categoryElectrician.
+  ///
+  /// In bs, this message translates to:
+  /// **'Električar'**
+  String get categoryElectrician;
+
+  /// No description provided for @categoryPlumber.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vodoinstalater'**
+  String get categoryPlumber;
+
+  /// No description provided for @categoryCleaningService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Usluga čišćenja'**
+  String get categoryCleaningService;
+
+  /// No description provided for @categoryAutomotiveService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Auto servis'**
+  String get categoryAutomotiveService;
+
+  /// No description provided for @categoryCarWashDetailing.
+  ///
+  /// In bs, this message translates to:
+  /// **'Praonica i detailing auta'**
+  String get categoryCarWashDetailing;
+
+  /// No description provided for @categoryTattooPiercing.
+  ///
+  /// In bs, this message translates to:
+  /// **'Studio za tetovaže i piercing'**
+  String get categoryTattooPiercing;
+
+  /// No description provided for @categoryVeterinaryPetCare.
+  ///
+  /// In bs, this message translates to:
+  /// **'Veterinarska i njega ljubimaca'**
+  String get categoryVeterinaryPetCare;
+
+  /// No description provided for @categoryPhotographyVideography.
+  ///
+  /// In bs, this message translates to:
+  /// **'Fotografija i videografija'**
+  String get categoryPhotographyVideography;
+
+  /// No description provided for @categoryLocksmith.
+  ///
+  /// In bs, this message translates to:
+  /// **'Bravar'**
+  String get categoryLocksmith;
+
+  /// No description provided for @categoryHvacService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Grijanje i klimatizacija'**
+  String get categoryHvacService;
+
+  /// No description provided for @categoryPainterDecorator.
+  ///
+  /// In bs, this message translates to:
+  /// **'Slikar i dekorater'**
+  String get categoryPainterDecorator;
+
+  /// No description provided for @categoryLegalConsultation.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pravno savjetovanje'**
+  String get categoryLegalConsultation;
+
+  /// No description provided for @categoryAccountingConsultation.
+  ///
+  /// In bs, this message translates to:
+  /// **'Računovodstveno savjetovanje'**
+  String get categoryAccountingConsultation;
+
+  /// No description provided for @categoryProfessionalService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Profesionalne usluge'**
+  String get categoryProfessionalService;
+
+  /// No description provided for @noSavedStaysYet.
+  ///
+  /// In bs, this message translates to:
+  /// **'Još nemate sačuvanih smještaja.'**
+  String get noSavedStaysYet;
+
+  /// No description provided for @createAppointment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kreiraj termin'**
+  String get createAppointment;
+
+  /// No description provided for @continueAppointmentLater.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ovaj termin možete nastaviti kasnije sa početne stranice.'**
+  String get continueAppointmentLater;
+
+  /// No description provided for @selectService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite uslugu'**
+  String get selectService;
+
+  /// No description provided for @selectProvider.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite pružaoca usluge'**
+  String get selectProvider;
+
+  /// No description provided for @noServiceProvidersAvailable.
+  ///
+  /// In bs, this message translates to:
+  /// **'Još nema dostupnih pružalaca usluga.'**
+  String get noServiceProvidersAvailable;
+
+  /// No description provided for @selectDate.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite datum'**
+  String get selectDate;
+
+  /// No description provided for @availableTimes.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dostupni termini'**
+  String get availableTimes;
+
+  /// No description provided for @noAppointmentSlotsAvailable.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nema dostupnih termina za odabrani datum.'**
+  String get noAppointmentSlotsAvailable;
+
+  /// No description provided for @updateProfileImage.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ažuriraj profilnu sliku'**
+  String get updateProfileImage;
+
+  /// No description provided for @myBusinesses.
+  ///
+  /// In bs, this message translates to:
+  /// **'Moji businessi'**
+  String get myBusinesses;
+
+  /// No description provided for @selectBusinessToManage.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite business kojim želite upravljati ili dodajte novi.'**
+  String get selectBusinessToManage;
+
+  /// No description provided for @noBusinessesYet.
+  ///
+  /// In bs, this message translates to:
+  /// **'Još nema businessa'**
+  String get noBusinessesYet;
+
+  /// No description provided for @createBusinessToStart.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kreirajte business da počnete upravljati rezervacijama i zaradom.'**
+  String get createBusinessToStart;
+
+  /// No description provided for @appointmentCustomer.
+  ///
+  /// In bs, this message translates to:
+  /// **'Korisnik termina'**
+  String get appointmentCustomer;
+
+  /// No description provided for @todaysBookings.
+  ///
+  /// In bs, this message translates to:
+  /// **'Današnje rezervacije'**
+  String get todaysBookings;
+
+  /// No description provided for @todaysAppointments.
+  ///
+  /// In bs, this message translates to:
+  /// **'Današnji termini'**
+  String get todaysAppointments;
+
+  /// No description provided for @serviceProvider.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pružalac usluge'**
+  String get serviceProvider;
+
+  /// No description provided for @selectDayForSlots.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite dan da provjerite koji su termini slobodni ili zauzeti.'**
+  String get selectDayForSlots;
+
+  /// No description provided for @slotColorsExplanation.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ljubičasti termini su zauzeti ili blokirani. Tamni termini su dostupni.'**
+  String get slotColorsExplanation;
+
+  /// No description provided for @noProviderHoursSelectedDay.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ovaj pružalac usluge nema radno vrijeme odabranog dana.'**
+  String get noProviderHoursSelectedDay;
+
+  /// No description provided for @personalInformation.
+  ///
+  /// In bs, this message translates to:
+  /// **'Lični podaci'**
+  String get personalInformation;
+
+  /// No description provided for @security.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sigurnost'**
+  String get security;
+
+  /// No description provided for @addBusinessImage.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj sliku businessa'**
+  String get addBusinessImage;
+
+  /// No description provided for @addEveryBookableService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodajte svaku uslugu koju korisnici mogu rezervisati.'**
+  String get addEveryBookableService;
+
+  /// No description provided for @serviceProvidersDescription.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodajte svaku osobu koja obavlja termine i podesite njenu ponavljajuću dostupnost.'**
+  String get serviceProvidersDescription;
+
+  /// No description provided for @recurringSlotsDescription.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kreirajte sedmične termine koji se ponavljaju. Korisnici će vidjeti samo dostupne termine.'**
+  String get recurringSlotsDescription;
+
+  /// No description provided for @endTimeAfterStart.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vrijeme završetka mora biti nakon vremena početka.'**
+  String get endTimeAfterStart;
+
+  /// No description provided for @addPhotosUpToSeven.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodajte do 7 JPG ili PNG fotografija.'**
+  String get addPhotosUpToSeven;
+
+  /// No description provided for @businessLogo.
+  ///
+  /// In bs, this message translates to:
+  /// **'Logo businessa'**
+  String get businessLogo;
+
+  /// No description provided for @coverPhoto.
+  ///
+  /// In bs, this message translates to:
+  /// **'Naslovna fotografija'**
+  String get coverPhoto;
+
+  /// No description provided for @customerInformation.
+  ///
+  /// In bs, this message translates to:
+  /// **'Podaci o korisniku'**
+  String get customerInformation;
+
+  /// No description provided for @confirmationDetails.
+  ///
+  /// In bs, this message translates to:
+  /// **'Detalji potvrde'**
+  String get confirmationDetails;
+
+  /// No description provided for @confirmationCode.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kod potvrde'**
+  String get confirmationCode;
+
+  /// No description provided for @showCodeToProvider.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pokažite ovaj kod pružaocu usluge'**
+  String get showCodeToProvider;
+
+  /// No description provided for @quickInfo.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kratke informacije'**
+  String get quickInfo;
+
+  /// No description provided for @priceBreakdown.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pregled cijene'**
+  String get priceBreakdown;
+
+  /// No description provided for @billingInformation.
+  ///
+  /// In bs, this message translates to:
+  /// **'Podaci za naplatu'**
+  String get billingInformation;
+
+  /// No description provided for @selectNewDate.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite novi datum'**
+  String get selectNewDate;
+
+  /// No description provided for @providerNoLongerAvailable.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ovaj pružalac usluge više nije dostupan.'**
+  String get providerNoLongerAvailable;
+
+  /// No description provided for @availableAddOns.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dostupni dodaci'**
+  String get availableAddOns;
+
+  /// No description provided for @autumnDiscounts.
+  ///
+  /// In bs, this message translates to:
+  /// **'🍂 Jesenski popusti do 30%'**
+  String get autumnDiscounts;
+
+  /// No description provided for @selectTime.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite vrijeme'**
+  String get selectTime;
+
+  /// No description provided for @bookingInformation.
+  ///
+  /// In bs, this message translates to:
+  /// **'Informacije o rezervaciji'**
+  String get bookingInformation;
+
+  /// No description provided for @checkInOutTimes.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prijava: 15:00 • Odjava: 11:00'**
+  String get checkInOutTimes;
+
+  /// No description provided for @priceSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pregled cijene'**
+  String get priceSummary;
+
+  /// No description provided for @duration.
+  ///
+  /// In bs, this message translates to:
+  /// **'Trajanje'**
+  String get duration;
+
+  /// No description provided for @pricePerSession.
+  ///
+  /// In bs, this message translates to:
+  /// **'Cijena po terminu'**
+  String get pricePerSession;
+
+  /// No description provided for @addNewBusiness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj novi business'**
+  String get addNewBusiness;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nazad na početnu'**
+  String get backToHome;
+
+  /// No description provided for @confirmAndPay.
+  ///
+  /// In bs, this message translates to:
+  /// **'Potvrdi i plati {total}'**
+  String confirmAndPay(String total);
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sačuvaj izmjene'**
+  String get saveChanges;
+
+  /// No description provided for @manage.
+  ///
+  /// In bs, this message translates to:
+  /// **'Upravljaj'**
+  String get manage;
+
+  /// No description provided for @contactCustomer.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kontaktiraj korisnika'**
+  String get contactCustomer;
+
+  /// No description provided for @declineBooking.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odbij rezervaciju'**
+  String get declineBooking;
+
+  /// No description provided for @messageCustomer.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pošalji poruku korisniku'**
+  String get messageCustomer;
+
+  /// No description provided for @declineAppointment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odbij termin'**
+  String get declineAppointment;
+
+  /// No description provided for @rescheduleBooking.
+  ///
+  /// In bs, this message translates to:
+  /// **'Promijeni termin rezervacije'**
+  String get rescheduleBooking;
+
+  /// No description provided for @proceedToPayment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nastavi na plaćanje'**
+  String get proceedToPayment;
+
+  /// No description provided for @cancelBooking.
+  ///
+  /// In bs, this message translates to:
+  /// **'Otkaži rezervaciju'**
+  String get cancelBooking;
+
+  /// No description provided for @seedDemoStays.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj 20 demo smještaja'**
+  String get seedDemoStays;
+
+  /// No description provided for @seedDemoServices.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj 29 demo usluga'**
+  String get seedDemoServices;
+
+  /// No description provided for @createBusiness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kreiraj business'**
+  String get createBusiness;
+
+  /// No description provided for @addService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj uslugu'**
+  String get addService;
+
+  /// No description provided for @addProvider.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj pružaoca usluge'**
+  String get addProvider;
+
+  /// No description provided for @addAvailabilitySlot.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj termin dostupnosti'**
+  String get addAvailabilitySlot;
+
+  /// No description provided for @reviewAppointment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pregled termina'**
+  String get reviewAppointment;
+
+  /// No description provided for @blockSlot.
+  ///
+  /// In bs, this message translates to:
+  /// **'Blokiraj termin'**
+  String get blockSlot;
+
+  /// No description provided for @unblockSlot.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odblokiraj termin'**
+  String get unblockSlot;
+
+  /// No description provided for @processingPayment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Plaćanje se obrađuje...'**
+  String get processingPayment;
+
+  /// No description provided for @rescheduling.
+  ///
+  /// In bs, this message translates to:
+  /// **'Termin se mijenja...'**
+  String get rescheduling;
+
+  /// No description provided for @confirmReschedule.
+  ///
+  /// In bs, this message translates to:
+  /// **'Potvrdi promjenu termina'**
+  String get confirmReschedule;
+
+  /// No description provided for @agreeToTermsAndPrivacy.
+  ///
+  /// In bs, this message translates to:
+  /// **'Slažem se s Uslovima korištenja i Pravilima privatnosti'**
+  String get agreeToTermsAndPrivacy;
+
+  /// No description provided for @acceptTermsToContinue.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prihvatite uslove za nastavak.'**
+  String get acceptTermsToContinue;
 }
 
 class _AppLocalizationsDelegate

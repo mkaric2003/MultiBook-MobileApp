@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +31,13 @@ class DashboardEmptyState extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 22),
-              const Text(
-                'No businesses yet',
+              Text(
+                context.l10n.noBusinessesYet,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Create a business to start managing bookings and earnings.',
+              Text(
+                context.l10n.createBusinessToStart,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: AppColors.muted, fontSize: 16),
               ),
@@ -49,7 +50,7 @@ class DashboardEmptyState extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(25, 12, 25, 24),
           child: CustomButton(
-            buttonName: 'Add New Business',
+            buttonName: context.l10n.addNewBusiness,
             leadingIcon: const Icon(Icons.add),
             onPressed: onAddBusiness,
           ),

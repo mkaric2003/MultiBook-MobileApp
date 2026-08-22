@@ -198,15 +198,19 @@ class AddBusinessView extends HookWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
-                            hint: const Text(
-                              'Select category',
-                              style: TextStyle(color: AppColors.white),
+                            hint: Text(
+                              context.l10n.selectCategory,
+                              style: const TextStyle(color: AppColors.white),
                             ),
                             items: categories
                                 .map(
                                   (category) => DropdownMenuItem(
                                     value: category.id,
-                                    child: Text(category.name),
+                                    child: Text(
+                                      context.l10n.businessCategoryName(
+                                        category.id,
+                                      ),
+                                    ),
                                   ),
                                 )
                                 .toList(),
@@ -239,7 +243,7 @@ class AddBusinessView extends HookWidget {
                               ),
                               const SizedBox(height: 26),
                             ],
-                            const FormFieldLabel('Amenities'),
+                            FormFieldLabel(context.l10n.amenities),
                             const SizedBox(height: 10),
                             AmenitiesSelector(
                               selectedAmenities: state.selectedAmenities,
@@ -379,7 +383,7 @@ class AddBusinessView extends HookWidget {
                           const SizedBox(height: 30),
                           if (state.businessType == BusinessType.stays) ...[
                             CustomButton(
-                              buttonName: 'Seed 20 demo stays',
+                              buttonName: context.l10n.seedDemoStays,
                               color: AppColors.surface,
                               textColor: AppColors.primary,
                               borderColor: AppColors.primary,
@@ -394,7 +398,7 @@ class AddBusinessView extends HookWidget {
                           ],
                           if (state.businessType == BusinessType.services) ...[
                             CustomButton(
-                              buttonName: 'Seed 29 demo services',
+                              buttonName: context.l10n.seedDemoServices,
                               color: AppColors.surface,
                               textColor: AppColors.primary,
                               borderColor: AppColors.primary,
@@ -408,7 +412,7 @@ class AddBusinessView extends HookWidget {
                             const SizedBox(height: 14),
                           ],
                           CustomButton(
-                            buttonName: 'Create business',
+                            buttonName: context.l10n.createBusiness,
                             onPressed: canCreate && !state.isLoading
                                 ? () => context.read<AddBusinessBloc>().add(
                                     BusinessCreationRequested(

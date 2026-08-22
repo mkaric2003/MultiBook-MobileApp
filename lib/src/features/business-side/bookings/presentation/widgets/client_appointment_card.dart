@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_appointment_status_label.dart';
@@ -91,7 +92,7 @@ class ClientAppointmentCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           CustomButton(
-            buttonName: 'Manage',
+            buttonName: context.l10n.manage,
             height: 44,
             fontSize: 15,
             onPressed: onManage,

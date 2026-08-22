@@ -59,8 +59,8 @@ class ServiceOfferingsSection extends HookWidget {
       children: [
         const FormFieldLabel('Services offered*'),
         const SizedBox(height: 8),
-        const Text(
-          'Add every service your customers can book.',
+        Text(
+          context.l10n.addEveryBookableService,
           style: TextStyle(color: AppColors.muted, fontSize: 13),
         ),
         const SizedBox(height: 14),
@@ -116,7 +116,7 @@ class ServiceOfferingsSection extends HookWidget {
         ),
         const SizedBox(height: 12),
         CustomButton(
-          buttonName: 'Add service',
+          buttonName: context.l10n.addService,
           color: AppColors.surface,
           textColor: AppColors.primary,
           borderColor: AppColors.primary,

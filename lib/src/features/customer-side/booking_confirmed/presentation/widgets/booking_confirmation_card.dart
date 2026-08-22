@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class BookingConfirmationCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      '⭐ ${stay.rating.toStringAsFixed(1)} (${stay.reviewCount} reviews)',
+                      '⭐ ${stay.rating.toStringAsFixed(1)} (${context.l10n.reviews(stay.reviewCount)})',
                       style: const TextStyle(color: AppColors.muted),
                     ),
                     const SizedBox(height: 6),

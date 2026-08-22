@@ -120,14 +120,14 @@ class CreateAppointmentView extends HookWidget {
                     child: Column(
                       children: [
                         CustomAppBar(
-                          title: 'Create appointment',
+                          title: context.l10n.createAppointment,
                           onBackPressed: () async {
                             final shouldSave = await showDialog<bool>(
                               context: context,
                               builder: (dialogContext) => AlertDialog(
                                 title: Text(context.l10n.saveAppointmentDraft),
-                                content: const Text(
-                                  'You can continue this appointment later from Home.',
+                                content: Text(
+                                  context.l10n.continueAppointmentLater,
                                 ),
                                 actions: [
                                   TextButton(
@@ -169,9 +169,9 @@ class CreateAppointmentView extends HookWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Select a service',
-                                  style: TextStyle(
+                                Text(
+                                  context.l10n.selectService,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -198,18 +198,20 @@ class CreateAppointmentView extends HookWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 26),
-                                const Text(
-                                  'Select provider',
-                                  style: TextStyle(
+                                Text(
+                                  context.l10n.selectProvider,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
                                 const SizedBox(height: 16),
                                 if (providers.isEmpty)
-                                  const Text(
-                                    'No service providers are available yet.',
-                                    style: TextStyle(color: AppColors.muted),
+                                  Text(
+                                    context.l10n.noServiceProvidersAvailable,
+                                    style: const TextStyle(
+                                      color: AppColors.muted,
+                                    ),
                                   )
                                 else
                                   ...providers.map(
@@ -231,9 +233,9 @@ class CreateAppointmentView extends HookWidget {
                                     ),
                                   ),
                                 const SizedBox(height: 26),
-                                const Text(
-                                  'Select date',
-                                  style: TextStyle(
+                                Text(
+                                  context.l10n.selectDate,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -270,9 +272,9 @@ class CreateAppointmentView extends HookWidget {
                                   },
                                 ),
                                 const SizedBox(height: 26),
-                                const Text(
-                                  'Available times',
-                                  style: TextStyle(
+                                Text(
+                                  context.l10n.availableTimes,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -319,7 +321,7 @@ class CreateAppointmentView extends HookWidget {
                             ),
                           ),
                           child: CustomButton(
-                            buttonName: 'Continue',
+                            buttonName: context.l10n.continueLabel,
                             enabled: canContinue,
                             onPressed: !canContinue
                                 ? null

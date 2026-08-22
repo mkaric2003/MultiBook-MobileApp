@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +45,8 @@ class TodaysBookingCard extends StatelessWidget {
               ],
             ),
           ),
-          const Text(
-            'Check-in',
+          Text(
+            context.l10n.checkIn,
             style: TextStyle(
               color: AppColors.muted,
               fontWeight: FontWeight.w700,

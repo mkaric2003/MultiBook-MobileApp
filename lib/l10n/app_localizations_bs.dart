@@ -1061,4 +1061,434 @@ class AppLocalizationsBs extends AppLocalizations {
   @override
   String get couldNotDeclineBooking =>
       'Nije bilo moguće odbiti ovu rezervaciju.';
+
+  @override
+  String get amenityWifi => 'Wi-Fi';
+
+  @override
+  String get amenityParking => 'Parking';
+
+  @override
+  String get amenityPool => 'Bazen';
+
+  @override
+  String get amenitySpa => 'Spa';
+
+  @override
+  String get amenityPetFriendly => 'Dozvoljeni ljubimci';
+
+  @override
+  String get amenityGym => 'Teretana';
+
+  @override
+  String get amenityAirConditioning => 'Klima uređaj';
+
+  @override
+  String get amenityHeating => 'Grijanje';
+
+  @override
+  String get amenityKitchen => 'Kuhinja';
+
+  @override
+  String get amenityWasher => 'Veš mašina';
+
+  @override
+  String get amenityBalcony => 'Balkon';
+
+  @override
+  String get amenitySeaView => 'Pogled na more';
+
+  @override
+  String get amenityMountainView => 'Pogled na planine';
+
+  @override
+  String get amenityWorkspace => 'Radni prostor';
+
+  @override
+  String get amenityElevator => 'Lift';
+
+  @override
+  String get amenitySkiInSkiOut => 'Skijanje do i od objekta';
+
+  @override
+  String get amenitySkiStorage => 'Spremište za skije';
+
+  @override
+  String get amenitySkiRental => 'Iznajmljivanje skija';
+
+  @override
+  String get amenitySkiShuttle => 'Prijevoz do skijališta';
+
+  @override
+  String get selectCategory => 'Odaberite kategoriju';
+
+  @override
+  String get singleUnit => 'Jedna jedinica';
+
+  @override
+  String get oneBookableStay => 'Jedan smještaj za rezervaciju';
+
+  @override
+  String get multipleUnits => 'Više jedinica';
+
+  @override
+  String get roomsOrUnits => 'Sobe ili jedinice';
+
+  @override
+  String get categoryHotel => 'Hotel';
+
+  @override
+  String get categoryApartment => 'Apartman';
+
+  @override
+  String get categoryVilla => 'Vila';
+
+  @override
+  String get categoryBeachVilla => 'Vila na plaži';
+
+  @override
+  String get categoryPoolVilla => 'Vila s bazenom';
+
+  @override
+  String get categoryCabin => 'Koliba';
+
+  @override
+  String get categoryMountainCabin => 'Planinska koliba';
+
+  @override
+  String get categoryCottage => 'Vikendica';
+
+  @override
+  String get categoryResort => 'Resort';
+
+  @override
+  String get categoryGuesthouse => 'Pansion';
+
+  @override
+  String get categoryHostel => 'Hostel';
+
+  @override
+  String get categoryAparthotel => 'Aparthotel';
+
+  @override
+  String get categoryGlamping => 'Glamping';
+
+  @override
+  String get categoryVacationHome => 'Kuća za odmor';
+
+  @override
+  String get categoryHairSalon => 'Frizerski salon';
+
+  @override
+  String get categoryBarbershop => 'Berbernica';
+
+  @override
+  String get categoryBeautySalon => 'Kozmetički salon';
+
+  @override
+  String get categoryNailSalon => 'Salon za nokte i pedikuru';
+
+  @override
+  String get categoryDentalClinic => 'Stomatološka ordinacija';
+
+  @override
+  String get categoryMedicalClinic => 'Medicinska klinika';
+
+  @override
+  String get categoryPhysiotherapy => 'Fizioterapija';
+
+  @override
+  String get categoryMassageSpa => 'Masaža i spa';
+
+  @override
+  String get categoryMassageTherapy => 'Terapijska masaža';
+
+  @override
+  String get categorySpaWellness => 'Spa i wellness';
+
+  @override
+  String get categoryPersonalTraining => 'Personalni trening';
+
+  @override
+  String get categoryTutoring => 'Instrukcije i podučavanje';
+
+  @override
+  String get categoryElectrician => 'Električar';
+
+  @override
+  String get categoryPlumber => 'Vodoinstalater';
+
+  @override
+  String get categoryCleaningService => 'Usluga čišćenja';
+
+  @override
+  String get categoryAutomotiveService => 'Auto servis';
+
+  @override
+  String get categoryCarWashDetailing => 'Praonica i detailing auta';
+
+  @override
+  String get categoryTattooPiercing => 'Studio za tetovaže i piercing';
+
+  @override
+  String get categoryVeterinaryPetCare => 'Veterinarska i njega ljubimaca';
+
+  @override
+  String get categoryPhotographyVideography => 'Fotografija i videografija';
+
+  @override
+  String get categoryLocksmith => 'Bravar';
+
+  @override
+  String get categoryHvacService => 'Grijanje i klimatizacija';
+
+  @override
+  String get categoryPainterDecorator => 'Slikar i dekorater';
+
+  @override
+  String get categoryLegalConsultation => 'Pravno savjetovanje';
+
+  @override
+  String get categoryAccountingConsultation => 'Računovodstveno savjetovanje';
+
+  @override
+  String get categoryProfessionalService => 'Profesionalne usluge';
+
+  @override
+  String get noSavedStaysYet => 'Još nemate sačuvanih smještaja.';
+
+  @override
+  String get createAppointment => 'Kreiraj termin';
+
+  @override
+  String get continueAppointmentLater =>
+      'Ovaj termin možete nastaviti kasnije sa početne stranice.';
+
+  @override
+  String get selectService => 'Odaberite uslugu';
+
+  @override
+  String get selectProvider => 'Odaberite pružaoca usluge';
+
+  @override
+  String get noServiceProvidersAvailable =>
+      'Još nema dostupnih pružalaca usluga.';
+
+  @override
+  String get selectDate => 'Odaberite datum';
+
+  @override
+  String get availableTimes => 'Dostupni termini';
+
+  @override
+  String get noAppointmentSlotsAvailable =>
+      'Nema dostupnih termina za odabrani datum.';
+
+  @override
+  String get updateProfileImage => 'Ažuriraj profilnu sliku';
+
+  @override
+  String get myBusinesses => 'Moji businessi';
+
+  @override
+  String get selectBusinessToManage =>
+      'Odaberite business kojim želite upravljati ili dodajte novi.';
+
+  @override
+  String get noBusinessesYet => 'Još nema businessa';
+
+  @override
+  String get createBusinessToStart =>
+      'Kreirajte business da počnete upravljati rezervacijama i zaradom.';
+
+  @override
+  String get appointmentCustomer => 'Korisnik termina';
+
+  @override
+  String get todaysBookings => 'Današnje rezervacije';
+
+  @override
+  String get todaysAppointments => 'Današnji termini';
+
+  @override
+  String get serviceProvider => 'Pružalac usluge';
+
+  @override
+  String get selectDayForSlots =>
+      'Odaberite dan da provjerite koji su termini slobodni ili zauzeti.';
+
+  @override
+  String get slotColorsExplanation =>
+      'Ljubičasti termini su zauzeti ili blokirani. Tamni termini su dostupni.';
+
+  @override
+  String get noProviderHoursSelectedDay =>
+      'Ovaj pružalac usluge nema radno vrijeme odabranog dana.';
+
+  @override
+  String get personalInformation => 'Lični podaci';
+
+  @override
+  String get security => 'Sigurnost';
+
+  @override
+  String get addBusinessImage => 'Dodaj sliku businessa';
+
+  @override
+  String get addEveryBookableService =>
+      'Dodajte svaku uslugu koju korisnici mogu rezervisati.';
+
+  @override
+  String get serviceProvidersDescription =>
+      'Dodajte svaku osobu koja obavlja termine i podesite njenu ponavljajuću dostupnost.';
+
+  @override
+  String get recurringSlotsDescription =>
+      'Kreirajte sedmične termine koji se ponavljaju. Korisnici će vidjeti samo dostupne termine.';
+
+  @override
+  String get endTimeAfterStart =>
+      'Vrijeme završetka mora biti nakon vremena početka.';
+
+  @override
+  String get addPhotosUpToSeven => 'Dodajte do 7 JPG ili PNG fotografija.';
+
+  @override
+  String get businessLogo => 'Logo businessa';
+
+  @override
+  String get coverPhoto => 'Naslovna fotografija';
+
+  @override
+  String get customerInformation => 'Podaci o korisniku';
+
+  @override
+  String get confirmationDetails => 'Detalji potvrde';
+
+  @override
+  String get confirmationCode => 'Kod potvrde';
+
+  @override
+  String get showCodeToProvider => 'Pokažite ovaj kod pružaocu usluge';
+
+  @override
+  String get quickInfo => 'Kratke informacije';
+
+  @override
+  String get priceBreakdown => 'Pregled cijene';
+
+  @override
+  String get billingInformation => 'Podaci za naplatu';
+
+  @override
+  String get selectNewDate => 'Odaberite novi datum';
+
+  @override
+  String get providerNoLongerAvailable =>
+      'Ovaj pružalac usluge više nije dostupan.';
+
+  @override
+  String get availableAddOns => 'Dostupni dodaci';
+
+  @override
+  String get autumnDiscounts => '🍂 Jesenski popusti do 30%';
+
+  @override
+  String get selectTime => 'Odaberite vrijeme';
+
+  @override
+  String get bookingInformation => 'Informacije o rezervaciji';
+
+  @override
+  String get checkInOutTimes => 'Prijava: 15:00 • Odjava: 11:00';
+
+  @override
+  String get priceSummary => 'Pregled cijene';
+
+  @override
+  String get duration => 'Trajanje';
+
+  @override
+  String get pricePerSession => 'Cijena po terminu';
+
+  @override
+  String get addNewBusiness => 'Dodaj novi business';
+
+  @override
+  String get backToHome => 'Nazad na početnu';
+
+  @override
+  String confirmAndPay(String total) {
+    return 'Potvrdi i plati $total';
+  }
+
+  @override
+  String get saveChanges => 'Sačuvaj izmjene';
+
+  @override
+  String get manage => 'Upravljaj';
+
+  @override
+  String get contactCustomer => 'Kontaktiraj korisnika';
+
+  @override
+  String get declineBooking => 'Odbij rezervaciju';
+
+  @override
+  String get messageCustomer => 'Pošalji poruku korisniku';
+
+  @override
+  String get declineAppointment => 'Odbij termin';
+
+  @override
+  String get rescheduleBooking => 'Promijeni termin rezervacije';
+
+  @override
+  String get proceedToPayment => 'Nastavi na plaćanje';
+
+  @override
+  String get cancelBooking => 'Otkaži rezervaciju';
+
+  @override
+  String get seedDemoStays => 'Dodaj 20 demo smještaja';
+
+  @override
+  String get seedDemoServices => 'Dodaj 29 demo usluga';
+
+  @override
+  String get createBusiness => 'Kreiraj business';
+
+  @override
+  String get addService => 'Dodaj uslugu';
+
+  @override
+  String get addProvider => 'Dodaj pružaoca usluge';
+
+  @override
+  String get addAvailabilitySlot => 'Dodaj termin dostupnosti';
+
+  @override
+  String get reviewAppointment => 'Pregled termina';
+
+  @override
+  String get blockSlot => 'Blokiraj termin';
+
+  @override
+  String get unblockSlot => 'Odblokiraj termin';
+
+  @override
+  String get processingPayment => 'Plaćanje se obrađuje...';
+
+  @override
+  String get rescheduling => 'Termin se mijenja...';
+
+  @override
+  String get confirmReschedule => 'Potvrdi promjenu termina';
+
+  @override
+  String get agreeToTermsAndPrivacy =>
+      'Slažem se s Uslovima korištenja i Pravilima privatnosti';
+
+  @override
+  String get acceptTermsToContinue => 'Prihvatite uslove za nastavak.';
 }

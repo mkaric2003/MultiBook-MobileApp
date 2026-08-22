@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:aquabook/src/features/customer-side/explore/cubit/explore_cubit.dart';
@@ -53,7 +54,9 @@ class ExploreView extends HookWidget {
                             extra: ExploreStayResultsArguments(
                               city: city,
                               categoryId: category.id,
-                              categoryTitle: category.title,
+                              categoryTitle: context.l10n.businessCategoryName(
+                                category.id,
+                              ),
                             ),
                           );
                         },
@@ -79,7 +82,9 @@ class ExploreView extends HookWidget {
                             extra: ExploreServiceResultsArguments(
                               city: state.selectedCity,
                               categoryId: category.id,
-                              categoryTitle: category.title,
+                              categoryTitle: context.l10n.businessCategoryName(
+                                category.id,
+                              ),
                             ),
                           );
                         },

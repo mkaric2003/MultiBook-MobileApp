@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
@@ -29,7 +30,7 @@ class CustomerBookingActions extends StatelessWidget {
     children: [
       if (_canCancel) ...[
         CustomButton(
-          buttonName: 'Cancel Booking',
+          buttonName: context.l10n.cancelBooking,
           color: const Color(0xFFDC2626),
           onPressed: onCancel,
           enabled: !isCancelling,
@@ -38,7 +39,7 @@ class CustomerBookingActions extends StatelessWidget {
       ],
       if (_isPast)
         CustomButton(
-          buttonName: 'Book Again',
+          buttonName: context.l10n.bookAgain,
           color: AppColors.surfaceHighlight,
           onPressed: onBookAgain,
         ),

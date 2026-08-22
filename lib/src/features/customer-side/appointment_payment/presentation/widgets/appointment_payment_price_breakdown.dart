@@ -33,11 +33,6 @@ class AppointmentPaymentPriceBreakdown extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         AppointmentPaymentPriceRow(
-          label: 'Add-ons',
-          value: arguments.addOnsCost,
-        ),
-        const SizedBox(height: 12),
-        AppointmentPaymentPriceRow(
           label: 'Service fee',
           value: arguments.serviceFee,
         ),

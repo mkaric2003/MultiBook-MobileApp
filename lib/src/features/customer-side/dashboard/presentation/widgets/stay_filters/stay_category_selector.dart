@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_category_filter_option.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class StayCategorySelector extends StatelessWidget {
@@ -36,7 +37,7 @@ class StayCategorySelector extends StatelessWidget {
     children: _categories
         .map(
           (category) => FilterChip(
-            label: Text(category.label),
+            label: Text(context.l10n.businessCategoryName(category.id)),
             selected: selectedCategoryIds.contains(category.id),
             onSelected: (_) => onChanged(category.id),
             selectedColor: AppColors.primary,
