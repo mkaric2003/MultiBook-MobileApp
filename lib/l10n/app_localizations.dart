@@ -118,6 +118,72 @@ abstract class AppLocalizations {
   /// **'Jezik'**
   String get language;
 
+  /// No description provided for @currency.
+  ///
+  /// In bs, this message translates to:
+  /// **'Valuta'**
+  String get currency;
+
+  /// No description provided for @addBusiness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj business'**
+  String get addBusiness;
+
+  /// No description provided for @addYourFirstBusiness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodajte svoj prvi business'**
+  String get addYourFirstBusiness;
+
+  /// No description provided for @optionalExtras.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodatne opcije'**
+  String get optionalExtras;
+
+  /// No description provided for @addressRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Adresa*'**
+  String get addressRequired;
+
+  /// No description provided for @shortDescription.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kratak opis'**
+  String get shortDescription;
+
+  /// No description provided for @describeYourBusiness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Opišite svoj business...'**
+  String get describeYourBusiness;
+
+  /// No description provided for @describeYourBusinessServices.
+  ///
+  /// In bs, this message translates to:
+  /// **'Opišite usluge svog businessa...'**
+  String get describeYourBusinessServices;
+
+  /// No description provided for @businessImages.
+  ///
+  /// In bs, this message translates to:
+  /// **'Slike businessa'**
+  String get businessImages;
+
+  /// No description provided for @businessPhotos.
+  ///
+  /// In bs, this message translates to:
+  /// **'Fotografije businessa'**
+  String get businessPhotos;
+
+  /// No description provided for @tapMapToPlacePin.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodirnite mapu da postavite oznaku'**
+  String get tapMapToPlacePin;
+
   /// No description provided for @languageAndLocalization.
   ///
   /// In bs, this message translates to:
@@ -913,7 +979,7 @@ abstract class AppLocalizations {
   /// No description provided for @featuredCollections.
   ///
   /// In bs, this message translates to:
-  /// **'Izdvojene kolekcije'**
+  /// **'Istaknute kolekcije'**
   String get featuredCollections;
 
   /// No description provided for @trendingNearYou.
@@ -2530,6 +2596,174 @@ abstract class AppLocalizations {
   /// **'Nema dostupnih termina za odabrani datum.'**
   String get noAppointmentSlotsAvailable;
 
+  /// No description provided for @addBusinessIntro.
+  ///
+  /// In bs, this message translates to:
+  /// **'Počnite podešavanjem smještaja ili usluga.'**
+  String get addBusinessIntro;
+
+  /// No description provided for @businessType.
+  ///
+  /// In bs, this message translates to:
+  /// **'Tip businessa'**
+  String get businessType;
+
+  /// No description provided for @stayBusinessExamples.
+  ///
+  /// In bs, this message translates to:
+  /// **'Hoteli, apartmani, kolibe'**
+  String get stayBusinessExamples;
+
+  /// No description provided for @serviceBusinessExamples.
+  ///
+  /// In bs, this message translates to:
+  /// **'Saloni, klinike, profesionalci'**
+  String get serviceBusinessExamples;
+
+  /// No description provided for @businessNameRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Naziv businessa*'**
+  String get businessNameRequired;
+
+  /// No description provided for @businessCategoryRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kategorija businessa*'**
+  String get businessCategoryRequired;
+
+  /// No description provided for @stayInventoryRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Inventar smještaja*'**
+  String get stayInventoryRequired;
+
+  /// No description provided for @pricePerNightRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Cijena po noći*'**
+  String get pricePerNightRequired;
+
+  /// No description provided for @bookableUnits.
+  ///
+  /// In bs, this message translates to:
+  /// **'Jedinice za rezervaciju'**
+  String get bookableUnits;
+
+  /// No description provided for @cityRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Grad*'**
+  String get cityRequired;
+
+  /// No description provided for @chargedPerHour.
+  ///
+  /// In bs, this message translates to:
+  /// **'Naplaćuje se po satu'**
+  String get chargedPerHour;
+
+  /// No description provided for @chargedPerNight.
+  ///
+  /// In bs, this message translates to:
+  /// **'Naplaćuje se po noći'**
+  String get chargedPerNight;
+
+  /// No description provided for @oneTimeCharge.
+  ///
+  /// In bs, this message translates to:
+  /// **'Jednokratna naplata'**
+  String get oneTimeCharge;
+
+  /// No description provided for @tapToPlacePin.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodirnite za postavljanje oznake na mapi'**
+  String get tapToPlacePin;
+
+  /// No description provided for @servicesOfferedRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ponuđene usluge*'**
+  String get servicesOfferedRequired;
+
+  /// No description provided for @serviceTypeRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Tip usluge*'**
+  String get serviceTypeRequired;
+
+  /// No description provided for @durationRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Trajanje (min)*'**
+  String get durationRequired;
+
+  /// No description provided for @priceRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Cijena*'**
+  String get priceRequired;
+
+  /// No description provided for @descriptionOptional.
+  ///
+  /// In bs, this message translates to:
+  /// **'Opis (opcionalno)'**
+  String get descriptionOptional;
+
+  /// No description provided for @serviceProvidersRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pružaoci usluga*'**
+  String get serviceProvidersRequired;
+
+  /// No description provided for @serviceProviderRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pružalac usluge*'**
+  String get serviceProviderRequired;
+
+  /// No description provided for @firstUnitTypeRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prvi tip jedinice*'**
+  String get firstUnitTypeRequired;
+
+  /// No description provided for @firstRoomTypeRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prvi tip sobe*'**
+  String get firstRoomTypeRequired;
+
+  /// No description provided for @availabilityRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dostupnost*'**
+  String get availabilityRequired;
+
+  /// No description provided for @from.
+  ///
+  /// In bs, this message translates to:
+  /// **'Od'**
+  String get from;
+
+  /// No description provided for @to.
+  ///
+  /// In bs, this message translates to:
+  /// **'Do'**
+  String get to;
+
+  /// No description provided for @uploadCoverPhoto.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj naslovnu fotografiju'**
+  String get uploadCoverPhoto;
+
+  /// No description provided for @uploadLogo.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj logo'**
+  String get uploadLogo;
+
   /// No description provided for @updateProfileImage.
   ///
   /// In bs, this message translates to:
@@ -2919,6 +3153,102 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Prihvatite uslove za nastavak.'**
   String get acceptTermsToContinue;
+
+  /// No description provided for @businessPhotosCount.
+  ///
+  /// In bs, this message translates to:
+  /// **'Fotografije businessa ({count}/{max})'**
+  String businessPhotosCount(int count, int max);
+
+  /// No description provided for @addPhotos.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj fotografije'**
+  String get addPhotos;
+
+  /// No description provided for @coverPhotoFormatHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'JPG, PNG do 10 MB'**
+  String get coverPhotoFormatHint;
+
+  /// No description provided for @logoFormatHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'JPG, PNG do 5 MB'**
+  String get logoFormatHint;
+
+  /// No description provided for @extraBreakfast.
+  ///
+  /// In bs, this message translates to:
+  /// **'Doručak'**
+  String get extraBreakfast;
+
+  /// No description provided for @extraParking.
+  ///
+  /// In bs, this message translates to:
+  /// **'Parking'**
+  String get extraParking;
+
+  /// No description provided for @extraSpaAccess.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pristup spa centru'**
+  String get extraSpaAccess;
+
+  /// No description provided for @extraAirportTransfer.
+  ///
+  /// In bs, this message translates to:
+  /// **'Transfer s aerodroma'**
+  String get extraAirportTransfer;
+
+  /// No description provided for @extraLateCheckout.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kasna odjava'**
+  String get extraLateCheckout;
+
+  /// No description provided for @extraPetStay.
+  ///
+  /// In bs, this message translates to:
+  /// **'Boravak kućnog ljubimca'**
+  String get extraPetStay;
+
+  /// No description provided for @extraBed.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodatni krevet'**
+  String get extraBed;
+
+  /// No description provided for @extraLaundryService.
+  ///
+  /// In bs, this message translates to:
+  /// **'Usluga pranja veša'**
+  String get extraLaundryService;
+
+  /// No description provided for @extraQuadBikeRental.
+  ///
+  /// In bs, this message translates to:
+  /// **'Iznajmljivanje quad bicikla'**
+  String get extraQuadBikeRental;
+
+  /// No description provided for @extraGuidedTour.
+  ///
+  /// In bs, this message translates to:
+  /// **'Lokalna vođena tura'**
+  String get extraGuidedTour;
+
+  /// No description provided for @extraHikingGuide.
+  ///
+  /// In bs, this message translates to:
+  /// **'Privatni vodič za planinarenje'**
+  String get extraHikingGuide;
+
+  /// No description provided for @extraBoatTour.
+  ///
+  /// In bs, this message translates to:
+  /// **'Privatna tura brodom'**
+  String get extraBoatTour;
 }
 
 class _AppLocalizationsDelegate

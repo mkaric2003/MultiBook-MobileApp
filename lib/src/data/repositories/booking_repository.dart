@@ -56,7 +56,7 @@ class BookingRepository {
         0;
     final roomSubtotal = price * booking.nightCount;
     final extras = _extrasTotal(arguments.selectedExtras, booking.nightCount);
-    final cleaning = 25;
+    final cleaning = 2500;
     final service = ((roomSubtotal + extras) * .05).round();
     final taxes = ((roomSubtotal + extras + cleaning + service) * .08).round();
     final id = _firestore.createDocumentId(collection: _collection);
@@ -89,6 +89,7 @@ class BookingRepository {
       paymentStatus: PaymentStatus.paid,
       paymentMethod: 'card',
       confirmationCode: _confirmationCode(),
+      currency: business.currency,
     );
     try {
       await _firestore.setDocument(
@@ -132,6 +133,7 @@ class BookingRepository {
           'paymentStatus': result.paymentStatus.name,
           'paymentMethod': result.paymentMethod,
           'confirmationCode': result.confirmationCode,
+          'currency': result.currency.name,
           'createdAt': _firestore.serverTimestamp,
         },
       );

@@ -90,6 +90,13 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     _$city,
     opt: true,
   );
+  static CurrencyCode _$businessCurrency(UserModel v) => v.businessCurrency;
+  static const Field<UserModel, CurrencyCode> _f$businessCurrency = Field(
+    'businessCurrency',
+    _$businessCurrency,
+    opt: true,
+    def: CurrencyCode.bam,
+  );
 
   @override
   final MappableFields<UserModel> fields = const {
@@ -106,6 +113,7 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     #dateOfBirth: _f$dateOfBirth,
     #address: _f$address,
     #city: _f$city,
+    #businessCurrency: _f$businessCurrency,
   };
 
   static UserModel _instantiate(DecodingData data) {
@@ -123,6 +131,7 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
       dateOfBirth: data.dec(_f$dateOfBirth),
       address: data.dec(_f$address),
       city: data.dec(_f$city),
+      businessCurrency: data.dec(_f$businessCurrency),
     );
   }
 
@@ -199,6 +208,7 @@ abstract class UserModelCopyWith<$R, $In extends UserModel, $Out>
     DateTime? dateOfBirth,
     String? address,
     String? city,
+    CurrencyCode? businessCurrency,
   });
   UserModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -226,6 +236,7 @@ class _UserModelCopyWithImpl<$R, $Out>
     Object? dateOfBirth = $none,
     Object? address = $none,
     Object? city = $none,
+    CurrencyCode? businessCurrency,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -241,6 +252,7 @@ class _UserModelCopyWithImpl<$R, $Out>
       if (dateOfBirth != $none) #dateOfBirth: dateOfBirth,
       if (address != $none) #address: address,
       if (city != $none) #city: city,
+      if (businessCurrency != null) #businessCurrency: businessCurrency,
     }),
   );
   @override
@@ -261,6 +273,7 @@ class _UserModelCopyWithImpl<$R, $Out>
     dateOfBirth: data.get(#dateOfBirth, or: $value.dateOfBirth),
     address: data.get(#address, or: $value.address),
     city: data.get(#city, or: $value.city),
+    businessCurrency: data.get(#businessCurrency, or: $value.businessCurrency),
   );
 
   @override

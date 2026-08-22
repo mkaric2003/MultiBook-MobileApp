@@ -15,6 +15,39 @@ class AppLocalizationsBs extends AppLocalizations {
   String get language => 'Jezik';
 
   @override
+  String get currency => 'Valuta';
+
+  @override
+  String get addBusiness => 'Dodaj business';
+
+  @override
+  String get addYourFirstBusiness => 'Dodajte svoj prvi business';
+
+  @override
+  String get optionalExtras => 'Dodatne opcije';
+
+  @override
+  String get addressRequired => 'Adresa*';
+
+  @override
+  String get shortDescription => 'Kratak opis';
+
+  @override
+  String get describeYourBusiness => 'Opišite svoj business...';
+
+  @override
+  String get describeYourBusinessServices => 'Opišite usluge svog businessa...';
+
+  @override
+  String get businessImages => 'Slike businessa';
+
+  @override
+  String get businessPhotos => 'Fotografije businessa';
+
+  @override
+  String get tapMapToPlacePin => 'Dodirnite mapu da postavite oznaku';
+
+  @override
   String get languageAndLocalization => 'Jezik i lokalizacija';
 
   @override
@@ -442,7 +475,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get browseByCategory => 'Pregledaj po kategoriji';
 
   @override
-  String get featuredCollections => 'Izdvojene kolekcije';
+  String get featuredCollections => 'Istaknute kolekcije';
 
   @override
   String get trendingNearYou => 'Popularno u vašoj blizini';
@@ -1297,6 +1330,90 @@ class AppLocalizationsBs extends AppLocalizations {
       'Nema dostupnih termina za odabrani datum.';
 
   @override
+  String get addBusinessIntro => 'Počnite podešavanjem smještaja ili usluga.';
+
+  @override
+  String get businessType => 'Tip businessa';
+
+  @override
+  String get stayBusinessExamples => 'Hoteli, apartmani, kolibe';
+
+  @override
+  String get serviceBusinessExamples => 'Saloni, klinike, profesionalci';
+
+  @override
+  String get businessNameRequired => 'Naziv businessa*';
+
+  @override
+  String get businessCategoryRequired => 'Kategorija businessa*';
+
+  @override
+  String get stayInventoryRequired => 'Inventar smještaja*';
+
+  @override
+  String get pricePerNightRequired => 'Cijena po noći*';
+
+  @override
+  String get bookableUnits => 'Jedinice za rezervaciju';
+
+  @override
+  String get cityRequired => 'Grad*';
+
+  @override
+  String get chargedPerHour => 'Naplaćuje se po satu';
+
+  @override
+  String get chargedPerNight => 'Naplaćuje se po noći';
+
+  @override
+  String get oneTimeCharge => 'Jednokratna naplata';
+
+  @override
+  String get tapToPlacePin => 'Dodirnite za postavljanje oznake na mapi';
+
+  @override
+  String get servicesOfferedRequired => 'Ponuđene usluge*';
+
+  @override
+  String get serviceTypeRequired => 'Tip usluge*';
+
+  @override
+  String get durationRequired => 'Trajanje (min)*';
+
+  @override
+  String get priceRequired => 'Cijena*';
+
+  @override
+  String get descriptionOptional => 'Opis (opcionalno)';
+
+  @override
+  String get serviceProvidersRequired => 'Pružaoci usluga*';
+
+  @override
+  String get serviceProviderRequired => 'Pružalac usluge*';
+
+  @override
+  String get firstUnitTypeRequired => 'Prvi tip jedinice*';
+
+  @override
+  String get firstRoomTypeRequired => 'Prvi tip sobe*';
+
+  @override
+  String get availabilityRequired => 'Dostupnost*';
+
+  @override
+  String get from => 'Od';
+
+  @override
+  String get to => 'Do';
+
+  @override
+  String get uploadCoverPhoto => 'Dodaj naslovnu fotografiju';
+
+  @override
+  String get uploadLogo => 'Dodaj logo';
+
+  @override
   String get updateProfileImage => 'Ažuriraj profilnu sliku';
 
   @override
@@ -1503,4 +1620,54 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get acceptTermsToContinue => 'Prihvatite uslove za nastavak.';
+
+  @override
+  String businessPhotosCount(int count, int max) {
+    return 'Fotografije businessa ($count/$max)';
+  }
+
+  @override
+  String get addPhotos => 'Dodaj fotografije';
+
+  @override
+  String get coverPhotoFormatHint => 'JPG, PNG do 10 MB';
+
+  @override
+  String get logoFormatHint => 'JPG, PNG do 5 MB';
+
+  @override
+  String get extraBreakfast => 'Doručak';
+
+  @override
+  String get extraParking => 'Parking';
+
+  @override
+  String get extraSpaAccess => 'Pristup spa centru';
+
+  @override
+  String get extraAirportTransfer => 'Transfer s aerodroma';
+
+  @override
+  String get extraLateCheckout => 'Kasna odjava';
+
+  @override
+  String get extraPetStay => 'Boravak kućnog ljubimca';
+
+  @override
+  String get extraBed => 'Dodatni krevet';
+
+  @override
+  String get extraLaundryService => 'Usluga pranja veša';
+
+  @override
+  String get extraQuadBikeRental => 'Iznajmljivanje quad bicikla';
+
+  @override
+  String get extraGuidedTour => 'Lokalna vođena tura';
+
+  @override
+  String get extraHikingGuide => 'Privatni vodič za planinarenje';
+
+  @override
+  String get extraBoatTour => 'Privatna tura brodom';
 }

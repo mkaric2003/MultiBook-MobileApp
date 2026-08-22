@@ -77,7 +77,7 @@ class SavedBusinessCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '\$${stay.pricePerNight ?? 0}${context.l10n.perNight}',
+                    '${context.l10n.formatCurrency(stay.pricePerNight ?? 0)}${context.l10n.perNight}',
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w800,

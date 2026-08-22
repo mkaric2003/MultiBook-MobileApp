@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/enums/booking_status.dart';
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/data/enums/payment_status.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:dart_mappable/dart_mappable.dart';
@@ -33,6 +34,7 @@ class BookingModel with BookingModelMappable {
     required this.paymentStatus,
     required this.paymentMethod,
     required this.confirmationCode,
+    this.currency = CurrencyCode.bam,
     this.roomType,
     this.roomTypeId,
     this.customerAvatarUrl,
@@ -63,6 +65,7 @@ class BookingModel with BookingModelMappable {
   final PaymentStatus paymentStatus;
   final String paymentMethod;
   final String confirmationCode;
+  final CurrencyCode currency;
   final String? roomType;
   final String? roomTypeId;
   final String? customerAvatarUrl;

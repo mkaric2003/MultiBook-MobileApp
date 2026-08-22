@@ -35,7 +35,7 @@ class BusinessMediaSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          isService ? 'Business Photos' : 'Business Images',
+          isService ? context.l10n.businessPhotos : context.l10n.businessImages,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 20),

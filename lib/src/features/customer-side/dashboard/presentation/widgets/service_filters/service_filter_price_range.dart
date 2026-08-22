@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ServiceFilterPriceRange extends StatelessWidget {
@@ -23,8 +24,8 @@ class ServiceFilterPriceRange extends StatelessWidget {
           activeColor: AppColors.primary,
           inactiveColor: AppColors.surface,
           labels: RangeLabels(
-            '\$${values.start.round()}',
-            '\$${values.end.round()}',
+            context.l10n.formatCurrency(values.start.round() * 100),
+            context.l10n.formatCurrency(values.end.round() * 100),
           ),
           onChanged: onChanged,
         ),
@@ -34,14 +35,14 @@ class ServiceFilterPriceRange extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '\$${values.start.round()}',
+                context.l10n.formatCurrency(values.start.round() * 100),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
-                '\$${values.end.round()}',
+                context.l10n.formatCurrency(values.end.round() * 100),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

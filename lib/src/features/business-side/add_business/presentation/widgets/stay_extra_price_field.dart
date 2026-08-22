@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -30,16 +31,16 @@ class StayExtraPriceField extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                extra.label,
+                context.l10n.stayExtra(extra),
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 3),
               Text(
                 extra.isPerHour
-                    ? 'Charged per hour'
+                    ? context.l10n.chargedPerHour
                     : extra.isPerNight
-                    ? 'Charged per night'
-                    : 'One-time charge',
+                    ? context.l10n.chargedPerNight
+                    : context.l10n.oneTimeCharge,
                 style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],
@@ -49,13 +50,16 @@ class StayExtraPriceField extends StatelessWidget {
           width: 92,
           child: TextFormField(
             key: ValueKey(extra),
-            initialValue: price.toString(),
-            onChanged: (value) => onPriceChanged(int.tryParse(value) ?? 0),
+            initialValue: (price / 100).toStringAsFixed(price % 100 == 0 ? 0 : 2),
+            onChanged: (value) =>
+                onPriceChanged(((double.tryParse(value) ?? 0) * 100).round()),
             keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d*([.,]\d{0,2})?$')),
+            ],
             textAlign: TextAlign.center,
-            decoration: const InputDecoration(
-              prefixText: '\$',
+            decoration: InputDecoration(
+              prefixText: context.l10n.currencySymbol,
               isDense: true,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 10,

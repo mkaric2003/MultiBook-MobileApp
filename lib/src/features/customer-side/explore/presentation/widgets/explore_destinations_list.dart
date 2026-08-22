@@ -9,19 +9,19 @@ class ExploreDestinationsList extends StatelessWidget {
   static const _destinations = [
     ExploreDestination(
       name: 'Paris',
-      startingPrice: 89,
+      startingPrice: 8900,
       imageUrl:
           'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=480&q=85',
     ),
     ExploreDestination(
       name: 'Tokyo',
-      startingPrice: 65,
+      startingPrice: 6500,
       imageUrl:
           'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=480&q=85',
     ),
     ExploreDestination(
       name: 'New York',
-      startingPrice: 120,
+      startingPrice: 12000,
       imageUrl:
           'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?auto=format&fit=crop&w=480&q=85',
     ),
@@ -58,7 +58,7 @@ class ExploreDestinationsList extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 context.l10n.fromPrice(
-                  '\$${destination.startingPrice}${context.l10n.perNight}',
+                  '${context.l10n.formatCurrency(destination.startingPrice)}${context.l10n.perNight}',
                 ),
                 style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),

@@ -62,7 +62,7 @@ class ServiceOfferingCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 16),
                     Text(
-                      '\$${offering.price}',
+                      context.l10n.formatCurrency(offering.price),
                       style: const TextStyle(fontWeight: FontWeight.w800),
                     ),
                   ],

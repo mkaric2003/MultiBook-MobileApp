@@ -49,19 +49,23 @@ class BookingSummaryCard extends StatelessWidget {
           const Divider(height: 28, color: AppColors.border),
           BookingSummaryRow(
             label: context.l10n.nights(state.nightCount),
-            value: '\$$pricePerNight × ${state.nightCount}',
+            value:
+                '${context.l10n.formatCurrency(pricePerNight)} × ${state.nightCount}',
           ),
           const SizedBox(height: 11),
           BookingSummaryRow(
             label: context.l10n.serviceFee,
-            value: '\$$serviceFee',
+            value: context.l10n.formatCurrency(serviceFee),
           ),
           const SizedBox(height: 11),
-          BookingSummaryRow(label: context.l10n.taxes, value: '\$$taxes'),
+          BookingSummaryRow(
+            label: context.l10n.taxes,
+            value: context.l10n.formatCurrency(taxes),
+          ),
           const Divider(height: 28, color: AppColors.border),
           BookingSummaryRow(
             label: context.l10n.total,
-            value: '\$$total',
+            value: context.l10n.formatCurrency(total),
             bold: true,
           ),
         ],

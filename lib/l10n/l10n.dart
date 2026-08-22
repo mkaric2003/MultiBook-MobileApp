@@ -1,11 +1,34 @@
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 import 'app_localizations.dart';
+import '../src/core/injectable/injectable.dart';
+import '../src/data/enums/currency_code.dart';
 import '../src/data/enums/stay_amenity.dart';
 import '../src/data/enums/stay_collection.dart';
+import '../src/data/enums/stay_extra_type.dart';
+import '../src/features/shared/localization/cubit/locale_cubit.dart';
 
 extension L10nBuildContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
+}
+
+extension CurrencyL10n on AppLocalizations {
+  CurrencyCode get _currency => getIt<LocaleCubit>().state.currency;
+
+  String get currencySymbol => _currency.symbol;
+
+  String formatCurrency(num amount) {
+    final hasFraction = amount % 100 != 0;
+    final numberFormat = NumberFormat.decimalPattern(localeName)
+      ..minimumFractionDigits = hasFraction ? 2 : 0
+      ..maximumFractionDigits = hasFraction ? 2 : 0;
+    final formattedAmount = numberFormat.format(amount / 100);
+
+    return _currency == CurrencyCode.usd
+        ? '${_currency.symbol}$formattedAmount'
+        : '$formattedAmount${_currency.symbol}';
+  }
 }
 
 extension StayAmenityL10n on AppLocalizations {
@@ -29,6 +52,23 @@ extension StayAmenityL10n on AppLocalizations {
     StayAmenity.skiStorage => amenitySkiStorage,
     StayAmenity.skiRental => amenitySkiRental,
     StayAmenity.skiShuttle => amenitySkiShuttle,
+  };
+}
+
+extension StayExtraTypeL10n on AppLocalizations {
+  String stayExtra(StayExtraType extra) => switch (extra) {
+    StayExtraType.breakfast => extraBreakfast,
+    StayExtraType.parking => extraParking,
+    StayExtraType.spaAccess => extraSpaAccess,
+    StayExtraType.airportTransfer => extraAirportTransfer,
+    StayExtraType.lateCheckout => extraLateCheckout,
+    StayExtraType.petStay => extraPetStay,
+    StayExtraType.extraBed => extraBed,
+    StayExtraType.laundryService => extraLaundryService,
+    StayExtraType.quadBikeRental => extraQuadBikeRental,
+    StayExtraType.guidedTour => extraGuidedTour,
+    StayExtraType.hikingGuide => extraHikingGuide,
+    StayExtraType.boatTour => extraBoatTour,
   };
 }
 

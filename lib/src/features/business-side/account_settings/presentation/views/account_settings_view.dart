@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_cubit.dart';
 import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
 import 'package:aquabook/src/features/business-side/account_settings/presentation/widgets/account_settings_avatar.dart';
@@ -103,11 +104,14 @@ class AccountSettingsView extends HookWidget {
                         firstName: state.user?.firstName ?? '',
                         lastName: state.user?.lastName ?? '',
                         phoneNumber: state.user?.phoneNumber ?? '',
+                        businessCurrency:
+                            state.user?.businessCurrency ?? CurrencyCode.bam,
                       );
                   await context.read<AccountSettingsCubit>().save(
                     firstName: data.firstName,
                     lastName: data.lastName,
                     phoneNumber: data.phoneNumber,
+                    businessCurrency: data.businessCurrency,
                   );
                 },
               ),

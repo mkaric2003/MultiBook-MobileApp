@@ -50,7 +50,7 @@ class AppointmentServiceOptionCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 7),
                   Text(
-                    '\$${offering.price}',
+                    context.l10n.formatCurrency(offering.price),
                     style: const TextStyle(
                       color: AppColors.primary,
                       fontSize: 17,

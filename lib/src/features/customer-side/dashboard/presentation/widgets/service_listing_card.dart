@@ -71,7 +71,7 @@ class ServiceListingCard extends StatelessWidget {
                 else
                   const SizedBox(height: 6),
                 Text(
-                  context.l10n.fromPrice('\$${service.price}'),
+                  context.l10n.fromPrice(context.l10n.formatCurrency(service.price ?? 0)),
                   style: const TextStyle(
                     color: AppColors.primary,
                     fontSize: 15,

@@ -120,7 +120,7 @@ class ManageAppointmentSheet extends StatelessWidget {
                     const SizedBox(height: 16),
                     AppointmentInfoRow(
                       icon: Icons.attach_money,
-                      title: '\$${appointment.total.toStringAsFixed(2)}',
+                      title: context.l10n.formatCurrency(appointment.total),
                       subtitle: appointment.paymentMethod,
                     ),
                     const SizedBox(height: 16),

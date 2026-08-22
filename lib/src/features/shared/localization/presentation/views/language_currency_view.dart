@@ -1,5 +1,6 @@
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/features/shared/localization/cubit/locale_cubit.dart';
 import 'package:aquabook/src/features/shared/localization/presentation/widgets/language_option.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
@@ -22,6 +23,9 @@ class LanguageCurrencyView extends StatelessWidget {
   Widget build(BuildContext context) {
     final selectedLocale = context.select<LocaleCubit, Locale>(
       (cubit) => cubit.state.locale,
+    );
+    final selectedCurrency = context.select<LocaleCubit, CurrencyCode>(
+      (cubit) => cubit.state.currency,
     );
 
     return Scaffold(
@@ -55,6 +59,39 @@ class LanguageCurrencyView extends StatelessWidget {
                         ),
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 22),
+                  Text(
+                    context.l10n.currency,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  DropdownButtonFormField<CurrencyCode>(
+                    initialValue: selectedCurrency,
+                    isExpanded: true,
+                    dropdownColor: AppColors.surface,
+                    decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.surface,
+                    ),
+                    items: CurrencyCode.values
+                        .map(
+                          (currency) => DropdownMenuItem(
+                            value: currency,
+                            child: Text(
+                              '${currency.code} (${currency.symbol})',
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (currency) {
+                      if (currency != null) {
+                        context.read<LocaleCubit>().changeCurrency(currency);
+                      }
+                    },
                   ),
                 ],
               ),

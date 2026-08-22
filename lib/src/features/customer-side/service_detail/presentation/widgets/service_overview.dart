@@ -66,7 +66,7 @@ class ServiceOverview extends StatelessWidget {
           if (service.price != null) ...[
             const SizedBox(height: 22),
             Text(
-              '${context.l10n.fromPrice('\$${service.price}')} ${context.l10n.perSession}',
+              '${context.l10n.fromPrice(context.l10n.formatCurrency(service.price ?? 0))} ${context.l10n.perSession}',
               style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
             ),
           ],

@@ -127,6 +127,7 @@ class AppointmentRepository {
       total: arguments.total,
       paymentMethod: request.paymentMethod,
       confirmationCode: _confirmationCode(),
+      currency: business.currency,
     );
     try {
       final appointmentWrite = FirestoreDocumentWrite(
@@ -161,6 +162,7 @@ class AppointmentRepository {
           'status': 'confirmed',
           'rescheduleCount': 0,
           'confirmationCode': result.confirmationCode,
+          'currency': result.currency.name,
           'createdAt': _firestore.serverTimestamp,
         },
       );

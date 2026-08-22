@@ -50,18 +50,18 @@ extension StayExtraTypeLabel on StayExtraType {
   };
 
   int get defaultPrice => switch (this) {
-    StayExtraType.breakfast => 20,
-    StayExtraType.parking => 15,
-    StayExtraType.spaAccess => 40,
-    StayExtraType.airportTransfer => 35,
-    StayExtraType.lateCheckout => 25,
-    StayExtraType.petStay => 15,
-    StayExtraType.extraBed => 30,
-    StayExtraType.laundryService => 18,
-    StayExtraType.quadBikeRental => 45,
-    StayExtraType.guidedTour => 30,
-    StayExtraType.hikingGuide => 35,
-    StayExtraType.boatTour => 80,
+    StayExtraType.breakfast => 2000,
+    StayExtraType.parking => 1500,
+    StayExtraType.spaAccess => 4000,
+    StayExtraType.airportTransfer => 3500,
+    StayExtraType.lateCheckout => 2500,
+    StayExtraType.petStay => 1500,
+    StayExtraType.extraBed => 3000,
+    StayExtraType.laundryService => 1800,
+    StayExtraType.quadBikeRental => 4500,
+    StayExtraType.guidedTour => 3000,
+    StayExtraType.hikingGuide => 3500,
+    StayExtraType.boatTour => 8000,
   };
 
   bool get isPerNight => switch (this) {

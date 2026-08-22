@@ -47,7 +47,7 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FormFieldLabel('Availability*'),
+        FormFieldLabel(context.l10n.availabilityRequired),
         const SizedBox(height: 8),
         Text(
           context.l10n.recurringSlotsDescription,
@@ -73,7 +73,7 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
           children: [
             Expanded(
               child: ServiceTimePickerButton(
-                label: 'From',
+                label: context.l10n.from,
                 time: startTime.value,
                 onTap: () => selectTime(startTime),
               ),
@@ -81,7 +81,7 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
             const SizedBox(width: 12),
             Expanded(
               child: ServiceTimePickerButton(
-                label: 'To',
+                label: context.l10n.to,
                 time: endTime.value,
                 onTap: () => selectTime(endTime),
               ),

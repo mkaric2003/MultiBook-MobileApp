@@ -22,7 +22,7 @@ class BusinessPhotosUpload extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        'Business photos (${imagePaths.length}/$maxPhotos)',
+        context.l10n.businessPhotosCount(imagePaths.length, maxPhotos),
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       const SizedBox(height: 12),
@@ -48,17 +48,18 @@ class BusinessPhotosUpload extends StatelessWidget {
                   border: Border.all(color: AppColors.border),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.add_photo_alternate_outlined,
                       color: AppColors.primary,
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
-                      'Add photos',
-                      style: TextStyle(
+                      context.l10n.addPhotos,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
                         color: AppColors.primary,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,

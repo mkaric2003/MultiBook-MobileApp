@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/picked_image_preview.dart';
 import 'package:flutter/material.dart';
 
@@ -29,22 +30,22 @@ class BusinessCoverPhotoUpload extends StatelessWidget {
         child: PickedImagePreview(
           imagePath: imagePath,
           fit: BoxFit.cover,
-          fallback: const Column(
+          fallback: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.image_outlined, color: AppColors.iconMuted, size: 28),
-              SizedBox(height: 9),
+              const Icon(Icons.image_outlined, color: AppColors.iconMuted, size: 28),
+              const SizedBox(height: 9),
               Text(
-                'Upload cover photo',
-                style: TextStyle(
+                context.l10n.uploadCoverPhoto,
+                style: const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
-                'JPG, PNG up to 10MB',
-                style: TextStyle(color: AppColors.muted, fontSize: 13),
+                context.l10n.coverPhotoFormatHint,
+                style: const TextStyle(color: AppColors.muted, fontSize: 13),
               ),
             ],
           ),

@@ -61,7 +61,7 @@ class BookingConfirmationDetails extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         Text(
-          '\$$total',
+          context.l10n.formatCurrency(total),
           style: const TextStyle(
             color: Color(0xFF10B981),
             fontSize: 22,

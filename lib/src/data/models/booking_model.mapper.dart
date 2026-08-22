@@ -134,6 +134,13 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     'confirmationCode',
     _$confirmationCode,
   );
+  static CurrencyCode _$currency(BookingModel v) => v.currency;
+  static const Field<BookingModel, CurrencyCode> _f$currency = Field(
+    'currency',
+    _$currency,
+    opt: true,
+    def: CurrencyCode.bam,
+  );
   static String? _$roomType(BookingModel v) => v.roomType;
   static const Field<BookingModel, String> _f$roomType = Field(
     'roomType',
@@ -186,6 +193,7 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     #paymentStatus: _f$paymentStatus,
     #paymentMethod: _f$paymentMethod,
     #confirmationCode: _f$confirmationCode,
+    #currency: _f$currency,
     #roomType: _f$roomType,
     #roomTypeId: _f$roomTypeId,
     #customerAvatarUrl: _f$customerAvatarUrl,
@@ -219,6 +227,7 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
       paymentStatus: data.dec(_f$paymentStatus),
       paymentMethod: data.dec(_f$paymentMethod),
       confirmationCode: data.dec(_f$confirmationCode),
+      currency: data.dec(_f$currency),
       roomType: data.dec(_f$roomType),
       roomTypeId: data.dec(_f$roomTypeId),
       customerAvatarUrl: data.dec(_f$customerAvatarUrl),
@@ -320,6 +329,7 @@ abstract class BookingModelCopyWith<$R, $In extends BookingModel, $Out>
     PaymentStatus? paymentStatus,
     String? paymentMethod,
     String? confirmationCode,
+    CurrencyCode? currency,
     String? roomType,
     String? roomTypeId,
     String? customerAvatarUrl,
@@ -374,6 +384,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
     PaymentStatus? paymentStatus,
     String? paymentMethod,
     String? confirmationCode,
+    CurrencyCode? currency,
     Object? roomType = $none,
     Object? roomTypeId = $none,
     Object? customerAvatarUrl = $none,
@@ -405,6 +416,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
       if (paymentStatus != null) #paymentStatus: paymentStatus,
       if (paymentMethod != null) #paymentMethod: paymentMethod,
       if (confirmationCode != null) #confirmationCode: confirmationCode,
+      if (currency != null) #currency: currency,
       if (roomType != $none) #roomType: roomType,
       if (roomTypeId != $none) #roomTypeId: roomTypeId,
       if (customerAvatarUrl != $none) #customerAvatarUrl: customerAvatarUrl,
@@ -438,6 +450,7 @@ class _BookingModelCopyWithImpl<$R, $Out>
     paymentStatus: data.get(#paymentStatus, or: $value.paymentStatus),
     paymentMethod: data.get(#paymentMethod, or: $value.paymentMethod),
     confirmationCode: data.get(#confirmationCode, or: $value.confirmationCode),
+    currency: data.get(#currency, or: $value.currency),
     roomType: data.get(#roomType, or: $value.roomType),
     roomTypeId: data.get(#roomTypeId, or: $value.roomTypeId),
     customerAvatarUrl: data.get(

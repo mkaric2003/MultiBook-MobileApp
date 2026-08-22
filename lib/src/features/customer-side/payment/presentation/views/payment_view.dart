@@ -174,7 +174,9 @@ class PaymentView extends HookWidget {
                           ),
                         ),
                       CustomButton(
-                        buttonName: context.l10n.confirmAndPay('\$$total'),
+                        buttonName: context.l10n.confirmAndPay(
+                          context.l10n.formatCurrency(total),
+                        ),
                         enabled: agreed.value && isCardValid,
                         onPressed: () async => paymentCubit.confirm(arguments),
                       ),

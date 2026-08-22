@@ -49,7 +49,7 @@ class StayRoomCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '\$${room.pricePerNight} ${context.l10n.perNight}',
+                        '${context.l10n.formatCurrency(room.pricePerNight)} ${context.l10n.perNight}',
                         style: const TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.w800,

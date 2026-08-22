@@ -25,7 +25,7 @@ class HotelRoomForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FormFieldLabel('First room type*'),
+        FormFieldLabel(context.l10n.firstRoomTypeRequired),
         const SizedBox(height: 10),
         CustomTextField(
           hintText: context.l10n.roomNameExample,
@@ -48,7 +48,11 @@ class HotelRoomForm extends StatelessWidget {
                 hintText: context.l10n.sizeSquareMeters,
                 controller: sizeController,
                 keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'^\d*([.,]\d{0,2})?$'),
+                  ),
+                ],
               ),
             ),
           ],

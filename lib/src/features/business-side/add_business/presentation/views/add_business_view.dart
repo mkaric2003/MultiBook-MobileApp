@@ -94,6 +94,10 @@ class AddBusinessView extends HookWidget {
         },
         builder: (context, state) {
           final categories = AddBusinessCategories.forType(state.businessType);
+          int parsePrice(String value) =>
+              ((double.tryParse(value.replaceAll(',', '.')) ?? 0) * 100)
+                  .round();
+
           final canCreate =
               nameController.text.trim().isNotEmpty &&
               cityController.text.trim().isNotEmpty &&
@@ -103,12 +107,12 @@ class AddBusinessView extends HookWidget {
               state.categoryId != null &&
               (state.businessType != BusinessType.stays ||
                   (state.stayInventoryType == StayInventoryType.singleUnit
-                      ? (int.tryParse(priceController.text) ?? 0) > 0
+                      ? parsePrice(priceController.text) > 0
                       : (roomNameController.text.trim().isNotEmpty &&
                             (int.tryParse(roomGuestsController.text) ?? 0) >
                                 0 &&
                             (int.tryParse(roomSizeController.text) ?? 0) > 0 &&
-                            (int.tryParse(roomPriceController.text) ?? 0) > 0 &&
+                            parsePrice(roomPriceController.text) > 0 &&
                             (int.tryParse(roomQuantityController.text) ?? 0) >
                                 0))) &&
               (state.businessType != BusinessType.services ||
@@ -143,8 +147,8 @@ class AddBusinessView extends HookWidget {
                 children: [
                   CustomAppBar(
                     title: state.hasExistingBusiness
-                        ? 'Add business'
-                        : 'Add your first business',
+                        ? context.l10n.addBusiness
+                        : context.l10n.addYourFirstBusiness,
                   ),
                   Expanded(
                     child: SingleChildScrollView(
@@ -153,14 +157,14 @@ class AddBusinessView extends HookWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Start by setting up your stays or services.',
+                            context.l10n.addBusinessIntro,
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               color: AppColors.muted,
                             ),
                           ),
                           const SizedBox(height: 30),
-                          const FormFieldLabel('Business Type'),
+                          FormFieldLabel(context.l10n.businessType),
                           const SizedBox(height: 12),
                           BusinessTypeSelector(
                             selectedType: state.businessType,
@@ -171,22 +175,22 @@ class AddBusinessView extends HookWidget {
                           const SizedBox(height: 10),
                           Text(
                             state.businessType == BusinessType.stays
-                                ? 'Hotels, apartments, cabins'
-                                : 'Salons, clinics, professionals',
+                                ? context.l10n.stayBusinessExamples
+                                : context.l10n.serviceBusinessExamples,
                             style: const TextStyle(
                               color: AppColors.muted,
                               fontSize: 13,
                             ),
                           ),
                           const SizedBox(height: 28),
-                          const FormFieldLabel('Business name*'),
+                          FormFieldLabel(context.l10n.businessNameRequired),
                           const SizedBox(height: 10),
                           CustomTextField(
                             hintText: context.l10n.enterBusinessName,
                             controller: nameController,
                           ),
                           const SizedBox(height: 26),
-                          const FormFieldLabel('Business category*'),
+                          FormFieldLabel(context.l10n.businessCategoryRequired),
                           const SizedBox(height: 10),
                           DropdownButtonFormField<String>(
                             key: ValueKey(state.businessType),
@@ -220,7 +224,7 @@ class AddBusinessView extends HookWidget {
                           ),
                           const SizedBox(height: 26),
                           if (state.businessType == BusinessType.stays) ...[
-                            const FormFieldLabel('Stay inventory*'),
+                            FormFieldLabel(context.l10n.stayInventoryRequired),
                             const SizedBox(height: 10),
                             StayInventoryTypeSelector(
                               selectedType: state.stayInventoryType,
@@ -231,14 +235,16 @@ class AddBusinessView extends HookWidget {
                             const SizedBox(height: 26),
                             if (state.stayInventoryType ==
                                 StayInventoryType.singleUnit) ...[
-                              const FormFieldLabel('Price per night*'),
+                              FormFieldLabel(context.l10n.pricePerNightRequired),
                               const SizedBox(height: 10),
                               CustomTextField(
                                 hintText: context.l10n.enterPricePerNight,
                                 controller: priceController,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
+                                  FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d*([.,]\d{0,2})?$'),
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 26),
@@ -252,7 +258,7 @@ class AddBusinessView extends HookWidget {
                                   .add(BusinessAmenityToggled(amenity)),
                             ),
                             const SizedBox(height: 26),
-                            const FormFieldLabel('Optional extras'),
+                            FormFieldLabel(context.l10n.optionalExtras),
                             const SizedBox(height: 10),
                             StayExtrasSelector(
                               selectedExtras: state.selectedExtras,
@@ -269,7 +275,7 @@ class AddBusinessView extends HookWidget {
                                   ),
                             ),
                             const SizedBox(height: 26),
-                            const FormFieldLabel('Featured collections'),
+                            FormFieldLabel(context.l10n.featuredCollections),
                             const SizedBox(height: 10),
                             StayCollectionsSelector(
                               selectedCollectionIds:
@@ -281,7 +287,7 @@ class AddBusinessView extends HookWidget {
                             const SizedBox(height: 28),
                             if (state.stayInventoryType ==
                                 StayInventoryType.multipleUnits) ...[
-                              const FormFieldLabel('Bookable units'),
+                              FormFieldLabel(context.l10n.bookableUnits),
                               const SizedBox(height: 10),
                               StayUnitForm(
                                 nameController: roomNameController,
@@ -329,14 +335,14 @@ class AddBusinessView extends HookWidget {
                             ),
                             const SizedBox(height: 28),
                           ],
-                          const FormFieldLabel('City*'),
+                          FormFieldLabel(context.l10n.cityRequired),
                           const SizedBox(height: 10),
                           CustomTextField(
                             hintText: context.l10n.enterCity,
                             controller: cityController,
                           ),
                           const SizedBox(height: 26),
-                          const FormFieldLabel('Address*'),
+                          FormFieldLabel(context.l10n.addressRequired),
                           const SizedBox(height: 10),
                           CustomTextField(
                             hintText: context.l10n.enterBusinessAddress,
@@ -355,12 +361,12 @@ class AddBusinessView extends HookWidget {
                                 ),
                           ),
                           const SizedBox(height: 26),
-                          const FormFieldLabel('Short description'),
+                          FormFieldLabel(context.l10n.shortDescription),
                           const SizedBox(height: 10),
                           CustomTextField(
                             hintText: state.businessType == BusinessType.stays
-                                ? 'Describe your business...'
-                                : 'Describe your business services...',
+                                ? context.l10n.describeYourBusiness
+                                : context.l10n.describeYourBusinessServices,
                             controller: descriptionController,
                             maxLines: 4,
                           ),
@@ -426,7 +432,7 @@ class AddBusinessView extends HookWidget {
                                                   BusinessType.stays &&
                                               state.stayInventoryType ==
                                                   StayInventoryType.singleUnit
-                                          ? int.tryParse(priceController.text)
+                                          ? parsePrice(priceController.text)
                                           : null,
                                       amenities: state.selectedAmenities,
                                       rooms:
@@ -443,9 +449,10 @@ class AddBusinessView extends HookWidget {
                                                 sizeSquareMeters: int.parse(
                                                   roomSizeController.text,
                                                 ),
-                                                pricePerNight: int.parse(
-                                                  roomPriceController.text,
-                                                ),
+                                                pricePerNight:
+                                                    parsePrice(
+                                                      roomPriceController.text,
+                                                    ),
                                                 quantity: int.parse(
                                                   roomQuantityController.text,
                                                 ),

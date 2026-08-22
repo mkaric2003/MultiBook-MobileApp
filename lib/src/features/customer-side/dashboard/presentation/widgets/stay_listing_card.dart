@@ -57,7 +57,7 @@ class StayListingCard extends StatelessWidget {
                 else
                   const SizedBox(height: 6),
                 Text(
-                  '\$${stay.pricePerNight}${context.l10n.perNight}',
+                  '${context.l10n.formatCurrency(stay.pricePerNight ?? 0)}${context.l10n.perNight}',
                   style: const TextStyle(
                     color: AppColors.primary,
                     fontSize: 15,

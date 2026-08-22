@@ -4,6 +4,7 @@ import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/user_type.dart';
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
@@ -124,6 +125,7 @@ class UserRepository {
     DateTime? dateOfBirth,
     String? address,
     String? city,
+    CurrencyCode? businessCurrency,
   }) async {
     final currentUser = _authenticationDataSource.currentUser;
     if (currentUser == null) {
@@ -173,6 +175,7 @@ class UserRepository {
         'countryCode': countryCode,
         'dateOfBirth': dateOfBirth,
         'address': address?.trim().isEmpty ?? true ? null : address!.trim(),
+        'businessCurrency': (businessCurrency ?? user.businessCurrency).name,
         'updatedAt': _firestoreDataSource.serverTimestamp,
       };
       if (city != null) {
@@ -197,6 +200,7 @@ class UserRepository {
         city: city == null
             ? user.city
             : (normalizedCity?.isEmpty ?? true ? null : normalizedCity),
+        businessCurrency: businessCurrency ?? user.businessCurrency,
       );
     } on FirebaseException catch (error, stackTrace) {
       log(

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/models/user_model.dart';
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,14 @@ class AccountSettingsForm extends HookWidget {
     final lastNameController = useTextEditingController();
     final emailController = useTextEditingController();
     final phoneController = useTextEditingController();
+    final currency = useState(user?.businessCurrency ?? CurrencyCode.bam);
 
     useEffect(() {
       firstNameController.text = user?.firstName ?? '';
       lastNameController.text = user?.lastName ?? '';
       emailController.text = user?.email ?? '';
       phoneController.text = user?.phoneNumber ?? '';
+      currency.value = user?.businessCurrency ?? CurrencyCode.bam;
       return null;
     }, [user?.id]);
 
@@ -30,6 +33,7 @@ class AccountSettingsForm extends HookWidget {
         firstName: firstNameController.text,
         lastName: lastNameController.text,
         phoneNumber: phoneController.text,
+        businessCurrency: currency.value,
       ),
     );
 
@@ -42,6 +46,26 @@ class AccountSettingsForm extends HookWidget {
           controller: firstNameController,
           hintText: context.l10n.firstName,
           onChanged: (_) => notifyChanges(),
+        ),
+        const SizedBox(height: 27),
+        Text(context.l10n.currency, style: _labelStyle),
+        const SizedBox(height: 10),
+        DropdownButtonFormField<CurrencyCode>(
+          initialValue: currency.value,
+          dropdownColor: const Color(0xFF1D1B2A),
+          items: CurrencyCode.values
+              .map(
+                (value) => DropdownMenuItem(
+                  value: value,
+                  child: Text('${value.code} (${value.symbol})'),
+                ),
+              )
+              .toList(),
+          onChanged: (value) {
+            if (value == null) return;
+            currency.value = value;
+            notifyChanges();
+          },
         ),
         const SizedBox(height: 27),
         Text(context.l10n.lastNameRequired, style: _labelStyle),
@@ -84,9 +108,11 @@ class AccountSettingsFormData {
     required this.firstName,
     required this.lastName,
     required this.phoneNumber,
+    required this.businessCurrency,
   });
 
   final String firstName;
   final String lastName;
   final String phoneNumber;
+  final CurrencyCode businessCurrency;
 }

@@ -179,7 +179,7 @@ class AppointmentPaymentView extends HookWidget {
                           buttonName: state.isProcessing
                               ? context.l10n.processingPayment
                               : context.l10n.confirmAndPay(
-                                  '\$${arguments.total.toStringAsFixed(2)}',
+                                  context.l10n.formatCurrency(arguments.total),
                                 ),
                           enabled: canPay && !state.isProcessing,
                           onPressed: () => paymentCubit.confirm(

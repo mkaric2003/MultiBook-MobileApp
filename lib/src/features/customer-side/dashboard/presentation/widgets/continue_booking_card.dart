@@ -59,7 +59,7 @@ class ContinueBookingCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '\$${draft.pricePerNight}${context.l10n.perNight}',
+                      '${context.l10n.formatCurrency(draft.pricePerNight)}${context.l10n.perNight}',
                       style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w800,

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -52,7 +53,7 @@ class BusinessLocationMap extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           selectedLocation == null
-              ? 'Tap map to place pin'
+              ? context.l10n.tapMapToPlacePin
               : 'Pin location selected',
           style: const TextStyle(
             color: AppColors.muted,

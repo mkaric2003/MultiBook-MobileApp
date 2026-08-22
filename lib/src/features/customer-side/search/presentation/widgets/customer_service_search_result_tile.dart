@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -59,7 +60,7 @@ class CustomerServiceSearchResultTile extends StatelessWidget {
                   if (service.price != null) ...[
                     const SizedBox(height: 6),
                     Text(
-                      'From \$${service.price}${service.durationMinutes == null ? '' : ' · ${service.durationMinutes} min'}',
+                      '${context.l10n.fromPrice(context.l10n.formatCurrency(service.price ?? 0))}${service.durationMinutes == null ? '' : ' · ${context.l10n.serviceDuration(service.durationMinutes!)}'}',
                       style: const TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,

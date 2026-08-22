@@ -30,10 +30,13 @@ class ServiceOfferingsSection extends HookWidget {
     useListenable(durationController);
     useListenable(priceController);
 
+    int parsePrice(String value) =>
+        ((double.tryParse(value.replaceAll(',', '.')) ?? 0) * 100).round();
+
     final canAdd =
         nameController.text.trim().isNotEmpty &&
         (int.tryParse(durationController.text) ?? 0) > 0 &&
-        (int.tryParse(priceController.text) ?? 0) >= 0;
+        parsePrice(priceController.text) >= 0;
 
     void addOffering() {
       if (!canAdd) return;
@@ -42,7 +45,7 @@ class ServiceOfferingsSection extends HookWidget {
           id: 'service-${DateTime.now().microsecondsSinceEpoch}',
           name: nameController.text.trim(),
           durationMinutes: int.parse(durationController.text),
-          price: int.parse(priceController.text),
+          price: parsePrice(priceController.text),
           description: descriptionController.text.trim().isEmpty
               ? null
               : descriptionController.text.trim(),
@@ -57,14 +60,14 @@ class ServiceOfferingsSection extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FormFieldLabel('Services offered*'),
+        FormFieldLabel(context.l10n.servicesOfferedRequired),
         const SizedBox(height: 8),
         Text(
           context.l10n.addEveryBookableService,
           style: TextStyle(color: AppColors.muted, fontSize: 13),
         ),
         const SizedBox(height: 14),
-        const FormFieldLabel('Service type*'),
+        FormFieldLabel(context.l10n.serviceTypeRequired),
         const SizedBox(height: 8),
         CustomTextField(
           hintText: context.l10n.serviceNameExample,
@@ -77,7 +80,7 @@ class ServiceOfferingsSection extends HookWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const FormFieldLabel('Duration (min)*'),
+                  FormFieldLabel(context.l10n.durationRequired),
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: context.l10n.durationExample,
@@ -93,13 +96,17 @@ class ServiceOfferingsSection extends HookWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const FormFieldLabel('Price*'),
+                  FormFieldLabel(context.l10n.priceRequired),
                   const SizedBox(height: 8),
                   CustomTextField(
                     hintText: context.l10n.priceExample,
                     controller: priceController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d*([.,]\d{0,2})?$'),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -107,7 +114,7 @@ class ServiceOfferingsSection extends HookWidget {
           ],
         ),
         const SizedBox(height: 14),
-        const FormFieldLabel('Description (optional)'),
+        FormFieldLabel(context.l10n.descriptionOptional),
         const SizedBox(height: 8),
         CustomTextField(
           hintText: context.l10n.describeService,
@@ -153,7 +160,7 @@ class ServiceOfferingsSection extends HookWidget {
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            '${entry.$2.durationMinutes} min · \$${entry.$2.price}',
+                            '${context.l10n.serviceDuration(entry.$2.durationMinutes)} · ${context.l10n.formatCurrency(entry.$2.price)}',
                             style: const TextStyle(
                               color: AppColors.muted,
                               fontSize: 13,

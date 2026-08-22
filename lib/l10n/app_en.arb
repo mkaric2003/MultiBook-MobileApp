@@ -2,6 +2,17 @@
   "@@locale": "en",
   "appName": "MultiBook",
   "language": "Language",
+  "currency": "Currency",
+  "addBusiness": "Add business",
+  "addYourFirstBusiness": "Add your first business",
+  "optionalExtras": "Optional extras",
+  "addressRequired": "Address*",
+  "shortDescription": "Short description",
+  "describeYourBusiness": "Describe your business...",
+  "describeYourBusinessServices": "Describe your business services...",
+  "businessImages": "Business Images",
+  "businessPhotos": "Business Photos",
+  "tapMapToPlacePin": "Tap map to place pin",
   "languageAndLocalization": "Language & localization",
   "languageAndCurrency": "Language & currency",
   "selectLanguage": "Select language",
@@ -425,6 +436,35 @@
   ,"selectDate": "Select date"
   ,"availableTimes": "Available times"
   ,"noAppointmentSlotsAvailable": "No appointment slots are available for this date."
+  ,"addBusinessIntro": "Start by setting up your stays or services."
+  ,"businessType": "Business type"
+  ,"stayBusinessExamples": "Hotels, apartments, cabins"
+  ,"serviceBusinessExamples": "Salons, clinics, professionals"
+  ,"businessNameRequired": "Business name*"
+  ,"businessCategoryRequired": "Business category*"
+  ,"stayInventoryRequired": "Stay inventory*"
+  ,"pricePerNightRequired": "Price per night*"
+  ,"featuredCollections": "Featured collections"
+  ,"bookableUnits": "Bookable units"
+  ,"cityRequired": "City*"
+  ,"chargedPerHour": "Charged per hour"
+  ,"chargedPerNight": "Charged per night"
+  ,"oneTimeCharge": "One-time charge"
+  ,"tapToPlacePin": "Tap to place pin on map"
+  ,"servicesOfferedRequired": "Services offered*"
+  ,"serviceTypeRequired": "Service type*"
+  ,"durationRequired": "Duration (min)*"
+  ,"priceRequired": "Price*"
+  ,"descriptionOptional": "Description (optional)"
+  ,"serviceProvidersRequired": "Service providers*"
+  ,"serviceProviderRequired": "Service provider*"
+  ,"firstUnitTypeRequired": "First unit type*"
+  ,"firstRoomTypeRequired": "First room type*"
+  ,"availabilityRequired": "Availability*"
+  ,"from": "From"
+  ,"to": "To"
+  ,"uploadCoverPhoto": "Upload cover photo"
+  ,"uploadLogo": "Upload logo"
   ,"updateProfileImage": "Update profile image"
   ,"myBusinesses": "My Businesses"
   ,"selectBusinessToManage": "Select a business to manage or add a new one."
@@ -491,4 +531,21 @@
   ,"confirmReschedule": "Confirm reschedule"
   ,"agreeToTermsAndPrivacy": "I agree to the Terms of Service and Privacy Policy"
   ,"acceptTermsToContinue": "Accept the terms to continue."
+  ,"businessPhotosCount": "Business photos ({count}/{max})"
+  ,"@businessPhotosCount": {"placeholders": {"count": {"type": "int"}, "max": {"type": "int"}}}
+  ,"addPhotos": "Add photos"
+  ,"coverPhotoFormatHint": "JPG, PNG up to 10MB"
+  ,"logoFormatHint": "JPG, PNG up to 5MB"
+  ,"extraBreakfast": "Breakfast"
+  ,"extraParking": "Parking"
+  ,"extraSpaAccess": "Spa access"
+  ,"extraAirportTransfer": "Airport transfer"
+  ,"extraLateCheckout": "Late checkout"
+  ,"extraPetStay": "Pet stay"
+  ,"extraBed": "Extra bed"
+  ,"extraLaundryService": "Laundry service"
+  ,"extraQuadBikeRental": "Quad bike rental"
+  ,"extraGuidedTour": "Local guided tour"
+  ,"extraHikingGuide": "Private hiking guide"
+  ,"extraBoatTour": "Private boat tour"
 }

@@ -12,7 +12,7 @@ class ServiceProviderField extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const FormFieldLabel('Service provider*'),
+      FormFieldLabel(context.l10n.serviceProviderRequired),
       const SizedBox(height: 10),
       CustomTextField(
         controller: controller,

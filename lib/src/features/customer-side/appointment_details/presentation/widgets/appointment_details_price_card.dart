@@ -31,24 +31,24 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
           const SizedBox(height: 20),
           AppointmentDetailsRow(
             label: 'Services',
-            value: '\$${appointment.serviceCost}',
+            value: context.l10n.formatCurrency(appointment.serviceCost),
           ),
           if (appointment.addOnsCost > 0) ...[
             const SizedBox(height: 12),
             AppointmentDetailsRow(
               label: 'Add-ons',
-              value: '\$${appointment.addOnsCost}',
+              value: context.l10n.formatCurrency(appointment.addOnsCost),
             ),
           ],
           const SizedBox(height: 12),
           AppointmentDetailsRow(
             label: 'Service fee',
-            value: '\$${appointment.serviceFee.toStringAsFixed(2)}',
+            value: context.l10n.formatCurrency(appointment.serviceFee),
           ),
           const SizedBox(height: 12),
           AppointmentDetailsRow(
             label: 'Taxes',
-            value: '\$${appointment.taxes.toStringAsFixed(2)}',
+            value: context.l10n.formatCurrency(appointment.taxes),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 14),
@@ -56,7 +56,7 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
           ),
           AppointmentDetailsRow(
             label: 'Total paid',
-            value: '\$${appointment.total.toStringAsFixed(2)}',
+            value: context.l10n.formatCurrency(appointment.total),
           ),
           const SizedBox(height: 12),
           AppointmentDetailsRow(

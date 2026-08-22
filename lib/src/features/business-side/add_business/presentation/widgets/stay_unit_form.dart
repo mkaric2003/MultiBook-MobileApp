@@ -24,7 +24,7 @@ class StayUnitForm extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const FormFieldLabel('First unit type*'),
+      FormFieldLabel(context.l10n.firstUnitTypeRequired),
       const SizedBox(height: 10),
       CustomTextField(
         hintText: context.l10n.unitNameExample,
@@ -47,7 +47,11 @@ class StayUnitForm extends StatelessWidget {
               hintText: context.l10n.sizeSquareMeters,
               controller: sizeController,
               keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d*([.,]\d{0,2})?$'),
+                ),
+              ],
             ),
           ),
         ],

@@ -17,7 +17,7 @@ class PaymentPriceBreakdown extends StatelessWidget {
     final booking = arguments.review.bookingState;
     final room = booking.nightCount * pricePerNight;
     final extras = _extraTotal(arguments.selectedExtras, booking.nightCount);
-    final cleaning = 25;
+    final cleaning = 2500;
     final service = ((room + extras) * .05).round();
     final taxes = ((room + extras + cleaning + service) * .08).round();
     final total = room + extras + cleaning + service + taxes;
@@ -35,19 +35,22 @@ class PaymentPriceBreakdown extends StatelessWidget {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 22),
-          _row('Room (${booking.nightCount} nights)', '\$$room'),
+          _row(
+            'Room (${booking.nightCount} nights)',
+            context.l10n.formatCurrency(room),
+          ),
           if (extras > 0) ...[
             const SizedBox(height: 12),
-            _row('Extras', '\$$extras'),
+            _row('Extras', context.l10n.formatCurrency(extras)),
           ],
           const SizedBox(height: 12),
-          _row('Cleaning fee', '\$$cleaning'),
+          _row('Cleaning fee', context.l10n.formatCurrency(cleaning)),
           const SizedBox(height: 12),
-          _row('Service fee', '\$$service'),
+          _row('Service fee', context.l10n.formatCurrency(service)),
           const SizedBox(height: 12),
-          _row('Taxes', '\$$taxes'),
+          _row('Taxes', context.l10n.formatCurrency(taxes)),
           const Divider(height: 28, color: AppColors.border),
-          _row('Total', '\$$total', bold: true),
+          _row('Total', context.l10n.formatCurrency(total), bold: true),
         ],
       ),
     );
@@ -57,7 +60,7 @@ class PaymentPriceBreakdown extends StatelessWidget {
     final b = arguments.review.bookingState;
     final room = b.nightCount * pricePerNight;
     final extras = _extraTotal(arguments.selectedExtras, b.nightCount);
-    final cleaning = 25;
+    final cleaning = 2500;
     final service = ((room + extras) * .05).round();
     return room +
         extras +

@@ -15,6 +15,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
+  String get currency => 'Currency';
+
+  @override
+  String get addBusiness => 'Add business';
+
+  @override
+  String get addYourFirstBusiness => 'Add your first business';
+
+  @override
+  String get optionalExtras => 'Optional extras';
+
+  @override
+  String get addressRequired => 'Address*';
+
+  @override
+  String get shortDescription => 'Short description';
+
+  @override
+  String get describeYourBusiness => 'Describe your business...';
+
+  @override
+  String get describeYourBusinessServices =>
+      'Describe your business services...';
+
+  @override
+  String get businessImages => 'Business Images';
+
+  @override
+  String get businessPhotos => 'Business Photos';
+
+  @override
+  String get tapMapToPlacePin => 'Tap map to place pin';
+
+  @override
   String get languageAndLocalization => 'Language & localization';
 
   @override
@@ -1293,6 +1327,90 @@ class AppLocalizationsEn extends AppLocalizations {
       'No appointment slots are available for this date.';
 
   @override
+  String get addBusinessIntro => 'Start by setting up your stays or services.';
+
+  @override
+  String get businessType => 'Business type';
+
+  @override
+  String get stayBusinessExamples => 'Hotels, apartments, cabins';
+
+  @override
+  String get serviceBusinessExamples => 'Salons, clinics, professionals';
+
+  @override
+  String get businessNameRequired => 'Business name*';
+
+  @override
+  String get businessCategoryRequired => 'Business category*';
+
+  @override
+  String get stayInventoryRequired => 'Stay inventory*';
+
+  @override
+  String get pricePerNightRequired => 'Price per night*';
+
+  @override
+  String get bookableUnits => 'Bookable units';
+
+  @override
+  String get cityRequired => 'City*';
+
+  @override
+  String get chargedPerHour => 'Charged per hour';
+
+  @override
+  String get chargedPerNight => 'Charged per night';
+
+  @override
+  String get oneTimeCharge => 'One-time charge';
+
+  @override
+  String get tapToPlacePin => 'Tap to place pin on map';
+
+  @override
+  String get servicesOfferedRequired => 'Services offered*';
+
+  @override
+  String get serviceTypeRequired => 'Service type*';
+
+  @override
+  String get durationRequired => 'Duration (min)*';
+
+  @override
+  String get priceRequired => 'Price*';
+
+  @override
+  String get descriptionOptional => 'Description (optional)';
+
+  @override
+  String get serviceProvidersRequired => 'Service providers*';
+
+  @override
+  String get serviceProviderRequired => 'Service provider*';
+
+  @override
+  String get firstUnitTypeRequired => 'First unit type*';
+
+  @override
+  String get firstRoomTypeRequired => 'First room type*';
+
+  @override
+  String get availabilityRequired => 'Availability*';
+
+  @override
+  String get from => 'From';
+
+  @override
+  String get to => 'To';
+
+  @override
+  String get uploadCoverPhoto => 'Upload cover photo';
+
+  @override
+  String get uploadLogo => 'Upload logo';
+
+  @override
   String get updateProfileImage => 'Update profile image';
 
   @override
@@ -1498,4 +1616,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get acceptTermsToContinue => 'Accept the terms to continue.';
+
+  @override
+  String businessPhotosCount(int count, int max) {
+    return 'Business photos ($count/$max)';
+  }
+
+  @override
+  String get addPhotos => 'Add photos';
+
+  @override
+  String get coverPhotoFormatHint => 'JPG, PNG up to 10MB';
+
+  @override
+  String get logoFormatHint => 'JPG, PNG up to 5MB';
+
+  @override
+  String get extraBreakfast => 'Breakfast';
+
+  @override
+  String get extraParking => 'Parking';
+
+  @override
+  String get extraSpaAccess => 'Spa access';
+
+  @override
+  String get extraAirportTransfer => 'Airport transfer';
+
+  @override
+  String get extraLateCheckout => 'Late checkout';
+
+  @override
+  String get extraPetStay => 'Pet stay';
+
+  @override
+  String get extraBed => 'Extra bed';
+
+  @override
+  String get extraLaundryService => 'Laundry service';
+
+  @override
+  String get extraQuadBikeRental => 'Quad bike rental';
+
+  @override
+  String get extraGuidedTour => 'Local guided tour';
+
+  @override
+  String get extraHikingGuide => 'Private hiking guide';
+
+  @override
+  String get extraBoatTour => 'Private boat tour';
 }

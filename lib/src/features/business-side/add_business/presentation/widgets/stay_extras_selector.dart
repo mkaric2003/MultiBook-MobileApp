@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extra_price_field.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class StayExtrasSelector extends StatelessWidget {
         children: [
           for (final extra in StayExtraType.values)
             FilterChip(
-              label: Text(extra.label),
+              label: Text(context.l10n.stayExtra(extra)),
               selected: selectedExtras.contains(extra),
               onSelected: (_) => onChanged(extra),
               selectedColor: AppColors.primary,

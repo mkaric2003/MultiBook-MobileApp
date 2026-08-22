@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart';
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,6 +51,7 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
     DateTime? dateOfBirth,
     String? address,
     String? city,
+    CurrencyCode? businessCurrency,
   }) async {
     if (state.isSaving) {
       return;
@@ -74,6 +76,7 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
         dateOfBirth: dateOfBirth,
         address: address,
         city: city,
+        businessCurrency: businessCurrency,
       );
       emit(
         AccountSettingsState(

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/picked_image_preview.dart';
 import 'package:flutter/material.dart';
 
@@ -51,21 +52,21 @@ class BusinessLogoUpload extends StatelessWidget {
         const SizedBox(width: 16),
         InkWell(
           onTap: onTap,
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Upload logo',
-                style: TextStyle(
+                context.l10n.uploadLogo,
+                style: const TextStyle(
                   color: AppColors.primary,
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
-                'JPG, PNG up to 5MB',
-                style: TextStyle(color: AppColors.muted, fontSize: 13),
+                context.l10n.logoFormatHint,
+                style: const TextStyle(color: AppColors.muted, fontSize: 13),
               ),
             ],
           ),

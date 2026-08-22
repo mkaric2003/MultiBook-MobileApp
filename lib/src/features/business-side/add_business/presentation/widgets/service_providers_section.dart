@@ -35,7 +35,7 @@ class ServiceProvidersSection extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const FormFieldLabel('Service providers*'),
+        FormFieldLabel(context.l10n.serviceProvidersRequired),
         const SizedBox(height: 8),
         Text(
           context.l10n.serviceProvidersDescription,

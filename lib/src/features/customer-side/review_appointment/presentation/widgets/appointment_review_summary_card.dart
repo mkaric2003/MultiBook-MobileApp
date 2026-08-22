@@ -113,12 +113,12 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
           ),
           AppointmentSummaryRow(
             label: context.l10n.pricePerSession,
-            value: '\$$basePrice',
+            value: context.l10n.formatCurrency(basePrice),
           ),
           const SizedBox(height: 12),
           AppointmentSummaryRow(
             label: context.l10n.total,
-            value: '\$$basePrice',
+            value: context.l10n.formatCurrency(basePrice),
             emphasized: true,
           ),
         ],

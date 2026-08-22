@@ -42,16 +42,26 @@ class ReviewPriceBreakdown extends StatelessWidget {
           const SizedBox(height: 20),
           ReviewPriceRow(
             label: 'Room (${state.nightCount} nights)',
-            value: '\$$room',
+            value: context.l10n.formatCurrency(room),
           ),
           if (extrasTotal > 0) ...[
             const SizedBox(height: 12),
-            ReviewPriceRow(label: 'Extras', value: '\$$extrasTotal'),
+            ReviewPriceRow(
+              label: 'Extras',
+              value: context.l10n.formatCurrency(extrasTotal),
+            ),
           ],
           const SizedBox(height: 12),
-          ReviewPriceRow(label: 'Taxes & fees', value: '\$$taxes'),
+          ReviewPriceRow(
+            label: 'Taxes & fees',
+            value: context.l10n.formatCurrency(taxes),
+          ),
           const Divider(height: 28, color: AppColors.border),
-          ReviewPriceRow(label: 'Total', value: '\$$total', bold: true),
+          ReviewPriceRow(
+            label: 'Total',
+            value: context.l10n.formatCurrency(total),
+            bold: true,
+          ),
         ],
       ),
     );

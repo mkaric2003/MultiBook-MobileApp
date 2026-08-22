@@ -6,6 +6,7 @@ import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/data/enums/service_collection.dart';
 import 'package:aquabook/src/data/enums/service_weekday.dart';
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
@@ -1283,11 +1284,12 @@ class BusinessRepository {
             'id': businessId,
             'ownerId': ownerId,
             'type': BusinessType.stays.name,
+            'currency': CurrencyCode.bam.name,
             'name': name,
             'categoryId': categoryId,
             'nameLowercase': _normalizeSearchValue(name),
             'cityLowercase': _normalizeSearchValue(city),
-            'stayPricePerNight': pricePerNight,
+            'stayPricePerNight': pricePerNight * 100,
             'maxGuestCapacity': rooms.isEmpty
                 ? 99
                 : rooms
@@ -1311,7 +1313,7 @@ class BusinessRepository {
             'averageRating': rating,
             'reviewCount': reviewCount,
             'stayDetails': {
-              'pricePerNight': pricePerNight,
+              'pricePerNight': pricePerNight * 100,
               'inventoryType': inventoryType.name,
               'amenities': amenities,
               'rooms': rooms,
@@ -1389,6 +1391,7 @@ class BusinessRepository {
             'nameLowercase': _normalizeSearchValue(name),
             'cityLowercase': _normalizeSearchValue(city),
             'categoryId': categoryId,
+            'currency': CurrencyCode.bam.name,
             'location': {
               'address': service['address'],
               'city': city,
@@ -1411,14 +1414,14 @@ class BusinessRepository {
                   'id': 'primary-service',
                   'name': service['serviceName'],
                   'durationMinutes': duration,
-                  'price': price,
+                  'price': price * 100,
                   'description': 'Book ${service['serviceName']} at $name.',
                 },
                 {
                   'id': 'extended-service',
                   'name': service['secondaryServiceName'],
                   'durationMinutes': secondaryDuration,
-                  'price': secondaryPrice,
+                  'price': secondaryPrice * 100,
                   'description':
                       'Book ${service['secondaryServiceName']} at $name.',
                 },
@@ -1812,6 +1815,9 @@ class BusinessRepository {
     final businessId = _firestoreDataSource.createDocumentId(
       collection: _businessesCollection,
     );
+    final currency =
+        (await _userRepository.getCurrentUser())?.businessCurrency ??
+        CurrencyCode.bam;
     final uploadedStoragePaths = <String>[];
 
     try {
@@ -1853,6 +1859,7 @@ class BusinessRepository {
           latitude: latitude,
           longitude: longitude,
         ),
+        currency: currency,
         shortDescription: shortDescription.trim().isEmpty
             ? null
             : shortDescription.trim(),
@@ -1890,6 +1897,7 @@ class BusinessRepository {
           'id': business.id,
           'ownerId': business.ownerId,
           'type': business.type.name,
+          'currency': business.currency.name,
           'name': business.name,
           'nameLowercase': _normalizeSearchValue(business.name),
           'cityLowercase': _normalizeSearchValue(business.location.city),
@@ -2365,10 +2373,10 @@ class BusinessRepository {
   int _demoExtraPrice(StayExtraType extra, int index) {
     final variation = (index % 4) * 5;
     return switch (extra) {
-      StayExtraType.quadBikeRental => 45 + variation,
-      StayExtraType.guidedTour => 30 + variation,
-      StayExtraType.hikingGuide => 35 + variation,
-      StayExtraType.boatTour => 80 + (variation * 2),
+      StayExtraType.quadBikeRental => (45 + variation) * 100,
+      StayExtraType.guidedTour => (30 + variation) * 100,
+      StayExtraType.hikingGuide => (35 + variation) * 100,
+      StayExtraType.boatTour => (80 + (variation * 2)) * 100,
       _ => extra.defaultPrice,
     };
   }
@@ -2396,7 +2404,7 @@ class BusinessRepository {
         'name': primaryName,
         'maxGuests': 2,
         'sizeSquareMeters': 30,
-        'pricePerNight': price,
+        'pricePerNight': price * 100,
         'quantity': categoryId == 'hostel' ? 8 : 12,
       },
       {
@@ -2404,7 +2412,7 @@ class BusinessRepository {
         'name': secondaryName,
         'maxGuests': 4,
         'sizeSquareMeters': 55,
-        'pricePerNight': price + 65,
+        'pricePerNight': (price + 65) * 100,
         'quantity': categoryId == 'hostel' ? 4 : 6,
       },
     ];

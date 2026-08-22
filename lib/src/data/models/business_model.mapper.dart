@@ -49,6 +49,13 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     'location',
     _$location,
   );
+  static CurrencyCode _$currency(BusinessModel v) => v.currency;
+  static const Field<BusinessModel, CurrencyCode> _f$currency = Field(
+    'currency',
+    _$currency,
+    opt: true,
+    def: CurrencyCode.bam,
+  );
   static String? _$shortDescription(BusinessModel v) => v.shortDescription;
   static const Field<BusinessModel, String> _f$shortDescription = Field(
     'shortDescription',
@@ -135,6 +142,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     #name: _f$name,
     #categoryId: _f$categoryId,
     #location: _f$location,
+    #currency: _f$currency,
     #shortDescription: _f$shortDescription,
     #logoUrl: _f$logoUrl,
     #coverPhotoUrl: _f$coverPhotoUrl,
@@ -157,6 +165,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       name: data.dec(_f$name),
       categoryId: data.dec(_f$categoryId),
       location: data.dec(_f$location),
+      currency: data.dec(_f$currency),
       shortDescription: data.dec(_f$shortDescription),
       logoUrl: data.dec(_f$logoUrl),
       coverPhotoUrl: data.dec(_f$coverPhotoUrl),
@@ -254,6 +263,7 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
     String? name,
     String? categoryId,
     BusinessLocationModel? location,
+    CurrencyCode? currency,
     String? shortDescription,
     String? logoUrl,
     String? coverPhotoUrl,
@@ -315,6 +325,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     String? name,
     String? categoryId,
     BusinessLocationModel? location,
+    CurrencyCode? currency,
     Object? shortDescription = $none,
     Object? logoUrl = $none,
     Object? coverPhotoUrl = $none,
@@ -335,6 +346,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
       if (name != null) #name: name,
       if (categoryId != null) #categoryId: categoryId,
       if (location != null) #location: location,
+      if (currency != null) #currency: currency,
       if (shortDescription != $none) #shortDescription: shortDescription,
       if (logoUrl != $none) #logoUrl: logoUrl,
       if (coverPhotoUrl != $none) #coverPhotoUrl: coverPhotoUrl,
@@ -358,6 +370,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     name: data.get(#name, or: $value.name),
     categoryId: data.get(#categoryId, or: $value.categoryId),
     location: data.get(#location, or: $value.location),
+    currency: data.get(#currency, or: $value.currency),
     shortDescription: data.get(#shortDescription, or: $value.shortDescription),
     logoUrl: data.get(#logoUrl, or: $value.logoUrl),
     coverPhotoUrl: data.get(#coverPhotoUrl, or: $value.coverPhotoUrl),

@@ -1,3 +1,4 @@
+import 'package:aquabook/src/data/enums/currency_code.dart';
 import 'package:aquabook/src/data/enums/user_type.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
@@ -19,6 +20,7 @@ class UserModel with UserModelMappable {
     this.dateOfBirth,
     this.address,
     this.city,
+    this.businessCurrency = CurrencyCode.bam,
   });
 
   final String id;
@@ -34,4 +36,5 @@ class UserModel with UserModelMappable {
   final DateTime? dateOfBirth;
   final String? address;
   final String? city;
+  final CurrencyCode businessCurrency;
 }

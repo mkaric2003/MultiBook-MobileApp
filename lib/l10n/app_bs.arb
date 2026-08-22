@@ -2,6 +2,17 @@
   "@@locale": "bs",
   "appName": "MultiBook",
   "language": "Jezik",
+  "currency": "Valuta",
+  "addBusiness": "Dodaj business",
+  "addYourFirstBusiness": "Dodajte svoj prvi business",
+  "optionalExtras": "Dodatne opcije",
+  "addressRequired": "Adresa*",
+  "shortDescription": "Kratak opis",
+  "describeYourBusiness": "Opišite svoj business...",
+  "describeYourBusinessServices": "Opišite usluge svog businessa...",
+  "businessImages": "Slike businessa",
+  "businessPhotos": "Fotografije businessa",
+  "tapMapToPlacePin": "Dodirnite mapu da postavite oznaku",
   "languageAndLocalization": "Jezik i lokalizacija",
   "languageAndCurrency": "Jezik i valuta",
   "selectLanguage": "Odaberi jezik",
@@ -425,6 +436,35 @@
   ,"selectDate": "Odaberite datum"
   ,"availableTimes": "Dostupni termini"
   ,"noAppointmentSlotsAvailable": "Nema dostupnih termina za odabrani datum."
+  ,"addBusinessIntro": "Počnite podešavanjem smještaja ili usluga."
+  ,"businessType": "Tip businessa"
+  ,"stayBusinessExamples": "Hoteli, apartmani, kolibe"
+  ,"serviceBusinessExamples": "Saloni, klinike, profesionalci"
+  ,"businessNameRequired": "Naziv businessa*"
+  ,"businessCategoryRequired": "Kategorija businessa*"
+  ,"stayInventoryRequired": "Inventar smještaja*"
+  ,"pricePerNightRequired": "Cijena po noći*"
+  ,"featuredCollections": "Istaknute kolekcije"
+  ,"bookableUnits": "Jedinice za rezervaciju"
+  ,"cityRequired": "Grad*"
+  ,"chargedPerHour": "Naplaćuje se po satu"
+  ,"chargedPerNight": "Naplaćuje se po noći"
+  ,"oneTimeCharge": "Jednokratna naplata"
+  ,"tapToPlacePin": "Dodirnite za postavljanje oznake na mapi"
+  ,"servicesOfferedRequired": "Ponuđene usluge*"
+  ,"serviceTypeRequired": "Tip usluge*"
+  ,"durationRequired": "Trajanje (min)*"
+  ,"priceRequired": "Cijena*"
+  ,"descriptionOptional": "Opis (opcionalno)"
+  ,"serviceProvidersRequired": "Pružaoci usluga*"
+  ,"serviceProviderRequired": "Pružalac usluge*"
+  ,"firstUnitTypeRequired": "Prvi tip jedinice*"
+  ,"firstRoomTypeRequired": "Prvi tip sobe*"
+  ,"availabilityRequired": "Dostupnost*"
+  ,"from": "Od"
+  ,"to": "Do"
+  ,"uploadCoverPhoto": "Dodaj naslovnu fotografiju"
+  ,"uploadLogo": "Dodaj logo"
   ,"updateProfileImage": "Ažuriraj profilnu sliku"
   ,"myBusinesses": "Moji businessi"
   ,"selectBusinessToManage": "Odaberite business kojim želite upravljati ili dodajte novi."
@@ -491,4 +531,21 @@
   ,"confirmReschedule": "Potvrdi promjenu termina"
   ,"agreeToTermsAndPrivacy": "Slažem se s Uslovima korištenja i Pravilima privatnosti"
   ,"acceptTermsToContinue": "Prihvatite uslove za nastavak."
+  ,"businessPhotosCount": "Fotografije businessa ({count}/{max})"
+  ,"@businessPhotosCount": {"placeholders": {"count": {"type": "int"}, "max": {"type": "int"}}}
+  ,"addPhotos": "Dodaj fotografije"
+  ,"coverPhotoFormatHint": "JPG, PNG do 10 MB"
+  ,"logoFormatHint": "JPG, PNG do 5 MB"
+  ,"extraBreakfast": "Doručak"
+  ,"extraParking": "Parking"
+  ,"extraSpaAccess": "Pristup spa centru"
+  ,"extraAirportTransfer": "Transfer s aerodroma"
+  ,"extraLateCheckout": "Kasna odjava"
+  ,"extraPetStay": "Boravak kućnog ljubimca"
+  ,"extraBed": "Dodatni krevet"
+  ,"extraLaundryService": "Usluga pranja veša"
+  ,"extraQuadBikeRental": "Iznajmljivanje quad bicikla"
+  ,"extraGuidedTour": "Lokalna vođena tura"
+  ,"extraHikingGuide": "Privatni vodič za planinarenje"
+  ,"extraBoatTour": "Privatna tura brodom"
 }

@@ -180,7 +180,7 @@ class ManageBookingSheet extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        '\$${booking.total}.00',
+                        context.l10n.formatCurrency(booking.total),
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBookingPriceRow extends StatelessWidget {
@@ -25,7 +26,7 @@ class CustomerBookingPriceRow extends StatelessWidget {
         ),
       ),
       Text(
-        '\$$value.00',
+        context.l10n.formatCurrency(value),
         style: TextStyle(
           color: highlighted ? AppColors.primary : Colors.white,
           fontSize: 17,

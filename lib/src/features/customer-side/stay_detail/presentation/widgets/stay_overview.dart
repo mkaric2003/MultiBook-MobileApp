@@ -44,7 +44,7 @@ class StayOverview extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '\$$price',
+                    text: context.l10n.formatCurrency(price),
                     style: const TextStyle(
                       fontSize: 27,
                       fontWeight: FontWeight.w800,

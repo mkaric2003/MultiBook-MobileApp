@@ -37,7 +37,7 @@ class AppointmentPriceSummary extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: AppointmentSummaryRow(
                 label: offering.name,
-                value: '\$${offering.price}',
+                value: context.l10n.formatCurrency(offering.price),
               ),
             ),
           ),
@@ -45,7 +45,7 @@ class AppointmentPriceSummary extends StatelessWidget {
           const SizedBox(height: 8),
           AppointmentSummaryRow(
             label: context.l10n.total,
-            value: '\$$basePrice',
+            value: context.l10n.formatCurrency(basePrice),
             emphasized: true,
           ),
         ],

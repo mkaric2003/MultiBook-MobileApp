@@ -15,6 +15,40 @@ class AppLocalizationsFr extends AppLocalizations {
   String get language => 'Langue';
 
   @override
+  String get currency => 'Devise';
+
+  @override
+  String get addBusiness => 'Ajouter une entreprise';
+
+  @override
+  String get addYourFirstBusiness => 'Ajoutez votre première entreprise';
+
+  @override
+  String get optionalExtras => 'Suppléments optionnels';
+
+  @override
+  String get addressRequired => 'Adresse*';
+
+  @override
+  String get shortDescription => 'Brève description';
+
+  @override
+  String get describeYourBusiness => 'Décrivez votre entreprise...';
+
+  @override
+  String get describeYourBusinessServices =>
+      'Décrivez vos services aux entreprises...';
+
+  @override
+  String get businessImages => 'Images d\'entreprise';
+
+  @override
+  String get businessPhotos => 'Photos d\'entreprise';
+
+  @override
+  String get tapMapToPlacePin => 'Appuyez sur la carte pour placer l\'épingle';
+
+  @override
   String get languageAndLocalization => 'Langue et localisation';
 
   @override
@@ -1303,6 +1337,91 @@ class AppLocalizationsFr extends AppLocalizations {
       'Aucun créneau de rendez-vous n\'est disponible pour cette date.';
 
   @override
+  String get addBusinessIntro =>
+      'Commencez par paramétrer vos séjours ou services.';
+
+  @override
+  String get businessType => 'Type d\'entreprise';
+
+  @override
+  String get stayBusinessExamples => 'Hôtels, appartements, chalets';
+
+  @override
+  String get serviceBusinessExamples => 'Salons, cliniques, professionnels';
+
+  @override
+  String get businessNameRequired => 'Nom de l\'entreprise*';
+
+  @override
+  String get businessCategoryRequired => 'Catégorie d\'entreprise*';
+
+  @override
+  String get stayInventoryRequired => 'Rester en inventaire*';
+
+  @override
+  String get pricePerNightRequired => 'Prix ​​par nuit*';
+
+  @override
+  String get bookableUnits => 'Unités réservables';
+
+  @override
+  String get cityRequired => 'Ville*';
+
+  @override
+  String get chargedPerHour => 'Facturé à l\'heure';
+
+  @override
+  String get chargedPerNight => 'Facturé par nuit';
+
+  @override
+  String get oneTimeCharge => 'Frais uniques';
+
+  @override
+  String get tapToPlacePin => 'Appuyez pour placer une épingle sur la carte';
+
+  @override
+  String get servicesOfferedRequired => 'Services offerts*';
+
+  @override
+  String get serviceTypeRequired => 'Type de prestation*';
+
+  @override
+  String get durationRequired => 'Durée (min)*';
+
+  @override
+  String get priceRequired => 'Prix*';
+
+  @override
+  String get descriptionOptional => 'Description (facultatif)';
+
+  @override
+  String get serviceProvidersRequired => 'Prestataires de services*';
+
+  @override
+  String get serviceProviderRequired => 'Prestataire de services*';
+
+  @override
+  String get firstUnitTypeRequired => 'Type de première unité*';
+
+  @override
+  String get firstRoomTypeRequired => 'Premier type de chambre*';
+
+  @override
+  String get availabilityRequired => 'Disponibilité*';
+
+  @override
+  String get from => 'Depuis';
+
+  @override
+  String get to => 'À';
+
+  @override
+  String get uploadCoverPhoto => 'Télécharger la photo de couverture';
+
+  @override
+  String get uploadLogo => 'Télécharger le logo';
+
+  @override
   String get updateProfileImage => 'Mettre à jour l\'image de profil';
 
   @override
@@ -1509,4 +1628,54 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get acceptTermsToContinue => 'Acceptez les conditions pour continuer.';
+
+  @override
+  String businessPhotosCount(int count, int max) {
+    return 'Photos professionnelles ($count/$max)';
+  }
+
+  @override
+  String get addPhotos => 'Ajouter des photos';
+
+  @override
+  String get coverPhotoFormatHint => 'JPG, PNG jusqu\'à 10 Mo';
+
+  @override
+  String get logoFormatHint => 'JPG, PNG jusqu\'à 5 Mo';
+
+  @override
+  String get extraBreakfast => 'Petit-déjeuner';
+
+  @override
+  String get extraParking => 'Parking';
+
+  @override
+  String get extraSpaAccess => 'Accès au spa';
+
+  @override
+  String get extraAirportTransfer => 'Transfert aéroport';
+
+  @override
+  String get extraLateCheckout => 'Départ tardif';
+
+  @override
+  String get extraPetStay => 'Séjour animal';
+
+  @override
+  String get extraBed => 'Lit supplémentaire';
+
+  @override
+  String get extraLaundryService => 'Blanchisserie';
+
+  @override
+  String get extraQuadBikeRental => 'Location de quad';
+
+  @override
+  String get extraGuidedTour => 'Visite guidée locale';
+
+  @override
+  String get extraHikingGuide => 'Guide de randonnée privé';
+
+  @override
+  String get extraBoatTour => 'Tour en bateau privé';
 }

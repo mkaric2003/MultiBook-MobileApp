@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class BusinessLocationPlaceholder extends StatelessWidget {
@@ -13,14 +14,14 @@ class BusinessLocationPlaceholder extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
       ),
-      child: const Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.location_on, color: AppColors.primary, size: 30),
-          SizedBox(height: 10),
+          const Icon(Icons.location_on, color: AppColors.primary, size: 30),
+          const SizedBox(height: 10),
           Text(
-            'Tap to place pin on map',
-            style: TextStyle(color: AppColors.muted, fontSize: 15),
+            context.l10n.tapToPlacePin,
+            style: const TextStyle(color: AppColors.muted, fontSize: 15),
           ),
         ],
       ),

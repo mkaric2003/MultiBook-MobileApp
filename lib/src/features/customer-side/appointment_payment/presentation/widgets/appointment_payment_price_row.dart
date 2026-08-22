@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentPaymentPriceRow extends StatelessWidget {
@@ -13,9 +14,6 @@ class AppointmentPaymentPriceRow extends StatelessWidget {
   final num value;
   final bool emphasized;
 
-  String get _formattedValue =>
-      value is int ? value.toString() : (value as double).toStringAsFixed(2);
-
   @override
   Widget build(BuildContext context) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,7 +27,7 @@ class AppointmentPaymentPriceRow extends StatelessWidget {
         ),
       ),
       Text(
-        '\$$_formattedValue',
+        context.l10n.formatCurrency(value),
         style: TextStyle(
           fontSize: emphasized ? 18 : 16,
           fontWeight: FontWeight.w800,

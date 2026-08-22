@@ -1,6 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
 import '../enums/business_type.dart';
+import '../enums/currency_code.dart';
 import 'business_location_model.dart';
 import 'service_details_model.dart';
 import 'stay_details_model.dart';
@@ -18,6 +19,7 @@ class BusinessModel with BusinessModelMappable {
   final String categoryId;
 
   final BusinessLocationModel location;
+  final CurrencyCode currency;
 
   final String? shortDescription;
 
@@ -42,6 +44,7 @@ class BusinessModel with BusinessModelMappable {
     required this.name,
     required this.categoryId,
     required this.location,
+    this.currency = CurrencyCode.bam,
     this.shortDescription,
     this.logoUrl,
     this.coverPhotoUrl,

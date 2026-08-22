@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
@@ -52,7 +53,7 @@ class ReviewExtraTile extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                '+\$${extra.price}${extra.isPerHour
+                '+${context.l10n.formatCurrency(extra.price)}${extra.isPerHour
                     ? '/hour'
                     : extra.isPerNight
                     ? '/day'
