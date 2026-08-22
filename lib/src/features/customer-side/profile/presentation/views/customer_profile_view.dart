@@ -7,7 +7,6 @@ import 'package:aquabook/src/features/customer-side/home/bloc/customer_home_even
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_cubit.dart';
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_state.dart';
 import 'package:aquabook/src/features/customer-side/profile/presentation/widgets/customer_profile_menu_item.dart';
-import 'package:aquabook/src/features/shared/localization/presentation/widgets/language_picker_sheet.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -124,7 +123,7 @@ class CustomerProfileView extends StatelessWidget {
                 CustomerProfileMenuItem(
                   icon: Icons.language,
                   label: context.l10n.languageAndCurrency,
-                  onTap: () => LanguagePickerSheet.show(context),
+                  onTap: () => context.push(AppRoutes.LANGUAGE_CURRENCY),
                 ),
                 const SizedBox(height: 32),
                 Text(

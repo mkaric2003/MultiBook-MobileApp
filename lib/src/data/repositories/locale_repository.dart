@@ -8,7 +8,7 @@ class LocaleRepository {
 
   static const _localeCodeKey = 'selected_locale_code';
   static const defaultLocale = Locale('bs');
-  static const supportedLocaleCodes = {'bs', 'en'};
+  static const supportedLocaleCodes = {'bs', 'en', 'de', 'es', 'fr', 'it'};
 
   final SharedPreferences _sharedPreferences;
 

@@ -42,6 +42,7 @@ dependencies:
   firebase_messaging: ^16.5.0
   cloud_functions: ^6.0.0
   geolocator: ^14.0.2
+  circle_flags: ^5.0.1
 
 dev_dependencies:
   flutter_test:

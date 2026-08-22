@@ -30,6 +30,18 @@ class AppLocalizationsBs extends AppLocalizations {
   String get english => 'Engleski';
 
   @override
+  String get german => 'Njemački';
+
+  @override
+  String get spanish => 'Španski';
+
+  @override
+  String get french => 'Francuski';
+
+  @override
+  String get italian => 'Italijanski';
+
+  @override
   String get cancel => 'Odustani';
 
   @override

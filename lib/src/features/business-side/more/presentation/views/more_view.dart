@@ -6,7 +6,6 @@ import 'package:aquabook/src/features/business-side/more/bloc/more_state.dart';
 import 'package:aquabook/src/features/business-side/more/domain/models/more_menu_item.dart';
 import 'package:aquabook/src/features/business-side/more/presentation/widgets/more_header.dart';
 import 'package:aquabook/src/features/business-side/more/presentation/widgets/more_menu_section.dart';
-import 'package:aquabook/src/features/shared/localization/presentation/widgets/language_picker_sheet.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,9 +104,10 @@ class MoreView extends StatelessWidget {
                           onTap: () => context.push(AppRoutes.ACCOUNT_SETTINGS),
                         ),
                         MoreMenuItem(
-                          label: context.l10n.languageAndLocalization,
+                          label: context.l10n.languageAndCurrency,
                           icon: Icons.language_rounded,
-                          onTap: () => LanguagePickerSheet.show(context),
+                          onTap: () =>
+                              context.push(AppRoutes.LANGUAGE_CURRENCY),
                         ),
                         MoreMenuItem(
                           label: context.l10n.helpAndSupport,
