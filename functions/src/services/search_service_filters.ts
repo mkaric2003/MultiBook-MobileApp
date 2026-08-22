@@ -18,8 +18,10 @@ export function parseServiceSearchFilters(
     categoryId: normalizeIdentifier(data.categoryId),
     collectionId: normalizeIdentifier(data.collectionId),
     city: normalizeText(data.city),
-    minPrice: nonNegative(data.minPrice, 0),
-    maxPrice: nonNegative(data.maxPrice, Number.MAX_SAFE_INTEGER),
+    // UI filters use whole currency units; service offering prices in
+    // Firestore are stored in minor units.
+    minPrice: priceInMinorUnits(data.minPrice, 0),
+    maxPrice: priceInMinorUnits(data.maxPrice, Number.MAX_SAFE_INTEGER),
     sortOption: supportedSortOptions.has(String(data.sortOption))
       ? String(data.sortOption)
       : "recommended",
@@ -114,4 +116,10 @@ function integer(value: unknown, fallback: number) {
 function nonNegative(value: unknown, fallback: number) {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
+function priceInMinorUnits(value: unknown, fallback: number) {
+  if (value == null) return fallback;
+  const price = nonNegative(value, fallback);
+  return Number.isSafeInteger(price * 100) ? Math.round(price * 100) : fallback;
 }

@@ -24,8 +24,10 @@ export function parseStaySearchFilters(
     checkOut,
     adults: positiveInteger(data.adults, 1),
     children: nonNegativeInteger(data.children, 0),
-    minPrice: nonNegativeNumber(data.minPrice, 0),
-    maxPrice: nonNegativeNumber(data.maxPrice, Number.MAX_SAFE_INTEGER),
+    // The mobile UI works with whole currency units, while Firestore stores
+    // prices in minor units (for example, 50 BAM as 5000).
+    minPrice: priceInMinorUnits(data.minPrice, 0),
+    maxPrice: priceInMinorUnits(data.maxPrice, Number.MAX_SAFE_INTEGER),
     minimumRating: nonNegativeNumber(data.minimumRating, 0),
     categoryIds: stringList(data.categoryIds),
     collectionIds: stringList(data.collectionIds),
@@ -136,6 +138,12 @@ function nonNegativeInteger(value: unknown, fallback: number) {
 function nonNegativeNumber(value: unknown, fallback: number) {
   const number = Number(value);
   return Number.isFinite(number) && number >= 0 ? number : fallback;
+}
+
+function priceInMinorUnits(value: unknown, fallback: number) {
+  if (value == null) return fallback;
+  const price = nonNegativeNumber(value, fallback);
+  return Number.isSafeInteger(price * 100) ? Math.round(price * 100) : fallback;
 }
 
 function stringList(value: unknown) {
