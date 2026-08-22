@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_category_filter_options.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/service_filters/service_city_selector.dart';
@@ -76,8 +77,8 @@ class ServiceFiltersSheet extends HookWidget {
         context: context,
         backgroundColor: Colors.transparent,
         builder: (_) => ServiceFilterOptionPickerSheet(
-          title: 'Select category',
-          allOptionLabel: 'All categories',
+          title: context.l10n.category,
+          allOptionLabel: context.l10n.allCategories,
           options: ServiceCategoryFilterOptions.all
               .map((category) => category.label)
               .toList(),
@@ -116,18 +117,21 @@ class ServiceFiltersSheet extends HookWidget {
                     alignment: Alignment.centerLeft,
                     child: TextButton(
                       onPressed: () => filters.value = const ServiceFilters(),
-                      child: const Text(
-                        'Reset',
-                        style: TextStyle(
+                      child: Text(
+                        context.l10n.reset,
+                        style: const TextStyle(
                           color: AppColors.primary,
                           fontSize: 16,
                         ),
                       ),
                     ),
                   ),
-                  const Text(
-                    'Filters',
-                    style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),
+                  Text(
+                    context.l10n.filters,
+                    style: const TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
@@ -148,18 +152,18 @@ class ServiceFiltersSheet extends HookWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ServiceFilterSectionHeader(
+                    ServiceFilterSectionHeader(
                       icon: Icons.calendar_month_rounded,
-                      title: 'Date & time',
+                      title: context.l10n.dateAndTime,
                     ),
                     const SizedBox(height: 16),
                     Row(
                       children: [
                         Expanded(
                           child: ServiceFilterValueField(
-                            label: 'Date',
+                            label: context.l10n.date,
                             value: filters.value.date == null
-                                ? 'Any date'
+                                ? context.l10n.anyDate
                                 : MaterialLocalizations.of(
                                     context,
                                   ).formatMediumDate(filters.value.date!),
@@ -169,9 +173,9 @@ class ServiceFiltersSheet extends HookWidget {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ServiceFilterValueField(
-                            label: 'Time',
+                            label: context.l10n.time,
                             value: filters.value.timeMinutes == null
-                                ? 'Any time'
+                                ? context.l10n.anyTime
                                 : _formatTime(
                                     context,
                                     filters.value.timeMinutes!,
@@ -188,18 +192,18 @@ class ServiceFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const ServiceFilterSectionHeader(
+                    ServiceFilterSectionHeader(
                       icon: Icons.content_cut_rounded,
-                      title: 'Business category',
+                      title: context.l10n.businessCategory,
                     ),
                     const SizedBox(height: 16),
                     ServiceFilterValueField(
-                      label: 'Category',
+                      label: context.l10n.category,
                       value:
                           ServiceCategoryFilterOptions.byId(
                             filters.value.categoryId,
                           )?.label ??
-                          'All categories',
+                          context.l10n.allCategories,
                       onTap: selectCategory,
                     ),
                     const Padding(
@@ -209,9 +213,9 @@ class ServiceFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const ServiceFilterSectionHeader(
+                    ServiceFilterSectionHeader(
                       icon: Icons.location_city_rounded,
-                      title: 'City',
+                      title: context.l10n.city,
                     ),
                     const SizedBox(height: 16),
                     ServiceCitySelector(
@@ -227,9 +231,9 @@ class ServiceFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const ServiceFilterSectionHeader(
+                    ServiceFilterSectionHeader(
                       icon: Icons.attach_money_rounded,
-                      title: 'Price range',
+                      title: context.l10n.priceRange,
                     ),
                     const SizedBox(height: 8),
                     ServiceFilterPriceRange(
@@ -250,9 +254,9 @@ class ServiceFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const ServiceFilterSectionHeader(
+                    ServiceFilterSectionHeader(
                       icon: Icons.sort_rounded,
-                      title: 'Sort by',
+                      title: context.l10n.sortBy,
                     ),
                     const SizedBox(height: 8),
                     ServiceSortSelector(
@@ -277,17 +281,19 @@ class ServiceFiltersSheet extends HookWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${filters.value.appliedFiltersCount} filters applied',
+                        context.l10n.filtersApplied(
+                          filters.value.appliedFiltersCount,
+                        ),
                         style: const TextStyle(color: AppColors.muted),
                       ),
                       TextButton(
                         onPressed: () => filters.value = const ServiceFilters(),
-                        child: const Text('Clear all'),
+                        child: Text(context.l10n.clearAll),
                       ),
                     ],
                   ),
                   CustomButton(
-                    buttonName: 'Show results',
+                    buttonName: context.l10n.showResults,
                     onPressed: () => Navigator.of(context).pop(filters.value),
                   ),
                 ],

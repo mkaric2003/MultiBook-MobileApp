@@ -10,6 +10,7 @@ import 'package:aquabook/src/features/customer-side/review_appointment/presentat
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -62,18 +63,18 @@ class ReviewAppointmentView extends HookWidget {
                 final shouldSave = await showDialog<bool>(
                   context: context,
                   builder: (dialogContext) => AlertDialog(
-                    title: const Text('Save appointment draft?'),
+                    title: Text(context.l10n.saveAppointmentDraft),
                     content: const Text(
                       'You can continue this appointment later from Home.',
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext, false),
-                        child: const Text('Discard'),
+                        child: Text(context.l10n.discard),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext, true),
-                        child: const Text('Save draft'),
+                        child: Text(context.l10n.saveDraft),
                       ),
                     ],
                   ),

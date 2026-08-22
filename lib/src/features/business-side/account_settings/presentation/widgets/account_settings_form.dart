@@ -1,5 +1,6 @@
 import 'package:aquabook/src/data/models/user_model.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -35,35 +36,35 @@ class AccountSettingsForm extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('First Name*', style: _labelStyle),
+        Text(context.l10n.firstNameRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: firstNameController,
-          hintText: 'First name',
+          hintText: context.l10n.firstName,
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 27),
-        const Text('Last Name*', style: _labelStyle),
+        Text(context.l10n.lastNameRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: lastNameController,
-          hintText: 'Last name',
+          hintText: context.l10n.lastName,
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 27),
-        const Text('Email Address*', style: _labelStyle),
+        Text(context.l10n.emailAddressRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: emailController,
-          hintText: 'Email address',
+          hintText: context.l10n.emailAddress,
           keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 27),
-        const Text('Phone Number', style: _labelStyle),
+        Text(context.l10n.phoneNumber, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: phoneController,
-          hintText: '+1 (555) 123-4567',
+          hintText: context.l10n.phoneNumberExample,
           keyboardType: TextInputType.phone,
           onChanged: (_) => notifyChanges(),
         ),

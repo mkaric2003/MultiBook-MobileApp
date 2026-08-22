@@ -1,5 +1,6 @@
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -86,7 +87,7 @@ class SavedBusinessCard extends StatelessWidget {
                   FilledButton(
                     onPressed: () =>
                         context.push(AppRoutes.STAY_DETAIL, extra: stay),
-                    child: const Text('View details'),
+                    child: Text(context.l10n.viewDetails),
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
@@ -10,16 +11,16 @@ class UserLocationPermissionDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Row(
+      title: Row(
         children: [
           Icon(Icons.location_on_rounded, color: AppColors.primary),
           SizedBox(width: 10),
-          Text('Use your location'),
+          Text(context.l10n.useYourLocation),
         ],
       ),
-      content: const Text(
-        'Allow MultiBook to use your current location so we can save your city and show relevant stays and services nearby.',
-        style: TextStyle(color: AppColors.muted, height: 1.4),
+      content: Text(
+        context.l10n.locationPermissionDescription,
+        style: const TextStyle(color: AppColors.muted, height: 1.4),
       ),
       actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
       actions: [
@@ -27,7 +28,7 @@ class UserLocationPermissionDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             CustomButton(
-              buttonName: 'Use current location',
+              buttonName: context.l10n.useCurrentLocation,
               height: 46,
               fontSize: 15,
               onPressed: () => Navigator.of(context).pop(true),
@@ -35,7 +36,7 @@ class UserLocationPermissionDialog extends StatelessWidget {
             Center(
               child: TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Not now'),
+                child: Text(context.l10n.notNow),
               ),
             ),
           ],

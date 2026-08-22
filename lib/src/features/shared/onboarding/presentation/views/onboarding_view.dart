@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/features/shared/onboarding/cubit/onboarding_cubit.dart';
 import 'package:aquabook/src/features/shared/onboarding/cubit/onboarding_state.dart';
@@ -14,33 +15,29 @@ import 'package:go_router/go_router.dart';
 class OnboardingView extends HookWidget {
   const OnboardingView({super.key});
 
-  static const _pages = [
-    OnboardingPageModel(
-      assetPath: 'assets/images/first-intro.png',
-      title: 'Manage your stays &\nservices in one place',
-      description:
-          'Easily control your hotels, apartments, and service businesses from one app.',
-      isSvg: false,
-    ),
-    OnboardingPageModel(
-      assetPath: 'assets/images/second-intro.png',
-      title: 'Track bookings &\nearnings easily',
-      description:
-          'Stay on top of your reservations and monitor your income in real time.',
-      isSvg: false,
-    ),
-    OnboardingPageModel(
-      assetPath: 'assets/images/third-intro-image.svg',
-      title: 'Connect with your\ncustomers directly',
-      description:
-          'Receive instant notifications, manage bookings, and chat with your clients in one place.',
-      isSvg: true,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final pageController = usePageController();
+    final pages = [
+      OnboardingPageModel(
+        assetPath: 'assets/images/first-intro.png',
+        title: context.l10n.onboardingFirstTitle,
+        description: context.l10n.onboardingFirstDescription,
+        isSvg: false,
+      ),
+      OnboardingPageModel(
+        assetPath: 'assets/images/second-intro.png',
+        title: context.l10n.onboardingSecondTitle,
+        description: context.l10n.onboardingSecondDescription,
+        isSvg: false,
+      ),
+      OnboardingPageModel(
+        assetPath: 'assets/images/third-intro-image.svg',
+        title: context.l10n.onboardingThirdTitle,
+        description: context.l10n.onboardingThirdDescription,
+        isSvg: true,
+      ),
+    ];
 
     return BlocProvider(
       create: (_) => getIt<OnboardingCubit>(),
@@ -49,7 +46,7 @@ class OnboardingView extends HookWidget {
             !previous.isCompleted && current.isCompleted,
         listener: (context, state) => context.go(AppRoutes.SIGNIN),
         builder: (context, state) {
-          final isLastPage = state.currentPage == _pages.length - 1;
+          final isLastPage = state.currentPage == pages.length - 1;
 
           return Scaffold(
             body: SafeArea(
@@ -58,10 +55,10 @@ class OnboardingView extends HookWidget {
                   Expanded(
                     child: PageView.builder(
                       controller: pageController,
-                      itemCount: _pages.length,
+                      itemCount: pages.length,
                       onPageChanged: context.read<OnboardingCubit>().changePage,
                       itemBuilder: (_, index) =>
-                          OnboardingPageContent(page: _pages[index]),
+                          OnboardingPageContent(page: pages[index]),
                     ),
                   ),
                   Padding(
@@ -70,7 +67,7 @@ class OnboardingView extends HookWidget {
                       children: [
                         if (isLastPage)
                           CustomButton(
-                            buttonName: 'Get started',
+                            buttonName: context.l10n.getStarted,
                             onPressed: () =>
                                 context.read<OnboardingCubit>().complete(),
                           ),
@@ -82,14 +79,14 @@ class OnboardingView extends HookWidget {
                                 alignment: Alignment.centerLeft,
                                 child: OnboardingPageIndicator(
                                   currentPage: state.currentPage,
-                                  pageCount: _pages.length,
+                                  pageCount: pages.length,
                                 ),
                               ),
                             ),
                             TextButton(
                               onPressed: () =>
                                   context.read<OnboardingCubit>().complete(),
-                              child: const Text('Skip'),
+                              child: Text(context.l10n.skip),
                             ),
                           ],
                         ),

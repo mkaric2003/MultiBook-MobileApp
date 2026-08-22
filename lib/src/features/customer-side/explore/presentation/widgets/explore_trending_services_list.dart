@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/service_listing_card.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +44,12 @@ class ExploreTrendingServicesList extends HookWidget {
       );
     }
     if (services.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 72,
         child: Center(
           child: Text(
-            'No services available in this city yet.',
-            style: TextStyle(color: AppColors.muted),
+            context.l10n.noServicesAvailableInCity,
+            style: const TextStyle(color: AppColors.muted),
           ),
         ),
       );

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class AppointmentDetailsActions extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     children: [
       CustomButton(
-        buttonName: 'Cancel appointment',
+        buttonName: context.l10n.cancelAppointment,
         color: Colors.redAccent,
         enabled: !isCancelling,
         onPressed: () => onCancel(),
@@ -30,13 +31,13 @@ class AppointmentDetailsActions extends StatelessWidget {
       if (canReschedule) ...[
         const SizedBox(height: 12),
         CustomButton(
-          buttonName: 'Reschedule appointment',
+          buttonName: context.l10n.rescheduleAppointment,
           onPressed: () => onReschedule(),
         ),
       ],
       const SizedBox(height: 12),
       CustomButton(
-        buttonName: 'Message provider',
+        buttonName: context.l10n.messageProvider,
         color: AppColors.surfaceHighlight,
         onPressed: onMessageProvider,
       ),

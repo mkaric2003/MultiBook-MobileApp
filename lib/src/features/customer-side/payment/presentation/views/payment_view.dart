@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/features/customer-side/booking_confirmed/domain/models/booking_confirmed_arguments.dart';
@@ -72,7 +73,7 @@ class PaymentView extends HookWidget {
           body: SafeArea(
             child: Column(
               children: [
-                const CustomAppBar(title: 'Payment'),
+                CustomAppBar(title: context.l10n.payment),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(22, 24, 22, 28),

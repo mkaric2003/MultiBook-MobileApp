@@ -3,6 +3,7 @@ import 'package:aquabook/src/data/models/service_offering_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -66,7 +67,7 @@ class ServiceOfferingsSection extends HookWidget {
         const FormFieldLabel('Service type*'),
         const SizedBox(height: 8),
         CustomTextField(
-          hintText: 'e.g. Haircut, teeth whitening, electrical inspection',
+          hintText: context.l10n.serviceNameExample,
           controller: nameController,
         ),
         const SizedBox(height: 14),
@@ -79,7 +80,7 @@ class ServiceOfferingsSection extends HookWidget {
                   const FormFieldLabel('Duration (min)*'),
                   const SizedBox(height: 8),
                   CustomTextField(
-                    hintText: '60',
+                    hintText: context.l10n.durationExample,
                     controller: durationController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -95,7 +96,7 @@ class ServiceOfferingsSection extends HookWidget {
                   const FormFieldLabel('Price*'),
                   const SizedBox(height: 8),
                   CustomTextField(
-                    hintText: '50',
+                    hintText: context.l10n.priceExample,
                     controller: priceController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -109,7 +110,7 @@ class ServiceOfferingsSection extends HookWidget {
         const FormFieldLabel('Description (optional)'),
         const SizedBox(height: 8),
         CustomTextField(
-          hintText: 'Briefly describe this service',
+          hintText: context.l10n.describeService,
           controller: descriptionController,
           maxLines: 2,
         ),

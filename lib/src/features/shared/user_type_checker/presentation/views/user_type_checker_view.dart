@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/user_type.dart';
@@ -39,17 +40,17 @@ class UserTypeCheckerView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'How will you use MultiBook?',
-                      style: TextStyle(
+                    Text(
+                      context.l10n.userTypeTitle,
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 12),
-                    const Text(
-                      'Choose the experience that fits you best. You can change this later.',
-                      style: TextStyle(
+                    Text(
+                      context.l10n.userTypeDescription,
+                      style: const TextStyle(
                         color: AppColors.muted,
                         fontSize: 16,
                         height: 1.5,
@@ -57,9 +58,8 @@ class UserTypeCheckerView extends StatelessWidget {
                     ),
                     const SizedBox(height: 42),
                     UserTypeOptionCard(
-                      title: 'I own a business',
-                      description:
-                          'Manage stays or services, bookings and earnings.',
+                      title: context.l10n.ownBusiness,
+                      description: context.l10n.ownBusinessDescription,
                       icon: Icons.storefront,
                       isSelected: state.selectedType == UserType.provider,
                       onTap: () => context
@@ -68,9 +68,8 @@ class UserTypeCheckerView extends StatelessWidget {
                     ),
                     const SizedBox(height: 18),
                     UserTypeOptionCard(
-                      title: 'I am a customer',
-                      description:
-                          'Book stays and schedule services in one place.',
+                      title: context.l10n.customer,
+                      description: context.l10n.customerDescription,
                       icon: Icons.calendar_month,
                       isSelected: state.selectedType == UserType.customer,
                       onTap: () => context
@@ -79,7 +78,7 @@ class UserTypeCheckerView extends StatelessWidget {
                     ),
                     const Spacer(),
                     CustomButton(
-                      buttonName: 'Continue',
+                      buttonName: context.l10n.continueLabel,
                       enabled: state.selectedType != null && !state.isLoading,
                       onPressed: () => context
                           .read<UserTypeCheckerCubit>()

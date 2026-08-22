@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBookingsHeader extends StatelessWidget {
@@ -12,12 +13,12 @@ class CustomerBookingsHeader extends StatelessWidget {
     decoration: const BoxDecoration(
       border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
     ),
-    child: const Row(
+    child: Row(
       children: [
         Expanded(
           child: Text(
-            'My bookings',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+            context.l10n.myBookings,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
           ),
         ),
       ],

@@ -11,6 +11,7 @@ import 'package:aquabook/src/features/customer-side/customer_booking_details/pre
 import 'package:aquabook/src/features/customer-side/customer_booking_details/presentation/widgets/customer_booking_price_card.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +29,7 @@ class CustomerBookingDetailsView extends StatelessWidget {
             body: SafeArea(
               child: Column(
                 children: [
-                  const CustomAppBar(title: 'Booking Details'),
+                  CustomAppBar(title: context.l10n.bookingDetails),
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(22),

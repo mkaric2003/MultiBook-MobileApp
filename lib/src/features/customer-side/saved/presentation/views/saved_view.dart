@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/saved/cubit/saved_cubit.dart';
 import 'package:aquabook/src/features/customer-side/saved/cubit/saved_state.dart';
 import 'package:aquabook/src/features/customer-side/saved/presentation/widgets/saved_business_card.dart';
@@ -61,7 +62,7 @@ class SavedView extends StatelessWidget {
                                       ),
                                       type: ToastificationType.warning,
                                       alignment: Alignment.bottomCenter,
-                                      title: const Text('Removed from saved'),
+                                      title: Text(context.l10n.removedFromSaved),
                                     );
                                   },
                                   background: const ColoredBox(
@@ -78,7 +79,7 @@ class SavedView extends StatelessWidget {
                                         ),
                                         type: ToastificationType.warning,
                                         alignment: Alignment.bottomCenter,
-                                        title: const Text('Removed from saved'),
+                                        title: Text(context.l10n.removedFromSaved),
                                       );
                                     },
                                   ),

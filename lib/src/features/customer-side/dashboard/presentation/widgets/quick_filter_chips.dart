@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/quick_filter_chip.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,7 @@ class QuickFilterChips extends HookWidget {
             final isToday = index == 0;
             final isSelected = isToday ? isTodaySelected : isWeekendSelected;
             return QuickFilterChip(
-              label: isToday ? 'Today' : 'Weekend',
+              label: isToday ? context.l10n.today : context.l10n.weekend,
               isSelected: isSelected,
               onTap: () => toggleDates(
                 isSelected: isSelected,

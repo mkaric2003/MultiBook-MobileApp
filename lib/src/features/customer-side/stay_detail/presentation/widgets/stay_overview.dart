@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class StayOverview extends StatelessWidget {
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                  '${stay.location.isEmpty ? 'City centre' : stay.location} · 0.5 km',
+                  '${stay.location.isEmpty ? context.l10n.cityCentre : stay.location} · 0.5 km',
                   style: const TextStyle(color: AppColors.muted, fontSize: 16),
                 ),
               ),
@@ -34,7 +35,7 @@ class StayOverview extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           Text(
-            '⭐ ${stay.rating.toStringAsFixed(1)} · ${stay.reviewCount} reviews',
+            '⭐ ${stay.rating.toStringAsFixed(1)} · ${context.l10n.reviews(stay.reviewCount)}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
           ),
           if (price != null) ...[
@@ -50,9 +51,12 @@ class StayOverview extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  const TextSpan(
-                    text: ' / night',
-                    style: TextStyle(color: AppColors.muted, fontSize: 16),
+                  TextSpan(
+                    text: ' ${context.l10n.perNight}',
+                    style: const TextStyle(
+                      color: AppColors.muted,
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),

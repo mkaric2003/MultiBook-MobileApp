@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:aquabook/l10n/app_localizations.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_theme.dart';
 import 'package:aquabook/src/data/repositories/authentication_repository.dart';
@@ -54,8 +56,12 @@ import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversatio
 import 'package:aquabook/src/features/shared/chat/presentation/views/chat_conversation_view.dart';
 import 'package:aquabook/src/features/shared/chat/presentation/views/chat_list_view.dart';
 import 'package:aquabook/src/features/shared/notifications/presentation/views/notifications_view.dart';
+import 'package:aquabook/src/features/shared/localization/cubit/locale_cubit.dart';
+import 'package:aquabook/src/features/shared/localization/cubit/locale_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 part 'src/router/app_pages.dart';
@@ -102,11 +108,24 @@ class App extends HookWidget {
       );
       return null;
     }, const []);
-    return MaterialApp.router(
-      routerConfig: router,
-      title: 'AquaBook',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
+    return BlocProvider.value(
+      value: getIt<LocaleCubit>(),
+      child: BlocBuilder<LocaleCubit, LocaleState>(
+        builder: (context, state) => MaterialApp.router(
+          routerConfig: router,
+          onGenerateTitle: (context) => context.l10n.appName,
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.dark,
+          locale: state.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+        ),
+      ),
     );
   }
 }

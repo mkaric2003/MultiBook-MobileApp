@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/global_widgets/searchable_city_picker_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,7 @@ class ExploreAppBar extends StatelessWidget {
                 child: Text(
                   selectedCity?.isNotEmpty == true
                       ? selectedCity!
-                      : 'All cities',
+                      : context.l10n.allCities,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -75,9 +76,9 @@ class ExploreAppBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        const Text(
-          'Explore',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+        Text(
+          context.l10n.explore,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
         ),
         const Spacer(),
         if (trailing != null) trailing!,

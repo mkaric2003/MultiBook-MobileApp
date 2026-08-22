@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
@@ -23,22 +24,31 @@ class StayBookingPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Row(
+          Row(
             children: [
               Expanded(
-                child: StayBookingField(label: 'Check-in', value: 'Mar 15'),
+                child: StayBookingField(
+                  label: context.l10n.checkIn,
+                  value: 'Mar 15',
+                ),
               ),
               SizedBox(width: 12),
               Expanded(
-                child: StayBookingField(label: 'Check-out', value: 'Mar 17'),
+                child: StayBookingField(
+                  label: context.l10n.checkOut,
+                  value: 'Mar 17',
+                ),
               ),
             ],
           ),
           const SizedBox(height: 14),
-          const StayBookingField(label: 'Guests', value: '2 adults · 1 child'),
+          StayBookingField(
+            label: context.l10n.guestSelection,
+            value: '2 adults · 1 child',
+          ),
           const SizedBox(height: 18),
           CustomButton(
-            buttonName: 'Check availability',
+            buttonName: context.l10n.checkAvailability,
             onPressed: () async => context.push(
               AppRoutes.BOOKING_DETAILS,
               extra: BookingDetailsArguments(stay: stay),

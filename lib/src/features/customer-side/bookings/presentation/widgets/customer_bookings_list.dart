@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
 import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
 import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_section.dart';
@@ -23,7 +24,7 @@ class CustomerBookingsList extends StatelessWidget {
     if (state.bookings.isEmpty) {
       return Center(
         child: Text(
-          state.errorMessage ?? 'No bookings yet.',
+          state.errorMessage ?? context.l10n.noBookingsYet,
           style: const TextStyle(color: AppColors.muted, fontSize: 16),
         ),
       );
@@ -33,14 +34,14 @@ class CustomerBookingsList extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
       children: [
         CustomerBookingsSection(
-          title: 'Upcoming',
+          title: context.l10n.upcoming,
           bookings: state.upcomingBookings,
           onBookingUpdated: context.read<CustomerBookingsCubit>().updateBooking,
         ),
         if (state.upcomingBookings.isNotEmpty && state.pastBookings.isNotEmpty)
           const SizedBox(height: 18),
         CustomerBookingsSection(
-          title: 'Past',
+          title: context.l10n.past,
           bookings: state.pastBookings,
           onBookingUpdated: context.read<CustomerBookingsCubit>().updateBooking,
         ),

@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/domain/models/create_appointment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart';
@@ -46,8 +47,8 @@ class CustomerDashboardView extends StatelessWidget {
                       const SizedBox(height: 28),
                       DestinationSearchField(
                         hintText: state.selectedTab == CustomerHomeTab.stays
-                            ? 'Where to?'
-                            : 'Find a service',
+                            ? context.l10n.whereTo
+                            : context.l10n.findAService,
                         onTap: () => context.push(
                           AppRoutes.CUSTOMER_SEARCH,
                           extra: state.selectedTab,

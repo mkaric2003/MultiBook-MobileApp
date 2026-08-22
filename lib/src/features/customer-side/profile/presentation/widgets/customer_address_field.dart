@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CustomerAddressField extends StatelessWidget {
@@ -25,10 +26,10 @@ class CustomerAddressField extends StatelessWidget {
           style: const TextStyle(color: Colors.white, fontSize: 16),
           textAlignVertical: TextAlignVertical.center,
           cursorColor: AppColors.primary,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             filled: true,
             fillColor: AppColors.surface,
-            hintText: 'Enter your address',
+            hintText: context.l10n.enterAddress,
             hintStyle: TextStyle(color: AppColors.muted, fontSize: 16),
             contentPadding: EdgeInsets.fromLTRB(46, 16, 14, 16),
           ),

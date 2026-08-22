@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/features/customer-side/service_detail/presentation/widgets/service_location_map.dart';
@@ -20,9 +21,9 @@ class ServiceLocationSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Location',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.location,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 14),
           ServiceLocationMap(
@@ -48,7 +49,7 @@ class ServiceLocationSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           CustomButton(
-            buttonName: 'Open in Maps',
+            buttonName: context.l10n.openInMaps,
             color: Colors.transparent,
             borderColor: AppColors.border,
             onPressed: _openInGoogleMaps,

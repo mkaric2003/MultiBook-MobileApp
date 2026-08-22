@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/bookings/domain/enums/customer_booking_type.dart';
 import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_booking_type_tab.dart';
 import 'package:flutter/material.dart';
@@ -29,14 +30,14 @@ class CustomerBookingsTypeSelector extends StatelessWidget {
         children: [
           Expanded(
             child: CustomerBookingTypeTab(
-              label: 'Stays',
+              label: context.l10n.stays,
               selected: selectedType == CustomerBookingType.stays,
               onTap: () => onChanged(CustomerBookingType.stays),
             ),
           ),
           Expanded(
             child: CustomerBookingTypeTab(
-              label: 'Services',
+              label: context.l10n.services,
               selected: selectedType == CustomerBookingType.services,
               onTap: () => onChanged(CustomerBookingType.services),
             ),

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ExploreViewAllCategoriesButton extends StatelessWidget {
@@ -19,7 +20,11 @@ class ExploreViewAllCategoriesButton extends StatelessWidget {
         isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.grid_view_rounded,
         size: 18,
       ),
-      label: Text(isExpanded ? 'Show fewer categories' : 'View all categories'),
+      label: Text(
+        isExpanded
+            ? context.l10n.showFewerCategories
+            : context.l10n.viewAllCategories,
+      ),
       style: TextButton.styleFrom(
         foregroundColor: AppColors.primary,
         textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),

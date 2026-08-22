@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CustomerAppointmentStatusPill extends StatelessWidget {
@@ -16,6 +17,13 @@ class CustomerAppointmentStatusPill extends StatelessWidget {
       'declined' => const Color(0xFFF59E0B),
       _ => AppColors.primary,
     };
+    final label = switch (normalized) {
+      'confirmed' => context.l10n.confirmed,
+      'completed' => context.l10n.completed,
+      'cancelled' => context.l10n.cancelled,
+      'declined' => context.l10n.declined,
+      _ => normalized,
+    };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
@@ -23,7 +31,7 @@ class CustomerAppointmentStatusPill extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        '${normalized[0].toUpperCase()}${normalized.substring(1)}',
+        label,
         style: TextStyle(
           color: color,
           fontWeight: FontWeight.w800,

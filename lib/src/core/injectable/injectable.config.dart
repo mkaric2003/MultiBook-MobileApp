@@ -47,6 +47,7 @@ import 'package:aquabook/src/data/repositories/booking_repository.dart'
 import 'package:aquabook/src/data/repositories/business_repository.dart'
     as _i1065;
 import 'package:aquabook/src/data/repositories/chat_repository.dart' as _i525;
+import 'package:aquabook/src/data/repositories/locale_repository.dart' as _i545;
 import 'package:aquabook/src/data/repositories/notification_repository.dart'
     as _i113;
 import 'package:aquabook/src/data/repositories/onboarding_repository.dart'
@@ -124,6 +125,8 @@ import 'package:aquabook/src/features/shared/chat/cubit/chat_conversation_cubit.
     as _i1047;
 import 'package:aquabook/src/features/shared/chat/cubit/chat_list_cubit.dart'
     as _i409;
+import 'package:aquabook/src/features/shared/localization/cubit/locale_cubit.dart'
+    as _i1031;
 import 'package:aquabook/src/features/shared/notifications/cubit/notifications_cubit.dart'
     as _i600;
 import 'package:aquabook/src/features/shared/onboarding/cubit/onboarding_cubit.dart'
@@ -179,6 +182,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i366.OnboardingRepository>(
       () => _i366.OnboardingRepository(gh<_i460.SharedPreferences>()),
     );
+    gh.lazySingleton<_i545.LocaleRepository>(
+      () => _i545.LocaleRepository(gh<_i460.SharedPreferences>()),
+    );
     gh.singleton<_i59.FirebaseAuth>(
       () => firebaseModule.firebaseAuth(gh<_i982.FirebaseApp>()),
     );
@@ -196,6 +202,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i680.OnboardingCubit>(
       () => _i680.OnboardingCubit(gh<_i366.OnboardingRepository>()),
+    );
+    gh.lazySingleton<_i1031.LocaleCubit>(
+      () => _i1031.LocaleCubit(gh<_i545.LocaleRepository>()),
     );
     gh.lazySingleton<_i206.ServiceSearchDataSource>(
       () => _i206.ServiceSearchDataSourceImpl(gh<_i809.FirebaseFunctions>()),
@@ -320,6 +329,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i151.FirestoreDataSource>(),
       ),
     );
+    gh.lazySingleton<_i744.RecentlyViewedRepository>(
+      () => _i744.RecentlyViewedRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i390.SavedBusinessRepository>(
       () => _i390.SavedBusinessRepository(
         gh<_i137.AuthenticationDataSource>(),
@@ -334,12 +349,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i1064.ServiceAvailabilityRepository>(
       () => _i1064.ServiceAvailabilityRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
-      ),
-    );
-    gh.lazySingleton<_i744.RecentlyViewedRepository>(
-      () => _i744.RecentlyViewedRepository(
         gh<_i137.AuthenticationDataSource>(),
         gh<_i151.FirestoreDataSource>(),
       ),
@@ -375,14 +384,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i600.NotificationsCubit>(
       () => _i600.NotificationsCubit(gh<_i113.NotificationRepository>()),
     );
-    gh.factory<_i758.DashboardCubit>(
-      () => _i758.DashboardCubit(
+    gh.factory<_i830.ExploreCubit>(
+      () => _i830.ExploreCubit(
         gh<_i747.UserRepository>(),
         gh<_i1065.BusinessRepository>(),
       ),
     );
-    gh.factory<_i830.ExploreCubit>(
-      () => _i830.ExploreCubit(
+    gh.factory<_i758.DashboardCubit>(
+      () => _i758.DashboardCubit(
         gh<_i747.UserRepository>(),
         gh<_i1065.BusinessRepository>(),
       ),

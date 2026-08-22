@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class AgreeTermsTile extends StatelessWidget {
@@ -43,14 +44,14 @@ class AgreeTermsTile extends StatelessWidget {
                 height: 1.35,
               ),
               children: [
-                const TextSpan(text: 'I agree to the '),
+                TextSpan(text: context.l10n.agreeToPrefix),
                 WidgetSpan(
                   baseline: TextBaseline.alphabetic,
                   alignment: PlaceholderAlignment.baseline,
                   child: InkWell(
                     onTap: onTapTerms,
-                    child: const Text(
-                      'Terms of Service',
+                    child: Text(
+                      context.l10n.termsOfService,
                       style: TextStyle(
                         color: linkColor,
                         decoration: TextDecoration.underline,
@@ -58,14 +59,14 @@ class AgreeTermsTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                const TextSpan(text: ' and\n'),
+                TextSpan(text: '${context.l10n.and}\n'),
                 WidgetSpan(
                   baseline: TextBaseline.alphabetic,
                   alignment: PlaceholderAlignment.baseline,
                   child: InkWell(
                     onTap: onTapPrivacy,
-                    child: const Text(
-                      'Privacy Policy',
+                    child: Text(
+                      context.l10n.privacyPolicy,
                       style: TextStyle(
                         color: linkColor,
                         decoration: TextDecoration.underline,

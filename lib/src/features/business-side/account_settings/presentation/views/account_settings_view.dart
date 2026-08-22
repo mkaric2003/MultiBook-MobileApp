@@ -6,6 +6,7 @@ import 'package:aquabook/src/features/business-side/account_settings/presentatio
 import 'package:aquabook/src/features/business-side/account_settings/presentation/widgets/account_settings_security_tile.dart';
 import 'package:aquabook/src/features/business-side/account_settings/presentation/widgets/profile_image_source_picker_sheet.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +34,7 @@ class AccountSettingsView extends HookWidget {
           body: SafeArea(
             child: Column(
               children: [
-                const CustomAppBar(title: 'Account Settings'),
+                CustomAppBar(title: context.l10n.accountSettings),
                 Expanded(
                   child: state.isLoading
                       ? const Center(child: CircularProgressIndicator())

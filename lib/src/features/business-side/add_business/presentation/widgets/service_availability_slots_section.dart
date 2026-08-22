@@ -4,6 +4,7 @@ import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_time_picker_button.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -57,7 +58,7 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
           initialValue: weekday.value,
           dropdownColor: AppColors.surface,
           style: const TextStyle(color: AppColors.white, fontSize: 16),
-          decoration: const InputDecoration(labelText: 'Day'),
+          decoration: InputDecoration(labelText: context.l10n.day),
           items: ServiceWeekday.values
               .map(
                 (day) => DropdownMenuItem(value: day, child: Text(day.label)),

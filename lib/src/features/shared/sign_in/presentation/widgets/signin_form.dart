@@ -1,3 +1,4 @@
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -52,20 +53,20 @@ class SigninForm extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Email address*', style: labelStyle),
+        Text(context.l10n.emailAddressRequired, style: labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
-          hintText: 'Enter your email',
+          hintText: context.l10n.enterYourEmail,
           prefixIcon: Icons.email_outlined,
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 30),
-        const Text('Password*', style: labelStyle),
+        Text(context.l10n.passwordRequired, style: labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
-          hintText: 'Enter your password',
+          hintText: context.l10n.enterYourPassword,
           prefixIcon: Icons.lock_outline,
           controller: passwordController,
           obscureText: !showPassword.value,

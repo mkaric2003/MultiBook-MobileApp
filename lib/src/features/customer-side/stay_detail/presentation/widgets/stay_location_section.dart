@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_location_map.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
@@ -20,9 +21,9 @@ class StayLocationSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Location',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.location,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 16),
           StayLocationMap(
@@ -33,13 +34,13 @@ class StayLocationSection extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             business.location.address.isEmpty
-                ? 'Location available on request'
+                ? context.l10n.locationOnRequest
                 : business.location.address,
             style: const TextStyle(color: AppColors.muted),
           ),
           const SizedBox(height: 14),
           CustomButton(
-            buttonName: 'Open in Maps',
+            buttonName: context.l10n.openInMaps,
             color: Colors.transparent,
             borderColor: AppColors.border,
             onPressed: () => _openInGoogleMaps(context),
@@ -60,9 +61,9 @@ class StayLocationSection extends StatelessWidget {
       mode: LaunchMode.externalApplication,
     );
     if (!opened && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unable to open Google Maps.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(context.l10n.unableToOpenMaps)));
     }
   }
 }

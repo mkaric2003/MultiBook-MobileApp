@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class BookingConfirmationDetails extends StatelessWidget {
@@ -54,7 +55,7 @@ class BookingConfirmationDetails extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 18),
-        const Text('Total paid', style: TextStyle(color: AppColors.muted)),
+        Text(context.l10n.totalPaid, style: const TextStyle(color: AppColors.muted)),
         const SizedBox(height: 5),
         Text(
           '\$$total',

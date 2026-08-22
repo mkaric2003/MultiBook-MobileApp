@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/app_notification_model.dart';
 import 'package:flutter/material.dart';
 
@@ -24,12 +25,12 @@ class NotificationTile extends StatelessWidget {
     final now = DateTime.now();
     final difference = now.difference(notification.createdAt);
     final timeLabel = difference.inMinutes < 1
-        ? 'Now'
+        ? context.l10n.now
         : difference.inHours < 1
-        ? '${difference.inMinutes}m ago'
+        ? context.l10n.minutesAgo(difference.inMinutes)
         : difference.inDays < 1
-        ? '${difference.inHours}h ago'
-        : '${difference.inDays}d ago';
+        ? context.l10n.hoursAgo(difference.inHours)
+        : context.l10n.daysAgo(difference.inDays);
 
     return Material(
       color: notification.isRead

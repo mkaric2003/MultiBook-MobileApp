@@ -5,6 +5,7 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_provider_availability_card.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -43,7 +44,7 @@ class ServiceProvidersSection extends HookWidget {
         const SizedBox(height: 14),
         CustomTextField(
           controller: nameController,
-          hintText: 'Provider name, e.g. Sarah Johnson',
+          hintText: context.l10n.providerNameExample,
         ),
         const SizedBox(height: 12),
         CustomButton(

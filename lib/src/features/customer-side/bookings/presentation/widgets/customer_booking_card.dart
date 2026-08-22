@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_booking_status_pill.dart';
@@ -71,7 +72,11 @@ class CustomerBookingCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '${booking.adults} adult${booking.adults == 1 ? '' : 's'}${booking.children > 0 ? ', ${booking.children} child${booking.children == 1 ? '' : 'ren'}' : ''}',
+                    [
+                      context.l10n.adults(booking.adults),
+                      if (booking.children > 0)
+                        context.l10n.children(booking.children),
+                    ].join(', '),
                     style: const TextStyle(
                       color: AppColors.muted,
                       fontSize: 14,
@@ -113,7 +118,9 @@ class CustomerBookingCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(4),
                 child: Text(
-                  _canBookAgain ? 'Book again' : 'View details',
+                  _canBookAgain
+                      ? context.l10n.bookAgain
+                      : context.l10n.viewDetails,
                   style: const TextStyle(
                     color: AppColors.primary,
                     fontSize: 15,

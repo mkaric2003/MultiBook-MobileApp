@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/domain/models/stay_room.dart';
 import 'package:flutter/material.dart';
 
@@ -48,14 +49,17 @@ class StayRoomCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        '\$${room.pricePerNight} / night',
+                        '\$${room.pricePerNight} ${context.l10n.perNight}',
                         style: const TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
                     ),
-                    FilledButton(onPressed: onBook, child: const Text('Book')),
+                    FilledButton(
+                      onPressed: onBook,
+                      child: Text(context.l10n.book),
+                    ),
                   ],
                 ),
               ],

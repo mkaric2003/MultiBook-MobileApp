@@ -165,6 +165,26 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 
 ---
 
+## 7.1 Lokalizacija
+
+Lokalizacija koristi Flutterov službeni `gen-l10n` mehanizam, bez dodatnog third-party localization sloja:
+
+- ARB katalozi: `lib/l10n/app_bs.arb` i `lib/l10n/app_en.arb`.
+- Generisani, tipizirani API: `AppLocalizations`; UI mu pristupa kroz `context.l10n` ekstenziju.
+- Bosanski (`bs`) je početni i fallback jezik; engleski (`en`) je trenutno podržan alternativni jezik.
+- `LocaleRepository` sprema odabrani kod jezika u SharedPreferences, a globalni `LocaleCubit` odmah mijenja `MaterialApp.locale` bez restarta aplikacije.
+- Izbor jezika je dostupan na customer Profile i provider More ekranima. iOS `Info.plist` eksplicitno navodi `bs` i `en`.
+
+Novi tekst uvijek treba dodati u oba ARB fajla, zatim pokrenuti:
+
+```bash
+flutter gen-l10n
+```
+
+Ne treba hardkodirati korisnički vidljiv tekst u novim widgetima. Za dinamički tekst koristiti ICU plural/select poruke u ARB-u, posebno za goste, noći, slotove, cijene i statuse.
+
+---
+
 ## 8. Business domen
 
 `BusinessModel` je zajednički entitet za oba tržišta:
@@ -551,4 +571,3 @@ Repositoryji i data sourcevi koriste `dart:developer` logove za bitne Firebase i
 - [lib/src/data/data_sources](lib/src/data/data_sources) — adapteri prema backendu/servisima.
 - [lib/src/features](lib/src/features) — feature organizacija.
 - [functions/src](functions/src) — callable endpointi i Firestore triggeri.
-

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ChatComposer extends StatelessWidget {
@@ -31,7 +32,7 @@ class ChatComposer extends StatelessWidget {
             textCapitalization: TextCapitalization.sentences,
             autocorrect: false,
             decoration: InputDecoration(
-              hintText: 'Write a message',
+              hintText: context.l10n.writeMessage,
               filled: true,
               fillColor: AppColors.surface,
               contentPadding: const EdgeInsets.symmetric(

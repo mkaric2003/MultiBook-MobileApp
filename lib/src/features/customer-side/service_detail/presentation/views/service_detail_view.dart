@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
@@ -37,7 +38,7 @@ class ServiceDetailView extends StatelessWidget {
             return Scaffold(
               body: Center(
                 child: Text(
-                  state.errorMessage ?? 'This service is unavailable.',
+                  state.errorMessage ?? context.l10n.serviceUnavailable,
                 ),
               ),
             );
@@ -72,8 +73,8 @@ class ServiceDetailView extends StatelessWidget {
                             alignment: Alignment.bottomCenter,
                             title: Text(
                               wasSaved
-                                  ? 'Removed from saved'
-                                  : 'Added to saved',
+                                  ? context.l10n.removedFromSaved
+                                  : context.l10n.addedToSaved,
                             ),
                           );
                         }

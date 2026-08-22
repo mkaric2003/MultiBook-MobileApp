@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_destination.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,9 @@ class ExploreDestinationsList extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'From \$${destination.startingPrice}/night',
+                context.l10n.fromPrice(
+                  '\$${destination.startingPrice}${context.l10n.perNight}',
+                ),
                 style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
             ],

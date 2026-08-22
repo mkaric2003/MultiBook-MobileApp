@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
 import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
 import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_appointment_card.dart';
@@ -23,7 +24,7 @@ class CustomerAppointmentsList extends StatelessWidget {
     if (state.appointments.isEmpty) {
       return Center(
         child: Text(
-          state.errorMessage ?? 'No service bookings yet.',
+          state.errorMessage ?? context.l10n.noServiceBookingsYet,
           style: const TextStyle(color: AppColors.muted, fontSize: 16),
         ),
       );
@@ -33,9 +34,9 @@ class CustomerAppointmentsList extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
       children: [
         if (state.upcomingAppointments.isNotEmpty) ...[
-          const Text(
-            'Upcoming',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.upcoming,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 18),
           ...state.upcomingAppointments.map(
@@ -52,9 +53,9 @@ class CustomerAppointmentsList extends StatelessWidget {
         ],
         if (state.pastAppointments.isNotEmpty) ...[
           const SizedBox(height: 22),
-          const Text(
-            'Past',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.past,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 18),
           ...state.pastAppointments.map(

@@ -4,6 +4,7 @@ import 'package:aquabook/src/features/customer-side/profile/domain/models/custom
 import 'package:aquabook/src/features/customer-side/profile/presentation/widgets/customer_address_field.dart';
 import 'package:aquabook/src/features/customer-side/profile/presentation/widgets/customer_date_of_birth_picker_sheet.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,13 +79,13 @@ class CustomerEditProfileForm extends HookWidget {
       showCountryPicker(
         context: context,
         showPhoneCode: true,
-        countryListTheme: const CountryListThemeData(
+        countryListTheme: CountryListThemeData(
           backgroundColor: AppColors.background,
           textStyle: TextStyle(color: Colors.white, fontSize: 16),
           searchTextStyle: TextStyle(color: Colors.white, fontSize: 16),
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           inputDecoration: InputDecoration(
-            hintText: 'Search country',
+            hintText: context.l10n.searchCountry,
             hintStyle: TextStyle(color: AppColors.muted),
             prefixIcon: Icon(Icons.search, color: AppColors.muted),
             filled: true,
@@ -101,32 +102,32 @@ class CustomerEditProfileForm extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('First Name*', style: _labelStyle),
+        Text(context.l10n.firstNameRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: firstNameController,
-          hintText: 'First name',
+          hintText: context.l10n.firstName,
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 24),
-        const Text('Last Name*', style: _labelStyle),
+        Text(context.l10n.lastNameRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: lastNameController,
-          hintText: 'Last name',
+          hintText: context.l10n.lastName,
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 24),
-        const Text('Email Address*', style: _labelStyle),
+        Text(context.l10n.emailAddressRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: emailController,
-          hintText: 'Email address',
+          hintText: context.l10n.emailAddress,
           enabled: false,
           prefixIcon: Icons.email_outlined,
         ),
         const SizedBox(height: 24),
-        const Text('Phone Number', style: _labelStyle),
+        Text(context.l10n.phoneNumber, style: _labelStyle),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -164,7 +165,7 @@ class CustomerEditProfileForm extends HookWidget {
               flex: 4,
               child: CustomTextField(
                 controller: phoneController,
-                hintText: '(555) 123-4567',
+                hintText: context.l10n.phoneNumberExample,
                 keyboardType: TextInputType.phone,
                 prefixIcon: Icons.phone_outlined,
                 onChanged: (_) => notifyChanges(),
@@ -173,7 +174,7 @@ class CustomerEditProfileForm extends HookWidget {
           ],
         ),
         const SizedBox(height: 24),
-        const Text('Date of Birth', style: _labelStyle),
+        Text(context.l10n.dateOfBirth, style: _labelStyle),
         const SizedBox(height: 10),
         InkWell(
           onTap: selectDateOfBirth,
@@ -181,22 +182,22 @@ class CustomerEditProfileForm extends HookWidget {
           child: IgnorePointer(
             child: CustomTextField(
               controller: dateOfBirthController,
-              hintText: 'DD. MM. YYYY.',
+              hintText: context.l10n.dateOfBirthExample,
               prefixIcon: Icons.calendar_today_outlined,
             ),
           ),
         ),
         const SizedBox(height: 24),
-        const Text('City (optional)', style: _labelStyle),
+        Text(context.l10n.cityOptional, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
           controller: cityController,
-          hintText: 'Enter your city',
+          hintText: context.l10n.enterCity,
           prefixIcon: Icons.location_city_outlined,
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 24),
-        const Text('Address (optional)', style: _labelStyle),
+        Text(context.l10n.addressOptional, style: _labelStyle),
         const SizedBox(height: 10),
         CustomerAddressField(
           controller: addressController,

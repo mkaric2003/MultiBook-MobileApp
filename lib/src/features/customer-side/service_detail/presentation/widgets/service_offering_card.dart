@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,7 @@ class ServiceOfferingCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      '${offering.durationMinutes} min',
+                      context.l10n.serviceDuration(offering.durationMinutes),
                       style: const TextStyle(color: AppColors.muted),
                     ),
                     const SizedBox(width: 16),
@@ -73,7 +74,7 @@ class ServiceOfferingCard extends StatelessWidget {
           SizedBox(
             width: 76,
             child: CustomButton(
-              buttonName: 'Book',
+              buttonName: context.l10n.book,
               horizontalPadding: 12,
               onPressed: onBook,
             ),

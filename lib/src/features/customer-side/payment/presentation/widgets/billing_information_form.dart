@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class BillingInformationForm extends StatelessWidget {
@@ -26,31 +27,31 @@ class BillingInformationForm extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Full Name'),
+        Text(context.l10n.fullName),
         const SizedBox(height: 8),
-        CustomTextField(hintText: 'Enter your full name', controller: name),
+        CustomTextField(hintText: context.l10n.enterFullName, controller: name),
         const SizedBox(height: 18),
-        const Text('Email'),
+        Text(context.l10n.email),
         const SizedBox(height: 8),
         CustomTextField(
-          hintText: 'your.email@example.com',
+          hintText: context.l10n.emailExample,
           controller: email,
           keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 18),
-        const Text('Phone Number'),
+        Text(context.l10n.phoneNumber),
         const SizedBox(height: 8),
         CustomTextField(
-          hintText: '+1 (555) 123-4567',
+          hintText: context.l10n.phoneNumberExample,
           controller: phone,
           keyboardType: TextInputType.phone,
         ),
         if (showAddress) ...[
           const SizedBox(height: 18),
-          const Text('Billing Address'),
+          Text(context.l10n.billingAddress),
           const SizedBox(height: 8),
           CustomTextField(
-            hintText: 'Enter your billing address',
+            hintText: context.l10n.enterBillingAddress,
             controller: address,
             maxLines: 3,
           ),

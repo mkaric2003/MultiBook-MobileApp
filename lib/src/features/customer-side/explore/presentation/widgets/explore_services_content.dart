@@ -1,4 +1,5 @@
 import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
 import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_category_catalog.dart';
@@ -54,9 +55,9 @@ class ExploreServicesContent extends HookWidget {
         const SizedBox(height: 34),
         const ExploreServicePromotionCarousel(),
         const SizedBox(height: 42),
-        const Text(
-          'Browse by category',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        Text(
+          context.l10n.browseByCategory,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 18),
         ExploreServiceCategoryGrid(
@@ -69,9 +70,9 @@ class ExploreServicesContent extends HookWidget {
           onPressed: () => showAllCategories.value = !showAllCategories.value,
         ),
         const SizedBox(height: 42),
-        const Text(
-          'Trending near you',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        Text(
+          context.l10n.trendingNearYou,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 18),
         ExploreTrendingServicesList(
@@ -82,9 +83,9 @@ class ExploreServicesContent extends HookWidget {
           onLoadMore: onLoadMoreTrendingServices,
         ),
         const SizedBox(height: 38),
-        const Text(
-          'Featured collections',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+        Text(
+          context.l10n.featuredCollections,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 18),
         ExploreServiceCollections(onSelected: onCollectionSelected),

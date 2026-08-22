@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -42,10 +43,10 @@ class SearchableCityPickerSheet extends HookWidget {
                 ),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Select city',
-                        style: TextStyle(
+                        context.l10n.selectCity,
+                        style: const TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.w700,
                         ),
@@ -66,7 +67,7 @@ class SearchableCityPickerSheet extends HookWidget {
                   onChanged: (value) => query.value = value,
                   style: const TextStyle(color: AppColors.white),
                   decoration: InputDecoration(
-                    hintText: 'Search cities',
+                    hintText: context.l10n.searchCities,
                     prefixIcon: const Icon(
                       Icons.search_rounded,
                       color: AppColors.muted,
@@ -95,7 +96,7 @@ class SearchableCityPickerSheet extends HookWidget {
                   children: [
                     ListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: const Text('All cities'),
+                      title: Text(context.l10n.allCities),
                       trailing: selectedCity == null
                           ? const Icon(
                               Icons.check_rounded,
@@ -105,11 +106,11 @@ class SearchableCityPickerSheet extends HookWidget {
                       onTap: () => Navigator.of(context).pop(''),
                     ),
                     if (filteredCities.isEmpty)
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(top: 32),
                         child: Center(
                           child: Text(
-                            'No cities found',
+                            context.l10n.noCitiesFound,
                             style: TextStyle(color: AppColors.muted),
                           ),
                         ),
@@ -121,7 +122,7 @@ class SearchableCityPickerSheet extends HookWidget {
                           Icons.add_location_alt_outlined,
                           color: AppColors.primary,
                         ),
-                        title: Text('Use "${query.value.trim()}"'),
+                        title: Text(context.l10n.useCity(query.value.trim())),
                         onTap: () =>
                             Navigator.of(context).pop(query.value.trim()),
                       ),

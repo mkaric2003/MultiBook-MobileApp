@@ -11,6 +11,7 @@ import 'package:aquabook/src/features/customer-side/reschedule_appointment/cubit
 import 'package:aquabook/src/features/customer-side/reschedule_appointment/cubit/reschedule_appointment_state.dart';
 import 'package:aquabook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -108,7 +109,7 @@ class RescheduleAppointmentView extends HookWidget {
                   body: SafeArea(
                     child: Column(
                       children: [
-                        const CustomAppBar(title: 'Reschedule appointment'),
+                        CustomAppBar(title: context.l10n.rescheduleAppointment),
                         Expanded(
                           child: SingleChildScrollView(
                             padding: const EdgeInsets.fromLTRB(22, 24, 22, 28),

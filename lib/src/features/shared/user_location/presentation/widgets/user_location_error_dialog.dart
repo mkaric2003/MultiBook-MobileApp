@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class UserLocationErrorDialog extends StatelessWidget {
@@ -18,14 +19,17 @@ class UserLocationErrorDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text('Location unavailable'),
+      title: Text(context.l10n.locationUnavailable),
       content: Text(message, style: const TextStyle(color: AppColors.muted)),
       actions: [
         if (canOpenSettings)
-          TextButton(onPressed: onOpenSettings, child: const Text('Settings')),
+          TextButton(
+            onPressed: onOpenSettings,
+            child: Text(context.l10n.openSettings),
+          ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('OK'),
+          child: Text(context.l10n.ok),
         ),
       ],
     );

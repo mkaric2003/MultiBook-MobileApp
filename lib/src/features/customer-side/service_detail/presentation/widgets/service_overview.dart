@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class ServiceOverview extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '⭐ ${service.rating.toStringAsFixed(1)} · ${service.reviewCount} reviews',
+            '⭐ ${service.rating.toStringAsFixed(1)} · ${context.l10n.reviews(service.reviewCount)}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 12),
@@ -56,7 +57,7 @@ class ServiceOverview extends StatelessWidget {
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                  '${service.location.isEmpty ? business.location.address : service.location} · 0.5 km away',
+                  '${service.location.isEmpty ? business.location.address : service.location} · 0.5 km ${context.l10n.away}',
                   style: const TextStyle(color: AppColors.muted, fontSize: 16),
                 ),
               ),
@@ -65,7 +66,7 @@ class ServiceOverview extends StatelessWidget {
           if (service.price != null) ...[
             const SizedBox(height: 22),
             Text(
-              'From \$${service.price} per session',
+              '${context.l10n.fromPrice('\$${service.price}')} ${context.l10n.perSession}',
               style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
             ),
           ],

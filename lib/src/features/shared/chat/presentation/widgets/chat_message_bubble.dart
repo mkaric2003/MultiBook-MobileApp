@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/chat_message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -56,11 +57,11 @@ class ChatMessageBubble extends StatelessWidget {
           ),
         ),
         if (isSeen)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(bottom: 7),
             child: Text(
-              'Seen',
-              style: TextStyle(color: AppColors.muted, fontSize: 10),
+              context.l10n.seen,
+              style: const TextStyle(color: AppColors.muted, fontSize: 10),
             ),
           )
         else

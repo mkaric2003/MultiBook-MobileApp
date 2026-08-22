@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/cubit/stay_detail_cubit.dart';
@@ -35,7 +36,7 @@ class StayDetailView extends StatelessWidget {
           if (state.business == null) {
             return Scaffold(
               body: Center(
-                child: Text(state.errorMessage ?? 'This stay is unavailable.'),
+                child: Text(state.errorMessage ?? context.l10n.stayUnavailable),
               ),
             );
           }
@@ -69,8 +70,8 @@ class StayDetailView extends StatelessWidget {
                             alignment: Alignment.bottomCenter,
                             title: Text(
                               wasSaved
-                                  ? 'Removed from saved'
-                                  : 'Added to saved',
+                                  ? context.l10n.removedFromSaved
+                                  : context.l10n.addedToSaved,
                             ),
                           );
                         }

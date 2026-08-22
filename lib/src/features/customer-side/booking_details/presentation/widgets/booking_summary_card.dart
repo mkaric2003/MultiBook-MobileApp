@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/presentation/widgets/booking_summary_row.dart';
 import 'package:flutter/material.dart';
@@ -30,32 +31,39 @@ class BookingSummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Booking summary',
-            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.bookingSummary,
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 20),
           BookingSummaryRow(
-            label: 'Dates',
+            label: context.l10n.dates,
             value:
                 '${dateFormat.format(state.checkIn)}–${dateFormat.format(state.checkOut)}',
           ),
           const SizedBox(height: 14),
           BookingSummaryRow(
-            label: 'Guests',
-            value: '${state.totalGuests} guests',
+            label: context.l10n.guestSelection,
+            value: context.l10n.guests(state.totalGuests),
           ),
           const Divider(height: 28, color: AppColors.border),
           BookingSummaryRow(
-            label: '${state.nightCount} nights',
+            label: context.l10n.nights(state.nightCount),
             value: '\$$pricePerNight × ${state.nightCount}',
           ),
           const SizedBox(height: 11),
-          BookingSummaryRow(label: 'Service fee', value: '\$$serviceFee'),
+          BookingSummaryRow(
+            label: context.l10n.serviceFee,
+            value: '\$$serviceFee',
+          ),
           const SizedBox(height: 11),
-          BookingSummaryRow(label: 'Taxes', value: '\$$taxes'),
+          BookingSummaryRow(label: context.l10n.taxes, value: '\$$taxes'),
           const Divider(height: 28, color: AppColors.border),
-          BookingSummaryRow(label: 'Total', value: '\$$total', bold: true),
+          BookingSummaryRow(
+            label: context.l10n.total,
+            value: '\$$total',
+            bold: true,
+          ),
         ],
       ),
     );

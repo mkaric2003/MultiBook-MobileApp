@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/home/bloc/customer_home_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:aquabook/src/features/customer-side/home/bloc/customer_home_even
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_cubit.dart';
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_state.dart';
 import 'package:aquabook/src/features/customer-side/profile/presentation/widgets/customer_profile_menu_item.dart';
+import 'package:aquabook/src/features/shared/localization/presentation/widgets/language_picker_sheet.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,10 +32,10 @@ class CustomerProfileView extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Profile',
-                        style: TextStyle(
+                        context.l10n.profile,
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
                         ),
@@ -57,7 +59,7 @@ class CustomerProfileView extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        user?.fullName ?? 'Profile',
+                        user?.fullName ?? context.l10n.profile,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
@@ -73,19 +75,19 @@ class CustomerProfileView extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 CustomButton(
-                  buttonName: 'Edit profile',
+                  buttonName: context.l10n.editProfile,
                   onPressed: () =>
                       context.push(AppRoutes.CUSTOMER_EDIT_PROFILE),
                 ),
                 const SizedBox(height: 32),
-                const Text(
-                  'Account',
+                Text(
+                  context.l10n.account,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 16),
                 CustomerProfileMenuItem(
                   icon: Icons.calendar_month,
-                  label: 'My bookings',
+                  label: context.l10n.bookings,
                   onTap: () => context.read<CustomerHomeBloc>().add(
                     const CustomerTabChanged(2),
                   ),
@@ -93,64 +95,65 @@ class CustomerProfileView extends StatelessWidget {
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.favorite,
-                  label: 'Saved',
+                  label: context.l10n.saved,
                   onTap: () => context.read<CustomerHomeBloc>().add(
                     const CustomerTabChanged(3),
                   ),
                 ),
                 const SizedBox(height: 10),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.credit_card,
-                  label: 'Payment methods',
+                  label: context.l10n.paymentMethods,
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.notifications,
-                  label: 'Notifications',
+                  label: context.l10n.notifications,
                   onTap: () => context.push(AppRoutes.NOTIFICATIONS),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.chat_bubble_outline,
-                  label: 'Messages',
+                  label: context.l10n.messages,
                   badgeCount: state.unreadMessagesCount > 0
                       ? state.unreadMessagesCount
                       : null,
                   onTap: () => context.push(AppRoutes.CHAT_LIST),
                 ),
                 const SizedBox(height: 10),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.language,
-                  label: 'Language & currency',
+                  label: context.l10n.languageAndCurrency,
+                  onTap: () => LanguagePickerSheet.show(context),
                 ),
                 const SizedBox(height: 32),
-                const Text(
-                  'Support',
+                Text(
+                  context.l10n.support,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
                 ),
                 const SizedBox(height: 16),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.help_outline,
-                  label: 'Help Center',
+                  label: context.l10n.helpCenter,
                 ),
                 const SizedBox(height: 10),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.chat_bubble_outline,
-                  label: 'Contact us',
+                  label: context.l10n.contactUs,
                 ),
                 const SizedBox(height: 10),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.description_outlined,
-                  label: 'Terms of Service',
+                  label: context.l10n.termsOfService,
                 ),
                 const SizedBox(height: 10),
-                const CustomerProfileMenuItem(
+                CustomerProfileMenuItem(
                   icon: Icons.shield_outlined,
-                  label: 'Privacy Policy',
+                  label: context.l10n.privacyPolicy,
                 ),
                 const SizedBox(height: 32),
                 CustomButton(
-                  buttonName: 'Log out',
+                  buttonName: context.l10n.logOut,
                   color: const Color(0xFFDC2626),
                   onPressed: state.isLoading
                       ? null

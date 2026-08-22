@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/models/booking_draft_model.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/continue_booking_card.dart';
@@ -80,29 +81,29 @@ class StaysContent extends HookWidget {
           ),
           const SizedBox(height: 28),
           if (isFiltering) ...[
-            const CustomerSectionTitle(title: 'Search results'),
+            CustomerSectionTitle(title: context.l10n.searchResults),
             const SizedBox(height: 14),
             OtherStaysGrid(
               stays: otherStays,
               isLoading: isOtherStaysLoading || isRecommendedStaysLoading,
-              emptyMessage: 'No stays match your filters.',
+              emptyMessage: context.l10n.noStaysMatchFilters,
             ),
           ] else ...[
             // const PromotionBanner(),
             // const SizedBox(height: 28),
             if (bookingDraft != null) ...[
-              const CustomerSectionTitle(title: 'Continue booking'),
+              CustomerSectionTitle(title: context.l10n.continueBooking),
               const SizedBox(height: 14),
               ContinueBookingCard(draft: bookingDraft!),
               const SizedBox(height: 28),
             ],
             if (isNearbyStaysLoading) ...[
-              const CustomerSectionTitle(title: 'Popular near you'),
+              CustomerSectionTitle(title: context.l10n.popularNearYou),
               const SizedBox(height: 18),
               const Center(child: CircularProgressIndicator()),
               const SizedBox(height: 28),
             ] else if (nearbyStays.isNotEmpty) ...[
-              const CustomerSectionTitle(title: 'Popular near you'),
+              CustomerSectionTitle(title: context.l10n.popularNearYou),
               const SizedBox(height: 14),
               NearbyStaysList(
                 stays: nearbyStays,
@@ -112,7 +113,7 @@ class StaysContent extends HookWidget {
               ),
               const SizedBox(height: 28),
             ],
-            const CustomerSectionTitle(title: 'Recommended for you'),
+            CustomerSectionTitle(title: context.l10n.recommendedForYou),
             const SizedBox(height: 14),
             RecommendedStaysList(
               stays: recommendedStays,

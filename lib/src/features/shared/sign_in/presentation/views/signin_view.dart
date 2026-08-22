@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/shared/sign_in/cubit/signin_cubit.dart';
@@ -52,7 +53,7 @@ class SigninView extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Sign in to MultiBook',
+                      context.l10n.signInTitle,
                       style: GoogleFonts.inter(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -61,7 +62,7 @@ class SigninView extends HookWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Access your bookings and favorite\nservices instantly.',
+                      context.l10n.signInDescription,
                       style: GoogleFonts.inter(
                         fontSize: 17,
                         height: 1.5,
@@ -86,12 +87,12 @@ class SigninView extends HookWidget {
                                   .sendPasswordResetEmail(
                                     signinData.value?.email ?? '',
                                   ),
-                        child: const Text('Forgot your password?'),
+                        child: Text(context.l10n.forgotPassword),
                       ),
                     ),
                     const SizedBox(height: 18),
                     CustomButton(
-                      buttonName: 'Sign in',
+                      buttonName: context.l10n.signIn,
                       onPressed: canSignIn
                           ? () => context.read<SigninCubit>().signIn(
                               email: signinData.value!.email,
@@ -104,7 +105,7 @@ class SigninView extends HookWidget {
                     const LabeledDivider(padding: EdgeInsets.zero),
                     const SizedBox(height: 38),
                     SocialSigninButton(
-                      label: 'Continue with Apple',
+                      label: context.l10n.continueWithApple,
                       icon: SvgPicture.asset(
                         'assets/icons/apple.svg',
                         width: 22,
@@ -112,17 +113,15 @@ class SigninView extends HookWidget {
                       ),
                       onPressed: () =>
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Apple sign in will be available shortly.',
-                              ),
+                            SnackBar(
+                              content: Text(context.l10n.appleSignInSoon),
                             ),
                           ),
                       enabled: !state.isLoading,
                     ),
                     const SizedBox(height: 18),
                     SocialSigninButton(
-                      label: 'Continue with Google',
+                      label: context.l10n.continueWithGoogle,
                       icon: SvgPicture.asset(
                         'assets/icons/google.svg',
                         width: 22,
@@ -136,8 +135,8 @@ class SigninView extends HookWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Don't have an account?",
+                        Text(
+                          context.l10n.dontHaveAccount,
                           style: TextStyle(
                             color: AppColors.muted,
                             fontSize: 18,
@@ -146,8 +145,8 @@ class SigninView extends HookWidget {
                         const SizedBox(width: 4),
                         InkWell(
                           onTap: () => context.go(AppRoutes.SIGNUP),
-                          child: const Text(
-                            'Create one',
+                          child: Text(
+                            context.l10n.createOne,
                             style: TextStyle(
                               color: Color(0xFF7C3AED),
                               decoration: TextDecoration.underline,

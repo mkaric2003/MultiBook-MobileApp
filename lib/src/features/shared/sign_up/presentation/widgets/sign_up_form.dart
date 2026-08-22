@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/shared/sign_up/presentation/widgets/password_requirement_item.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -97,19 +98,19 @@ class SignUpForm extends HookWidget {
       strengthColor = AppColors.muted;
       strengthValue = 0.0;
     } else if (score <= 1) {
-      strengthText = 'Weak';
+      strengthText = context.l10n.passwordWeak;
       strengthColor = const Color(0xFFF28B82);
       strengthValue = 0.18;
     } else if (score == 2) {
-      strengthText = 'Fair';
+      strengthText = context.l10n.passwordFair;
       strengthColor = const Color(0xFFF59E0B);
       strengthValue = 0.5;
     } else if (score == 3) {
-      strengthText = 'Good';
+      strengthText = context.l10n.passwordGood;
       strengthColor = const Color(0xFF34D399);
       strengthValue = 0.75;
     } else {
-      strengthText = 'Strong';
+      strengthText = context.l10n.passwordStrong;
       strengthColor = const Color(0xFF22C55E);
       strengthValue = 1.0;
     }
@@ -131,21 +132,21 @@ class SignUpForm extends HookWidget {
     return Column(
       children: [
         CustomTextField(
-          hintText: 'First name*',
+          hintText: context.l10n.firstNameRequired,
           prefixIcon: Icons.person,
           controller: firstNameCtrl,
           onChanged: (_) => notifyValidity(),
         ),
         const SizedBox(height: 30),
         CustomTextField(
-          hintText: 'Last name',
+          hintText: context.l10n.lastName,
           prefixIcon: Icons.person,
           controller: lastNameCtrl,
           onChanged: (_) => notifyValidity(),
         ),
         const SizedBox(height: 30),
         CustomTextField(
-          hintText: 'Email address*',
+          hintText: context.l10n.emailAddressRequired,
           prefixIcon: Icons.email,
           controller: emailCtrl,
           keyboardType: TextInputType.emailAddress,
@@ -153,7 +154,7 @@ class SignUpForm extends HookWidget {
         ),
         const SizedBox(height: 30),
         CustomTextField(
-          hintText: 'Password*',
+          hintText: context.l10n.passwordRequired,
           prefixIcon: Icons.lock,
           controller: passwordCtrl,
           obscureText: !showPassword.value,
@@ -165,7 +166,7 @@ class SignUpForm extends HookWidget {
         ),
         const SizedBox(height: 30),
         CustomTextField(
-          hintText: 'Confirm password*',
+          hintText: context.l10n.confirmPasswordRequired,
           prefixIcon: Icons.lock,
           controller: confirmPasswordCtrl,
           obscureText: !showConfirm.value,
@@ -180,7 +181,7 @@ class SignUpForm extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Password strength',
+              context.l10n.passwordStrength,
               style: GoogleFonts.inter(fontSize: 14, color: AppColors.muted),
             ),
             Text(
@@ -210,18 +211,18 @@ class SignUpForm extends HookWidget {
           ),
         ),
         PasswordRequirementItem(
-          label: 'At least 8 characters',
+          label: context.l10n.atLeastEightCharacters,
           met: hasMinLength,
         ),
         const SizedBox(height: 12),
         PasswordRequirementItem(
-          label: 'One uppercase letter',
+          label: context.l10n.oneUppercaseLetter,
           met: hasUppercase,
         ),
         const SizedBox(height: 12),
-        PasswordRequirementItem(label: 'One number', met: hasNumber),
+        PasswordRequirementItem(label: context.l10n.oneNumber, met: hasNumber),
         const SizedBox(height: 12),
-        PasswordRequirementItem(label: 'One symbol', met: hasSymbol),
+        PasswordRequirementItem(label: context.l10n.oneSymbol, met: hasSymbol),
         const SizedBox(height: 20),
       ],
     );

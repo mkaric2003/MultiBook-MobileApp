@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
@@ -45,7 +46,7 @@ class AppointmentDetailsView extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: [
-              const CustomAppBar(title: 'Appointment details'),
+              CustomAppBar(title: context.l10n.appointmentDetails),
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
@@ -69,20 +70,18 @@ class AppointmentDetailsView extends StatelessWidget {
                             final confirmed = await showDialog<bool>(
                               context: context,
                               builder: (dialogContext) => AlertDialog(
-                                title: const Text('Cancel appointment?'),
-                                content: const Text(
-                                  'This action cannot be undone.',
-                                ),
+                                title: Text(context.l10n.cancelAppointmentQuestion),
+                                content: Text(context.l10n.cannotBeUndone),
                                 actions: [
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.pop(dialogContext, false),
-                                    child: const Text('Keep appointment'),
+                                    child: Text(context.l10n.keepAppointment),
                                   ),
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.pop(dialogContext, true),
-                                    child: const Text('Cancel appointment'),
+                                    child: Text(context.l10n.cancelAppointment),
                                   ),
                                 ],
                               ),

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -43,7 +44,7 @@ class ChatTypingIndicator extends HookWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              '$name is typing',
+              context.l10n.isTyping(name),
               style: const TextStyle(color: AppColors.muted, fontSize: 12),
             ),
           ],

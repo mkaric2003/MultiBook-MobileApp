@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/data/models/booking_draft_model.dart';
@@ -53,12 +54,12 @@ class ContinueBookingCard extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '${DateFormat('dd.MM').format(draft.checkIn)}–${DateFormat('dd.MM').format(draft.checkOut)} • ${draft.adults + draft.children + draft.infants} guests',
+                      '${DateFormat('dd.MM').format(draft.checkIn)}–${DateFormat('dd.MM').format(draft.checkOut)} • ${context.l10n.guests(draft.adults + draft.children + draft.infants)}',
                       style: TextStyle(color: AppColors.muted, fontSize: 14),
                     ),
                     SizedBox(height: 4),
                     Text(
-                      '\$${draft.pricePerNight}/night',
+                      '\$${draft.pricePerNight}${context.l10n.perNight}',
                       style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w800,
@@ -71,7 +72,7 @@ class ContinueBookingCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           CustomButton(
-            buttonName: 'Resume',
+            buttonName: context.l10n.resume,
             height: 41,
             onPressed: () async => context.push(
               AppRoutes.BOOKING_DETAILS,

@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_cubit.dart';
@@ -35,24 +36,22 @@ class BookingDetailsView extends StatelessWidget {
             child: Column(
               children: [
                 CustomAppBar(
-                  title: 'Booking details',
+                  title: context.l10n.bookingDetails,
                   onBackPressed: () async {
                     final shouldSave = await showDialog<bool>(
                       context: context,
                       builder: (dialogContext) => AlertDialog(
-                        title: const Text('Save booking draft?'),
-                        content: const Text(
-                          'You can continue this booking later from Home.',
-                        ),
+                        title: Text(context.l10n.saveBookingDraft),
+                        content: Text(context.l10n.continueBookingLater),
                         actions: [
                           TextButton(
                             onPressed: () =>
                                 Navigator.pop(dialogContext, false),
-                            child: const Text('Discard'),
+                            child: Text(context.l10n.discard),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(dialogContext, true),
-                            child: const Text('Save draft'),
+                            child: Text(context.l10n.saveDraft),
                           ),
                         ],
                       ),
@@ -78,9 +77,9 @@ class BookingDetailsView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Select dates',
-                          style: TextStyle(
+                        Text(
+                          context.l10n.selectDates,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
                           ),
@@ -108,17 +107,17 @@ class BookingDetailsView extends StatelessWidget {
                           checkOut: state.checkOut,
                         ),
                         const SizedBox(height: 30),
-                        const Text(
-                          'Guests',
-                          style: TextStyle(
+                        Text(
+                          context.l10n.guestSelection,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                         const SizedBox(height: 16),
                         BookingGuestCounter(
-                          label: 'Adults',
-                          subtitle: 'Ages 13+',
+                          label: context.l10n.adult,
+                          subtitle: context.l10n.ages13Plus,
                           value: state.adults,
                           onChanged: context
                               .read<BookingDetailsCubit>()
@@ -126,8 +125,8 @@ class BookingDetailsView extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         BookingGuestCounter(
-                          label: 'Children',
-                          subtitle: 'Ages 2=12',
+                          label: context.l10n.child,
+                          subtitle: context.l10n.ages2To12,
                           value: state.children,
                           onChanged: context
                               .read<BookingDetailsCubit>()
@@ -135,8 +134,8 @@ class BookingDetailsView extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         BookingGuestCounter(
-                          label: 'Infants',
-                          subtitle: 'Under 2',
+                          label: context.l10n.infant,
+                          subtitle: context.l10n.under2,
                           value: state.infants,
                           onChanged: context
                               .read<BookingDetailsCubit>()
@@ -159,7 +158,7 @@ class BookingDetailsView extends StatelessWidget {
                     ),
                   ),
                   child: CustomButton(
-                    buttonName: 'Continue',
+                    buttonName: context.l10n.continueLabel,
                     onPressed: () async => context.push(
                       AppRoutes.REVIEW_STAY,
                       extra: ReviewStayArguments(

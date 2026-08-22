@@ -1,10 +1,12 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/features/business-side/more/bloc/more_cubit.dart';
 import 'package:aquabook/src/features/business-side/more/bloc/more_state.dart';
 import 'package:aquabook/src/features/business-side/more/domain/models/more_menu_item.dart';
 import 'package:aquabook/src/features/business-side/more/presentation/widgets/more_header.dart';
 import 'package:aquabook/src/features/business-side/more/presentation/widgets/more_menu_section.dart';
+import 'package:aquabook/src/features/shared/localization/presentation/widgets/language_picker_sheet.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,57 +36,57 @@ class MoreView extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
                   children: [
                     MoreMenuSection(
-                      title: 'Business management',
+                      title: context.l10n.businessManagement,
                       items: [
                         MoreMenuItem(
-                          label: 'Business Profile',
+                          label: context.l10n.businessProfile,
                           icon: Icons.apartment_rounded,
                         ),
                         MoreMenuItem(
-                          label: 'Manage Stays & Services',
+                          label: context.l10n.manageStaysAndServices,
                           icon: Icons.bed_rounded,
                         ),
                         MoreMenuItem(
-                          label: 'Availability & Calendar',
+                          label: context.l10n.availabilityAndCalendar,
                           icon: Icons.calendar_month_rounded,
                           onTap: () =>
                               context.push(AppRoutes.AVAILABILITY_CALENDAR),
                         ),
                         MoreMenuItem(
-                          label: 'Promotions & Discounts',
+                          label: context.l10n.promotionsAndDiscounts,
                           icon: Icons.percent_rounded,
                         ),
                       ],
                     ),
                     const SizedBox(height: 25),
                     MoreMenuSection(
-                      title: 'Financials',
+                      title: context.l10n.financials,
                       items: [
                         MoreMenuItem(
-                          label: 'Payout Methods',
+                          label: context.l10n.payoutMethods,
                           icon: Icons.credit_card_rounded,
                         ),
                         MoreMenuItem(
-                          label: 'Transaction History',
+                          label: context.l10n.transactionHistory,
                           icon: Icons.show_chart_rounded,
                         ),
                         MoreMenuItem(
-                          label: 'Invoices & Tax Information',
+                          label: context.l10n.invoicesAndTaxInformation,
                           icon: Icons.description_outlined,
                         ),
                       ],
                     ),
                     const SizedBox(height: 25),
                     MoreMenuSection(
-                      title: 'Notifications & Communication',
+                      title: context.l10n.notificationsAndCommunication,
                       items: [
                         MoreMenuItem(
-                          label: 'Notifications',
+                          label: context.l10n.notifications,
                           icon: Icons.notifications_rounded,
                           onTap: () => context.push(AppRoutes.NOTIFICATIONS),
                         ),
                         MoreMenuItem(
-                          label: 'Messages',
+                          label: context.l10n.messages,
                           icon: Icons.chat_bubble_rounded,
                           badgeCount: state.unreadMessagesCount > 0
                               ? state.unreadMessagesCount
@@ -95,34 +97,35 @@ class MoreView extends StatelessWidget {
                     ),
                     const SizedBox(height: 25),
                     MoreMenuSection(
-                      title: 'Settings',
+                      title: context.l10n.settings,
                       items: [
                         MoreMenuItem(
-                          label: 'Account Settings',
+                          label: context.l10n.accountSettings,
                           icon: Icons.person_rounded,
                           onTap: () => context.push(AppRoutes.ACCOUNT_SETTINGS),
                         ),
                         MoreMenuItem(
-                          label: 'Language & Localization',
+                          label: context.l10n.languageAndLocalization,
                           icon: Icons.language_rounded,
+                          onTap: () => LanguagePickerSheet.show(context),
                         ),
                         MoreMenuItem(
-                          label: 'Help & Support',
+                          label: context.l10n.helpAndSupport,
                           icon: Icons.help_rounded,
                         ),
                         MoreMenuItem(
-                          label: 'Terms of Service',
+                          label: context.l10n.termsOfService,
                           icon: Icons.article_outlined,
                         ),
                         MoreMenuItem(
-                          label: 'Privacy Policy',
+                          label: context.l10n.privacyPolicy,
                           icon: Icons.shield_outlined,
                         ),
                       ],
                     ),
                     const SizedBox(height: 30),
                     CustomButton(
-                      buttonName: 'Logout',
+                      buttonName: context.l10n.logOut,
                       color: Colors.transparent,
                       textColor: const Color(0xFFFF4B4B),
                       borderColor: const Color(0xFFFF4B4B),

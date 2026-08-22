@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
@@ -27,7 +28,7 @@ class ChatListView extends HookWidget {
         body: SafeArea(
           child: Column(
             children: [
-              const CustomAppBar(title: 'Messages'),
+              CustomAppBar(title: context.l10n.messages),
               Expanded(
                 child: BlocBuilder<ChatListCubit, ChatListState>(
                   builder: (context, state) {
@@ -40,10 +41,10 @@ class ChatListView extends HookWidget {
                       return Center(child: Text(state.errorMessage!));
                     }
                     if (state.conversations.isEmpty) {
-                      return const Center(
+                      return Center(
                         child: Text(
-                          'No messages yet.',
-                          style: TextStyle(color: AppColors.muted),
+                          context.l10n.noMessagesYet,
+                          style: const TextStyle(color: AppColors.muted),
                         ),
                       );
                     }

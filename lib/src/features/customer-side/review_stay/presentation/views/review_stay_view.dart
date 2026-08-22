@@ -9,6 +9,7 @@ import 'package:aquabook/src/features/customer-side/review_stay/presentation/wid
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -45,24 +46,22 @@ class ReviewStayView extends StatelessWidget {
             child: Column(
               children: [
                 CustomAppBar(
-                  title: 'Review your stay',
+                  title: context.l10n.bookingDetails,
                   onBackPressed: () async {
                     final save = await showDialog<bool>(
                       context: context,
                       builder: (dialogContext) => AlertDialog(
-                        title: const Text('Save booking draft?'),
-                        content: const Text(
-                          'Your selected extras will also be saved.',
-                        ),
+                        title: Text(context.l10n.saveBookingDraft),
+                        content: Text(context.l10n.saveSelectedExtras),
                         actions: [
                           TextButton(
                             onPressed: () =>
                                 Navigator.pop(dialogContext, false),
-                            child: const Text('Discard'),
+                            child: Text(context.l10n.discard),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(dialogContext, true),
-                            child: const Text('Save draft'),
+                            child: Text(context.l10n.saveDraft),
                           ),
                         ],
                       ),
@@ -150,9 +149,9 @@ class ReviewStayView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 28),
-                        const Text(
-                          'Add extras',
-                          style: TextStyle(
+                        Text(
+                          context.l10n.addExtras,
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
                           ),

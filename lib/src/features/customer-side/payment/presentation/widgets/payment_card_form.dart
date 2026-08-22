@@ -3,6 +3,7 @@ import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:aquabook/l10n/l10n.dart';
 
 class PaymentCardForm extends StatelessWidget {
   const PaymentCardForm({
@@ -26,21 +27,21 @@ class PaymentCardForm extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Row(
+        Row(
           children: [
             Icon(Icons.credit_card, color: AppColors.primary),
             SizedBox(width: 12),
             Text(
-              'Credit/Debit Card',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
+              context.l10n.creditDebitCard,
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
             ),
           ],
         ),
         const SizedBox(height: 24),
-        const Text('Card Number'),
+        Text(context.l10n.cardNumber),
         const SizedBox(height: 8),
         CustomTextField(
-          hintText: '1234 5678 9012 3456',
+          hintText: context.l10n.cardNumberExample,
           controller: cardNumber,
           keyboardType: TextInputType.number,
           inputFormatters: [CardNumberInputFormatter()],
@@ -52,10 +53,10 @@ class PaymentCardForm extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Expiry'),
+                  Text(context.l10n.expiry),
                   const SizedBox(height: 8),
                   CustomTextField(
-                    hintText: 'MM/YY',
+                    hintText: context.l10n.expiryExample,
                     controller: expiry,
                     keyboardType: TextInputType.number,
                     inputFormatters: [CardExpiryInputFormatter()],
@@ -68,10 +69,10 @@ class PaymentCardForm extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('CVV'),
+                  Text(context.l10n.cvv),
                   const SizedBox(height: 8),
                   CustomTextField(
-                    hintText: '123',
+                    hintText: context.l10n.cvvExample,
                     controller: cvv,
                     keyboardType: TextInputType.number,
                     obscureText: true,
@@ -86,9 +87,9 @@ class PaymentCardForm extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 18),
-        const Text('Name on Card'),
+        Text(context.l10n.nameOnCard),
         const SizedBox(height: 8),
-        CustomTextField(hintText: 'John Doe', controller: cardholder),
+        CustomTextField(hintText: context.l10n.cardholderNameExample, controller: cardholder),
       ],
     ),
   );

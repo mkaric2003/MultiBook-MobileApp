@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_appointment_status_pill.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class CustomerAppointmentCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      '${appointment.serviceNames.join(', ')} – ${duration}m',
+                      '${appointment.serviceNames.join(', ')} – ${context.l10n.serviceDuration(duration)}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -107,11 +108,11 @@ class CustomerAppointmentCard extends StatelessWidget {
                   );
                   if (updated != null) onUpdated(updated);
                 },
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.all(4),
                   child: Text(
-                    'View details',
-                    style: TextStyle(
+                    context.l10n.viewDetails,
+                    style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w700,
                     ),

@@ -1,5 +1,6 @@
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/form_field_label.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,7 +27,7 @@ class StayUnitForm extends StatelessWidget {
       const FormFieldLabel('First unit type*'),
       const SizedBox(height: 10),
       CustomTextField(
-        hintText: 'e.g. Deluxe room or Garden cabin',
+        hintText: context.l10n.unitNameExample,
         controller: nameController,
       ),
       const SizedBox(height: 16),
@@ -34,7 +35,7 @@ class StayUnitForm extends StatelessWidget {
         children: [
           Expanded(
             child: CustomTextField(
-              hintText: 'Max guests',
+              hintText: context.l10n.maxGuests,
               controller: guestsController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -43,7 +44,7 @@ class StayUnitForm extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: CustomTextField(
-              hintText: 'Size m²',
+              hintText: context.l10n.sizeSquareMeters,
               controller: sizeController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -56,7 +57,7 @@ class StayUnitForm extends StatelessWidget {
         children: [
           Expanded(
             child: CustomTextField(
-              hintText: 'Price per night',
+              hintText: context.l10n.pricePerNight,
               controller: priceController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -65,7 +66,7 @@ class StayUnitForm extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: CustomTextField(
-              hintText: 'Units available',
+              hintText: context.l10n.unitsAvailable,
               controller: quantityController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],

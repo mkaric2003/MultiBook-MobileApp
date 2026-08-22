@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/models/appointment_draft_model.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/continue_appointment_card.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_section_title.dart';
@@ -61,18 +62,18 @@ class ServicesContent extends HookWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (isFiltering) ...[
-            const CustomerSectionTitle(title: 'Search results'),
+            CustomerSectionTitle(title: context.l10n.searchResults),
             const SizedBox(height: 14),
             OtherServicesGrid(
               services: otherServices,
               isLoading: isOtherServicesLoading || isPopularServicesLoading,
-              emptyMessage: 'No services match your filters.',
+              emptyMessage: context.l10n.noServicesMatchFilters,
             ),
           ] else ...[
             // const PromotionBanner(),
             // const SizedBox(height: 28),
             if (appointmentDraft != null && onContinueAppointment != null) ...[
-              const CustomerSectionTitle(title: 'Continue appointment'),
+              CustomerSectionTitle(title: context.l10n.continueAppointment),
               const SizedBox(height: 14),
               ContinueAppointmentCard(
                 draft: appointmentDraft!,
@@ -80,7 +81,7 @@ class ServicesContent extends HookWidget {
               ),
               const SizedBox(height: 28),
             ],
-            const CustomerSectionTitle(title: 'Popular near you'),
+            CustomerSectionTitle(title: context.l10n.popularNearYou),
             const SizedBox(height: 14),
             PopularServicesList(
               services: popularServices,
@@ -90,7 +91,7 @@ class ServicesContent extends HookWidget {
               onLoadMore: onLoadMorePopularServices,
             ),
             const SizedBox(height: 28),
-            const CustomerSectionTitle(title: 'Explore more services'),
+            CustomerSectionTitle(title: context.l10n.exploreMoreServices),
             const SizedBox(height: 14),
             OtherServicesGrid(
               services: otherServices,

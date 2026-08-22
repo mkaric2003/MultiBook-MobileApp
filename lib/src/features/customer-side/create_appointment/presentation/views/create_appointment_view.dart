@@ -16,6 +16,7 @@ import 'package:aquabook/src/features/customer-side/create_appointment/presentat
 import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -124,7 +125,7 @@ class CreateAppointmentView extends HookWidget {
                             final shouldSave = await showDialog<bool>(
                               context: context,
                               builder: (dialogContext) => AlertDialog(
-                                title: const Text('Save appointment draft?'),
+                                title: Text(context.l10n.saveAppointmentDraft),
                                 content: const Text(
                                   'You can continue this appointment later from Home.',
                                 ),
@@ -132,12 +133,12 @@ class CreateAppointmentView extends HookWidget {
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.pop(dialogContext, false),
-                                    child: const Text('Discard'),
+                                    child: Text(context.l10n.discard),
                                   ),
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.pop(dialogContext, true),
-                                    child: const Text('Save draft'),
+                                    child: Text(context.l10n.saveDraft),
                                   ),
                                 ],
                               ),

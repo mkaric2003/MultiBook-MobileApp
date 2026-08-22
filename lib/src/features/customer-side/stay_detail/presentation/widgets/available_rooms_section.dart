@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
@@ -26,17 +27,19 @@ class AvailableRoomsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Available rooms',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.availableRooms,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 18),
           for (final room in rooms)
             StayRoomCard(
               room: StayRoom(
                 name: room.name,
-                description:
-                    '${room.maxGuests} guests · ${room.sizeSquareMeters}m²',
+                description: context.l10n.roomGuestsAndSize(
+                  room.maxGuests,
+                  room.sizeSquareMeters,
+                ),
                 pricePerNight: room.pricePerNight,
                 imageUrl: business.coverPhotoUrl ?? business.logoUrl ?? '',
               ),

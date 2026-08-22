@@ -1,5 +1,6 @@
 import 'package:aquabook/app.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/features/business-side/bookings/presentation/widgets/client_booking_status_pill.dart';
@@ -208,8 +209,8 @@ class ManageBookingSheet extends StatelessWidget {
                     return;
                   }
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('We could not decline this booking.'),
+                    SnackBar(
+                      content: Text(context.l10n.couldNotDeclineBooking),
                     ),
                   );
                 },

@@ -1,14 +1,15 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class LabeledDivider extends StatelessWidget {
   const LabeledDivider({
     super.key,
-    this.label = 'or continue with',
+    this.label,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
   });
 
-  final String label;
+  final String? label;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -26,7 +27,7 @@ class LabeledDivider extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            label,
+            label ?? context.l10n.orContinueWith,
             style: const TextStyle(color: AppColors.muted, fontSize: 16),
           ),
           const SizedBox(width: 12),

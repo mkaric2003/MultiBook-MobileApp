@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/shared/recently_viewed/cubit/recently_viewed_cubit.dart';
@@ -23,9 +24,9 @@ class ExploreRecentlyViewed extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 22),
-            const Text(
-              'Recently viewed',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            Text(
+              context.l10n.recentlyViewed,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 18),
             SizedBox(

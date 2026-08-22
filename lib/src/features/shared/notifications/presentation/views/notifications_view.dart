@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/app_notification_model.dart';
@@ -22,7 +23,7 @@ class NotificationsView extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const CustomAppBar(title: 'Notifications'),
+            CustomAppBar(title: context.l10n.notifications),
             Expanded(
               child: BlocBuilder<NotificationsCubit, NotificationsState>(
                 builder: (context, state) {
@@ -33,10 +34,10 @@ class NotificationsView extends StatelessWidget {
                     return Center(child: Text(state.errorMessage!));
                   }
                   if (state.notifications.isEmpty) {
-                    return const Center(
+                    return Center(
                       child: Text(
-                        'You have no notifications yet.',
-                        style: TextStyle(color: AppColors.muted),
+                        context.l10n.noNotificationsYet,
+                        style: const TextStyle(color: AppColors.muted),
                       ),
                     );
                   }

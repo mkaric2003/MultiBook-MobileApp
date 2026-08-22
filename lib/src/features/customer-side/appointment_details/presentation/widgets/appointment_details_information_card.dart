@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/domain/models/appointment_details_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_row.dart';
 import 'package:flutter/material.dart';
@@ -33,29 +34,29 @@ class AppointmentDetailsInformationCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Appointment information',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+          Text(
+            context.l10n.appointmentInformation,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 20),
           AppointmentDetailsRow(
-            label: 'Service',
+            label: context.l10n.service,
             value: appointment.serviceNames.join(', '),
           ),
           const SizedBox(height: 14),
           AppointmentDetailsRow(
-            label: 'Provider',
+            label: context.l10n.provider,
             value: appointment.providerName,
           ),
           const SizedBox(height: 14),
           AppointmentDetailsRow(
-            label: 'Date & time',
+            label: context.l10n.dateAndTime,
             value:
                 '${DateFormat('MMM d, y').format(appointment.date)}\n${DateFormat('h:mm a').format(start)} - ${DateFormat('h:mm a').format(end)}',
           ),
           const SizedBox(height: 14),
           AppointmentDetailsRow(
-            label: 'Status',
+            label: context.l10n.status,
             value:
                 '${appointment.status[0].toUpperCase()}${appointment.status.substring(1)}',
             valueColor: appointment.status == 'confirmed'
@@ -64,7 +65,7 @@ class AppointmentDetailsInformationCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           AppointmentDetailsRow(
-            label: 'Reference',
+            label: context.l10n.reference,
             value: appointment.confirmationCode,
           ),
         ],

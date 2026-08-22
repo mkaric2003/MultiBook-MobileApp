@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ServiceGallerySection extends StatelessWidget {
@@ -21,11 +22,11 @@ class ServiceGallerySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(right: 22),
             child: Text(
-              'Gallery',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              context.l10n.gallery,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
             ),
           ),
           const SizedBox(height: 16),

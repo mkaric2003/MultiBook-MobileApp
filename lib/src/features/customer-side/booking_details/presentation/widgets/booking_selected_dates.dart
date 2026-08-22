@@ -1,4 +1,5 @@
 import 'package:aquabook/src/features/customer-side/booking_details/presentation/widgets/booking_date_value.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,14 +18,14 @@ class BookingSelectedDates extends StatelessWidget {
       children: [
         Expanded(
           child: BookingDateValue(
-            label: 'Check-in',
+            label: context.l10n.checkIn,
             value: format.format(checkIn),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
           child: BookingDateValue(
-            label: 'Check-out',
+            label: context.l10n.checkOut,
             value: format.format(checkOut),
           ),
         ),

@@ -1,6 +1,7 @@
 // signup_view.dart
 
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/shared/sign_up/cubit/signup_cubit.dart';
@@ -60,7 +61,7 @@ class SignupView extends HookWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Create your MultiBook account',
+                      context.l10n.signUpTitle,
                       style: GoogleFonts.inter(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -69,7 +70,7 @@ class SignupView extends HookWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Join thousands of users discovering their favorite stays and services.',
+                      context.l10n.signUpDescription,
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         color: AppColors.muted,
@@ -90,7 +91,7 @@ class SignupView extends HookWidget {
                     MarketingTile(value: true, onChanged: (v) {}),
                     const SizedBox(height: 15),
                     CustomButton(
-                      buttonName: 'Create account',
+                      buttonName: context.l10n.createAccount,
                       onPressed: canCreate
                           ? () => context.read<SignupCubit>().signUp(
                               firstName: signupData.value!.firstName,
@@ -105,7 +106,7 @@ class SignupView extends HookWidget {
                     const LabeledDivider(),
                     const SizedBox(height: 25),
                     SocialSigninButton(
-                      label: 'Continue with Apple',
+                      label: context.l10n.continueWithApple,
                       icon: SvgPicture.asset(
                         'assets/icons/apple.svg',
                         width: 22,
@@ -115,7 +116,7 @@ class SignupView extends HookWidget {
                     ),
                     const SizedBox(height: 12),
                     SocialSigninButton(
-                      label: 'Continue with Google',
+                      label: context.l10n.continueWithGoogle,
                       icon: SvgPicture.asset(
                         'assets/icons/google.svg',
                         width: 22,
@@ -129,8 +130,8 @@ class SignupView extends HookWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Already have an account?',
+                        Text(
+                          context.l10n.alreadyHaveAccount,
                           style: TextStyle(
                             color: AppColors.muted,
                             fontSize: 18,
@@ -139,8 +140,8 @@ class SignupView extends HookWidget {
                         const SizedBox(width: 4),
                         InkWell(
                           onTap: () => context.go(AppRoutes.SIGNIN),
-                          child: const Text(
-                            'Sign in',
+                          child: Text(
+                            context.l10n.signIn,
                             style: TextStyle(
                               color: Color(0xFF7C3AED),
                               decoration: TextDecoration.underline,

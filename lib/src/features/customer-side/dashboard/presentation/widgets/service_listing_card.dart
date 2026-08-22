@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -60,7 +61,7 @@ class ServiceListingCard extends StatelessWidget {
               if (service.durationMinutes != null) ...[
                 const SizedBox(height: 5),
                 Text(
-                  '${service.durationMinutes} min appointment',
+                  context.l10n.appointmentDuration(service.durationMinutes!),
                   style: const TextStyle(color: AppColors.muted, fontSize: 13),
                 ),
               ],
@@ -70,7 +71,7 @@ class ServiceListingCard extends StatelessWidget {
                 else
                   const SizedBox(height: 6),
                 Text(
-                  'From \$${service.price}',
+                  context.l10n.fromPrice('\$${service.price}'),
                   style: const TextStyle(
                     color: AppColors.primary,
                     fontSize: 15,

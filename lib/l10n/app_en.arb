@@ -1,0 +1,351 @@
+{
+  "@@locale": "en",
+  "appName": "MultiBook",
+  "language": "Language",
+  "languageAndLocalization": "Language & localization",
+  "languageAndCurrency": "Language & currency",
+  "selectLanguage": "Select language",
+  "bosnian": "Bosnian",
+  "english": "English",
+  "cancel": "Cancel",
+  "done": "Done",
+  "save": "Save",
+  "profile": "Profile",
+  "editProfile": "Edit profile",
+  "account": "Account",
+  "myBookings": "My bookings",
+  "saved": "Saved",
+  "paymentMethods": "Payment methods",
+  "notifications": "Notifications",
+  "messages": "Messages",
+  "support": "Support",
+  "helpCenter": "Help Center",
+  "contactUs": "Contact us",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy Policy",
+  "logOut": "Log out",
+  "signInTitle": "Sign in to MultiBook",
+  "signInDescription": "Access your bookings and favorite\nservices instantly.",
+  "signIn": "Sign in",
+  "forgotPassword": "Forgot your password?",
+  "continueWithApple": "Continue with Apple",
+  "continueWithGoogle": "Continue with Google",
+  "dontHaveAccount": "Don't have an account?",
+  "createOne": "Create one",
+  "appleSignInSoon": "Apple sign in will be available shortly.",
+  "signUpTitle": "Create your MultiBook account",
+  "signUpDescription": "Join thousands of users discovering their favorite stays and services.",
+  "createAccount": "Create account",
+  "alreadyHaveAccount": "Already have an account?",
+  "skip": "Skip",
+  "getStarted": "Get started",
+  "onboardingFirstTitle": "Manage your stays &\nservices in one place",
+  "onboardingFirstDescription": "Easily control your hotels, apartments, and service businesses from one app.",
+  "onboardingSecondTitle": "Track bookings &\nearnings easily",
+  "onboardingSecondDescription": "Stay on top of your reservations and monitor your income in real time.",
+  "onboardingThirdTitle": "Connect with your\ncustomers directly",
+  "onboardingThirdDescription": "Receive instant notifications, manage bookings, and chat with your clients in one place.",
+  "businessManagement": "Business management",
+  "financials": "Financials",
+  "notificationsAndCommunication": "Notifications & communication",
+  "settings": "Settings",
+  "businessProfile": "Business Profile",
+  "manageStaysAndServices": "Manage Stays & Services",
+  "availabilityAndCalendar": "Availability & Calendar",
+  "promotionsAndDiscounts": "Promotions & Discounts",
+  "payoutMethods": "Payout Methods",
+  "transactionHistory": "Transaction History",
+  "invoicesAndTaxInformation": "Invoices & Tax Information",
+  "accountSettings": "Account Settings",
+  "helpAndSupport": "Help & Support"
+  ,"orContinueWith": "or continue with"
+  ,"selectCity": "Select city"
+  ,"searchCities": "Search cities"
+  ,"allCities": "All cities"
+  ,"noCitiesFound": "No cities found"
+  ,"useCity": "Use \"{city}\""
+  ,"@useCity": {"placeholders": {"city": {"type": "String"}}}
+  ,"emailAddressRequired": "Email address*"
+  ,"enterYourEmail": "Enter your email"
+  ,"passwordRequired": "Password*"
+  ,"enterYourPassword": "Enter your password"
+  ,"firstNameRequired": "First name*"
+  ,"lastName": "Last name"
+  ,"confirmPasswordRequired": "Confirm password*"
+  ,"passwordStrength": "Password strength"
+  ,"passwordWeak": "Weak"
+  ,"passwordFair": "Fair"
+  ,"passwordGood": "Good"
+  ,"passwordStrong": "Strong"
+  ,"atLeastEightCharacters": "At least 8 characters"
+  ,"oneUppercaseLetter": "One uppercase letter"
+  ,"oneNumber": "One number"
+  ,"oneSymbol": "One symbol"
+  ,"agreeToPrefix": "I agree to the "
+  ,"and": " and "
+  ,"useYourLocation": "Use your location"
+  ,"locationPermissionDescription": "Allow MultiBook to use your current location so we can save your city and show relevant stays and services nearby."
+  ,"useCurrentLocation": "Use current location"
+  ,"notNow": "Not now"
+  ,"locationUnavailable": "Location unavailable"
+  ,"openSettings": "Settings"
+  ,"ok": "OK"
+  ,"userTypeTitle": "How will you use MultiBook?"
+  ,"userTypeDescription": "Choose the experience that fits you best. You can change this later."
+  ,"ownBusiness": "I own a business"
+  ,"ownBusinessDescription": "Manage stays or services, bookings and earnings."
+  ,"customer": "I am a customer"
+  ,"customerDescription": "Book stays and schedule services in one place."
+  ,"continueLabel": "Continue"
+  ,"writeMessage": "Write a message"
+  ,"seen": "Seen"
+  ,"isTyping": "{name} is typing"
+  ,"@isTyping": {"placeholders": {"name": {"type": "String"}}}
+  ,"noMessagesYet": "No messages yet."
+  ,"noNotificationsYet": "You have no notifications yet."
+  ,"now": "Now"
+  ,"minutesAgo": "{count}m ago"
+  ,"@minutesAgo": {"placeholders": {"count": {"type": "int"}}}
+  ,"hoursAgo": "{count}h ago"
+  ,"@hoursAgo": {"placeholders": {"count": {"type": "int"}}}
+  ,"daysAgo": "{count}d ago"
+  ,"@daysAgo": {"placeholders": {"count": {"type": "int"}}}
+  ,"home": "Home"
+  ,"bookings": "Bookings"
+  ,"explore": "Explore"
+  ,"stays": "Stays"
+  ,"services": "Services"
+  ,"whereTo": "Where to?"
+  ,"findAService": "Find a service"
+  ,"searchResults": "Search results"
+  ,"noStaysMatchFilters": "No stays match your filters."
+  ,"noServicesMatchFilters": "No services match your filters."
+  ,"continueBooking": "Continue booking"
+  ,"continueAppointment": "Continue appointment"
+  ,"popularNearYou": "Popular near you"
+  ,"recommendedForYou": "Recommended for you"
+  ,"exploreMoreServices": "Explore more services"
+  ,"today": "Today"
+  ,"weekend": "Weekend"
+  ,"featured": "Featured"
+  ,"perNight": "/night"
+  ,"fromPrice": "From {price}"
+  ,"@fromPrice": {"placeholders": {"price": {"type": "String"}}}
+  ,"appointmentDuration": "{minutes} min appointment"
+  ,"@appointmentDuration": {"placeholders": {"minutes": {"type": "int"}}}
+  ,"guests": "{count} guests"
+  ,"@guests": {"placeholders": {"count": {"type": "int"}}}
+  ,"resume": "Resume"
+  ,"withProvider": "With {name}"
+  ,"@withProvider": {"placeholders": {"name": {"type": "String"}}}
+  ,"browseByCategory": "Browse by category"
+  ,"featuredCollections": "Featured collections"
+  ,"trendingNearYou": "Trending near you"
+  ,"recentlyViewed": "Recently viewed"
+  ,"viewAllCategories": "View all categories"
+  ,"showFewerCategories": "Show fewer categories"
+  ,"noServicesAvailableInCity": "No services available in this city yet."
+  ,"autumnGetaways": "Autumn getaways"
+  ,"saveUpToThirtyPercent": "Save up to 30%"
+  ,"weekendEscapes": "Weekend escapes"
+  ,"nextBreakCloser": "Your next break is closer than you think"
+  ,"beachfrontStays": "Beachfront stays"
+  ,"wakeUpToOceanViews": "Wake up to ocean views"
+  ,"topRatedServices": "Top-rated services"
+  ,"bookInstantlyBestPrices": "Book instantly · Best prices"
+  ,"lastMinuteAvailability": "Last-minute availability"
+  ,"findOpeningToday": "Find an opening for today"
+  ,"trustedLocalExperts": "Trusted local experts"
+  ,"verifiedProvidersNearYou": "Verified providers near you"
+  ,"romanticGetaways": "Romantic getaways"
+  ,"perfectForCouples": "Perfect for couples"
+  ,"familyFriendly": "Family friendly"
+  ,"kidApprovedStays": "Kid-approved stays"
+  ,"quickCityBreaks": "Quick city breaks"
+  ,"oceanViewsIncluded": "Ocean views included"
+  ,"petFriendlyStays": "Pet-friendly stays"
+  ,"bringYourBestFriend": "Bring your best friend"
+  ,"poolStays": "Pool stays"
+  ,"makeASplash": "Make a splash"
+  ,"mountainEscapes": "Mountain escapes"
+  ,"freshAirAndViews": "Fresh air and stunning views"
+  ,"cityBreaks": "City breaks"
+  ,"stayCloseToAction": "Stay close to the action"
+  ,"wellnessAndSpa": "Wellness & Spa"
+  ,"relaxAndRejuvenate": "Relax and rejuvenate"
+  ,"beautyAndGrooming": "Beauty & Grooming"
+  ,"lookYourBest": "Look your best"
+  ,"homeRepairs": "Home Repairs"
+  ,"fixItRight": "Fix it right"
+  ,"autoServices": "Auto Services"
+  ,"keepMoving": "Keep moving"
+  ,"healthAndCare": "Health & Care"
+  ,"feelYourBest": "Feel your best"
+  ,"learnAndGrow": "Learn & Grow"
+  ,"buildNewSkills": "Build new skills"
+  ,"petCare": "Pet Care"
+  ,"careForEveryCompanion": "Care for every companion"
+  ,"professionalServices": "Professional Services"
+  ,"expertSupportWhenNeeded": "Expert support when needed"
+  ,"upcoming": "Upcoming"
+  ,"past": "Past"
+  ,"noBookingsYet": "No bookings yet."
+  ,"noServiceBookingsYet": "No service bookings yet."
+  ,"bookAgain": "Book again"
+  ,"viewDetails": "View details"
+  ,"confirmed": "Confirmed"
+  ,"declined": "Declined"
+  ,"cancelled": "Cancelled"
+  ,"completed": "Completed"
+  ,"adults": "{count, plural, =1{# adult} other{# adults}}"
+  ,"@adults": {"placeholders": {"count": {"type": "int"}}}
+  ,"children": "{count, plural, =1{# child} other{# children}}"
+  ,"@children": {"placeholders": {"count": {"type": "int"}}}
+  ,"serviceDuration": "{minutes} min"
+  ,"@serviceDuration": {"placeholders": {"minutes": {"type": "int"}}}
+  ,"bookingDetails": "Booking details"
+  ,"saveBookingDraft": "Save booking draft?"
+  ,"continueBookingLater": "You can continue this booking later from Home."
+  ,"discard": "Discard"
+  ,"saveDraft": "Save draft"
+  ,"selectDates": "Select dates"
+  ,"checkIn": "Check-in"
+  ,"checkOut": "Check-out"
+  ,"guestSelection": "Guests"
+  ,"adult": "Adults"
+  ,"ages13Plus": "Ages 13+"
+  ,"child": "Children"
+  ,"ages2To12": "Ages 2–12"
+  ,"infant": "Infants"
+  ,"under2": "Under 2"
+  ,"bookingSummary": "Booking summary"
+  ,"dates": "Dates"
+  ,"nights": "{count, plural, =1{# night} other{# nights}}"
+  ,"@nights": {"placeholders": {"count": {"type": "int"}}}
+  ,"serviceFee": "Service fee"
+  ,"taxes": "Taxes"
+  ,"total": "Total"
+  ,"appointmentDetails": "Appointment details"
+  ,"cancelAppointmentQuestion": "Cancel appointment?"
+  ,"cannotBeUndone": "This action cannot be undone."
+  ,"keepAppointment": "Keep appointment"
+  ,"cancelAppointment": "Cancel appointment"
+  ,"rescheduleAppointment": "Reschedule appointment"
+  ,"messageProvider": "Message provider"
+  ,"appointmentInformation": "Appointment information"
+  ,"service": "Service"
+  ,"provider": "Provider"
+  ,"dateAndTime": "Date & time"
+  ,"status": "Status"
+  ,"reference": "Reference"
+  ,"filters": "Filters"
+  ,"reset": "Reset"
+  ,"clearAll": "Clear all"
+  ,"showResults": "Show results"
+  ,"filtersApplied": "{count} filters applied"
+  ,"@filtersApplied": {"placeholders": {"count": {"type": "int"}}}
+  ,"city": "City"
+  ,"propertyType": "Property type"
+  ,"stayType": "Stay type"
+  ,"priceRange": "Price range"
+  ,"rating": "Rating"
+  ,"amenities": "Amenities"
+  ,"date": "Date"
+  ,"time": "Time"
+  ,"dateAndTime": "Date & time"
+  ,"anyDate": "Any date"
+  ,"anyTime": "Any time"
+  ,"businessCategory": "Business category"
+  ,"category": "Category"
+  ,"allCategories": "All categories"
+  ,"sortBy": "Sort by"
+  ,"checkInDate": "Check-in date"
+  ,"checkOutDate": "Check-out date"
+  ,"stayUnavailable": "This stay is unavailable."
+  ,"removedFromSaved": "Removed from saved"
+  ,"addedToSaved": "Added to saved"
+  ,"availableRooms": "Available rooms"
+  ,"aboutThisStay": "About this stay"
+  ,"checkAvailability": "Check availability"
+  ,"guestReviews": "Guest reviews"
+  ,"seeAllReviews": "See all reviews"
+  ,"location": "Location"
+  ,"locationOnRequest": "Location available on request"
+  ,"openInMaps": "Open in Maps"
+  ,"unableToOpenMaps": "Unable to open Google Maps."
+  ,"cityCentre": "City centre"
+  ,"reviews": "{count} reviews"
+  ,"@reviews": {"placeholders": {"count": {"type": "int"}}}
+  ,"roomGuestsAndSize": "{guests} guests · {size}m²"
+  ,"@roomGuestsAndSize": {"placeholders": {"guests": {"type": "int"}, "size": {"type": "int"}}}
+  ,"book": "Book"
+  ,"serviceUnavailable": "This service is unavailable."
+  ,"about": "About"
+  ,"gallery": "Gallery"
+  ,"servicesOffered": "Services offered"
+  ,"customerReviews": "Customer reviews"
+  ,"perSession": "per session"
+  ,"away": "away"
+  ,"inCity": "{title} in {city}"
+  ,"@inCity": {"placeholders": {"title": {"type": "String"}, "city": {"type": "String"}}}
+  ,"noCategoryAvailable": "No {category} are available."
+  ,"@noCategoryAvailable": {"placeholders": {"category": {"type": "String"}}}
+  ,"noCategoryAvailableInCity": "No {category} are available in {city}."
+  ,"@noCategoryAvailableInCity": {"placeholders": {"category": {"type": "String"}, "city": {"type": "String"}}}
+  ,"payment": "Payment"
+  ,"creditDebitCard": "Credit/Debit Card"
+  ,"cardNumber": "Card Number"
+  ,"cardNumberExample": "1234 5678 9012 3456"
+  ,"expiry": "Expiry"
+  ,"expiryExample": "MM/YY"
+  ,"cvv": "CVV"
+  ,"cvvExample": "123"
+  ,"nameOnCard": "Name on Card"
+  ,"cardholderNameExample": "John Doe"
+  ,"fullName": "Full name"
+  ,"enterFullName": "Enter your full name"
+  ,"email": "Email"
+  ,"emailExample": "your.email@example.com"
+  ,"phoneNumber": "Phone number"
+  ,"phoneNumberExample": "+1 (555) 123-4567"
+  ,"billingAddress": "Billing address"
+  ,"enterBillingAddress": "Enter your billing address"
+  ,"firstName": "First name"
+  ,"lastNameRequired": "Last name*"
+  ,"emailAddressRequired": "Email address*"
+  ,"emailAddress": "Email address"
+  ,"chooseFromLibrary": "Choose from library"
+  ,"takePhoto": "Take a photo"
+  ,"enterAddress": "Enter your address"
+  ,"searchCountry": "Search country"
+  ,"dateOfBirth": "Date of birth"
+  ,"dateOfBirthExample": "DD. MM. YYYY."
+  ,"cityOptional": "City (optional)"
+  ,"enterCity": "Enter your city"
+  ,"addressOptional": "Address (optional)"
+  ,"saveAppointmentDraft": "Save appointment draft?"
+  ,"saveSelectedExtras": "Your selected extras will also be saved."
+  ,"addExtras": "Add extras"
+  ,"totalPaid": "Total paid"
+  ,"entirePlace": "Entire place"
+  ,"roomOrUnit": "Room or unit"
+  ,"day": "Day"
+  ,"businessName": "Business name"
+  ,"enterBusinessName": "Enter business name"
+  ,"enterPricePerNight": "Enter price per night"
+  ,"enterBusinessAddress": "Enter business address"
+  ,"roomNameExample": "e.g. Deluxe room"
+  ,"unitNameExample": "e.g. Deluxe room or Garden cabin"
+  ,"maxGuests": "Max guests"
+  ,"sizeSquareMeters": "Size m²"
+  ,"pricePerNight": "Price per night"
+  ,"roomsAvailable": "Rooms available"
+  ,"unitsAvailable": "Units available"
+  ,"providerNameExample": "Provider name, e.g. Sarah Johnson"
+  ,"serviceNameExample": "e.g. Haircut, teeth whitening, electrical inspection"
+  ,"durationExample": "60"
+  ,"priceExample": "50"
+  ,"describeService": "Briefly describe this service"
+  ,"providerNameHint": "Name of the person providing services"
+  ,"couldNotDeclineBooking": "We could not decline this booking."
+}

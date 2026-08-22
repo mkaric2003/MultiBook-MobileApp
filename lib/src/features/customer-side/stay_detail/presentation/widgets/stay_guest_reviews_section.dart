@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_review_card.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
@@ -21,10 +22,13 @@ class StayGuestReviewsSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Guest reviews',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                  context.l10n.guestReviews,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
               Text(
@@ -47,7 +51,7 @@ class StayGuestReviewsSection extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           CustomButton(
-            buttonName: 'See all reviews',
+            buttonName: context.l10n.seeAllReviews,
             color: Colors.transparent,
             borderColor: AppColors.border,
             onPressed: () async {},

@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_amenities_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_category_selector.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
@@ -38,7 +39,9 @@ class StayFiltersSheet extends HookWidget {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (_) => StayFilterDatePickerSheet(
-          title: isCheckIn ? 'Check-in date' : 'Check-out date',
+          title: isCheckIn
+              ? context.l10n.checkInDate
+              : context.l10n.checkOutDate,
           initialDate: isCheckIn
               ? current.checkIn ?? minimumDate
               : current.checkOut ?? minimumDate,
@@ -77,18 +80,21 @@ class StayFiltersSheet extends HookWidget {
                     alignment: Alignment.centerLeft,
                     child: TextButton(
                       onPressed: () => filters.value = const StayFilters(),
-                      child: const Text(
-                        'Reset',
-                        style: TextStyle(
+                      child: Text(
+                        context.l10n.reset,
+                        style: const TextStyle(
                           color: AppColors.primary,
                           fontSize: 16,
                         ),
                       ),
                     ),
                   ),
-                  const Text(
-                    'Filters',
-                    style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),
+                  Text(
+                    context.l10n.filters,
+                    style: const TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
@@ -109,21 +115,21 @@ class StayFiltersSheet extends HookWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.calendar_month_rounded,
-                      title: 'Dates',
+                      title: context.l10n.dates,
                     ),
                     const SizedBox(height: 16),
                     Row(
                       children: [
                         StayFilterDateField(
-                          label: 'Check-in',
+                          label: context.l10n.checkIn,
                           date: filters.value.checkIn,
                           onTap: () => selectDate(isCheckIn: true),
                         ),
                         const SizedBox(width: 12),
                         StayFilterDateField(
-                          label: 'Check-out',
+                          label: context.l10n.checkOut,
                           date: filters.value.checkOut,
                           onTap: () => selectDate(isCheckIn: false),
                         ),
@@ -136,14 +142,14 @@ class StayFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.people_alt_rounded,
-                      title: 'Guests',
+                      title: context.l10n.guestSelection,
                     ),
                     const SizedBox(height: 16),
                     StayGuestStepper(
-                      title: 'Adults',
-                      subtitle: 'Ages 13 or above',
+                      title: context.l10n.adult,
+                      subtitle: context.l10n.ages13Plus,
                       value: filters.value.adults,
                       minimum: 1,
                       onChanged: (value) =>
@@ -151,8 +157,8 @@ class StayFiltersSheet extends HookWidget {
                     ),
                     const SizedBox(height: 16),
                     StayGuestStepper(
-                      title: 'Children',
-                      subtitle: 'Ages 2–12',
+                      title: context.l10n.child,
+                      subtitle: context.l10n.ages2To12,
                       value: filters.value.children,
                       minimum: 0,
                       onChanged: (value) => filters.value = filters.value
@@ -165,9 +171,9 @@ class StayFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.location_city_rounded,
-                      title: 'City',
+                      title: context.l10n.city,
                     ),
                     const SizedBox(height: 16),
                     StayCitySelector(
@@ -183,9 +189,9 @@ class StayFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.home_work_rounded,
-                      title: 'Property type',
+                      title: context.l10n.propertyType,
                     ),
                     const SizedBox(height: 16),
                     StayCategorySelector(
@@ -207,9 +213,9 @@ class StayFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.key_rounded,
-                      title: 'Stay type',
+                      title: context.l10n.stayType,
                     ),
                     const SizedBox(height: 16),
                     StayInventoryTypeSelector(
@@ -228,9 +234,9 @@ class StayFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.attach_money_rounded,
-                      title: 'Price range',
+                      title: context.l10n.priceRange,
                     ),
                     const SizedBox(height: 8),
                     StayPriceRange(
@@ -251,9 +257,9 @@ class StayFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.star_rounded,
-                      title: 'Rating',
+                      title: context.l10n.rating,
                     ),
                     const SizedBox(height: 12),
                     StayRatingSelector(
@@ -268,9 +274,9 @@ class StayFiltersSheet extends HookWidget {
                         color: AppColors.surfaceHighlight,
                       ),
                     ),
-                    const FilterSectionHeader(
+                    FilterSectionHeader(
                       icon: Icons.auto_awesome_rounded,
-                      title: 'Amenities',
+                      title: context.l10n.amenities,
                     ),
                     const SizedBox(height: 16),
                     StayAmenitiesSelector(
@@ -302,17 +308,19 @@ class StayFiltersSheet extends HookWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${filters.value.appliedFiltersCount} filters applied',
+                        context.l10n.filtersApplied(
+                          filters.value.appliedFiltersCount,
+                        ),
                         style: const TextStyle(color: AppColors.muted),
                       ),
                       TextButton(
                         onPressed: () => filters.value = const StayFilters(),
-                        child: const Text('Clear all'),
+                        child: Text(context.l10n.clearAll),
                       ),
                     ],
                   ),
                   CustomButton(
-                    buttonName: 'Show results',
+                    buttonName: context.l10n.showResults,
                     onPressed: () => Navigator.of(context).pop(filters.value),
                   ),
                 ],

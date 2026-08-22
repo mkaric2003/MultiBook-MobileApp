@@ -1,0 +1,351 @@
+{
+  "@@locale": "bs",
+  "appName": "MultiBook",
+  "language": "Jezik",
+  "languageAndLocalization": "Jezik i lokalizacija",
+  "languageAndCurrency": "Jezik i valuta",
+  "selectLanguage": "Odaberi jezik",
+  "bosnian": "Bosanski",
+  "english": "Engleski",
+  "cancel": "Odustani",
+  "done": "Gotovo",
+  "save": "Sačuvaj",
+  "profile": "Profil",
+  "editProfile": "Uredi profil",
+  "account": "Račun",
+  "myBookings": "Moje rezervacije",
+  "saved": "Sačuvano",
+  "paymentMethods": "Načini plaćanja",
+  "notifications": "Notifikacije",
+  "messages": "Poruke",
+  "support": "Podrška",
+  "helpCenter": "Centar za pomoć",
+  "contactUs": "Kontaktirajte nas",
+  "termsOfService": "Uslovi korištenja",
+  "privacyPolicy": "Pravila privatnosti",
+  "logOut": "Odjavi se",
+  "signInTitle": "Prijavite se na MultiBook",
+  "signInDescription": "Pristupite svojim rezervacijama i omiljenim\nuslugama odmah.",
+  "signIn": "Prijavi se",
+  "forgotPassword": "Zaboravili ste lozinku?",
+  "continueWithApple": "Nastavi s Appleom",
+  "continueWithGoogle": "Nastavi s Googleom",
+  "dontHaveAccount": "Nemate račun?",
+  "createOne": "Kreirajte ga",
+  "appleSignInSoon": "Apple prijava uskoro će biti dostupna.",
+  "signUpTitle": "Kreirajte MultiBook račun",
+  "signUpDescription": "Pridružite se hiljadama korisnika koji otkrivaju omiljeni smještaj i usluge.",
+  "createAccount": "Kreiraj račun",
+  "alreadyHaveAccount": "Već imate račun?",
+  "skip": "Preskoči",
+  "getStarted": "Započni",
+  "onboardingFirstTitle": "Upravljajte smještajima i\nuslugama na jednom mjestu",
+  "onboardingFirstDescription": "Jednostavno upravljajte hotelima, apartmanima i uslužnim businessima iz jedne aplikacije.",
+  "onboardingSecondTitle": "Pratite rezervacije i\nzaradu jednostavno",
+  "onboardingSecondDescription": "Budite u toku s rezervacijama i pratite prihode u stvarnom vremenu.",
+  "onboardingThirdTitle": "Povežite se direktno\ns korisnicima",
+  "onboardingThirdDescription": "Primajte trenutne notifikacije, upravljajte rezervacijama i razgovarajte s klijentima na jednom mjestu.",
+  "businessManagement": "Upravljanje businessom",
+  "financials": "Finansije",
+  "notificationsAndCommunication": "Notifikacije i komunikacija",
+  "settings": "Postavke",
+  "businessProfile": "Business profil",
+  "manageStaysAndServices": "Upravljanje smještajima i uslugama",
+  "availabilityAndCalendar": "Dostupnost i kalendar",
+  "promotionsAndDiscounts": "Promocije i popusti",
+  "payoutMethods": "Načini isplate",
+  "transactionHistory": "Historija transakcija",
+  "invoicesAndTaxInformation": "Računi i poreske informacije",
+  "accountSettings": "Postavke računa",
+  "helpAndSupport": "Pomoć i podrška"
+  ,"orContinueWith": "ili nastavi sa"
+  ,"selectCity": "Odaberi grad"
+  ,"searchCities": "Pretraži gradove"
+  ,"allCities": "Svi gradovi"
+  ,"noCitiesFound": "Nema pronađenih gradova"
+  ,"useCity": "Koristi \"{city}\""
+  ,"@useCity": {"placeholders": {"city": {"type": "String"}}}
+  ,"emailAddressRequired": "Email adresa*"
+  ,"enterYourEmail": "Unesite email"
+  ,"passwordRequired": "Lozinka*"
+  ,"enterYourPassword": "Unesite lozinku"
+  ,"firstNameRequired": "Ime*"
+  ,"lastName": "Prezime"
+  ,"confirmPasswordRequired": "Potvrdite lozinku*"
+  ,"passwordStrength": "Jačina lozinke"
+  ,"passwordWeak": "Slaba"
+  ,"passwordFair": "Dovoljna"
+  ,"passwordGood": "Dobra"
+  ,"passwordStrong": "Jaka"
+  ,"atLeastEightCharacters": "Najmanje 8 znakova"
+  ,"oneUppercaseLetter": "Jedno veliko slovo"
+  ,"oneNumber": "Jedan broj"
+  ,"oneSymbol": "Jedan simbol"
+  ,"agreeToPrefix": "Slažem se sa "
+  ,"and": " i "
+  ,"useYourLocation": "Koristi vašu lokaciju"
+  ,"locationPermissionDescription": "Dozvolite MultiBooku korištenje trenutne lokacije kako bismo sačuvali vaš grad i prikazali relevantan smještaj i usluge u blizini."
+  ,"useCurrentLocation": "Koristi trenutnu lokaciju"
+  ,"notNow": "Ne sada"
+  ,"locationUnavailable": "Lokacija nije dostupna"
+  ,"openSettings": "Postavke"
+  ,"ok": "U redu"
+  ,"userTypeTitle": "Kako ćete koristiti MultiBook?"
+  ,"userTypeDescription": "Odaberite iskustvo koje vam najviše odgovara. Ovo možete promijeniti kasnije."
+  ,"ownBusiness": "Vlasnik sam businessa"
+  ,"ownBusinessDescription": "Upravljajte smještajima ili uslugama, rezervacijama i zaradom."
+  ,"customer": "Ja sam korisnik"
+  ,"customerDescription": "Rezervišite smještaj i termine za usluge na jednom mjestu."
+  ,"continueLabel": "Nastavi"
+  ,"writeMessage": "Napišite poruku"
+  ,"seen": "Viđeno"
+  ,"isTyping": "{name} piše"
+  ,"@isTyping": {"placeholders": {"name": {"type": "String"}}}
+  ,"noMessagesYet": "Još nema poruka."
+  ,"noNotificationsYet": "Još nemate notifikacija."
+  ,"now": "Sada"
+  ,"minutesAgo": "prije {count} min"
+  ,"@minutesAgo": {"placeholders": {"count": {"type": "int"}}}
+  ,"hoursAgo": "prije {count} h"
+  ,"@hoursAgo": {"placeholders": {"count": {"type": "int"}}}
+  ,"daysAgo": "prije {count} d"
+  ,"@daysAgo": {"placeholders": {"count": {"type": "int"}}}
+  ,"home": "Početna"
+  ,"bookings": "Rezervacije"
+  ,"explore": "Istraži"
+  ,"stays": "Smještaji"
+  ,"services": "Usluge"
+  ,"whereTo": "Gdje želite ići?"
+  ,"findAService": "Pronađi uslugu"
+  ,"searchResults": "Rezultati pretrage"
+  ,"noStaysMatchFilters": "Nijedan smještaj ne odgovara vašim filterima."
+  ,"noServicesMatchFilters": "Nijedna usluga ne odgovara vašim filterima."
+  ,"continueBooking": "Nastavi rezervaciju"
+  ,"continueAppointment": "Nastavi zakazivanje"
+  ,"popularNearYou": "Popularno u vašoj blizini"
+  ,"recommendedForYou": "Preporučeno za vas"
+  ,"exploreMoreServices": "Istražite više usluga"
+  ,"today": "Danas"
+  ,"weekend": "Vikend"
+  ,"featured": "Izdvojeno"
+  ,"perNight": "/noć"
+  ,"fromPrice": "Od {price}"
+  ,"@fromPrice": {"placeholders": {"price": {"type": "String"}}}
+  ,"appointmentDuration": "Termin od {minutes} min"
+  ,"@appointmentDuration": {"placeholders": {"minutes": {"type": "int"}}}
+  ,"guests": "{count} gostiju"
+  ,"@guests": {"placeholders": {"count": {"type": "int"}}}
+  ,"resume": "Nastavi"
+  ,"withProvider": "Kod {name}"
+  ,"@withProvider": {"placeholders": {"name": {"type": "String"}}}
+  ,"browseByCategory": "Pregledaj po kategoriji"
+  ,"featuredCollections": "Izdvojene kolekcije"
+  ,"trendingNearYou": "Popularno u vašoj blizini"
+  ,"recentlyViewed": "Nedavno pregledano"
+  ,"viewAllCategories": "Prikaži sve kategorije"
+  ,"showFewerCategories": "Prikaži manje kategorija"
+  ,"noServicesAvailableInCity": "U ovom gradu još nema dostupnih usluga."
+  ,"autumnGetaways": "Jesenski odmori"
+  ,"saveUpToThirtyPercent": "Uštedite do 30%"
+  ,"weekendEscapes": "Vikend bijegovi"
+  ,"nextBreakCloser": "Vaš sljedeći odmor bliži je nego što mislite"
+  ,"beachfrontStays": "Smještaji uz plažu"
+  ,"wakeUpToOceanViews": "Budite se uz pogled na more"
+  ,"topRatedServices": "Najbolje ocijenjene usluge"
+  ,"bookInstantlyBestPrices": "Rezervišite odmah · Najbolje cijene"
+  ,"lastMinuteAvailability": "Dostupnost u zadnji čas"
+  ,"findOpeningToday": "Pronađite slobodan termin danas"
+  ,"trustedLocalExperts": "Pouzdani lokalni stručnjaci"
+  ,"verifiedProvidersNearYou": "Potvrđeni pružaoci usluga u blizini"
+  ,"romanticGetaways": "Romantični odmori"
+  ,"perfectForCouples": "Savršeno za parove"
+  ,"familyFriendly": "Prilagođeno porodici"
+  ,"kidApprovedStays": "Smještaji koje djeca vole"
+  ,"quickCityBreaks": "Brzi gradski odmori"
+  ,"oceanViewsIncluded": "Pogled na more uključen"
+  ,"petFriendlyStays": "Smještaji za kućne ljubimce"
+  ,"bringYourBestFriend": "Povedite svog najboljeg prijatelja"
+  ,"poolStays": "Smještaji s bazenom"
+  ,"makeASplash": "Uživajte u osvježenju"
+  ,"mountainEscapes": "Planinski odmori"
+  ,"freshAirAndViews": "Svjež zrak i predivni pogledi"
+  ,"cityBreaks": "Gradski odmori"
+  ,"stayCloseToAction": "Budite blizu svih dešavanja"
+  ,"wellnessAndSpa": "Wellness i spa"
+  ,"relaxAndRejuvenate": "Opustite se i obnovite energiju"
+  ,"beautyAndGrooming": "Ljepota i njega"
+  ,"lookYourBest": "Izgledajte najbolje"
+  ,"homeRepairs": "Kućne popravke"
+  ,"fixItRight": "Popravite kako treba"
+  ,"autoServices": "Auto usluge"
+  ,"keepMoving": "Nastavite dalje"
+  ,"healthAndCare": "Zdravlje i njega"
+  ,"feelYourBest": "Osjećajte se najbolje"
+  ,"learnAndGrow": "Učite i rastite"
+  ,"buildNewSkills": "Steknite nove vještine"
+  ,"petCare": "Njega ljubimaca"
+  ,"careForEveryCompanion": "Njega za svakog ljubimca"
+  ,"professionalServices": "Profesionalne usluge"
+  ,"expertSupportWhenNeeded": "Stručna podrška kada vam treba"
+  ,"upcoming": "Predstojeće"
+  ,"past": "Prošle"
+  ,"noBookingsYet": "Još nemate rezervacija."
+  ,"noServiceBookingsYet": "Još nemate zakazanih usluga."
+  ,"bookAgain": "Rezerviši ponovo"
+  ,"viewDetails": "Pogledaj detalje"
+  ,"confirmed": "Potvrđeno"
+  ,"declined": "Odbijeno"
+  ,"cancelled": "Otkazano"
+  ,"completed": "Završeno"
+  ,"adults": "{count, plural, one{# odrasla osoba} other{# odraslih osoba}}"
+  ,"@adults": {"placeholders": {"count": {"type": "int"}}}
+  ,"children": "{count, plural, one{# dijete} other{# djece}}"
+  ,"@children": {"placeholders": {"count": {"type": "int"}}}
+  ,"serviceDuration": "{minutes} min"
+  ,"@serviceDuration": {"placeholders": {"minutes": {"type": "int"}}}
+  ,"bookingDetails": "Detalji rezervacije"
+  ,"saveBookingDraft": "Sačuvati nacrt rezervacije?"
+  ,"continueBookingLater": "Ovu rezervaciju možete nastaviti kasnije sa početne stranice."
+  ,"discard": "Odbaci"
+  ,"saveDraft": "Sačuvaj nacrt"
+  ,"selectDates": "Odaberite datume"
+  ,"checkIn": "Prijava"
+  ,"checkOut": "Odjava"
+  ,"guestSelection": "Gosti"
+  ,"adult": "Odrasli"
+  ,"ages13Plus": "13+ godina"
+  ,"child": "Djeca"
+  ,"ages2To12": "2–12 godina"
+  ,"infant": "Bebe"
+  ,"under2": "Ispod 2 godine"
+  ,"bookingSummary": "Sažetak rezervacije"
+  ,"dates": "Datumi"
+  ,"nights": "{count, plural, one{# noć} other{# noći}}"
+  ,"@nights": {"placeholders": {"count": {"type": "int"}}}
+  ,"serviceFee": "Naknada za uslugu"
+  ,"taxes": "Porezi"
+  ,"total": "Ukupno"
+  ,"appointmentDetails": "Detalji termina"
+  ,"cancelAppointmentQuestion": "Otkazati termin?"
+  ,"cannotBeUndone": "Ova radnja se ne može poništiti."
+  ,"keepAppointment": "Zadrži termin"
+  ,"cancelAppointment": "Otkaži termin"
+  ,"rescheduleAppointment": "Promijeni termin"
+  ,"messageProvider": "Pošalji poruku pružaocu usluge"
+  ,"appointmentInformation": "Informacije o terminu"
+  ,"service": "Usluga"
+  ,"provider": "Pružalac usluge"
+  ,"dateAndTime": "Datum i vrijeme"
+  ,"status": "Status"
+  ,"reference": "Referenca"
+  ,"filters": "Filteri"
+  ,"reset": "Resetuj"
+  ,"clearAll": "Očisti sve"
+  ,"showResults": "Prikaži rezultate"
+  ,"filtersApplied": "Primijenjeno filtera: {count}"
+  ,"@filtersApplied": {"placeholders": {"count": {"type": "int"}}}
+  ,"city": "Grad"
+  ,"propertyType": "Tip objekta"
+  ,"stayType": "Tip smještaja"
+  ,"priceRange": "Raspon cijena"
+  ,"rating": "Ocjena"
+  ,"amenities": "Pogodnosti"
+  ,"date": "Datum"
+  ,"time": "Vrijeme"
+  ,"dateAndTime": "Datum i vrijeme"
+  ,"anyDate": "Bilo koji datum"
+  ,"anyTime": "Bilo koje vrijeme"
+  ,"businessCategory": "Kategorija businessa"
+  ,"category": "Kategorija"
+  ,"allCategories": "Sve kategorije"
+  ,"sortBy": "Sortiraj po"
+  ,"checkInDate": "Datum prijave"
+  ,"checkOutDate": "Datum odjave"
+  ,"stayUnavailable": "Ovaj smještaj nije dostupan."
+  ,"removedFromSaved": "Uklonjeno iz sačuvanih"
+  ,"addedToSaved": "Dodano u sačuvane"
+  ,"availableRooms": "Dostupne sobe"
+  ,"aboutThisStay": "O ovom smještaju"
+  ,"checkAvailability": "Provjeri dostupnost"
+  ,"guestReviews": "Recenzije gostiju"
+  ,"seeAllReviews": "Pogledaj sve recenzije"
+  ,"location": "Lokacija"
+  ,"locationOnRequest": "Lokacija dostupna na upit"
+  ,"openInMaps": "Otvori u Mapama"
+  ,"unableToOpenMaps": "Nije moguće otvoriti Google Maps."
+  ,"cityCentre": "Centar grada"
+  ,"reviews": "{count} recenzija"
+  ,"@reviews": {"placeholders": {"count": {"type": "int"}}}
+  ,"roomGuestsAndSize": "{guests} gostiju · {size} m²"
+  ,"@roomGuestsAndSize": {"placeholders": {"guests": {"type": "int"}, "size": {"type": "int"}}}
+  ,"book": "Rezerviši"
+  ,"serviceUnavailable": "Ova usluga nije dostupna."
+  ,"about": "O usluzi"
+  ,"gallery": "Galerija"
+  ,"servicesOffered": "Ponuđene usluge"
+  ,"customerReviews": "Recenzije korisnika"
+  ,"perSession": "po terminu"
+  ,"away": "udaljeno"
+  ,"inCity": "{title} u gradu {city}"
+  ,"@inCity": {"placeholders": {"title": {"type": "String"}, "city": {"type": "String"}}}
+  ,"noCategoryAvailable": "Nema dostupnih objekata kategorije {category}."
+  ,"@noCategoryAvailable": {"placeholders": {"category": {"type": "String"}}}
+  ,"noCategoryAvailableInCity": "Nema dostupnih objekata kategorije {category} u gradu {city}."
+  ,"@noCategoryAvailableInCity": {"placeholders": {"category": {"type": "String"}, "city": {"type": "String"}}}
+  ,"payment": "Plaćanje"
+  ,"creditDebitCard": "Kreditna/debitna kartica"
+  ,"cardNumber": "Broj kartice"
+  ,"cardNumberExample": "1234 5678 9012 3456"
+  ,"expiry": "Datum isteka"
+  ,"expiryExample": "MM/GG"
+  ,"cvv": "CVV"
+  ,"cvvExample": "123"
+  ,"nameOnCard": "Ime na kartici"
+  ,"cardholderNameExample": "John Doe"
+  ,"fullName": "Puno ime"
+  ,"enterFullName": "Unesite puno ime"
+  ,"email": "E-mail"
+  ,"emailExample": "vas.email@primjer.com"
+  ,"phoneNumber": "Broj telefona"
+  ,"phoneNumberExample": "+1 (555) 123-4567"
+  ,"billingAddress": "Adresa za naplatu"
+  ,"enterBillingAddress": "Unesite adresu za naplatu"
+  ,"firstName": "Ime"
+  ,"lastNameRequired": "Prezime*"
+  ,"emailAddressRequired": "E-mail adresa*"
+  ,"emailAddress": "E-mail adresa"
+  ,"chooseFromLibrary": "Odaberi iz biblioteke"
+  ,"takePhoto": "Snimi fotografiju"
+  ,"enterAddress": "Unesite adresu"
+  ,"searchCountry": "Pretraži državu"
+  ,"dateOfBirth": "Datum rođenja"
+  ,"dateOfBirthExample": "DD. MM. GGGG."
+  ,"cityOptional": "Grad (opcionalno)"
+  ,"enterCity": "Unesite grad"
+  ,"addressOptional": "Adresa (opcionalno)"
+  ,"saveAppointmentDraft": "Sačuvati nacrt termina?"
+  ,"saveSelectedExtras": "Odabrani dodaci također će biti sačuvani."
+  ,"addExtras": "Dodaj dodatke"
+  ,"totalPaid": "Ukupno plaćeno"
+  ,"entirePlace": "Cijeli objekat"
+  ,"roomOrUnit": "Soba ili jedinica"
+  ,"day": "Dan"
+  ,"businessName": "Naziv businessa"
+  ,"enterBusinessName": "Unesite naziv businessa"
+  ,"enterPricePerNight": "Unesite cijenu po noći"
+  ,"enterBusinessAddress": "Unesite adresu businessa"
+  ,"roomNameExample": "npr. Deluxe soba"
+  ,"unitNameExample": "npr. Deluxe soba ili vrtna kućica"
+  ,"maxGuests": "Maks. gostiju"
+  ,"sizeSquareMeters": "Veličina m²"
+  ,"pricePerNight": "Cijena po noći"
+  ,"roomsAvailable": "Dostupno soba"
+  ,"unitsAvailable": "Dostupno jedinica"
+  ,"providerNameExample": "Ime pružaoca usluge, npr. Sarah Johnson"
+  ,"serviceNameExample": "npr. Šišanje, izbjeljivanje zuba, električni pregled"
+  ,"durationExample": "60"
+  ,"priceExample": "50"
+  ,"describeService": "Ukratko opišite ovu uslugu"
+  ,"providerNameHint": "Ime osobe koja pruža usluge"
+  ,"couldNotDeclineBooking": "Nije bilo moguće odbiti ovu rezervaciju."
+}

@@ -1,4 +1,5 @@
 import 'package:aquabook/app.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/business_type.dart';
@@ -181,7 +182,7 @@ class AddBusinessView extends HookWidget {
                           const FormFieldLabel('Business name*'),
                           const SizedBox(height: 10),
                           CustomTextField(
-                            hintText: 'Enter business name',
+                            hintText: context.l10n.enterBusinessName,
                             controller: nameController,
                           ),
                           const SizedBox(height: 26),
@@ -229,7 +230,7 @@ class AddBusinessView extends HookWidget {
                               const FormFieldLabel('Price per night*'),
                               const SizedBox(height: 10),
                               CustomTextField(
-                                hintText: 'Enter price per night',
+                                hintText: context.l10n.enterPricePerNight,
                                 controller: priceController,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
@@ -327,14 +328,14 @@ class AddBusinessView extends HookWidget {
                           const FormFieldLabel('City*'),
                           const SizedBox(height: 10),
                           CustomTextField(
-                            hintText: 'Enter city',
+                            hintText: context.l10n.enterCity,
                             controller: cityController,
                           ),
                           const SizedBox(height: 26),
                           const FormFieldLabel('Address*'),
                           const SizedBox(height: 10),
                           CustomTextField(
-                            hintText: 'Enter business address',
+                            hintText: context.l10n.enterBusinessAddress,
                             controller: addressController,
                           ),
                           const SizedBox(height: 10),
