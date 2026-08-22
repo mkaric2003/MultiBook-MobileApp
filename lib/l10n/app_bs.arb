@@ -548,4 +548,12 @@
   ,"extraGuidedTour": "Lokalna vođena tura"
   ,"extraHikingGuide": "Privatni vodič za planinarenje"
   ,"extraBoatTour": "Privatna tura brodom"
+  ,"leaveReview": "Ostavi recenziju"
+  ,"rateYourExperience": "Ocijenite svoje iskustvo"
+  ,"howWasYourExperience": "Kako je bilo?"
+  ,"writeReviewOptional": "Napišite recenziju (opcionalno)"
+  ,"shareYourExperience": "Podijelite svoje iskustvo..."
+  ,"submitReview": "Objavi recenziju"
+  ,"couldNotSubmitReview": "Nismo mogli objaviti recenziju. Pokušajte ponovo."
+  ,"allReviews": "Sve recenzije"
 }

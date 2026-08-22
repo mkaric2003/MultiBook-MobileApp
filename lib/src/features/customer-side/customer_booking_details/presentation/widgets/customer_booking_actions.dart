@@ -12,11 +12,15 @@ class CustomerBookingActions extends StatelessWidget {
     required this.isCancelling,
     required this.onCancel,
     required this.onBookAgain,
+    required this.onLeaveReview,
+    required this.hasSubmittedReview,
   });
   final BookingModel booking;
   final bool isCancelling;
   final Future<void> Function() onCancel;
   final Future<void> Function() onBookAgain;
+  final Future<void> Function() onLeaveReview;
+  final bool hasSubmittedReview;
 
   bool get _isPast {
     final now = DateTime.now();
@@ -37,12 +41,20 @@ class CustomerBookingActions extends StatelessWidget {
         ),
         const SizedBox(height: 14),
       ],
-      if (_isPast)
+      if (_isPast) ...[
+        if (!hasSubmittedReview) ...[
+          CustomButton(
+            buttonName: context.l10n.leaveReview,
+            onPressed: onLeaveReview,
+          ),
+          const SizedBox(height: 14),
+        ],
         CustomButton(
           buttonName: context.l10n.bookAgain,
           color: AppColors.surfaceHighlight,
           onPressed: onBookAgain,
         ),
+      ],
     ],
   );
 }

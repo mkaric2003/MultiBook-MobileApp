@@ -3249,6 +3249,54 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Privatna tura brodom'**
   String get extraBoatTour;
+
+  /// No description provided for @leaveReview.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ostavi recenziju'**
+  String get leaveReview;
+
+  /// No description provided for @rateYourExperience.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ocijenite svoje iskustvo'**
+  String get rateYourExperience;
+
+  /// No description provided for @howWasYourExperience.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako je bilo?'**
+  String get howWasYourExperience;
+
+  /// No description provided for @writeReviewOptional.
+  ///
+  /// In bs, this message translates to:
+  /// **'Napišite recenziju (opcionalno)'**
+  String get writeReviewOptional;
+
+  /// No description provided for @shareYourExperience.
+  ///
+  /// In bs, this message translates to:
+  /// **'Podijelite svoje iskustvo...'**
+  String get shareYourExperience;
+
+  /// No description provided for @submitReview.
+  ///
+  /// In bs, this message translates to:
+  /// **'Objavi recenziju'**
+  String get submitReview;
+
+  /// No description provided for @couldNotSubmitReview.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nismo mogli objaviti recenziju. Pokušajte ponovo.'**
+  String get couldNotSubmitReview;
+
+  /// No description provided for @allReviews.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sve recenzije'**
+  String get allReviews;
 }
 
 class _AppLocalizationsDelegate

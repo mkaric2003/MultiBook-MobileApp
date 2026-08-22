@@ -3,3 +3,4 @@ export { notifyOnBookingCreated, notifyOnBookingStatusChanged } from "./notifica
 export { notifyOnChatMessageCreated } from "./notifications/chat_notifications.js";
 export { searchStays } from "./stays/search_stays.js";
 export { searchServices } from "./services/search_services.js";
+export { createReview } from "./reviews/create_review.js";

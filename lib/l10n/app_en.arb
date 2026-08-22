@@ -548,4 +548,12 @@
   ,"extraGuidedTour": "Local guided tour"
   ,"extraHikingGuide": "Private hiking guide"
   ,"extraBoatTour": "Private boat tour"
+  ,"leaveReview": "Leave a review"
+  ,"rateYourExperience": "Rate your experience"
+  ,"howWasYourExperience": "How was your experience?"
+  ,"writeReviewOptional": "Write a review (optional)"
+  ,"shareYourExperience": "Share your experience..."
+  ,"submitReview": "Submit review"
+  ,"couldNotSubmitReview": "We could not submit your review. Please try again."
+  ,"allReviews": "All reviews"
 }

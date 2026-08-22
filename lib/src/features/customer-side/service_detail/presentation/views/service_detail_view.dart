@@ -13,6 +13,7 @@ import 'package:aquabook/src/features/customer-side/service_detail/presentation/
 import 'package:aquabook/src/features/customer-side/service_detail/presentation/widgets/service_overview.dart';
 import 'package:aquabook/src/features/customer-side/service_detail/presentation/widgets/service_reviews_section.dart';
 import 'package:aquabook/src/features/customer-side/service_detail/presentation/widgets/services_offered_section.dart';
+import 'package:aquabook/src/features/shared/business_reviews/presentation/widgets/business_reviews_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -93,7 +94,23 @@ class ServiceDetailView extends StatelessWidget {
                     ),
                     ServiceAboutSection(business: business),
                     ServiceGallerySection(business: business),
-                    ServiceReviewsSection(service: listing),
+                    if (state.reviews.isNotEmpty)
+                      ServiceReviewsSection(
+                        service: listing,
+                        reviews: state.reviews,
+                        onViewAll: () async => showModalBottomSheet<void>(
+                          context: context,
+                          backgroundColor: AppColors.background,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(24),
+                            ),
+                          ),
+                          builder: (_) =>
+                              BusinessReviewsSheet(businessId: business.id),
+                        ),
+                      ),
                     ServiceLocationSection(business: business),
                     const SizedBox(height: 28),
                   ],

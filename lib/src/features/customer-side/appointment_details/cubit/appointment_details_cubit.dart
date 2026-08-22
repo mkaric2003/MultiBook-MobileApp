@@ -1,17 +1,23 @@
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/appointment_repository.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:aquabook/src/data/repositories/review_repository.dart';
 import 'package:aquabook/src/features/customer-side/appointment_details/cubit/appointment_details_state.dart';
+import 'package:aquabook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
-  AppointmentDetailsCubit(this._businessRepository, this._appointmentRepository)
-    : super(const AppointmentDetailsState());
+  AppointmentDetailsCubit(
+    this._businessRepository,
+    this._appointmentRepository,
+    this._reviewRepository,
+  ) : super(const AppointmentDetailsState());
 
   final BusinessRepository _businessRepository;
   final AppointmentRepository _appointmentRepository;
+  final ReviewRepository _reviewRepository;
 
   Future<void> load(String businessId) async {
     try {
@@ -28,6 +34,37 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
       );
     }
   }
+
+  Future<void> loadReviewStatus(AppointmentModel appointment) async {
+    try {
+      final hasSubmittedReview = await _reviewRepository.hasReview(
+        RateBusinessTarget.service(
+          businessId: appointment.businessId,
+          sourceId: appointment.id,
+          businessName: appointment.businessName,
+        ),
+      );
+      emit(
+        AppointmentDetailsState(
+          isLoading: state.isLoading,
+          business: state.business,
+          appointment: state.appointment,
+          isCancelling: state.isCancelling,
+          hasSubmittedReview: hasSubmittedReview,
+        ),
+      );
+    } catch (_) {}
+  }
+
+  void markReviewSubmitted() => emit(
+    AppointmentDetailsState(
+      isLoading: state.isLoading,
+      business: state.business,
+      appointment: state.appointment,
+      isCancelling: state.isCancelling,
+      hasSubmittedReview: true,
+    ),
+  );
 
   Future<void> cancel(AppointmentModel appointment) async {
     if (state.isCancelling) return;

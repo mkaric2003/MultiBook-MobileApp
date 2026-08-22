@@ -1666,4 +1666,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get extraBoatTour => 'Private boat tour';
+
+  @override
+  String get leaveReview => 'Leave a review';
+
+  @override
+  String get rateYourExperience => 'Rate your experience';
+
+  @override
+  String get howWasYourExperience => 'How was your experience?';
+
+  @override
+  String get writeReviewOptional => 'Write a review (optional)';
+
+  @override
+  String get shareYourExperience => 'Share your experience...';
+
+  @override
+  String get submitReview => 'Submit review';
+
+  @override
+  String get couldNotSubmitReview =>
+      'We could not submit your review. Please try again.';
+
+  @override
+  String get allReviews => 'All reviews';
 }

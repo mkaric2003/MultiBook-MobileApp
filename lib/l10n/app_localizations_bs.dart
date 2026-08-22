@@ -1670,4 +1670,29 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get extraBoatTour => 'Privatna tura brodom';
+
+  @override
+  String get leaveReview => 'Ostavi recenziju';
+
+  @override
+  String get rateYourExperience => 'Ocijenite svoje iskustvo';
+
+  @override
+  String get howWasYourExperience => 'Kako je bilo?';
+
+  @override
+  String get writeReviewOptional => 'Napišite recenziju (opcionalno)';
+
+  @override
+  String get shareYourExperience => 'Podijelite svoje iskustvo...';
+
+  @override
+  String get submitReview => 'Objavi recenziju';
+
+  @override
+  String get couldNotSubmitReview =>
+      'Nismo mogli objaviti recenziju. Pokušajte ponovo.';
+
+  @override
+  String get allReviews => 'Sve recenzije';
 }

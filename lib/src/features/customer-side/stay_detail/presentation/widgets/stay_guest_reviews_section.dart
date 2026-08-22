@@ -1,14 +1,22 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_review_card.dart';
+import 'package:aquabook/src/data/models/business_review_model.dart';
+import 'package:aquabook/src/features/shared/business_reviews/presentation/widgets/business_review_card.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class StayGuestReviewsSection extends StatelessWidget {
-  const StayGuestReviewsSection({super.key, required this.stay});
+  const StayGuestReviewsSection({
+    super.key,
+    required this.stay,
+    required this.reviews,
+    required this.onViewAll,
+  });
 
   final StayListing stay;
+  final List<BusinessReviewModel> reviews;
+  final Future<void> Function() onViewAll;
 
   @override
   Widget build(BuildContext context) {
@@ -38,24 +46,21 @@ class StayGuestReviewsSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 18),
-          const StayReviewCard(
-            name: 'Sarah M.',
-            review:
-                'Amazing stay! The room was spotless and the staff was incredibly helpful. Great location too.',
-          ),
-          const SizedBox(height: 14),
-          const StayReviewCard(
-            name: 'James K.',
-            review:
-                'Perfect for business travel. Fast Wi-Fi, comfortable workspace, and excellent breakfast.',
-          ),
-          const SizedBox(height: 18),
-          CustomButton(
-            buttonName: context.l10n.seeAllReviews,
-            color: Colors.transparent,
-            borderColor: AppColors.border,
-            onPressed: () async {},
-          ),
+          ...reviews
+              .take(3)
+              .expand(
+                (review) => [
+                  BusinessReviewCard(review: review),
+                  const SizedBox(height: 14),
+                ],
+              ),
+          if (reviews.length > 3)
+            CustomButton(
+              buttonName: context.l10n.seeAllReviews,
+              color: Colors.transparent,
+              borderColor: AppColors.border,
+              onPressed: onViewAll,
+            ),
         ],
       ),
     );

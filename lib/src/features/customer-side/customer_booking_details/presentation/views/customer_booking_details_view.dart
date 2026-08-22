@@ -10,6 +10,8 @@ import 'package:aquabook/src/features/customer-side/customer_booking_details/pre
 import 'package:aquabook/src/features/customer-side/customer_booking_details/presentation/widgets/customer_booking_information_card.dart';
 import 'package:aquabook/src/features/customer-side/customer_booking_details/presentation/widgets/customer_booking_price_card.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:aquabook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
+import 'package:aquabook/src/features/shared/rate_business/presentation/widgets/rate_business_sheet.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,8 @@ class CustomerBookingDetailsView extends StatelessWidget {
   final BookingModel booking;
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (_) => getIt<CustomerBookingDetailsCubit>(param1: booking),
+    create: (_) =>
+        getIt<CustomerBookingDetailsCubit>(param1: booking)..loadReviewStatus(),
     child:
         BlocBuilder<CustomerBookingDetailsCubit, CustomerBookingDetailsState>(
           builder: (context, state) => Scaffold(
@@ -54,6 +57,7 @@ class CustomerBookingDetailsView extends StatelessWidget {
                           CustomerBookingActions(
                             booking: state.booking,
                             isCancelling: state.isCancelling,
+                            hasSubmittedReview: state.hasSubmittedReview,
                             onCancel: () async {
                               final cubit = context
                                   .read<CustomerBookingDetailsCubit>();
@@ -62,6 +66,32 @@ class CustomerBookingDetailsView extends StatelessWidget {
                                   cubit.state.booking.status ==
                                       BookingStatus.cancelled) {
                                 context.pop(cubit.state.booking);
+                              }
+                            },
+                            onLeaveReview: () async {
+                              final submitted =
+                                  await showModalBottomSheet<bool>(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: AppColors.background,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(24),
+                                      ),
+                                    ),
+                                    builder: (_) => RateBusinessSheet(
+                                      target: RateBusinessTarget.stay(
+                                        businessId: state.booking.businessId,
+                                        sourceId: state.booking.id,
+                                        businessName:
+                                            state.booking.businessName,
+                                      ),
+                                    ),
+                                  );
+                              if (submitted == true && context.mounted) {
+                                context
+                                    .read<CustomerBookingDetailsCubit>()
+                                    .markReviewSubmitted();
                               }
                             },
                             onBookAgain: () async => context.push(

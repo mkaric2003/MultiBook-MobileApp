@@ -12,6 +12,7 @@ import 'package:aquabook/src/features/customer-side/stay_detail/presentation/wid
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_guest_reviews_section.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_location_section.dart';
 import 'package:aquabook/src/features/customer-side/stay_detail/presentation/widgets/stay_overview.dart';
+import 'package:aquabook/src/features/shared/business_reviews/presentation/widgets/business_reviews_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -82,7 +83,23 @@ class StayDetailView extends StatelessWidget {
                     AvailableRoomsSection(business: business, stay: listing),
                     AmenitiesSection(business: business),
                     StayAboutSection(business: business),
-                    StayGuestReviewsSection(stay: listing),
+                    if (state.reviews.isNotEmpty)
+                      StayGuestReviewsSection(
+                        stay: listing,
+                        reviews: state.reviews,
+                        onViewAll: () async => showModalBottomSheet<void>(
+                          context: context,
+                          backgroundColor: AppColors.background,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(24),
+                            ),
+                          ),
+                          builder: (_) =>
+                              BusinessReviewsSheet(businessId: business.id),
+                        ),
+                      ),
                     StayLocationSection(business: business),
                     const SizedBox(height: 28),
                   ],

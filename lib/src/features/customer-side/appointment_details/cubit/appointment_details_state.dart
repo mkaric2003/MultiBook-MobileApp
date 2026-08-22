@@ -7,6 +7,7 @@ class AppointmentDetailsState {
     this.business,
     this.appointment,
     this.isCancelling = false,
+    this.hasSubmittedReview = false,
     this.errorMessage,
   });
 
@@ -14,5 +15,6 @@ class AppointmentDetailsState {
   final BusinessModel? business;
   final AppointmentModel? appointment;
   final bool isCancelling;
+  final bool hasSubmittedReview;
   final String? errorMessage;
 }

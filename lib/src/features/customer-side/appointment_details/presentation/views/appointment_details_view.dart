@@ -12,6 +12,9 @@ import 'package:aquabook/src/features/customer-side/appointment_details/presenta
 import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_price_card.dart';
 import 'package:aquabook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
 import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
+import 'package:aquabook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
+import 'package:aquabook/src/features/shared/rate_business/presentation/widgets/rate_business_sheet.dart';
+import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,9 +28,9 @@ class AppointmentDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocProvider(
-    create: (_) =>
-        getIt<AppointmentDetailsCubit>()
-          ..load(arguments.appointment.businessId),
+    create: (_) => getIt<AppointmentDetailsCubit>()
+      ..load(arguments.appointment.businessId)
+      ..loadReviewStatus(arguments.appointment),
     child: BlocConsumer<AppointmentDetailsCubit, AppointmentDetailsState>(
       listener: (context, state) {
         if (state.appointment != null) context.pop(state.appointment);
@@ -118,6 +121,37 @@ class AppointmentDetailsView extends StatelessWidget {
                                 business,
                               ),
                             );
+                          },
+                        ),
+                      ],
+                      if (arguments.canReview && !state.hasSubmittedReview) ...[
+                        const SizedBox(height: 24),
+                        CustomButton(
+                          buttonName: context.l10n.leaveReview,
+                          onPressed: () async {
+                            final submitted = await showModalBottomSheet<bool>(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: AppColors.background,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(24),
+                                ),
+                              ),
+                              builder: (_) => RateBusinessSheet(
+                                target: RateBusinessTarget.service(
+                                  businessId: arguments.appointment.businessId,
+                                  sourceId: arguments.appointment.id,
+                                  businessName:
+                                      arguments.appointment.businessName,
+                                ),
+                              ),
+                            );
+                            if (submitted == true && context.mounted) {
+                              context
+                                  .read<AppointmentDetailsCubit>()
+                                  .markReviewSubmitted();
+                            }
                           },
                         ),
                       ],
