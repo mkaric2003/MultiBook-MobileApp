@@ -4,3 +4,4 @@ export { notifyOnChatMessageCreated } from "./notifications/chat_notifications.j
 export { searchStays } from "./stays/search_stays.js";
 export { searchServices } from "./services/search_services.js";
 export { createReview } from "./reviews/create_review.js";
+export { initializeBusinessMetrics } from "./metrics/business_metrics.js";

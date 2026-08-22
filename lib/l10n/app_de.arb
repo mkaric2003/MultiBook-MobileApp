@@ -682,5 +682,24 @@
         "type": "int"
       }
     }
-  }
+  },
+  "leaveReview": "Bewertung schreiben",
+  "rateYourExperience": "Bewerte deine Erfahrung",
+  "howWasYourExperience": "Wie war deine Erfahrung?",
+  "writeReviewOptional": "Bewertung schreiben (optional)",
+  "shareYourExperience": "Teile deine Erfahrung...",
+  "submitReview": "Bewertung absenden",
+  "couldNotSubmitReview": "Deine Bewertung konnte nicht gesendet werden. Bitte versuche es erneut.",
+  "allReviews": "Alle Bewertungen",
+  "activeBookings": "Aktive Buchungen",
+  "activeAppointments": "Aktive Termine",
+  "earningsThisMonth": "Einnahmen diesen Monat",
+  "averageRating": "Durchschnittliche Bewertung",
+  "earningsTrend": "Einnahmentrend",
+  "bookingsTrend": "Buchungstrend",
+  "appointmentsTrend": "Termintrend",
+  "week": "Woche {count}",
+  "@week": {"placeholders": {"count": {"type": "int"}}},
+  "switchBusiness": "Business wechseln",
+  "appointments": "Termine"
 }

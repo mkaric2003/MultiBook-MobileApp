@@ -42,6 +42,20 @@ service cloud.firestore {
         && resource.data.ownerId == request.auth.uid;
     }
 
+    match /business_metrics/{businessId} {
+      allow read: if request.auth != null
+        && get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerId
+          == request.auth.uid;
+      allow write: if false;
+
+      match /months/{monthKey} {
+        allow read: if request.auth != null
+          && get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerId
+            == request.auth.uid;
+        allow write: if false;
+      }
+    }
+
     match /bookings/{bookingId} {
       allow read: if request.auth != null
         && (resource.data.customerId == request.auth.uid

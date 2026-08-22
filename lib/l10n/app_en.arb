@@ -556,4 +556,15 @@
   ,"submitReview": "Submit review"
   ,"couldNotSubmitReview": "We could not submit your review. Please try again."
   ,"allReviews": "All reviews"
+  ,"activeBookings": "Active bookings"
+  ,"activeAppointments": "Active appointments"
+  ,"earningsThisMonth": "Earnings this month"
+  ,"averageRating": "Average rating"
+  ,"earningsTrend": "Earnings trend"
+  ,"bookingsTrend": "Bookings trend"
+  ,"appointmentsTrend": "Appointments trend"
+  ,"week": "Week {count}"
+  ,"@week": {"placeholders": {"count": {"type": "int"}}}
+  ,"switchBusiness": "Switch business"
+  ,"appointments": "Appointments"
 }

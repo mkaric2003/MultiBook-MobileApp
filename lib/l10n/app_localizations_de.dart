@@ -1683,27 +1683,59 @@ class AppLocalizationsDe extends AppLocalizations {
   String get extraBoatTour => 'Private Bootstour';
 
   @override
-  String get leaveReview => 'Ostavi recenziju';
+  String get leaveReview => 'Bewertung schreiben';
 
   @override
-  String get rateYourExperience => 'Ocijenite svoje iskustvo';
+  String get rateYourExperience => 'Bewerte deine Erfahrung';
 
   @override
-  String get howWasYourExperience => 'Kako je bilo?';
+  String get howWasYourExperience => 'Wie war deine Erfahrung?';
 
   @override
-  String get writeReviewOptional => 'Napišite recenziju (opcionalno)';
+  String get writeReviewOptional => 'Bewertung schreiben (optional)';
 
   @override
-  String get shareYourExperience => 'Podijelite svoje iskustvo...';
+  String get shareYourExperience => 'Teile deine Erfahrung...';
 
   @override
-  String get submitReview => 'Objavi recenziju';
+  String get submitReview => 'Bewertung absenden';
 
   @override
   String get couldNotSubmitReview =>
-      'Nismo mogli objaviti recenziju. Pokušajte ponovo.';
+      'Deine Bewertung konnte nicht gesendet werden. Bitte versuche es erneut.';
 
   @override
-  String get allReviews => 'Sve recenzije';
+  String get allReviews => 'Alle Bewertungen';
+
+  @override
+  String get activeBookings => 'Aktive Buchungen';
+
+  @override
+  String get activeAppointments => 'Aktive Termine';
+
+  @override
+  String get earningsThisMonth => 'Einnahmen diesen Monat';
+
+  @override
+  String get averageRating => 'Durchschnittliche Bewertung';
+
+  @override
+  String get earningsTrend => 'Einnahmentrend';
+
+  @override
+  String get bookingsTrend => 'Buchungstrend';
+
+  @override
+  String get appointmentsTrend => 'Termintrend';
+
+  @override
+  String week(int count) {
+    return 'Woche $count';
+  }
+
+  @override
+  String get switchBusiness => 'Business wechseln';
+
+  @override
+  String get appointments => 'Termine';
 }

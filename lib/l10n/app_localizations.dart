@@ -3297,6 +3297,66 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Sve recenzije'**
   String get allReviews;
+
+  /// No description provided for @activeBookings.
+  ///
+  /// In bs, this message translates to:
+  /// **'Aktivne rezervacije'**
+  String get activeBookings;
+
+  /// No description provided for @activeAppointments.
+  ///
+  /// In bs, this message translates to:
+  /// **'Aktivni termini'**
+  String get activeAppointments;
+
+  /// No description provided for @earningsThisMonth.
+  ///
+  /// In bs, this message translates to:
+  /// **'Zarada ovog mjeseca'**
+  String get earningsThisMonth;
+
+  /// No description provided for @averageRating.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prosječna ocjena'**
+  String get averageRating;
+
+  /// No description provided for @earningsTrend.
+  ///
+  /// In bs, this message translates to:
+  /// **'Trend zarade'**
+  String get earningsTrend;
+
+  /// No description provided for @bookingsTrend.
+  ///
+  /// In bs, this message translates to:
+  /// **'Trend rezervacija'**
+  String get bookingsTrend;
+
+  /// No description provided for @appointmentsTrend.
+  ///
+  /// In bs, this message translates to:
+  /// **'Trend termina'**
+  String get appointmentsTrend;
+
+  /// No description provided for @week.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sedmica {count}'**
+  String week(int count);
+
+  /// No description provided for @switchBusiness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Promijeni business'**
+  String get switchBusiness;
+
+  /// No description provided for @appointments.
+  ///
+  /// In bs, this message translates to:
+  /// **'Termini'**
+  String get appointments;
 }
 
 class _AppLocalizationsDelegate

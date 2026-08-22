@@ -1,6 +1,7 @@
 import { onDocumentCreated, onDocumentUpdated } from "firebase-functions/v2/firestore";
 
 import { createAndDeliverNotification } from "./notification_dispatcher.js";
+import { recordReservationCreated, recordReservationUpdated } from "../metrics/business_metrics.js";
 
 export const notifyOnAppointmentCreated = onDocumentCreated(
   "appointments/{appointmentId}",
@@ -8,7 +9,8 @@ export const notifyOnAppointmentCreated = onDocumentCreated(
     const appointment = event.data?.data();
     if (appointment == null) return;
 
-    await createAndDeliverNotification({
+    await Promise.all([
+      createAndDeliverNotification({
       id: `appointment_created_owner_${event.params.appointmentId}`,
       recipientId: appointment.businessOwnerId as string,
       kind: "appointment_created",
@@ -19,7 +21,9 @@ export const notifyOnAppointmentCreated = onDocumentCreated(
         appointmentId: event.params.appointmentId,
         businessId: appointment.businessId as string,
       },
-    });
+      }),
+      recordReservationCreated("appointment", appointment),
+    ]);
   },
 );
 
@@ -30,7 +34,8 @@ export const notifyOnAppointmentStatusChanged = onDocumentUpdated(
     const after = event.data?.after.data();
     if (before == null || after == null || before.status === after.status) return;
 
-    await createAndDeliverNotification({
+    await Promise.all([
+      createAndDeliverNotification({
       id: `appointment_status_${event.params.appointmentId}_${after.status as string}`,
       recipientId: after.customerId as string,
       kind: "appointment_status_changed",
@@ -41,6 +46,8 @@ export const notifyOnAppointmentStatusChanged = onDocumentUpdated(
         appointmentId: event.params.appointmentId,
         businessId: after.businessId as string,
       },
-    });
+      }),
+      recordReservationUpdated("appointment", before, after),
+    ]);
   },
 );

@@ -1695,4 +1695,36 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get allReviews => 'Sve recenzije';
+
+  @override
+  String get activeBookings => 'Aktivne rezervacije';
+
+  @override
+  String get activeAppointments => 'Aktivni termini';
+
+  @override
+  String get earningsThisMonth => 'Zarada ovog mjeseca';
+
+  @override
+  String get averageRating => 'Prosječna ocjena';
+
+  @override
+  String get earningsTrend => 'Trend zarade';
+
+  @override
+  String get bookingsTrend => 'Trend rezervacija';
+
+  @override
+  String get appointmentsTrend => 'Trend termina';
+
+  @override
+  String week(int count) {
+    return 'Sedmica $count';
+  }
+
+  @override
+  String get switchBusiness => 'Promijeni business';
+
+  @override
+  String get appointments => 'Termini';
 }

@@ -1691,4 +1691,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allReviews => 'All reviews';
+
+  @override
+  String get activeBookings => 'Active bookings';
+
+  @override
+  String get activeAppointments => 'Active appointments';
+
+  @override
+  String get earningsThisMonth => 'Earnings this month';
+
+  @override
+  String get averageRating => 'Average rating';
+
+  @override
+  String get earningsTrend => 'Earnings trend';
+
+  @override
+  String get bookingsTrend => 'Bookings trend';
+
+  @override
+  String get appointmentsTrend => 'Appointments trend';
+
+  @override
+  String week(int count) {
+    return 'Week $count';
+  }
+
+  @override
+  String get switchBusiness => 'Switch business';
+
+  @override
+  String get appointments => 'Appointments';
 }

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:aquabook/src/data/enums/user_type.dart';
+import 'package:aquabook/src/data/repositories/business_metrics_repository.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
@@ -7,13 +10,20 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class DashboardCubit extends Cubit<DashboardState> {
-  DashboardCubit(this._userRepository, this._businessRepository)
-    : super(const DashboardState());
+  DashboardCubit(
+    this._userRepository,
+    this._businessRepository,
+    this._businessMetricsRepository,
+  ) : super(const DashboardState());
 
   final UserRepository _userRepository;
   final BusinessRepository _businessRepository;
+  final BusinessMetricsRepository _businessMetricsRepository;
+  StreamSubscription? _summarySubscription;
+  StreamSubscription? _monthSubscription;
 
   Future<void> load() async {
+    await _cancelMetricSubscriptions();
     final user = await _userRepository.getCurrentUser();
     if (user == null || user.type != UserType.provider) {
       emit(const DashboardState(isLoading: false));
@@ -32,5 +42,34 @@ class DashboardCubit extends Cubit<DashboardState> {
     }
 
     emit(DashboardState(isLoading: false, business: business));
+    if (business == null) return;
+    try {
+      await _businessMetricsRepository.initialize(business.id);
+    } catch (_) {
+      // A missing metrics document simply renders zero values until the next
+      // booking or appointment event creates it.
+    }
+    _summarySubscription = _businessMetricsRepository
+        .watchSummary(business.id)
+        .listen((metrics) => emit(state.copyWith(metrics: metrics)));
+    _monthSubscription = _businessMetricsRepository
+        .watchCurrentMonth(business.id)
+        .listen(
+          (monthlyMetrics) =>
+              emit(state.copyWith(monthlyMetrics: monthlyMetrics)),
+        );
+  }
+
+  Future<void> _cancelMetricSubscriptions() async {
+    await _summarySubscription?.cancel();
+    await _monthSubscription?.cancel();
+    _summarySubscription = null;
+    _monthSubscription = null;
+  }
+
+  @override
+  Future<void> close() async {
+    await _cancelMetricSubscriptions();
+    return super.close();
   }
 }

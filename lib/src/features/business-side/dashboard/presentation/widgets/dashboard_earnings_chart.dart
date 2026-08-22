@@ -1,25 +1,48 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_chart_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class DashboardEarningsChart extends StatelessWidget {
-  const DashboardEarningsChart({super.key});
+  const DashboardEarningsChart({required this.values, super.key});
+
+  final List<double> values;
 
   @override
   Widget build(BuildContext context) {
     return DashboardChartCard(
-      title: 'Earnings Trend',
+      title: context.l10n.earningsTrend,
       child: LineChart(
         LineChartData(
           minX: 0,
           maxX: 3,
-          minY: 2500,
-          maxY: 4000,
+          minY: 0,
+          maxY: _maximumValue,
+          lineTouchData: LineTouchData(
+            touchTooltipData: LineTouchTooltipData(
+              getTooltipColor: (_) => AppColors.surface,
+              tooltipBorderRadius: BorderRadius.circular(8),
+              fitInsideHorizontally: true,
+              fitInsideVertically: true,
+              getTooltipItems: (touchedSpots) => touchedSpots
+                  .map(
+                    (spot) => LineTooltipItem(
+                      context.l10n.formatCurrency(spot.y),
+                      const TextStyle(
+                        color: AppColors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
           borderData: FlBorderData(show: false),
           gridData: FlGridData(
             drawVerticalLine: false,
-            horizontalInterval: 500,
+            horizontalInterval: _maximumValue / 4,
             getDrawingHorizontalLine: (_) =>
                 const FlLine(color: AppColors.border, strokeWidth: 1),
           ),
@@ -34,9 +57,9 @@ class DashboardEarningsChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 42,
-                interval: 500,
+                interval: _maximumValue / 4,
                 getTitlesWidget: (value, meta) => Text(
-                  value.toInt().toString(),
+                  context.l10n.formatCurrency(value),
                   style: const TextStyle(color: AppColors.muted, fontSize: 11),
                 ),
               ),
@@ -47,11 +70,10 @@ class DashboardEarningsChart extends StatelessWidget {
                 reservedSize: 25,
                 interval: 1,
                 getTitlesWidget: (value, meta) {
-                  const labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
                   return Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
-                      labels[value.toInt()],
+                      context.l10n.week(value.toInt() + 1),
                       style: const TextStyle(
                         color: AppColors.muted,
                         fontSize: 11,
@@ -64,12 +86,10 @@ class DashboardEarningsChart extends StatelessWidget {
           ),
           lineBarsData: [
             LineChartBarData(
-              spots: const [
-                FlSpot(0, 2800),
-                FlSpot(1, 3200),
-                FlSpot(2, 3800),
-                FlSpot(3, 2650),
-              ],
+              spots: List.generate(
+                4,
+                (index) => FlSpot(index.toDouble(), values[index]),
+              ),
               color: const Color(0xFF24E5C5),
               barWidth: 3,
               isCurved: false,
@@ -80,5 +100,13 @@ class DashboardEarningsChart extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double get _maximumValue {
+    final maximum = values.fold<double>(
+      0,
+      (value, item) => item > value ? item : value,
+    );
+    return maximum == 0 ? 100 : (maximum * 1.2).ceilToDouble();
   }
 }

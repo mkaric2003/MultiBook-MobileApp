@@ -14,6 +14,8 @@ import 'package:aquabook/src/core/modules/shared_preferences_module.dart'
     as _i144;
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart'
     as _i137;
+import 'package:aquabook/src/data/data_sources/business_metrics_data_source.dart'
+    as _i422;
 import 'package:aquabook/src/data/data_sources/chat_data_source.dart' as _i511;
 import 'package:aquabook/src/data/data_sources/device_location_data_source.dart'
     as _i986;
@@ -46,6 +48,8 @@ import 'package:aquabook/src/data/repositories/booking_draft_repository.dart'
     as _i64;
 import 'package:aquabook/src/data/repositories/booking_repository.dart'
     as _i961;
+import 'package:aquabook/src/data/repositories/business_metrics_repository.dart'
+    as _i1034;
 import 'package:aquabook/src/data/repositories/business_repository.dart'
     as _i1065;
 import 'package:aquabook/src/data/repositories/chat_repository.dart' as _i525;
@@ -226,6 +230,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i805.NotificationDataSource>(
       () => _i805.NotificationDataSourceImpl(gh<_i892.FirebaseMessaging>()),
     );
+    gh.lazySingleton<_i422.BusinessMetricsDataSource>(
+      () => _i422.BusinessMetricsDataSourceImpl(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i809.FirebaseFunctions>(),
+      ),
+    );
     gh.lazySingleton<_i83.FirebaseStorageDataSource>(
       () => _i83.FirebaseStorageDataSourceImpl(gh<_i457.FirebaseStorage>()),
     );
@@ -305,6 +315,11 @@ extension GetItInjectableX on _i174.GetIt {
       ),
       dispose: (i) => i.dispose(),
     );
+    gh.lazySingleton<_i1034.BusinessMetricsRepository>(
+      () => _i1034.BusinessMetricsRepository(
+        gh<_i422.BusinessMetricsDataSource>(),
+      ),
+    );
     gh.factory<_i324.RateBusinessCubit>(
       () => _i324.RateBusinessCubit(gh<_i890.ReviewRepository>()),
     );
@@ -333,6 +348,13 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i760.ServiceSearchRepository(
         gh<_i206.ServiceSearchDataSource>(),
         gh<_i1065.BusinessRepository>(),
+      ),
+    );
+    gh.factory<_i758.DashboardCubit>(
+      () => _i758.DashboardCubit(
+        gh<_i747.UserRepository>(),
+        gh<_i1065.BusinessRepository>(),
+        gh<_i1034.BusinessMetricsRepository>(),
       ),
     );
     gh.factory<_i1047.ChatConversationCubit>(
@@ -410,12 +432,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i830.ExploreCubit>(
       () => _i830.ExploreCubit(
-        gh<_i747.UserRepository>(),
-        gh<_i1065.BusinessRepository>(),
-      ),
-    );
-    gh.factory<_i758.DashboardCubit>(
-      () => _i758.DashboardCubit(
         gh<_i747.UserRepository>(),
         gh<_i1065.BusinessRepository>(),
       ),

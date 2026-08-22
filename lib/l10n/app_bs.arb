@@ -556,4 +556,15 @@
   ,"submitReview": "Objavi recenziju"
   ,"couldNotSubmitReview": "Nismo mogli objaviti recenziju. Pokušajte ponovo."
   ,"allReviews": "Sve recenzije"
+  ,"activeBookings": "Aktivne rezervacije"
+  ,"activeAppointments": "Aktivni termini"
+  ,"earningsThisMonth": "Zarada ovog mjeseca"
+  ,"averageRating": "Prosječna ocjena"
+  ,"earningsTrend": "Trend zarade"
+  ,"bookingsTrend": "Trend rezervacija"
+  ,"appointmentsTrend": "Trend termina"
+  ,"week": "Sedmica {count}"
+  ,"@week": {"placeholders": {"count": {"type": "int"}}}
+  ,"switchBusiness": "Promijeni business"
+  ,"appointments": "Termini"
 }

@@ -1,6 +1,7 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/shared/notifications/presentation/widgets/notification_bell.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class DashboardBusinessHeader extends StatelessWidget {
@@ -53,15 +54,18 @@ class DashboardBusinessHeader extends StatelessWidget {
               const SizedBox(height: 2),
               InkWell(
                 onTap: onSwitchBusiness,
-                child: const Row(
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Switch business',
-                      style: TextStyle(color: AppColors.muted, fontSize: 13),
+                      context.l10n.switchBusiness,
+                      style: const TextStyle(
+                        color: AppColors.muted,
+                        fontSize: 13,
+                      ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(
+                    const SizedBox(width: 4),
+                    const Icon(
                       Icons.keyboard_arrow_down,
                       color: AppColors.muted,
                       size: 19,

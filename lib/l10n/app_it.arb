@@ -682,5 +682,24 @@
         "type": "int"
       }
     }
-  }
+  },
+  "leaveReview": "Lascia una recensione",
+  "rateYourExperience": "Valuta la tua esperienza",
+  "howWasYourExperience": "Com’è stata la tua esperienza?",
+  "writeReviewOptional": "Scrivi una recensione (facoltativo)",
+  "shareYourExperience": "Condividi la tua esperienza...",
+  "submitReview": "Invia recensione",
+  "couldNotSubmitReview": "Non siamo riusciti a inviare la recensione. Riprova.",
+  "allReviews": "Tutte le recensioni",
+  "activeBookings": "Prenotazioni attive",
+  "activeAppointments": "Appuntamenti attivi",
+  "earningsThisMonth": "Entrate di questo mese",
+  "averageRating": "Valutazione media",
+  "earningsTrend": "Andamento entrate",
+  "bookingsTrend": "Andamento prenotazioni",
+  "appointmentsTrend": "Andamento appuntamenti",
+  "week": "Settimana {count}",
+  "@week": {"placeholders": {"count": {"type": "int"}}},
+  "switchBusiness": "Cambia attività",
+  "appointments": "Appuntamenti"
 }

@@ -682,5 +682,24 @@
         "type": "int"
       }
     }
-  }
+  },
+  "leaveReview": "Laisser un avis",
+  "rateYourExperience": "Évaluez votre expérience",
+  "howWasYourExperience": "Comment s’est passée votre expérience ?",
+  "writeReviewOptional": "Écrire un avis (facultatif)",
+  "shareYourExperience": "Partagez votre expérience...",
+  "submitReview": "Publier l’avis",
+  "couldNotSubmitReview": "Impossible de publier votre avis. Réessayez.",
+  "allReviews": "Tous les avis",
+  "activeBookings": "Réservations actives",
+  "activeAppointments": "Rendez-vous actifs",
+  "earningsThisMonth": "Revenus de ce mois",
+  "averageRating": "Note moyenne",
+  "earningsTrend": "Tendance des revenus",
+  "bookingsTrend": "Tendance des réservations",
+  "appointmentsTrend": "Tendance des rendez-vous",
+  "week": "Semaine {count}",
+  "@week": {"placeholders": {"count": {"type": "int"}}},
+  "switchBusiness": "Changer d’établissement",
+  "appointments": "Rendez-vous"
 }
