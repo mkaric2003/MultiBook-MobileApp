@@ -1723,4 +1723,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appointments => 'Appointments';
+
+  @override
+  String get earnings => 'Earnings';
+
+  @override
+  String get totalEarningsThisMonth => 'Total earnings this month';
+
+  @override
+  String get pendingPayouts => 'Pending payouts';
+
+  @override
+  String get completedPayouts => 'Completed payouts';
+
+  @override
+  String get earningsLoadFailed => 'We could not load earnings.';
+
+  @override
+  String get selectBusiness => 'Select business';
+
+  @override
+  String get payWithCash => 'Pay with cash';
+
+  @override
+  String get confirmBooking => 'Confirm booking';
+
+  @override
+  String get validCardDetailsRequired =>
+      'Enter a valid 16-digit card, MM/YY and CVV.';
+
+  @override
+  String get onlineEarnings => 'Online earnings';
+
+  @override
+  String get cashEarnings => 'Cash earnings';
+
+  @override
+  String get markAsCompleted => 'Mark as completed';
+
+  @override
+  String get cash => 'Cash';
+
+  @override
+  String get cashPaymentDue => 'Pay in cash on arrival';
+
+  @override
+  String get markAsNoShow => 'Mark as no-show';
+
+  @override
+  String get noShow => 'No-show';
+
+  @override
+  String get noShowEarningsHint =>
+      'Marking a no-show removes this amount from earnings and metrics.';
 }

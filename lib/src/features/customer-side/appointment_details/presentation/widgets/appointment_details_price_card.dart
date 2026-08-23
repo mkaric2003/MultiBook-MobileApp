@@ -63,6 +63,7 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
             label: 'Payment method',
             value: AppointmentDetailsFormatters.paymentMethod(
               appointment.paymentMethod,
+              cashLabel: context.l10n.cash,
             ),
           ),
         ],

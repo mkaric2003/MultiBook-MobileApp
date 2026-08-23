@@ -701,5 +701,22 @@
   "week": "Semaine {count}",
   "@week": {"placeholders": {"count": {"type": "int"}}},
   "switchBusiness": "Changer d’établissement",
-  "appointments": "Rendez-vous"
+  "appointments": "Rendez-vous",
+  "earnings": "Revenus",
+  "totalEarningsThisMonth": "Revenus totaux ce mois-ci",
+  "pendingPayouts": "Paiements en attente",
+  "completedPayouts": "Paiements terminés",
+  "earningsLoadFailed": "Impossible de charger les revenus.",
+  "selectBusiness": "Sélectionner un établissement",
+  "payWithCash": "Payer en espèces",
+  "confirmBooking": "Confirmer la réservation",
+  "validCardDetailsRequired": "Saisissez une carte valide à 16 chiffres, MM/AA et CVV.",
+  "onlineEarnings": "Revenus en ligne",
+  "cashEarnings": "Revenus en espèces",
+  "markAsCompleted": "Marquer comme terminé",
+  "cash": "Espèces",
+  "cashPaymentDue": "Payez en espèces à l’arrivée",
+  "markAsNoShow": "Marquer comme absent",
+  "noShow": "Absent",
+  "noShowEarningsHint": "Marquer une absence retire ce montant des revenus et des statistiques."
 }

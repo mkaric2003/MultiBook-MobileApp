@@ -105,7 +105,9 @@ class AppointmentConfirmationSummaryCard extends StatelessWidget {
             icon: Icons.attach_money_rounded,
             label: 'TOTAL AMOUNT',
             value: context.l10n.formatCurrency(arguments.appointment.total),
-            detail: 'Paid via ${arguments.appointment.paymentMethod}',
+            detail: arguments.appointment.paymentStatus.name == 'pending'
+                ? context.l10n.cashPaymentDue
+                : 'Paid via ${arguments.appointment.paymentMethod}',
             iconBackground: AppColors.success.withValues(alpha: .2),
             iconColor: AppColors.success,
           ),

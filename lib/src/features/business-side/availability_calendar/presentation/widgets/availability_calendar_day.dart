@@ -74,6 +74,7 @@ class AvailabilityCalendarDay extends StatelessWidget {
     BookingStatus.declined => const Color(0xFFF59E0B),
     BookingStatus.cancelled => const Color(0xFFFF4B4B),
     BookingStatus.completed => const Color(0xFF8B5CF6),
+    BookingStatus.noShow => const Color(0xFFFB4B4B),
   };
 
   Color _occupancyColor(AvailabilityDaySummary summary) {

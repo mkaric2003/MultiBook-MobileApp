@@ -1733,4 +1733,57 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get appointments => 'Citas';
+
+  @override
+  String get earnings => 'Ingresos';
+
+  @override
+  String get totalEarningsThisMonth => 'Ingresos totales de este mes';
+
+  @override
+  String get pendingPayouts => 'Pagos pendientes';
+
+  @override
+  String get completedPayouts => 'Pagos completados';
+
+  @override
+  String get earningsLoadFailed => 'No pudimos cargar los ingresos.';
+
+  @override
+  String get selectBusiness => 'Seleccionar negocio';
+
+  @override
+  String get payWithCash => 'Pagar en efectivo';
+
+  @override
+  String get confirmBooking => 'Confirmar reserva';
+
+  @override
+  String get validCardDetailsRequired =>
+      'Introduce una tarjeta válida de 16 dígitos, MM/AA y CVV.';
+
+  @override
+  String get onlineEarnings => 'Ingresos online';
+
+  @override
+  String get cashEarnings => 'Ingresos en efectivo';
+
+  @override
+  String get markAsCompleted => 'Marcar como completado';
+
+  @override
+  String get cash => 'Efectivo';
+
+  @override
+  String get cashPaymentDue => 'Paga en efectivo al llegar';
+
+  @override
+  String get markAsNoShow => 'Marcar como no presentado';
+
+  @override
+  String get noShow => 'No se presentó';
+
+  @override
+  String get noShowEarningsHint =>
+      'Al marcar una ausencia, este importe se elimina de los ingresos y las métricas.';
 }

@@ -1735,4 +1735,57 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get appointments => 'Appuntamenti';
+
+  @override
+  String get earnings => 'Entrate';
+
+  @override
+  String get totalEarningsThisMonth => 'Entrate totali di questo mese';
+
+  @override
+  String get pendingPayouts => 'Pagamenti in sospeso';
+
+  @override
+  String get completedPayouts => 'Pagamenti completati';
+
+  @override
+  String get earningsLoadFailed => 'Non è stato possibile caricare le entrate.';
+
+  @override
+  String get selectBusiness => 'Seleziona attività';
+
+  @override
+  String get payWithCash => 'Paga in contanti';
+
+  @override
+  String get confirmBooking => 'Conferma prenotazione';
+
+  @override
+  String get validCardDetailsRequired =>
+      'Inserisci una carta valida di 16 cifre, MM/AA e CVV.';
+
+  @override
+  String get onlineEarnings => 'Entrate online';
+
+  @override
+  String get cashEarnings => 'Entrate in contanti';
+
+  @override
+  String get markAsCompleted => 'Segna come completato';
+
+  @override
+  String get cash => 'Contanti';
+
+  @override
+  String get cashPaymentDue => 'Paga in contanti all’arrivo';
+
+  @override
+  String get markAsNoShow => 'Segna come assente';
+
+  @override
+  String get noShow => 'Assente';
+
+  @override
+  String get noShowEarningsHint =>
+      'Segnare l’assenza rimuove questo importo dalle entrate e dalle metriche.';
 }

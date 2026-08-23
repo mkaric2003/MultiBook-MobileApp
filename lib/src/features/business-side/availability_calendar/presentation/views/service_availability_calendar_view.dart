@@ -250,6 +250,7 @@ class ServiceAvailabilityCalendarView extends HookWidget {
     'completed' => BookingStatus.completed,
     'cancelled' => BookingStatus.cancelled,
     'declined' => BookingStatus.declined,
+    'no_show' => BookingStatus.noShow,
     _ => BookingStatus.confirmed,
   };
 

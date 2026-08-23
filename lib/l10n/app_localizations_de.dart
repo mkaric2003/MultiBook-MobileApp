@@ -1738,4 +1738,57 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get appointments => 'Termine';
+
+  @override
+  String get earnings => 'Einnahmen';
+
+  @override
+  String get totalEarningsThisMonth => 'Gesamteinnahmen diesen Monat';
+
+  @override
+  String get pendingPayouts => 'Ausstehende Auszahlungen';
+
+  @override
+  String get completedPayouts => 'Abgeschlossene Auszahlungen';
+
+  @override
+  String get earningsLoadFailed => 'Einnahmen konnten nicht geladen werden.';
+
+  @override
+  String get selectBusiness => 'Business auswählen';
+
+  @override
+  String get payWithCash => 'Bar zahlen';
+
+  @override
+  String get confirmBooking => 'Buchung bestätigen';
+
+  @override
+  String get validCardDetailsRequired =>
+      'Gib eine gültige 16-stellige Kartennummer, MM/JJ und CVV ein.';
+
+  @override
+  String get onlineEarnings => 'Online-Einnahmen';
+
+  @override
+  String get cashEarnings => 'Bareinnahmen';
+
+  @override
+  String get markAsCompleted => 'Als abgeschlossen markieren';
+
+  @override
+  String get cash => 'Barzahlung';
+
+  @override
+  String get cashPaymentDue => 'Barzahlung bei Ankunft';
+
+  @override
+  String get markAsNoShow => 'Als nicht erschienen markieren';
+
+  @override
+  String get noShow => 'Nicht erschienen';
+
+  @override
+  String get noShowEarningsHint =>
+      'Bei einer Markierung als nicht erschienen wird dieser Betrag aus Einnahmen und Statistiken entfernt.';
 }

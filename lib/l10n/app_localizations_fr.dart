@@ -1735,4 +1735,57 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appointments => 'Rendez-vous';
+
+  @override
+  String get earnings => 'Revenus';
+
+  @override
+  String get totalEarningsThisMonth => 'Revenus totaux ce mois-ci';
+
+  @override
+  String get pendingPayouts => 'Paiements en attente';
+
+  @override
+  String get completedPayouts => 'Paiements terminés';
+
+  @override
+  String get earningsLoadFailed => 'Impossible de charger les revenus.';
+
+  @override
+  String get selectBusiness => 'Sélectionner un établissement';
+
+  @override
+  String get payWithCash => 'Payer en espèces';
+
+  @override
+  String get confirmBooking => 'Confirmer la réservation';
+
+  @override
+  String get validCardDetailsRequired =>
+      'Saisissez une carte valide à 16 chiffres, MM/AA et CVV.';
+
+  @override
+  String get onlineEarnings => 'Revenus en ligne';
+
+  @override
+  String get cashEarnings => 'Revenus en espèces';
+
+  @override
+  String get markAsCompleted => 'Marquer comme terminé';
+
+  @override
+  String get cash => 'Espèces';
+
+  @override
+  String get cashPaymentDue => 'Payez en espèces à l’arrivée';
+
+  @override
+  String get markAsNoShow => 'Marquer comme absent';
+
+  @override
+  String get noShow => 'Absent';
+
+  @override
+  String get noShowEarningsHint =>
+      'Marquer une absence retire ce montant des revenus et des statistiques.';
 }

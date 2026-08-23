@@ -701,5 +701,22 @@
   "week": "Woche {count}",
   "@week": {"placeholders": {"count": {"type": "int"}}},
   "switchBusiness": "Business wechseln",
-  "appointments": "Termine"
+  "appointments": "Termine",
+  "earnings": "Einnahmen",
+  "totalEarningsThisMonth": "Gesamteinnahmen diesen Monat",
+  "pendingPayouts": "Ausstehende Auszahlungen",
+  "completedPayouts": "Abgeschlossene Auszahlungen",
+  "earningsLoadFailed": "Einnahmen konnten nicht geladen werden.",
+  "selectBusiness": "Business auswählen",
+  "payWithCash": "Bar zahlen",
+  "confirmBooking": "Buchung bestätigen",
+  "validCardDetailsRequired": "Gib eine gültige 16-stellige Kartennummer, MM/JJ und CVV ein.",
+  "onlineEarnings": "Online-Einnahmen",
+  "cashEarnings": "Bareinnahmen",
+  "markAsCompleted": "Als abgeschlossen markieren",
+  "cash": "Barzahlung",
+  "cashPaymentDue": "Barzahlung bei Ankunft",
+  "markAsNoShow": "Als nicht erschienen markieren",
+  "noShow": "Nicht erschienen",
+  "noShowEarningsHint": "Bei einer Markierung als nicht erschienen wird dieser Betrag aus Einnahmen und Statistiken entfernt."
 }

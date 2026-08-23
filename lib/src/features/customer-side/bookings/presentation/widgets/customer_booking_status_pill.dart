@@ -26,6 +26,7 @@ class CustomerBookingStatusPill extends StatelessWidget {
         context.l10n.completed,
         const Color(0xFF3B82F6),
       ),
+      BookingStatus.noShow => (context.l10n.noShow, const Color(0xFFEF4444)),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),

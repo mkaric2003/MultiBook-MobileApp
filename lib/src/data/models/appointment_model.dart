@@ -1,4 +1,5 @@
 import 'package:aquabook/src/data/enums/currency_code.dart';
+import 'package:aquabook/src/data/enums/payment_status.dart';
 
 class AppointmentModel {
   const AppointmentModel({
@@ -24,6 +25,7 @@ class AppointmentModel {
     required this.serviceFee,
     required this.taxes,
     required this.total,
+    required this.paymentStatus,
     required this.paymentMethod,
     required this.confirmationCode,
     this.currency = CurrencyCode.bam,
@@ -53,6 +55,7 @@ class AppointmentModel {
   final double serviceFee;
   final double taxes;
   final double total;
+  final PaymentStatus paymentStatus;
   final String paymentMethod;
   final String confirmationCode;
   final CurrencyCode currency;
@@ -90,6 +93,7 @@ class AppointmentModel {
     serviceFee: serviceFee,
     taxes: taxes,
     total: total,
+    paymentStatus: paymentStatus,
     paymentMethod: paymentMethod,
     confirmationCode: confirmationCode,
     currency: currency,

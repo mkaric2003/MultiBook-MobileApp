@@ -701,5 +701,22 @@
   "week": "Semana {count}",
   "@week": {"placeholders": {"count": {"type": "int"}}},
   "switchBusiness": "Cambiar negocio",
-  "appointments": "Citas"
+  "appointments": "Citas",
+  "earnings": "Ingresos",
+  "totalEarningsThisMonth": "Ingresos totales de este mes",
+  "pendingPayouts": "Pagos pendientes",
+  "completedPayouts": "Pagos completados",
+  "earningsLoadFailed": "No pudimos cargar los ingresos.",
+  "selectBusiness": "Seleccionar negocio",
+  "payWithCash": "Pagar en efectivo",
+  "confirmBooking": "Confirmar reserva",
+  "validCardDetailsRequired": "Introduce una tarjeta válida de 16 dígitos, MM/AA y CVV.",
+  "onlineEarnings": "Ingresos online",
+  "cashEarnings": "Ingresos en efectivo",
+  "markAsCompleted": "Marcar como completado",
+  "cash": "Efectivo",
+  "cashPaymentDue": "Paga en efectivo al llegar",
+  "markAsNoShow": "Marcar como no presentado",
+  "noShow": "No se presentó",
+  "noShowEarningsHint": "Al marcar una ausencia, este importe se elimina de los ingresos y las métricas."
 }

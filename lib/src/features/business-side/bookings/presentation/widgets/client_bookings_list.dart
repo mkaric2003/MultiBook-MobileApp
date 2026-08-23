@@ -76,6 +76,12 @@ class ClientBookingsList extends StatelessWidget {
                 onDecline: context
                     .read<ClientBookingsCubit>()
                     .declineAppointment,
+                onComplete: context
+                    .read<ClientBookingsCubit>()
+                    .completeAppointment,
+                onNoShow: context
+                    .read<ClientBookingsCubit>()
+                    .markAppointmentNoShow,
                 onReschedule: () async {
                   final business = state.selectedBusiness;
                   if (business == null) return;
@@ -107,6 +113,8 @@ class ClientBookingsList extends StatelessWidget {
             builder: (_) => ManageBookingSheet(
               booking: booking,
               onDecline: context.read<ClientBookingsCubit>().declineBooking,
+              onComplete: context.read<ClientBookingsCubit>().completeBooking,
+              onNoShow: context.read<ClientBookingsCubit>().markBookingNoShow,
             ),
           ),
         );

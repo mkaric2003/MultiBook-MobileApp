@@ -1727,4 +1727,57 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get appointments => 'Termini';
+
+  @override
+  String get earnings => 'Zarada';
+
+  @override
+  String get totalEarningsThisMonth => 'Ukupna zarada ovog mjeseca';
+
+  @override
+  String get pendingPayouts => 'Isplate na čekanju';
+
+  @override
+  String get completedPayouts => 'Završene isplate';
+
+  @override
+  String get earningsLoadFailed => 'Nismo mogli učitati zaradu.';
+
+  @override
+  String get selectBusiness => 'Odaberite business';
+
+  @override
+  String get payWithCash => 'Plati gotovinom';
+
+  @override
+  String get confirmBooking => 'Potvrdi rezervaciju';
+
+  @override
+  String get validCardDetailsRequired =>
+      'Unesite ispravan 16-cifren broj kartice, MM/GG i CVV.';
+
+  @override
+  String get onlineEarnings => 'Online zarada';
+
+  @override
+  String get cashEarnings => 'Gotovinska zarada';
+
+  @override
+  String get markAsCompleted => 'Označi kao završeno';
+
+  @override
+  String get cash => 'Gotovina';
+
+  @override
+  String get cashPaymentDue => 'Plaćanje gotovinom pri dolasku';
+
+  @override
+  String get markAsNoShow => 'Označi kao nedolazak';
+
+  @override
+  String get noShow => 'Nije se pojavio';
+
+  @override
+  String get noShowEarningsHint =>
+      'Označavanjem nedolaska iznos će biti uklonjen iz zarade i statistike.';
 }

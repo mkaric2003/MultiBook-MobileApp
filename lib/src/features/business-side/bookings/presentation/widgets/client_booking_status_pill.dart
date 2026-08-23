@@ -1,5 +1,6 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ClientBookingStatusPill extends StatelessWidget {
@@ -10,10 +11,20 @@ class ClientBookingStatusPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, color) = switch (status) {
-      BookingStatus.confirmed => ('Confirmed', const Color(0xFF10B981)),
-      BookingStatus.declined => ('Declined', const Color(0xFFFB7185)),
-      BookingStatus.cancelled => ('Cancelled', const Color(0xFFFB7185)),
-      BookingStatus.completed => ('Completed', AppColors.muted),
+      BookingStatus.confirmed => (
+        context.l10n.confirmed,
+        const Color(0xFF10B981),
+      ),
+      BookingStatus.declined => (
+        context.l10n.declined,
+        const Color(0xFFFB7185),
+      ),
+      BookingStatus.cancelled => (
+        context.l10n.cancelled,
+        const Color(0xFFFB7185),
+      ),
+      BookingStatus.completed => (context.l10n.completed, AppColors.muted),
+      BookingStatus.noShow => (context.l10n.noShow, const Color(0xFFFB4B4B)),
     };
 
     return Container(

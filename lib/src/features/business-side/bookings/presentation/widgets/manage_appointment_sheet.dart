@@ -14,12 +14,16 @@ class ManageAppointmentSheet extends StatelessWidget {
   const ManageAppointmentSheet({
     required this.appointment,
     required this.onDecline,
+    required this.onComplete,
+    required this.onNoShow,
     required this.onReschedule,
     super.key,
   });
 
   final AppointmentModel appointment;
   final Future<bool> Function(AppointmentModel appointment) onDecline;
+  final Future<bool> Function(AppointmentModel appointment) onComplete;
+  final Future<bool> Function(AppointmentModel appointment) onNoShow;
   final Future<void> Function() onReschedule;
 
   @override
@@ -33,6 +37,14 @@ class ManageAppointmentSheet extends StatelessWidget {
       Duration(minutes: appointment.endMinutes - appointment.startMinutes),
     );
     final canManage = appointment.status == 'confirmed';
+    final hasEnded = DateTime.now().isAfter(end);
+    final canComplete = canManage && hasEnded;
+    final canMarkNoShow =
+        hasEnded &&
+        (appointment.status == 'confirmed' ||
+            appointment.status == 'completed') &&
+        (appointment.paymentMethod.trim().toLowerCase() == 'cash' ||
+            appointment.paymentStatus.name == 'pending');
 
     return Container(
       decoration: const BoxDecoration(
@@ -134,6 +146,20 @@ class ManageAppointmentSheet extends StatelessWidget {
               ),
               if (canManage) ...[
                 const SizedBox(height: 20),
+                if (canComplete) ...[
+                  CustomButton(
+                    buttonName: context.l10n.markAsCompleted,
+                    height: 48,
+                    fontSize: 16,
+                    onPressed: () async {
+                      final didComplete = await onComplete(appointment);
+                      if (didComplete && context.mounted) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                ],
                 CustomButton(
                   buttonName: context.l10n.declineAppointment,
                   color: Colors.redAccent,
@@ -152,6 +178,47 @@ class ManageAppointmentSheet extends StatelessWidget {
                   height: 48,
                   fontSize: 16,
                   onPressed: onReschedule,
+                ),
+              ],
+              if (canMarkNoShow) ...[
+                const SizedBox(height: 10),
+                CustomButton(
+                  buttonName: context.l10n.markAsNoShow,
+                  color: Colors.transparent,
+                  textColor: Colors.redAccent,
+                  borderColor: Colors.redAccent,
+                  height: 48,
+                  fontSize: 16,
+                  onPressed: () async {
+                    final didMarkNoShow = await onNoShow(appointment);
+                    if (didMarkNoShow && context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 1),
+                      child: Icon(
+                        Icons.info_outline,
+                        size: 15,
+                        color: AppColors.muted,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        context.l10n.noShowEarningsHint,
+                        style: const TextStyle(
+                          color: AppColors.muted,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
               const SizedBox(height: 10),

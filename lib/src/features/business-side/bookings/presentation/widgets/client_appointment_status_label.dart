@@ -1,4 +1,5 @@
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ClientAppointmentStatusLabel extends StatelessWidget {
@@ -13,6 +14,7 @@ class ClientAppointmentStatusLabel extends StatelessWidget {
       'cancelled' => Colors.redAccent,
       'declined' => const Color(0xFFF59E0B),
       'completed' => AppColors.iconMuted,
+      'no_show' => Colors.redAccent,
       _ => AppColors.primary,
     };
     return Container(
@@ -22,9 +24,18 @@ class ClientAppointmentStatusLabel extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        status[0].toUpperCase() + status.substring(1),
+        _label(context),
         style: TextStyle(color: color, fontWeight: FontWeight.w700),
       ),
     );
   }
+
+  String _label(BuildContext context) => switch (status) {
+    'confirmed' => context.l10n.confirmed,
+    'cancelled' => context.l10n.cancelled,
+    'declined' => context.l10n.declined,
+    'completed' => context.l10n.completed,
+    'no_show' => context.l10n.noShow,
+    _ => status,
+  };
 }

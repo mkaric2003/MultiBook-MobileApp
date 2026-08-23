@@ -1,1 +1,1 @@
-enum BookingStatus { confirmed, declined, cancelled, completed }
+enum BookingStatus { confirmed, declined, cancelled, completed, noShow }

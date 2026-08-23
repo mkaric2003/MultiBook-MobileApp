@@ -5,6 +5,7 @@ import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/booking_status.dart';
+import 'package:aquabook/src/data/enums/payment_method_type.dart';
 import 'package:aquabook/src/data/enums/payment_status.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
@@ -27,7 +28,11 @@ class BookingRepository {
   final FirestoreDataSource _firestore;
   final BusinessRepository _businessRepository;
   static const _collection = 'bookings';
-  Future<BookingModel> createBooking(PaymentArguments arguments) async {
+  Future<BookingModel> createBooking(
+    PaymentArguments arguments, {
+    required PaymentMethodType paymentType,
+    required String paymentMethod,
+  }) async {
     final customerId = _auth.currentUser?.uid;
     if (customerId == null) {
       throw const BookingException(
@@ -86,8 +91,10 @@ class BookingRepository {
       taxes: taxes,
       total: roomSubtotal + extras + cleaning + service + taxes,
       status: BookingStatus.confirmed,
-      paymentStatus: PaymentStatus.paid,
-      paymentMethod: 'card',
+      paymentStatus: paymentType == PaymentMethodType.cash
+          ? PaymentStatus.pending
+          : PaymentStatus.paid,
+      paymentMethod: paymentMethod,
       confirmationCode: _confirmationCode(),
       currency: business.currency,
     );
@@ -131,6 +138,7 @@ class BookingRepository {
           'total': result.total,
           'status': result.status.name,
           'paymentStatus': result.paymentStatus.name,
+          'paymentType': paymentType.name,
           'paymentMethod': result.paymentMethod,
           'confirmationCode': result.confirmationCode,
           'currency': result.currency.name,
@@ -299,6 +307,76 @@ class BookingRepository {
       );
     }
   }
+
+  Future<BookingModel> completeBooking(BookingModel booking) async {
+    if (_auth.currentUser?.uid != booking.businessOwnerId) {
+      throw const BookingException(
+        'You are not allowed to complete this booking.',
+      );
+    }
+    try {
+      await _firestore.updateDocument(
+        collection: _collection,
+        documentId: booking.id,
+        data: {
+          'status': BookingStatus.completed.name,
+          'updatedAt': _firestore.serverTimestamp,
+        },
+      );
+      return booking.copyWith(status: BookingStatus.completed);
+    } catch (error, stackTrace) {
+      log(
+        'Could not complete booking.',
+        name: 'BookingRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const BookingException(
+        'We could not complete this booking. Please try again.',
+      );
+    }
+  }
+
+  Future<BookingModel> markBookingNoShow(BookingModel booking) async {
+    if (_auth.currentUser?.uid != booking.businessOwnerId ||
+        (booking.status != BookingStatus.confirmed &&
+            booking.status != BookingStatus.completed) ||
+        !_isCashBooking(booking) ||
+        !DateTime.now().isAfter(booking.checkOut)) {
+      throw const BookingException(
+        'You are not allowed to mark this booking as a no-show.',
+      );
+    }
+    try {
+      await _firestore.updateDocument(
+        collection: _collection,
+        documentId: booking.id,
+        data: {
+          'status': BookingStatus.noShow.name,
+          'updatedAt': _firestore.serverTimestamp,
+        },
+      );
+      log(
+        'Booking ${booking.id} marked as no-show.',
+        name: 'BookingRepository',
+      );
+      return booking.copyWith(status: BookingStatus.noShow);
+    } catch (error, stackTrace) {
+      log(
+        'Could not mark booking as no-show.',
+        name: 'BookingRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const BookingException(
+        'We could not mark this booking as a no-show. Please try again.',
+      );
+    }
+  }
+
+  bool _isCashBooking(BookingModel booking) =>
+      booking.paymentMethod.trim().toLowerCase() == 'cash' ||
+      booking.paymentStatus == PaymentStatus.pending;
 
   BookingModel _bookingFromDocument(Map<String, dynamic> document) {
     final extras = (document['selectedExtras'] as List<dynamic>? ?? const [])

@@ -48,7 +48,7 @@ Ključna poslovna odluka je da razgovor i rezervacija pripadaju **businessu**, a
 | DI | `get_it` + `injectable` | Registracija data sourcea, repozitorija i Firebase servisa |
 | Modeli | `dart_mappable` | Tipizirani modeli i serializacija |
 | Backend | Firebase Auth, Firestore, Storage, Functions, Messaging | Auth, baza, fajlovi, server-side pretraga i notifikacije |
-| Cloud Functions | TypeScript, Node.js 22, Functions v2 | Trigger notifikacije i callable pretrage |
+| Cloud Functions | TypeScript, Node.js 22, Functions v2 | Trigger notifikacije, agregirane metrike i callable pretrage |
 | Mape i lokacija | `google_maps_flutter`, `geolocator`, Nominatim preko `dio` | Pin na mapi, lokacija uređaja i besplatni reverse geocoding |
 | Slike | `image_picker`, `flutter_image_compress` | Odabir i WebP kompresija prije Storage uploada |
 | UI | Google Fonts, Flutter SVG, Cupertino, FL Chart | Dark dizajn, ikone, date picker i dashboard chartovi |
@@ -105,6 +105,7 @@ lib/
 
 functions/src/
  ├─ notifications/                    # Firestore trigger notifikacije i dispatch
+ ├─ metrics/                          # agregati zarade i KPI metrika po businessu
  ├─ stays/                            # modularni callable stay search
  └─ services/                         # modularni callable service search
 ```
@@ -169,13 +170,13 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 
 Lokalizacija koristi Flutterov službeni `gen-l10n` mehanizam, bez dodatnog third-party localization sloja:
 
-- ARB katalozi: `lib/l10n/app_bs.arb` i `lib/l10n/app_en.arb`.
+- ARB katalozi: `lib/l10n/app_{bs,en,de,es,fr,it}.arb`.
 - Generisani, tipizirani API: `AppLocalizations`; UI mu pristupa kroz `context.l10n` ekstenziju.
-- Bosanski (`bs`) je početni i fallback jezik; engleski (`en`) je trenutno podržan alternativni jezik.
+- Bosanski (`bs`) je početni i fallback jezik. Podržani su i engleski (`en`), njemački (`de`), španski (`es`), francuski (`fr`) i italijanski (`it`).
 - `LocaleRepository` sprema odabrani kod jezika u SharedPreferences, a globalni `LocaleCubit` odmah mijenja `MaterialApp.locale` bez restarta aplikacije.
 - Izbor jezika je dostupan na customer Profile i provider More ekranima. iOS `Info.plist` eksplicitno navodi `bs` i `en`.
 
-Novi tekst uvijek treba dodati u oba ARB fajla, zatim pokrenuti:
+Novi tekst uvijek treba dodati u sve ARB fajlove, zatim pokrenuti:
 
 ```bash
 flutter gen-l10n
@@ -255,9 +256,10 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - Ako customer ne odabere room type, flow koristi default jedinicu/cijenu businessa gdje je to dozvoljeno.
 - Booking details bira raspon datuma (ponedjeljak je prvi dan sedmice), goste i provjerava dostupnost.
 - Review stay bira extras i izračunava room subtotal, cleaning/service fee, taxes i total.
-- Payment validira karticu (formatiranje broja, expiry i 3-cifreni CVV), billing podatke i Terms checkbox.
-- Booking se nakon plaćanja kreira kao `confirmed`; mogući statusi su `confirmed`, `declined`, `cancelled`, `completed`.
+- Payment podržava karticu, Apple Pay, Google Pay i **plaćanje gotovinom**. Kartica validira format broja, expiry i 3-cifreni CVV; gotovina ne traži kartične podatke.
+- Booking se kreira kao `confirmed`; mogući statusi su `confirmed`, `declined`, `cancelled`, `completed` i `noShow`.
 - Customer može otkazati booking; providerovo odbijanje je `declined`, customerovo otkazivanje je `cancelled`.
+- Za gotovinske rezervacije business odmah vidi očekivanu zaradu. Nakon isteka termina provider može označiti `noShow`; iznos se tada uklanja iz zarade, cash/online podjele, broja rezervacija i chart agregata.
 
 ### Service detail i appointment
 
@@ -265,9 +267,9 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - Customer može odabrati više usluga; ukupno trajanje određuje koliko susjednih 30-minutnih slotova mora ostati slobodno.
 - Dostupnost se provjerava po konkretnom provideru; zauzeti ili blokirani slotovi nisu selektabilni.
 - Review appointment prikazuje odabrane usluge i add-ons; special requests su namjerno izbačeni iz sadašnjeg flowa.
-- Payment kreira `confirmed` appointment i atomarno zauzima njegove slotove.
+- Payment kreira `confirmed` appointment i atomarno zauzima njegove slotove. Dostupni su kartica, Apple Pay, Google Pay i gotovina.
 - Appointment detail prikazuje business, izvođača, usluge, datum/vrijeme, cijene, payment metodu i confirmation code.
-- Customer može otkazati appointment i može ga rescheduleati samo jednom; provider može rescheduleati bez tog ograničenja.
+- Customer može otkazati appointment i može ga rescheduleati samo jednom; provider može rescheduleati bez tog ograničenja. Past cash appointment može biti označen kao `no_show` kada customer ne dođe.
 
 ### Draftovi
 
@@ -289,9 +291,12 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 
 ## 10. Provider featurei
 
-### Dashboard i business management
+### Dashboard, earnings i business management
 
-- Dashboard prikazuje selektovani business, KPI kartice i trenutno hardkodirane FL Chart trendove.
+- Dashboard prikazuje selektovani business, aktivne bookinge/appointmente, zaradu u tekućem mjesecu, prosječni rating i FL Chart trendove iz agregiranih metrika.
+- Earnings prikazuje ukupnu mjesečnu zaradu, odvojeno **online** i **cash** earnings, te trend prihoda i volumena rezervacija.
+- Cash rezervacija/appointment ulazi u earnings odmah pri potvrdi kao očekivani prihod. No-show je dostupan samo provideru, samo za završeni cash termin/rezervaciju sa statusom `confirmed` ili `completed`; uz akciju se prikazuje objašnjenje o uticaju na metrike.
+- `business_metrics/{businessId}` i mjesečni dokumenti su server-side agregati. Ne računaju se skeniranjem svih booking/appointment dokumenata pri svakom otvaranju dashboarda.
 - `selectedBusinessId` u user dokumentu je jedini izvor aktivnog businessa i promjene se reaktivno reflektuju na dashboard i booking ekran.
 - Ako provider nema businessa, dashboard prikazuje empty state i *Add new business* akciju.
 - *My Businesses* lista podržava dodavanje, biranje aktivnog businessa i swipe-to-delete sa animacijom kartice bez reloadanja cijelog ekrana.
@@ -299,8 +304,8 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 ### Provider bookings i appointments
 
 - Bookings ekran učitava stavke za selektovani business, koristi filter chipove i cursor paginaciju.
-- Manage Booking prikazuje customera, room, datume, goste, cijenu i cancel akciju.
-- Service appointment kartice imaju Manage akciju za customer detalje, cancel, reschedule i kontakt.
+- Manage Booking prikazuje customera, room, datume, goste, cijenu, završavanje i odbijanje. Kod past cash stavki nudi i No-show akciju sa hintom o uklanjanju iz earnings metrika.
+- Service appointment kartice imaju Manage akciju za customer detalje, završavanje, cancel, reschedule, kontakt i No-show za past cash termine.
 - Provider cancel rezultira statusom `declined`; customer cancel rezultira `cancelled`.
 
 ### Availability & Calendar
@@ -352,6 +357,9 @@ Chat se otvara iz booking/appointment detalja kroz *Message provider/customer* i
 | `notifyOnAppointmentCreated` | Provider dobija notifikaciju o novom appointmentu |
 | `notifyOnAppointmentStatusChanged` | Customer dobija promjenu statusa appointmenta |
 | `notifyOnChatMessageCreated` | Push samo ako recipient nije aktivan u istom chatu |
+| `initializeBusinessMetrics` | Callable inicijalizacija ili verzionirana obnova KPI i earnings agregata za owner business |
+
+Promjene booking/appointment dokumenata istovremeno ažuriraju `business_metrics`: novi confirmed zapis dodaje prihod, a `declined`, `cancelled` ili no-show (`noShow` za booking, `no_show` za appointment) ga uklanja. Gotovina se računa pri potvrdi, ne tek pri ručnom označavanju kao completed.
 
 `notification_dispatcher` koristi transaction claim pattern (`processing`, timeout, attempts) kako se ista notifikacija ne bi više puta brojala ili slala pri retryju. Nevalidni FCM tokeni se uklanjaju iz `users/{uid}/devices`.
 
@@ -370,6 +378,8 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `businesses/{businessId}` | stay ili service business, detalji, mediji, lokacija i discovery polja |
 | `bookings/{id}` | stay rezervacije i payment/guest snapshot |
 | `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
+| `business_metrics/{businessId}` | agregat aktivnih booking/appointment KPI-jeva i verzija migracije metrika |
+| `business_metrics/{businessId}/months/{YYYY-MM}` | mjesečna revenue/cash/online zarada, booking count i dnevni chart podaci |
 | `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
 | `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
 | `booking_drafts/{uid}` | prekinut stay booking tok |
@@ -444,6 +454,7 @@ Za pouzdan search/filter gradova koriste se normalizovana polja, posebno `locati
 | Composite indeksi | Firestore može izvršiti query bez punog skeniranja kolekcije |
 | City denormalizacija | `location.cityLowercase` omogućava efikasan city query |
 | `appointment_slots` metadata | Dostupnost se čita bez preuzimanja privatnih appointment dokumenata |
+| Precomputed business metrics | Dashboard i Earnings čitaju mali agregat umjesto svih historijskih rezervacija |
 | Debounced text search | Smanjuje broj requestova dok korisnik tipka |
 | Slika: WebP, quality 42, max 1080 | Znatno manje Storage bandwidtha i vremena uploada; original se zadrži samo ako kompresija nije bolja ili plugin zakaže |
 | Max 7 business fotografija | Kontrolisan Storage i payload obim |
@@ -511,6 +522,7 @@ Korisnik deploy radi ručno. Konfigurisan codebase je **`multibook`**, zato imen
 ```bash
 firebase deploy --only firestore:rules,firestore:indexes,storage
 firebase deploy --only functions:multibook:searchStays,functions:multibook:searchServices
+firebase deploy --only functions:multibook:initializeBusinessMetrics,functions:multibook:notifyOnBookingCreated,functions:multibook:notifyOnBookingStatusChanged,functions:multibook:notifyOnAppointmentCreated,functions:multibook:notifyOnAppointmentStatusChanged
 firebase deploy --only functions
 ```
 
@@ -539,7 +551,7 @@ Za kritične flowove treba ručno provjeriti:
 1. email, Google i logout autentikaciju;
 2. kreiranje stay/service businessa sa slikama;
 3. direktni i endpoint search/filter rezultat;
-4. booking i appointment create/cancel/reschedule;
+4. booking i appointment create/cancel/reschedule, cash plaćanje i past-cash No-show;
 5. zauzete slotove sa više providera;
 6. promjenu selektovanog businessa na dashboardu, bookings i calendaru;
 7. chat seen/typing, unread indikator i ponašanje kad je chat otvoren;
@@ -552,9 +564,7 @@ Repositoryji i data sourcevi koriste `dart:developer` logove za bitne Firebase i
 
 ## 20. Trenutna ograničenja i naredne preporuke
 
-- Payment UI i validacija postoje, ali integracija stvarnog payment providera (npr. Stripe/Apple Pay/Google Pay tokenizacija) nije dio ovog prototipa. Kartični podaci se ne smiju trajno spremati u Firestore.
-- Dashboard chartovi koriste hardkodirane podatke dok se ne uvede analitika/aggregate sloj.
-- Recenzije i rating modeli su prikazani i podržani u podacima, ali puni review workflow može biti zaseban feature.
+- Payment UI koristi mock potvrdu za karticu, Apple Pay i Google Pay; prije produkcije treba integrisati stvarni payment provider (npr. Stripe), tokenizaciju i server-side verifikaciju. Kartični podaci se ne smiju trajno spremati u Firestore.
 - Search po slobodnom tekstu u Firestoreu ima prirodna ograničenja; za napredni full-text search u produkciji treba procijeniti Algolia, Typesense, Meilisearch ili namjenski indeks, uz troškovnu analizu.
 - Callable endpointi trenutno služe kompleksnim filterima. Ako kasnije business transakcije trebaju strožiju server-side kontrolu, booking/appointment create može se migrirati na callable endpoint uz server-side payment verifikaciju.
 - Za veći obim potrebno je dodati automatizovane unit, repository, widget i integration testove, Crashlytics/analytics strategiju, rate limiting i monitoring budžeta.

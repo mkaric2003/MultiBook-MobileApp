@@ -2,6 +2,7 @@ import 'package:aquabook/app.dart';
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/data/enums/payment_method_type.dart';
 import 'package:aquabook/src/features/customer-side/appointment_confirmed/domain/models/appointment_confirmed_arguments.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/cubit/appointment_payment_cubit.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/cubit/appointment_payment_state.dart';
@@ -35,6 +36,7 @@ class AppointmentPaymentView extends HookWidget {
     final phone = useTextEditingController();
     final address = useTextEditingController();
     final agreed = useState(false);
+    final paymentType = useState(PaymentMethodType.card);
     final paymentCubit = useMemoized(() => getIt<AppointmentPaymentCubit>());
     useEffect(() => paymentCubit.close, [paymentCubit]);
 
@@ -55,7 +57,12 @@ class AppointmentPaymentView extends HookWidget {
         name.text.trim().isNotEmpty &&
         email.text.trim().isNotEmpty &&
         phone.text.trim().isNotEmpty;
-    final canPay = agreed.value && isCardValid && hasCustomerInformation;
+    final isCashPayment = paymentType.value == PaymentMethodType.cash;
+    final requiresCardDetails = paymentType.value == PaymentMethodType.card;
+    final canPay =
+        agreed.value &&
+        hasCustomerInformation &&
+        (!requiresCardDetails || isCardValid);
 
     return BlocProvider.value(
       value: paymentCubit,
@@ -98,19 +105,34 @@ class AppointmentPaymentView extends HookWidget {
                           ),
                         ),
                         const SizedBox(height: 14),
-                        PaymentCardForm(
-                          cardNumber: cardNumber,
-                          expiry: expiry,
-                          cvv: cvv,
-                          cardholder: cardholder,
+                        PaymentWalletOption(
+                          label: context.l10n.creditDebitCard,
+                          icon: const Icon(Icons.credit_card_rounded, size: 24),
+                          isSelected:
+                              paymentType.value == PaymentMethodType.card,
+                          onTap: () =>
+                              paymentType.value = PaymentMethodType.card,
                         ),
                         const SizedBox(height: 14),
-                        const PaymentWalletOption(
+                        if (paymentType.value == PaymentMethodType.card)
+                          PaymentCardForm(
+                            cardNumber: cardNumber,
+                            expiry: expiry,
+                            cvv: cvv,
+                            cardholder: cardholder,
+                          ),
+                        if (paymentType.value == PaymentMethodType.card)
+                          const SizedBox(height: 14),
+                        PaymentWalletOption(
                           label: 'Apple Pay',
                           icon: Icon(Icons.apple, size: 25),
+                          isSelected:
+                              paymentType.value == PaymentMethodType.applePay,
+                          onTap: () =>
+                              paymentType.value = PaymentMethodType.applePay,
                         ),
                         const SizedBox(height: 14),
-                        const PaymentWalletOption(
+                        PaymentWalletOption(
                           label: 'Google Pay',
                           icon: Text(
                             'G',
@@ -119,6 +141,19 @@ class AppointmentPaymentView extends HookWidget {
                               fontWeight: FontWeight.w800,
                             ),
                           ),
+                          isSelected:
+                              paymentType.value == PaymentMethodType.googlePay,
+                          onTap: () =>
+                              paymentType.value = PaymentMethodType.googlePay,
+                        ),
+                        const SizedBox(height: 14),
+                        PaymentWalletOption(
+                          label: context.l10n.payWithCash,
+                          icon: const Icon(Icons.payments_outlined, size: 24),
+                          isSelected:
+                              paymentType.value == PaymentMethodType.cash,
+                          onTap: () =>
+                              paymentType.value = PaymentMethodType.cash,
                         ),
                         const SizedBox(height: 26),
                         Text(
@@ -178,6 +213,8 @@ class AppointmentPaymentView extends HookWidget {
                         builder: (context, state) => CustomButton(
                           buttonName: state.isProcessing
                               ? context.l10n.processingPayment
+                              : isCashPayment
+                              ? context.l10n.confirmBooking
                               : context.l10n.confirmAndPay(
                                   context.l10n.formatCurrency(arguments.total),
                                 ),
@@ -188,8 +225,11 @@ class AppointmentPaymentView extends HookWidget {
                               customerName: name.text,
                               customerEmail: email.text,
                               customerPhone: phone.text,
-                              paymentMethod:
-                                  'Card ending in ${cardNumber.text.replaceAll(' ', '').substring(12)}',
+                              paymentType: paymentType.value,
+                              paymentMethod: _paymentMethod(
+                                paymentType.value,
+                                cardNumber.text,
+                              ),
                             ),
                           ),
                         ),
@@ -203,3 +243,12 @@ class AppointmentPaymentView extends HookWidget {
     );
   }
 }
+
+String _paymentMethod(PaymentMethodType type, String cardNumber) =>
+    switch (type) {
+      PaymentMethodType.card =>
+        'Card ending in ${cardNumber.replaceAll(' ', '').substring(12)}',
+      PaymentMethodType.applePay => 'Apple Pay',
+      PaymentMethodType.googlePay => 'Google Pay',
+      PaymentMethodType.cash => 'cash',
+    };

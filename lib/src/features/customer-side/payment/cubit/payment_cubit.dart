@@ -1,3 +1,4 @@
+import 'package:aquabook/src/data/enums/payment_method_type.dart';
 import 'package:aquabook/src/data/repositories/booking_repository.dart';
 import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
 import 'package:aquabook/src/features/customer-side/payment/cubit/payment_state.dart';
@@ -11,11 +12,19 @@ class PaymentCubit extends Cubit<PaymentState> {
     : super(const PaymentState());
   final BookingRepository _repository;
   final BookingDraftRepository _draftRepository;
-  Future<void> confirm(PaymentArguments arguments) async {
+  Future<void> confirm(
+    PaymentArguments arguments, {
+    required PaymentMethodType paymentType,
+    required String paymentMethod,
+  }) async {
     if (state.isProcessing) return;
     emit(const PaymentState(isProcessing: true));
     try {
-      final booking = await _repository.createBooking(arguments);
+      final booking = await _repository.createBooking(
+        arguments,
+        paymentType: paymentType,
+        paymentMethod: paymentMethod,
+      );
       await _draftRepository.deleteDraft();
       emit(PaymentState(booking: booking));
     } on BookingException catch (error) {

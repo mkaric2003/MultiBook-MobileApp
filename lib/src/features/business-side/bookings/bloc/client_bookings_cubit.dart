@@ -242,6 +242,26 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     }
   }
 
+  Future<bool> completeBooking(BookingModel booking) async {
+    try {
+      final completed = await _bookingRepository.completeBooking(booking);
+      _replaceBooking(completed);
+      return true;
+    } on BookingException {
+      return false;
+    }
+  }
+
+  Future<bool> markBookingNoShow(BookingModel booking) async {
+    try {
+      final noShow = await _bookingRepository.markBookingNoShow(booking);
+      _replaceBooking(noShow);
+      return true;
+    } on BookingException {
+      return false;
+    }
+  }
+
   Future<bool> declineAppointment(AppointmentModel appointment) async {
     try {
       final declined = await _appointmentRepository.cancelAppointment(
@@ -252,6 +272,51 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     } on AppointmentException {
       return false;
     }
+  }
+
+  Future<bool> completeAppointment(AppointmentModel appointment) async {
+    try {
+      final completed = await _appointmentRepository.completeAppointment(
+        appointment,
+      );
+      _replaceAppointment(completed);
+      return true;
+    } on AppointmentException {
+      return false;
+    }
+  }
+
+  Future<bool> markAppointmentNoShow(AppointmentModel appointment) async {
+    try {
+      final noShow = await _appointmentRepository.markAppointmentNoShow(
+        appointment,
+      );
+      _replaceAppointment(noShow);
+      return true;
+    } on AppointmentException {
+      return false;
+    }
+  }
+
+  void _replaceBooking(BookingModel booking) {
+    final bookings =
+        state.filter == ClientBookingFilter.all ||
+            state.filter.bookingStatus == booking.status
+        ? state.bookings
+              .map((item) => item.id == booking.id ? booking : item)
+              .toList()
+        : state.bookings.where((item) => item.id != booking.id).toList();
+    emit(
+      ClientBookingsState(
+        filter: state.filter,
+        bookings: bookings,
+        businesses: state.businesses,
+        selectedBusiness: state.selectedBusiness,
+        tab: state.tab,
+        isLoading: false,
+        hasReachedEnd: state.hasReachedEnd,
+      ),
+    );
   }
 
   void updateAppointment(AppointmentModel appointment) {

@@ -701,5 +701,22 @@
   "week": "Settimana {count}",
   "@week": {"placeholders": {"count": {"type": "int"}}},
   "switchBusiness": "Cambia attività",
-  "appointments": "Appuntamenti"
+  "appointments": "Appuntamenti",
+  "earnings": "Entrate",
+  "totalEarningsThisMonth": "Entrate totali di questo mese",
+  "pendingPayouts": "Pagamenti in sospeso",
+  "completedPayouts": "Pagamenti completati",
+  "earningsLoadFailed": "Non è stato possibile caricare le entrate.",
+  "selectBusiness": "Seleziona attività",
+  "payWithCash": "Paga in contanti",
+  "confirmBooking": "Conferma prenotazione",
+  "validCardDetailsRequired": "Inserisci una carta valida di 16 cifre, MM/AA e CVV.",
+  "onlineEarnings": "Entrate online",
+  "cashEarnings": "Entrate in contanti",
+  "markAsCompleted": "Segna come completato",
+  "cash": "Contanti",
+  "cashPaymentDue": "Paga in contanti all’arrivo",
+  "markAsNoShow": "Segna come assente",
+  "noShow": "Assente",
+  "noShowEarningsHint": "Segnare l’assenza rimuove questo importo dalle entrate e dalle metriche."
 }

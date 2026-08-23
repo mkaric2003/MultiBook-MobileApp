@@ -3357,6 +3357,108 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Termini'**
   String get appointments;
+
+  /// No description provided for @earnings.
+  ///
+  /// In bs, this message translates to:
+  /// **'Zarada'**
+  String get earnings;
+
+  /// No description provided for @totalEarningsThisMonth.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ukupna zarada ovog mjeseca'**
+  String get totalEarningsThisMonth;
+
+  /// No description provided for @pendingPayouts.
+  ///
+  /// In bs, this message translates to:
+  /// **'Isplate na čekanju'**
+  String get pendingPayouts;
+
+  /// No description provided for @completedPayouts.
+  ///
+  /// In bs, this message translates to:
+  /// **'Završene isplate'**
+  String get completedPayouts;
+
+  /// No description provided for @earningsLoadFailed.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nismo mogli učitati zaradu.'**
+  String get earningsLoadFailed;
+
+  /// No description provided for @selectBusiness.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite business'**
+  String get selectBusiness;
+
+  /// No description provided for @payWithCash.
+  ///
+  /// In bs, this message translates to:
+  /// **'Plati gotovinom'**
+  String get payWithCash;
+
+  /// No description provided for @confirmBooking.
+  ///
+  /// In bs, this message translates to:
+  /// **'Potvrdi rezervaciju'**
+  String get confirmBooking;
+
+  /// No description provided for @validCardDetailsRequired.
+  ///
+  /// In bs, this message translates to:
+  /// **'Unesite ispravan 16-cifren broj kartice, MM/GG i CVV.'**
+  String get validCardDetailsRequired;
+
+  /// No description provided for @onlineEarnings.
+  ///
+  /// In bs, this message translates to:
+  /// **'Online zarada'**
+  String get onlineEarnings;
+
+  /// No description provided for @cashEarnings.
+  ///
+  /// In bs, this message translates to:
+  /// **'Gotovinska zarada'**
+  String get cashEarnings;
+
+  /// No description provided for @markAsCompleted.
+  ///
+  /// In bs, this message translates to:
+  /// **'Označi kao završeno'**
+  String get markAsCompleted;
+
+  /// No description provided for @cash.
+  ///
+  /// In bs, this message translates to:
+  /// **'Gotovina'**
+  String get cash;
+
+  /// No description provided for @cashPaymentDue.
+  ///
+  /// In bs, this message translates to:
+  /// **'Plaćanje gotovinom pri dolasku'**
+  String get cashPaymentDue;
+
+  /// No description provided for @markAsNoShow.
+  ///
+  /// In bs, this message translates to:
+  /// **'Označi kao nedolazak'**
+  String get markAsNoShow;
+
+  /// No description provided for @noShow.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nije se pojavio'**
+  String get noShow;
+
+  /// No description provided for @noShowEarningsHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'Označavanjem nedolaska iznos će biti uklonjen iz zarade i statistike.'**
+  String get noShowEarningsHint;
 }
 
 class _AppLocalizationsDelegate

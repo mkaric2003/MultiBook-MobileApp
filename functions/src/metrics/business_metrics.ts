@@ -10,6 +10,7 @@ type ReservationKind = "booking" | "appointment";
 
 const activeStatuses = new Set(["confirmed"]);
 const revenueStatuses = new Set(["confirmed", "completed"]);
+const metricsVersion = 2;
 
 export const initializeBusinessMetrics = onCall<{ businessId?: unknown }>(
   { region: "us-central1" },
@@ -35,7 +36,22 @@ export const initializeBusinessMetrics = onCall<{ businessId?: unknown }>(
     if (business.data()?.ownerId !== request.auth.uid) {
       throw new HttpsError("permission-denied", "You cannot initialize these metrics.");
     }
-    if (summary.exists) return { initialized: false };
+    if (summary.exists && summary.data()?.metricsVersion === metricsVersion) {
+      const currentMonth = await database
+          .collection("business_metrics")
+          .doc(businessId)
+          .collection("months")
+          .doc(formatMonthKey(new Date()))
+          .get();
+      const data = currentMonth.data();
+      if (
+        data == null ||
+        (typeof data.onlineEarnings === "number" &&
+          typeof data.cashEarnings === "number")
+      ) {
+        return { initialized: false };
+      }
+    }
 
     const metrics = aggregateMetrics([
       ...bookings.docs.map((document) => ({ kind: "booking" as const, data: document.data() })),
@@ -45,6 +61,7 @@ export const initializeBusinessMetrics = onCall<{ businessId?: unknown }>(
     const summaryReference = database.collection("business_metrics").doc(businessId);
     batch.set(summaryReference, {
       businessId,
+      metricsVersion,
       activeBookings: metrics.activeBookings,
       activeAppointments: metrics.activeAppointments,
       updatedAt: FieldValue.serverTimestamp(),
@@ -52,8 +69,11 @@ export const initializeBusinessMetrics = onCall<{ businessId?: unknown }>(
     for (const [monthKey, month] of metrics.months) {
       batch.set(summaryReference.collection("months").doc(monthKey), {
         monthKey,
+        metricsVersion,
         revenue: month.revenue,
         bookingCount: month.bookingCount,
+        onlineEarnings: month.onlineEarnings,
+        cashEarnings: month.cashEarnings,
         dailyRevenue: month.dailyRevenue,
         dailyBookings: month.dailyBookings,
         updatedAt: FieldValue.serverTimestamp(),
@@ -117,6 +137,7 @@ async function applyReservationChange(
       summaryReference,
       {
         businessId,
+        metricsVersion,
         [activeField]: nextActive,
         updatedAt: FieldValue.serverTimestamp(),
       },
@@ -148,6 +169,14 @@ async function applyReservationChange(
             0,
             numberValue(month.bookingCount) + delta.count,
           ),
+          onlineEarnings: Math.max(
+            0,
+            numberValue(month.onlineEarnings) + delta.onlineEarnings,
+          ),
+          cashEarnings: Math.max(
+            0,
+            numberValue(month.cashEarnings) + delta.cashEarnings,
+          ),
           dailyRevenue,
           dailyBookings,
           updatedAt: FieldValue.serverTimestamp(),
@@ -162,11 +191,15 @@ interface MonthlyDelta {
   dayKey: string;
   revenue: number;
   count: number;
+  onlineEarnings: number;
+  cashEarnings: number;
 }
 
 interface AggregateMonth {
   revenue: number;
   bookingCount: number;
+  onlineEarnings: number;
+  cashEarnings: number;
   dailyRevenue: Record<string, number>;
   dailyBookings: Record<string, number>;
 }
@@ -190,11 +223,15 @@ function aggregateMetrics(
     const month = months.get(monthKey) ?? {
       revenue: 0,
       bookingCount: 0,
+      onlineEarnings: 0,
+      cashEarnings: 0,
       dailyRevenue: {},
       dailyBookings: {},
     };
     month.revenue += revenue;
     month.bookingCount++;
+    if (isCashPayment(reservation.data)) month.cashEarnings += revenue;
+    else month.onlineEarnings += revenue;
     month.dailyRevenue[dayKey] = (month.dailyRevenue[dayKey] ?? 0) + revenue;
     month.dailyBookings[dayKey] = (month.dailyBookings[dayKey] ?? 0) + 1;
     months.set(monthKey, month);
@@ -215,6 +252,8 @@ function createMonthlyDeltas(
     dayKey,
     revenue: revenueDelta,
     count: revenueDelta > 0 ? 1 : -1,
+    onlineEarnings: isCashPayment(reservation) ? 0 : revenueDelta,
+    cashEarnings: isCashPayment(reservation) ? revenueDelta : 0,
   });
   return deltas;
 }
@@ -231,6 +270,8 @@ function mergeMonthlyDeltas(
     }
     current.revenue += delta.revenue;
     current.count += delta.count;
+    current.onlineEarnings += delta.onlineEarnings;
+    current.cashEarnings += delta.cashEarnings;
   }
 }
 
@@ -241,11 +282,22 @@ function activeContribution(reservation: DocumentData | null) {
 }
 
 function revenueContribution(reservation: DocumentData | null) {
-  if (reservation == null || !revenueStatuses.has(stringValue(reservation.status) ?? "")) {
-    return 0;
+  if (reservation == null) return 0;
+  if (isCashPayment(reservation)) {
+    return revenueStatuses.has(stringValue(reservation.status) ?? "")
+      ? numberValue(reservation.total)
+      : 0;
   }
+  if (!revenueStatuses.has(stringValue(reservation.status) ?? "")) return 0;
   if (stringValue(reservation.paymentStatus) !== "paid") return 0;
   return numberValue(reservation.total);
+}
+
+function isCashPayment(reservation: DocumentData | null) {
+  return (
+    stringValue(reservation?.paymentType) === "cash" ||
+    stringValue(reservation?.paymentMethod)?.toLowerCase() === "cash"
+  );
 }
 
 function numberValue(value: unknown) {

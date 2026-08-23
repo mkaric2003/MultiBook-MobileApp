@@ -8,11 +8,13 @@ class CustomAppBar extends StatelessWidget {
     required this.title,
     this.onBackPressed,
     this.trailing,
+    this.showBackButton = true,
   });
 
   final String title;
   final VoidCallback? onBackPressed;
   final Widget? trailing;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +24,27 @@ class CustomAppBar extends StatelessWidget {
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
       ),
-      child: Stack(
-        alignment: Alignment.center,
+      child: Row(
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
+          if (showBackButton) ...[
+            IconButton(
               padding: EdgeInsets.zero,
               alignment: Alignment.centerLeft,
               icon: const Icon(CupertinoIcons.back, size: 24),
               onPressed:
                   onBackPressed ?? () => Navigator.of(context).maybePop(),
             ),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
           ),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          if (trailing != null)
-            Align(alignment: Alignment.centerRight, child: trailing!),
+          if (trailing != null) ...[const SizedBox(width: 12), trailing!],
         ],
       ),
     );

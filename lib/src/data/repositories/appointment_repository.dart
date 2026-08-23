@@ -4,6 +4,8 @@ import 'dart:math' show Random;
 import 'package:aquabook/src/data/data_cursor.dart';
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
+import 'package:aquabook/src/data/enums/payment_method_type.dart';
+import 'package:aquabook/src/data/enums/payment_status.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
 import 'package:aquabook/src/data/models/firestore_document_path.dart';
 import 'package:aquabook/src/data/models/firestore_document_write.dart';
@@ -125,6 +127,9 @@ class AppointmentRepository {
       serviceFee: arguments.serviceFee,
       taxes: arguments.taxes,
       total: arguments.total,
+      paymentStatus: request.paymentType == PaymentMethodType.cash
+          ? PaymentStatus.pending
+          : PaymentStatus.paid,
       paymentMethod: request.paymentMethod,
       confirmationCode: _confirmationCode(),
       currency: business.currency,
@@ -157,7 +162,8 @@ class AppointmentRepository {
           'serviceFee': result.serviceFee,
           'taxes': result.taxes,
           'total': result.total,
-          'paymentStatus': 'paid',
+          'paymentStatus': result.paymentStatus.name,
+          'paymentType': request.paymentType.name,
           'paymentMethod': result.paymentMethod,
           'status': 'confirmed',
           'rescheduleCount': 0,
@@ -296,6 +302,80 @@ class AppointmentRepository {
       );
     }
   }
+
+  Future<AppointmentModel> completeAppointment(
+    AppointmentModel appointment,
+  ) async {
+    if (_auth.currentUser?.uid != appointment.businessOwnerId ||
+        appointment.status != 'confirmed') {
+      throw const AppointmentException(
+        'You are not allowed to complete this appointment.',
+      );
+    }
+    try {
+      await _firestore.updateDocument(
+        collection: _collection,
+        documentId: appointment.id,
+        data: {'status': 'completed', 'updatedAt': _firestore.serverTimestamp},
+      );
+      return appointment.copyWith(status: 'completed');
+    } catch (error, stackTrace) {
+      log(
+        'Could not complete appointment.',
+        name: 'AppointmentRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const AppointmentException(
+        'We could not complete this appointment. Please try again.',
+      );
+    }
+  }
+
+  Future<AppointmentModel> markAppointmentNoShow(
+    AppointmentModel appointment,
+  ) async {
+    final appointmentEnd = DateTime(
+      appointment.date.year,
+      appointment.date.month,
+      appointment.date.day,
+    ).add(Duration(minutes: appointment.endMinutes));
+    if (_auth.currentUser?.uid != appointment.businessOwnerId ||
+        (appointment.status != 'confirmed' &&
+            appointment.status != 'completed') ||
+        !_isCashAppointment(appointment) ||
+        !DateTime.now().isAfter(appointmentEnd)) {
+      throw const AppointmentException(
+        'You are not allowed to mark this appointment as a no-show.',
+      );
+    }
+    try {
+      await _firestore.updateDocument(
+        collection: _collection,
+        documentId: appointment.id,
+        data: {'status': 'no_show', 'updatedAt': _firestore.serverTimestamp},
+      );
+      log(
+        'Appointment ${appointment.id} marked as no-show.',
+        name: 'AppointmentRepository',
+      );
+      return appointment.copyWith(status: 'no_show');
+    } catch (error, stackTrace) {
+      log(
+        'Could not mark appointment as no-show.',
+        name: 'AppointmentRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const AppointmentException(
+        'We could not mark this appointment as a no-show. Please try again.',
+      );
+    }
+  }
+
+  bool _isCashAppointment(AppointmentModel appointment) =>
+      appointment.paymentMethod.trim().toLowerCase() == 'cash' ||
+      appointment.paymentStatus == PaymentStatus.pending;
 
   DataCursor<AppointmentModel> getOwnedAppointmentsCursor({
     required String businessId,
@@ -528,12 +608,19 @@ class AppointmentRepository {
       serviceFee: (document['serviceFee'] as num?)?.toDouble() ?? 0,
       taxes: (document['taxes'] as num?)?.toDouble() ?? 0,
       total: (document['total'] as num?)?.toDouble() ?? 0,
+      paymentStatus: _paymentStatus(document['paymentStatus']),
       paymentMethod: document['paymentMethod'] as String? ?? '',
       confirmationCode: document['confirmationCode'] as String? ?? '',
       status: document['status'] as String? ?? 'confirmed',
       rescheduleCount: (document['rescheduleCount'] as num?)?.toInt() ?? 0,
     );
   }
+
+  PaymentStatus _paymentStatus(Object? value) =>
+      PaymentStatus.values
+          .where((status) => status.name == value)
+          .firstOrNull ??
+      PaymentStatus.pending;
 
   static String _dateKey(DateTime date) =>
       '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';

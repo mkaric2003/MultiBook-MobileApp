@@ -26,7 +26,21 @@ class BusinessMetricsDataSourceImpl implements BusinessMetricsDataSource {
         .collection('business_metrics')
         .doc(businessId)
         .get();
-    if (summary.exists) return;
+    if (summary.exists && summary.data()?['metricsVersion'] == 2) {
+      final now = DateTime.now();
+      final monthKey = '${now.year}-${now.month.toString().padLeft(2, '0')}';
+      final currentMonth = await _firestore
+          .collection('business_metrics')
+          .doc(businessId)
+          .collection('months')
+          .doc(monthKey)
+          .get();
+      final data = currentMonth.data();
+      if (data == null ||
+          (data['onlineEarnings'] is num && data['cashEarnings'] is num)) {
+        return;
+      }
+    }
     await _functions.httpsCallable('initializeBusinessMetrics').call({
       'businessId': businessId,
     });
