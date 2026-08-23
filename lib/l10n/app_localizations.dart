@@ -3459,6 +3459,108 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Označavanjem nedolaska iznos će biti uklonjen iz zarade i statistike.'**
   String get noShowEarningsHint;
+
+  /// No description provided for @earningsPeriod.
+  ///
+  /// In bs, this message translates to:
+  /// **'Period'**
+  String get earningsPeriod;
+
+  /// No description provided for @currentWeek.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ova sedmica'**
+  String get currentWeek;
+
+  /// No description provided for @previousWeek.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prošla sedmica'**
+  String get previousWeek;
+
+  /// No description provided for @currentMonth.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ovaj mjesec'**
+  String get currentMonth;
+
+  /// No description provided for @previousMonth.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prošli mjesec'**
+  String get previousMonth;
+
+  /// No description provided for @currentYear.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ova godina'**
+  String get currentYear;
+
+  /// No description provided for @previousYear.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prošla godina'**
+  String get previousYear;
+
+  /// No description provided for @customRange.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prilagođeni period'**
+  String get customRange;
+
+  /// No description provided for @selectDateRange.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite period'**
+  String get selectDateRange;
+
+  /// No description provided for @startDate.
+  ///
+  /// In bs, this message translates to:
+  /// **'Početni datum'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In bs, this message translates to:
+  /// **'Završni datum'**
+  String get endDate;
+
+  /// No description provided for @providerCommissionRateHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'Provizija zaposlenika (%)'**
+  String get providerCommissionRateHint;
+
+  /// No description provided for @providerCommissionRateDescription.
+  ///
+  /// In bs, this message translates to:
+  /// **'Postotak cijene usluge koji zaposlenik zarađuje za svakog odrađenog klijenta.'**
+  String get providerCommissionRateDescription;
+
+  /// No description provided for @providerCommissionRateRangeHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'0 - 100'**
+  String get providerCommissionRateRangeHint;
+
+  /// No description provided for @allEmployees.
+  ///
+  /// In bs, this message translates to:
+  /// **'Svi zaposlenici'**
+  String get allEmployees;
+
+  /// No description provided for @grossEarnings.
+  ///
+  /// In bs, this message translates to:
+  /// **'Bruto zarada'**
+  String get grossEarnings;
+
+  /// No description provided for @providerEarnings.
+  ///
+  /// In bs, this message translates to:
+  /// **'Zarada zaposlenika'**
+  String get providerEarnings;
 }
 
 class _AppLocalizationsDelegate

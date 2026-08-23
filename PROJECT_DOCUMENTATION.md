@@ -295,6 +295,11 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 
 - Dashboard prikazuje selektovani business, aktivne bookinge/appointmente, zaradu u tekućem mjesecu, prosječni rating i FL Chart trendove iz agregiranih metrika.
 - Earnings prikazuje ukupnu mjesečnu zaradu, odvojeno **online** i **cash** earnings, te trend prihoda i volumena rezervacija.
+- Earnings period filter podržava: current week, past week, this month, past month, this year, last year i custom raspon. Custom početni/završni datum se bira u Cupertino date pickeru.
+- Kod service businessa Earnings omogućava i izbor zaposlenika. Prikazuju se **gross earnings** (ukupna vrijednost njegovih appointmenta) i **provider earnings** (njegova ugovorena provizija), uz trend prihoda i broj appointmenta za odabrani period.
+- Svaki zaposlenik ima `commissionRate` (podrazumijevano 100%). Pri kreiranju appointmenta spremaju se historijski snapshoti `providerCommissionRate` i `providerEarnings`, pa kasnija promjena provizije ne mijenja ranije obračune.
+- Cloud Functions održavaju owner-only agregate po zaposleniku u `business_metrics/{businessId}/providers/{providerId}/months/{YYYY-MM}`. Dnevni gross/provider iznosi omogućavaju week i custom filtere bez čitanja svih appointment dokumenata.
+- Za djelimične mjesece (sedmica i custom period) agregat koristi samo dnevne vrijednosti unutar odabranog raspona, uključujući zasebne daily online i cash earnings, pa podjela ostaje tačna.
 - Cash rezervacija/appointment ulazi u earnings odmah pri potvrdi kao očekivani prihod. No-show je dostupan samo provideru, samo za završeni cash termin/rezervaciju sa statusom `confirmed` ili `completed`; uz akciju se prikazuje objašnjenje o uticaju na metrike.
 - `business_metrics/{businessId}` i mjesečni dokumenti su server-side agregati. Ne računaju se skeniranjem svih booking/appointment dokumenata pri svakom otvaranju dashboarda.
 - `selectedBusinessId` u user dokumentu je jedini izvor aktivnog businessa i promjene se reaktivno reflektuju na dashboard i booking ekran.
@@ -379,7 +384,7 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `bookings/{id}` | stay rezervacije i payment/guest snapshot |
 | `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
 | `business_metrics/{businessId}` | agregat aktivnih booking/appointment KPI-jeva i verzija migracije metrika |
-| `business_metrics/{businessId}/months/{YYYY-MM}` | mjesečna revenue/cash/online zarada, booking count i dnevni chart podaci |
+| `business_metrics/{businessId}/months/{YYYY-MM}` | mjesečna revenue/cash/online zarada, booking count i dnevni ukupni/online/cash chart podaci |
 | `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
 | `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
 | `booking_drafts/{uid}` | prekinut stay booking tok |

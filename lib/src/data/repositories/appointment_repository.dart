@@ -111,6 +111,8 @@ class AppointmentRepository {
       customerAvatarUrl: _auth.currentUser?.photoURL,
       providerId: provider.id,
       providerName: provider.name,
+      providerCommissionRate: provider.commissionRate,
+      providerEarnings: arguments.serviceCost * (provider.commissionRate / 100),
       serviceIds: arguments.review.offerings.map((item) => item.id).toList(),
       serviceNames: arguments.review.offerings
           .map((item) => item.name)
@@ -151,6 +153,8 @@ class AppointmentRepository {
           'customerAvatarUrl': result.customerAvatarUrl,
           'providerId': result.providerId,
           'providerName': result.providerName,
+          'providerCommissionRate': result.providerCommissionRate,
+          'providerEarnings': result.providerEarnings,
           'serviceIds': result.serviceIds,
           'serviceNames': result.serviceNames,
           'date': result.date,
@@ -594,6 +598,11 @@ class AppointmentRepository {
       customerAvatarUrl: document['customerAvatarUrl'] as String?,
       providerId: document['providerId'] as String? ?? '',
       providerName: document['providerName'] as String? ?? '',
+      providerCommissionRate:
+          (document['providerCommissionRate'] as num?)?.toDouble() ?? 100,
+      providerEarnings:
+          (document['providerEarnings'] as num?)?.toDouble() ??
+          ((document['serviceCost'] as num?)?.toDouble() ?? 0),
       serviceIds: List<String>.from(
         document['serviceIds'] as List? ?? const [],
       ),

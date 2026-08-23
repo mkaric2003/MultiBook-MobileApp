@@ -6,6 +6,8 @@ class BusinessMonthlyMetrics {
     this.cashEarnings = 0,
     this.dailyRevenue = const {},
     this.dailyBookings = const {},
+    this.dailyOnlineEarnings = const {},
+    this.dailyCashEarnings = const {},
   });
 
   factory BusinessMonthlyMetrics.fromJson(Map<String, dynamic>? json) =>
@@ -16,6 +18,8 @@ class BusinessMonthlyMetrics {
         cashEarnings: (json?['cashEarnings'] as num?)?.toDouble() ?? 0,
         dailyRevenue: _numberMap(json?['dailyRevenue']),
         dailyBookings: _numberMap(json?['dailyBookings']),
+        dailyOnlineEarnings: _numberMap(json?['dailyOnlineEarnings']),
+        dailyCashEarnings: _numberMap(json?['dailyCashEarnings']),
       );
 
   final double revenue;
@@ -24,6 +28,8 @@ class BusinessMonthlyMetrics {
   final double cashEarnings;
   final Map<String, double> dailyRevenue;
   final Map<String, double> dailyBookings;
+  final Map<String, double> dailyOnlineEarnings;
+  final Map<String, double> dailyCashEarnings;
 
   static Map<String, double> _numberMap(Object? value) {
     if (value is! Map) return const {};

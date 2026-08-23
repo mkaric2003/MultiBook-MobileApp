@@ -1479,6 +1479,10 @@ class BusinessRepository {
                     'Emir Mujic',
                   ][index % 5],
                   'title': _demoServiceProviderTitle(categoryId),
+                  'commissionRate': _demoProviderCommissionRate(
+                    index,
+                    isPrimary: true,
+                  ),
                   'availabilitySlots': [
                     {
                       'id': 'provider-primary-monday',
@@ -1522,6 +1526,10 @@ class BusinessRepository {
                     'Ena Colic',
                   ][index % 5],
                   'title': _demoServiceProviderTitle(categoryId),
+                  'commissionRate': _demoProviderCommissionRate(
+                    index,
+                    isPrimary: false,
+                  ),
                   'availabilitySlots': [
                     {
                       'id': 'provider-secondary-monday',
@@ -1581,6 +1589,13 @@ class BusinessRepository {
         'We could not create the demo service businesses.',
       );
     }
+  }
+
+  double _demoProviderCommissionRate(int index, {required bool isPrimary}) {
+    const primaryRates = [60.0, 55.0, 65.0, 50.0, 70.0];
+    const secondaryRates = [45.0, 40.0, 50.0, 42.5, 55.0];
+    final rates = isPrimary ? primaryRates : secondaryRates;
+    return rates[index % rates.length];
   }
 
   List<String> _demoServiceCollectionIds(String categoryId) {

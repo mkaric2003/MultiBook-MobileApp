@@ -719,4 +719,21 @@
   "markAsNoShow": "Marcar como no presentado",
   "noShow": "No se presentó",
   "noShowEarningsHint": "Al marcar una ausencia, este importe se elimina de los ingresos y las métricas."
+  ,"earningsPeriod": "Período"
+  ,"currentWeek": "Esta semana"
+  ,"previousWeek": "Semana pasada"
+  ,"currentMonth": "Este mes"
+  ,"previousMonth": "Mes pasado"
+  ,"currentYear": "Este año"
+  ,"previousYear": "Año pasado"
+  ,"customRange": "Rango personalizado"
+  ,"selectDateRange": "Selecciona el período"
+  ,"startDate": "Fecha de inicio"
+  ,"endDate": "Fecha final"
+  ,"providerCommissionRateHint": "Comisión del empleado (%)"
+  ,"providerCommissionRateDescription": "Porcentaje del precio del servicio que gana el empleado por cada cliente atendido."
+  ,"providerCommissionRateRangeHint": "0 - 100"
+  ,"allEmployees": "Todos los empleados"
+  ,"grossEarnings": "Ingresos brutos"
+  ,"providerEarnings": "Ingresos del empleado"
 }

@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/data/models/service_provider_model.dart';
 import 'package:aquabook/src/data/repositories/business_metrics_repository.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
+import 'package:aquabook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
 import 'package:aquabook/src/features/business-side/earnings/bloc/earnings_state.dart';
+import 'package:aquabook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
+import 'package:aquabook/src/features/business-side/earnings/domain/models/earnings_date_range.dart';
+import 'package:aquabook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -19,7 +24,7 @@ class EarningsCubit extends Cubit<EarningsState> {
   final UserRepository _userRepository;
   final BusinessRepository _businessRepository;
   final BusinessMetricsRepository _businessMetricsRepository;
-  StreamSubscription? _monthlyMetricsSubscription;
+  StreamSubscription? _metricsSubscription;
   int _loadRequestId = 0;
 
   Future<void> load({String? businessId}) async {
@@ -52,6 +57,7 @@ class EarningsCubit extends Cubit<EarningsState> {
           isLoading: false,
           businesses: businesses,
           selectedBusiness: selectedBusiness,
+          dateRange: _rangeFor(EarningsPeriod.currentMonth),
         ),
       );
       try {
@@ -59,16 +65,10 @@ class EarningsCubit extends Cubit<EarningsState> {
       } catch (_) {
         // New reservations will create the metrics document automatically.
       }
-      _monthlyMetricsSubscription = _businessMetricsRepository
-          .watchCurrentMonth(selectedBusiness.id)
-          .listen(
-            (metrics) {
-              if (!isClosed) emit(state.copyWith(monthlyMetrics: metrics));
-            },
-            onError: (_, _) {
-              if (!isClosed) emit(state.copyWith(hasError: true));
-            },
-          );
+      _watchMetrics(
+        selectedBusiness.id,
+        _rangeFor(EarningsPeriod.currentMonth),
+      );
     } catch (_) {
       if (requestId != _loadRequestId) return;
       emit(const EarningsState(isLoading: false, hasError: true));
@@ -76,7 +76,132 @@ class EarningsCubit extends Cubit<EarningsState> {
   }
 
   Future<void> selectBusiness(BusinessModel business) =>
-      load(businessId: business.id);
+      _userRepository.setSelectedBusiness(businessId: business.id);
+
+  Future<void> selectPeriod(
+    EarningsPeriod period, {
+    EarningsDateRange? customRange,
+  }) async {
+    final business = state.selectedBusiness;
+    if (business == null) return;
+    final range = period == EarningsPeriod.custom
+        ? customRange
+        : _rangeFor(period);
+    if (range == null) return;
+    await _cancelMetricsSubscription();
+    emit(
+      state.copyWith(
+        period: period,
+        dateRange: range,
+        monthlyMetrics: const BusinessMonthlyMetrics(),
+        providerMetrics: const ProviderEarningsMetrics(),
+        hasError: false,
+      ),
+    );
+    _watchMetrics(business.id, range, provider: state.selectedProvider);
+  }
+
+  Future<void> selectProvider(ServiceProviderModel? provider) async {
+    final business = state.selectedBusiness;
+    final range = state.dateRange;
+    if (business == null || range == null) return;
+    await _cancelMetricsSubscription();
+    emit(
+      EarningsState(
+        isLoading: false,
+        businesses: state.businesses,
+        selectedBusiness: business,
+        monthlyMetrics: const BusinessMonthlyMetrics(),
+        providerMetrics: const ProviderEarningsMetrics(),
+        period: state.period,
+        dateRange: range,
+        selectedProvider: provider,
+      ),
+    );
+    _watchMetrics(business.id, range, provider: provider);
+  }
+
+  void _watchMetrics(
+    String businessId,
+    EarningsDateRange range, {
+    ServiceProviderModel? provider,
+  }) {
+    if (provider != null) {
+      _metricsSubscription = _businessMetricsRepository
+          .watchProviderDateRange(
+            businessId: businessId,
+            providerId: provider.id,
+            start: range.start,
+            end: range.end,
+          )
+          .listen(
+            (metrics) {
+              if (!isClosed) emit(state.copyWith(providerMetrics: metrics));
+            },
+            onError: (_, _) {
+              if (!isClosed) emit(state.copyWith(hasError: true));
+            },
+          );
+      return;
+    }
+    _metricsSubscription = _businessMetricsRepository
+        .watchDateRange(
+          businessId: businessId,
+          start: range.start,
+          end: range.end,
+        )
+        .listen(
+          (metrics) {
+            if (!isClosed) emit(state.copyWith(monthlyMetrics: metrics));
+          },
+          onError: (_, _) {
+            if (!isClosed) emit(state.copyWith(hasError: true));
+          },
+        );
+  }
+
+  EarningsDateRange _rangeFor(EarningsPeriod period) {
+    final today = _dateOnly(DateTime.now());
+    switch (period) {
+      case EarningsPeriod.currentWeek:
+        return EarningsDateRange(
+          start: today.subtract(Duration(days: today.weekday - 1)),
+          end: today,
+        );
+      case EarningsPeriod.previousWeek:
+        final end = today.subtract(Duration(days: today.weekday));
+        return EarningsDateRange(
+          start: end.subtract(const Duration(days: 6)),
+          end: end,
+        );
+      case EarningsPeriod.currentMonth:
+        return EarningsDateRange(
+          start: DateTime(today.year, today.month),
+          end: today,
+        );
+      case EarningsPeriod.previousMonth:
+        final start = DateTime(today.year, today.month - 1);
+        return EarningsDateRange(
+          start: start,
+          end: DateTime(
+            today.year,
+            today.month,
+          ).subtract(const Duration(days: 1)),
+        );
+      case EarningsPeriod.currentYear:
+        return EarningsDateRange(start: DateTime(today.year), end: today);
+      case EarningsPeriod.previousYear:
+        return EarningsDateRange(
+          start: DateTime(today.year - 1),
+          end: DateTime(today.year - 1, 12, 31),
+        );
+      case EarningsPeriod.custom:
+        return EarningsDateRange(start: today, end: today);
+    }
+  }
+
+  DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
 
   BusinessModel? _findBusiness(
     List<BusinessModel> businesses,
@@ -90,8 +215,8 @@ class EarningsCubit extends Cubit<EarningsState> {
   }
 
   Future<void> _cancelMetricsSubscription() async {
-    await _monthlyMetricsSubscription?.cancel();
-    _monthlyMetricsSubscription = null;
+    await _metricsSubscription?.cancel();
+    _metricsSubscription = null;
   }
 
   @override

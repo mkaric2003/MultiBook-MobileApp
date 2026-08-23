@@ -11,6 +11,19 @@ abstract class BusinessMetricsDataSource {
     required String businessId,
     required String monthKey,
   });
+
+  Stream<List<Map<String, dynamic>>> watchMonths({
+    required String businessId,
+    required String startMonthKey,
+    required String endMonthKey,
+  });
+
+  Stream<List<Map<String, dynamic>>> watchProviderMonths({
+    required String businessId,
+    required String providerId,
+    required String startMonthKey,
+    required String endMonthKey,
+  });
 }
 
 @LazySingleton(as: BusinessMetricsDataSource)
@@ -26,7 +39,7 @@ class BusinessMetricsDataSourceImpl implements BusinessMetricsDataSource {
         .collection('business_metrics')
         .doc(businessId)
         .get();
-    if (summary.exists && summary.data()?['metricsVersion'] == 2) {
+    if (summary.exists && summary.data()?['metricsVersion'] == 4) {
       final now = DateTime.now();
       final monthKey = '${now.year}-${now.month.toString().padLeft(2, '0')}';
       final currentMonth = await _firestore
@@ -64,4 +77,41 @@ class BusinessMetricsDataSourceImpl implements BusinessMetricsDataSource {
       .doc(monthKey)
       .snapshots()
       .map((snapshot) => snapshot.data());
+
+  @override
+  Stream<List<Map<String, dynamic>>> watchMonths({
+    required String businessId,
+    required String startMonthKey,
+    required String endMonthKey,
+  }) => _firestore
+      .collection('business_metrics')
+      .doc(businessId)
+      .collection('months')
+      .orderBy(FieldPath.documentId)
+      .startAt([startMonthKey])
+      .endAt([endMonthKey])
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs.map((document) => document.data()).toList(),
+      );
+
+  @override
+  Stream<List<Map<String, dynamic>>> watchProviderMonths({
+    required String businessId,
+    required String providerId,
+    required String startMonthKey,
+    required String endMonthKey,
+  }) => _firestore
+      .collection('business_metrics')
+      .doc(businessId)
+      .collection('providers')
+      .doc(providerId)
+      .collection('months')
+      .orderBy(FieldPath.documentId)
+      .startAt([startMonthKey])
+      .endAt([endMonthKey])
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs.map((document) => document.data()).toList(),
+      );
 }

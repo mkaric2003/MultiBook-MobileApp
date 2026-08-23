@@ -1776,4 +1776,56 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noShowEarningsHint =>
       'Marking a no-show removes this amount from earnings and metrics.';
+
+  @override
+  String get earningsPeriod => 'Period';
+
+  @override
+  String get currentWeek => 'Current week';
+
+  @override
+  String get previousWeek => 'Past week';
+
+  @override
+  String get currentMonth => 'This month';
+
+  @override
+  String get previousMonth => 'Past month';
+
+  @override
+  String get currentYear => 'This year';
+
+  @override
+  String get previousYear => 'Last year';
+
+  @override
+  String get customRange => 'Custom range';
+
+  @override
+  String get selectDateRange => 'Select date range';
+
+  @override
+  String get startDate => 'Start date';
+
+  @override
+  String get endDate => 'End date';
+
+  @override
+  String get providerCommissionRateHint => 'Employee commission (%)';
+
+  @override
+  String get providerCommissionRateDescription =>
+      'Percentage of the service price the employee earns for each completed client.';
+
+  @override
+  String get providerCommissionRateRangeHint => '0 - 100';
+
+  @override
+  String get allEmployees => 'All employees';
+
+  @override
+  String get grossEarnings => 'Gross earnings';
+
+  @override
+  String get providerEarnings => 'Employee earnings';
 }

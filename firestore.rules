@@ -54,6 +54,15 @@ service cloud.firestore {
             == request.auth.uid;
         allow write: if false;
       }
+
+      // Provider-level aggregates use the same owner-only access policy as
+      // the business-wide dashboard metrics.
+      match /providers/{providerId}/months/{monthKey} {
+        allow read: if request.auth != null
+          && get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerId
+            == request.auth.uid;
+        allow write: if false;
+      }
     }
 
     match /bookings/{bookingId} {

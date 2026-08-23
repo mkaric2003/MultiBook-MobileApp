@@ -15,6 +15,8 @@ class AppointmentModel {
     this.customerAvatarUrl,
     required this.providerId,
     required this.providerName,
+    this.providerCommissionRate = 100,
+    this.providerEarnings = 0,
     required this.serviceIds,
     required this.serviceNames,
     required this.date,
@@ -45,6 +47,8 @@ class AppointmentModel {
   final String? customerAvatarUrl;
   final String providerId;
   final String providerName;
+  final double providerCommissionRate;
+  final double providerEarnings;
   final List<String> serviceIds;
   final List<String> serviceNames;
   final DateTime date;
@@ -83,6 +87,8 @@ class AppointmentModel {
     customerAvatarUrl: customerAvatarUrl,
     providerId: providerId,
     providerName: providerName,
+    providerCommissionRate: providerCommissionRate,
+    providerEarnings: providerEarnings,
     serviceIds: serviceIds,
     serviceNames: serviceNames,
     date: date ?? this.date,

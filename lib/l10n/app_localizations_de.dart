@@ -1791,4 +1791,56 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get noShowEarningsHint =>
       'Bei einer Markierung als nicht erschienen wird dieser Betrag aus Einnahmen und Statistiken entfernt.';
+
+  @override
+  String get earningsPeriod => 'Zeitraum';
+
+  @override
+  String get currentWeek => 'Diese Woche';
+
+  @override
+  String get previousWeek => 'Letzte Woche';
+
+  @override
+  String get currentMonth => 'Dieser Monat';
+
+  @override
+  String get previousMonth => 'Letzter Monat';
+
+  @override
+  String get currentYear => 'Dieses Jahr';
+
+  @override
+  String get previousYear => 'Letztes Jahr';
+
+  @override
+  String get customRange => 'Benutzerdefinierter Zeitraum';
+
+  @override
+  String get selectDateRange => 'Zeitraum auswählen';
+
+  @override
+  String get startDate => 'Startdatum';
+
+  @override
+  String get endDate => 'Enddatum';
+
+  @override
+  String get providerCommissionRateHint => 'Mitarbeiterprovision (%)';
+
+  @override
+  String get providerCommissionRateDescription =>
+      'Prozentsatz des Servicepreises, den der Mitarbeiter für jeden abgeschlossenen Kunden erhält.';
+
+  @override
+  String get providerCommissionRateRangeHint => '0 - 100';
+
+  @override
+  String get allEmployees => 'Alle Mitarbeiter';
+
+  @override
+  String get grossEarnings => 'Bruttoeinnahmen';
+
+  @override
+  String get providerEarnings => 'Mitarbeitereinnahmen';
 }

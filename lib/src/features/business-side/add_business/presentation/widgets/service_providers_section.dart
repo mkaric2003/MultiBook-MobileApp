@@ -7,6 +7,7 @@ import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ServiceProvidersSection extends HookWidget {
@@ -29,8 +30,15 @@ class ServiceProvidersSection extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final nameController = useTextEditingController();
+    final commissionController = useTextEditingController(text: '100');
     useListenable(nameController);
-    final canAdd = nameController.text.trim().isNotEmpty;
+    useListenable(commissionController);
+    final commissionRate = double.tryParse(commissionController.text);
+    final canAdd =
+        nameController.text.trim().isNotEmpty &&
+        commissionRate != null &&
+        commissionRate >= 0 &&
+        commissionRate <= 100;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,6 +54,22 @@ class ServiceProvidersSection extends HookWidget {
           controller: nameController,
           hintText: context.l10n.providerNameExample,
         ),
+        const SizedBox(height: 10),
+        FormFieldLabel(context.l10n.providerCommissionRateHint),
+        const SizedBox(height: 6),
+        Text(
+          context.l10n.providerCommissionRateDescription,
+          style: const TextStyle(color: AppColors.muted, fontSize: 13),
+        ),
+        const SizedBox(height: 8),
+        CustomTextField(
+          controller: commissionController,
+          hintText: context.l10n.providerCommissionRateRangeHint,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}(\.\d{0,2})?')),
+          ],
+        ),
         const SizedBox(height: 12),
         CustomButton(
           buttonName: context.l10n.addProvider,
@@ -60,6 +84,7 @@ class ServiceProvidersSection extends HookWidget {
                     ServiceProviderModel(
                       id: 'provider-${DateTime.now().microsecondsSinceEpoch}',
                       name: nameController.text.trim(),
+                      commissionRate: commissionRate,
                     ),
                   );
                   nameController.clear();

@@ -719,4 +719,21 @@
   "markAsNoShow": "Als nicht erschienen markieren",
   "noShow": "Nicht erschienen",
   "noShowEarningsHint": "Bei einer Markierung als nicht erschienen wird dieser Betrag aus Einnahmen und Statistiken entfernt."
+  ,"earningsPeriod": "Zeitraum"
+  ,"currentWeek": "Diese Woche"
+  ,"previousWeek": "Letzte Woche"
+  ,"currentMonth": "Dieser Monat"
+  ,"previousMonth": "Letzter Monat"
+  ,"currentYear": "Dieses Jahr"
+  ,"previousYear": "Letztes Jahr"
+  ,"customRange": "Benutzerdefinierter Zeitraum"
+  ,"selectDateRange": "Zeitraum auswählen"
+  ,"startDate": "Startdatum"
+  ,"endDate": "Enddatum"
+  ,"providerCommissionRateHint": "Mitarbeiterprovision (%)"
+  ,"providerCommissionRateDescription": "Prozentsatz des Servicepreises, den der Mitarbeiter für jeden abgeschlossenen Kunden erhält."
+  ,"providerCommissionRateRangeHint": "0 - 100"
+  ,"allEmployees": "Alle Mitarbeiter"
+  ,"grossEarnings": "Bruttoeinnahmen"
+  ,"providerEarnings": "Mitarbeitereinnahmen"
 }

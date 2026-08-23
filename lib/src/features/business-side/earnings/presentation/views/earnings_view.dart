@@ -2,13 +2,21 @@ import 'package:aquabook/app.dart';
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:aquabook/src/data/models/service_provider_model.dart';
+import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_bookings_chart.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
 import 'package:aquabook/src/features/business-side/earnings/bloc/earnings_cubit.dart';
 import 'package:aquabook/src/features/business-side/earnings/bloc/earnings_state.dart';
+import 'package:aquabook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
+import 'package:aquabook/src/features/business-side/earnings/domain/models/earnings_date_range.dart';
 import 'package:aquabook/src/features/business-side/earnings/presentation/widgets/earnings_business_selector.dart';
+import 'package:aquabook/src/features/business-side/earnings/presentation/widgets/earnings_custom_range_picker_sheet.dart';
 import 'package:aquabook/src/features/business-side/earnings/presentation/widgets/earnings_payout_card.dart';
+import 'package:aquabook/src/features/business-side/earnings/presentation/widgets/earnings_period_selector.dart';
+import 'package:aquabook/src/features/business-side/earnings/presentation/widgets/earnings_provider_selector.dart';
 import 'package:aquabook/src/features/business-side/earnings/presentation/widgets/earnings_summary_card.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +30,13 @@ class EarningsView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = useMemoized(() => getIt<EarningsCubit>());
+    final selectedBusinessId = useValueListenable(
+      getIt<UserRepository>().selectedBusinessId,
+    );
     useEffect(() {
-      cubit.load();
+      cubit.load(businessId: selectedBusinessId);
       return null;
-    }, [cubit]);
+    }, [cubit, selectedBusinessId]);
     useEffect(() => cubit.close, [cubit]);
 
     return BlocProvider.value(
@@ -42,6 +53,22 @@ class EarningsView extends HookWidget {
           }
 
           final metrics = state.monthlyMetrics;
+          final range = state.dateRange;
+          final List<ServiceProviderModel> providers =
+              state.selectedBusiness!.type == BusinessType.services
+              ? state.selectedBusiness!.serviceDetails?.availableProviders ??
+                    const []
+              : const [];
+          final isProviderFilterActive = state.selectedProvider != null;
+          final grossEarnings = isProviderFilterActive
+              ? state.providerMetrics.grossRevenue
+              : metrics.revenue;
+          final chartRevenue = isProviderFilterActive
+              ? state.providerMetrics.dailyGrossRevenue
+              : metrics.dailyRevenue;
+          final chartBookings = isProviderFilterActive
+              ? state.providerMetrics.dailyAppointments
+              : metrics.dailyBookings;
           return SafeArea(
             bottom: false,
             child: Column(
@@ -69,18 +96,64 @@ class EarningsView extends HookWidget {
                         ),
                         const SizedBox(height: 12),
                       ],
+                      EarningsPeriodSelector(
+                        period: state.period,
+                        onSelected: (period) async {
+                          final cubit = context.read<EarningsCubit>();
+                          if (period != EarningsPeriod.custom) {
+                            await cubit.selectPeriod(period);
+                            return;
+                          }
+                          final initialRange =
+                              range ??
+                              EarningsDateRange(
+                                start: DateTime.now(),
+                                end: DateTime.now(),
+                              );
+                          final customRange =
+                              await showModalBottomSheet<EarningsDateRange>(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (_) => EarningsCustomRangePickerSheet(
+                                  initialRange: initialRange,
+                                ),
+                              );
+                          if (customRange != null && context.mounted) {
+                            await cubit.selectPeriod(
+                              EarningsPeriod.custom,
+                              customRange: customRange,
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 14),
+                      if (providers.isNotEmpty) ...[
+                        EarningsProviderSelector(
+                          providers: providers,
+                          selectedProvider: state.selectedProvider,
+                          onSelected: context
+                              .read<EarningsCubit>()
+                              .selectProvider,
+                        ),
+                        const SizedBox(height: 14),
+                      ],
                       EarningsSummaryCard(
-                        title: context.l10n.totalEarningsThisMonth,
-                        value: context.l10n.formatCurrency(metrics.revenue),
+                        title:
+                            '${context.l10n.earningsPeriod}: ${_periodLabel(context, state.period)}',
+                        value: context.l10n.formatCurrency(grossEarnings),
                       ),
                       const SizedBox(height: 14),
                       Row(
                         children: [
                           Expanded(
                             child: EarningsPayoutCard(
-                              title: context.l10n.onlineEarnings,
+                              title: isProviderFilterActive
+                                  ? context.l10n.grossEarnings
+                                  : context.l10n.onlineEarnings,
                               value: context.l10n.formatCurrency(
-                                metrics.onlineEarnings,
+                                isProviderFilterActive
+                                    ? grossEarnings
+                                    : metrics.onlineEarnings,
                               ),
                               valueColor: const Color(0xFFF59E0B),
                             ),
@@ -88,9 +161,13 @@ class EarningsView extends HookWidget {
                           const SizedBox(width: 12),
                           Expanded(
                             child: EarningsPayoutCard(
-                              title: context.l10n.cashEarnings,
+                              title: isProviderFilterActive
+                                  ? context.l10n.providerEarnings
+                                  : context.l10n.cashEarnings,
                               value: context.l10n.formatCurrency(
-                                metrics.cashEarnings,
+                                isProviderFilterActive
+                                    ? state.providerMetrics.providerEarnings
+                                    : metrics.cashEarnings,
                               ),
                               valueColor: AppColors.success,
                             ),
@@ -99,11 +176,17 @@ class EarningsView extends HookWidget {
                       ),
                       const SizedBox(height: 20),
                       DashboardEarningsChart(
-                        values: _weeklyValues(metrics.dailyRevenue),
+                        values: _periodValues(chartRevenue, range),
+                        onlineValues: isProviderFilterActive
+                            ? null
+                            : _periodValues(metrics.dailyOnlineEarnings, range),
+                        cashValues: isProviderFilterActive
+                            ? null
+                            : _periodValues(metrics.dailyCashEarnings, range),
                       ),
                       const SizedBox(height: 20),
                       DashboardBookingsChart(
-                        values: _weeklyValues(metrics.dailyBookings),
+                        values: _periodValues(chartBookings, range),
                         title: context.l10n.bookingsTrend,
                         tooltipLabel: context.l10n.bookings,
                       ),
@@ -119,17 +202,40 @@ class EarningsView extends HookWidget {
   }
 }
 
-List<double> _weeklyValues(Map<String, double> dailyValues) {
-  final now = DateTime.now();
-  final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
+List<double> _periodValues(
+  Map<String, double> dailyValues,
+  EarningsDateRange? range,
+) {
+  if (range == null) return List<double>.filled(4, 0);
+  final isCalendarMonth =
+      range.start.day == 1 &&
+      range.start.year == range.end.year &&
+      range.start.month == range.end.month;
+  final bucketDays = isCalendarMonth
+      ? DateTime(range.start.year, range.start.month + 1, 0).day
+      : range.end.difference(range.start).inDays + 1;
   final result = List<double>.filled(4, 0);
   for (final entry in dailyValues.entries) {
     final date = DateTime.tryParse(entry.key);
-    if (date == null || date.year != now.year || date.month != now.month) {
+    if (date == null || date.isBefore(range.start) || date.isAfter(range.end)) {
       continue;
     }
-    final week = (((date.day - 1) * 4) / daysInMonth).floor().clamp(0, 3);
-    result[week] += entry.value;
+    final dayOffset = isCalendarMonth
+        ? date.day - 1
+        : date.difference(range.start).inDays;
+    final index = ((dayOffset * 4) / bucketDays).floor().clamp(0, 3);
+    result[index] += entry.value;
   }
   return result;
 }
+
+String _periodLabel(BuildContext context, EarningsPeriod period) =>
+    switch (period) {
+      EarningsPeriod.currentWeek => context.l10n.currentWeek,
+      EarningsPeriod.previousWeek => context.l10n.previousWeek,
+      EarningsPeriod.currentMonth => context.l10n.currentMonth,
+      EarningsPeriod.previousMonth => context.l10n.previousMonth,
+      EarningsPeriod.currentYear => context.l10n.currentYear,
+      EarningsPeriod.previousYear => context.l10n.previousYear,
+      EarningsPeriod.custom => context.l10n.customRange,
+    };

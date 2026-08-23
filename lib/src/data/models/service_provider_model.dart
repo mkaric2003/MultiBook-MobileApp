@@ -10,11 +10,13 @@ class ServiceProviderModel with ServiceProviderModelMappable {
     required this.id,
     required this.name,
     this.title,
+    this.commissionRate = 100,
     this.availabilitySlots = const [],
   });
 
   final String id;
   final String name;
   final String? title;
+  final double commissionRate;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
 }

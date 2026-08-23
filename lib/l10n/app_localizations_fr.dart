@@ -1788,4 +1788,56 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get noShowEarningsHint =>
       'Marquer une absence retire ce montant des revenus et des statistiques.';
+
+  @override
+  String get earningsPeriod => 'Période';
+
+  @override
+  String get currentWeek => 'Cette semaine';
+
+  @override
+  String get previousWeek => 'Semaine dernière';
+
+  @override
+  String get currentMonth => 'Ce mois-ci';
+
+  @override
+  String get previousMonth => 'Mois dernier';
+
+  @override
+  String get currentYear => 'Cette année';
+
+  @override
+  String get previousYear => 'L’année dernière';
+
+  @override
+  String get customRange => 'Période personnalisée';
+
+  @override
+  String get selectDateRange => 'Sélectionnez la période';
+
+  @override
+  String get startDate => 'Date de début';
+
+  @override
+  String get endDate => 'Date de fin';
+
+  @override
+  String get providerCommissionRateHint => 'Commission de l’employé (%)';
+
+  @override
+  String get providerCommissionRateDescription =>
+      'Pourcentage du prix du service que l’employé gagne pour chaque client pris en charge.';
+
+  @override
+  String get providerCommissionRateRangeHint => '0 - 100';
+
+  @override
+  String get allEmployees => 'Tous les employés';
+
+  @override
+  String get grossEarnings => 'Revenus bruts';
+
+  @override
+  String get providerEarnings => 'Revenus de l’employé';
 }

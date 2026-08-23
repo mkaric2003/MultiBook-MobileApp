@@ -719,4 +719,21 @@
   "markAsNoShow": "Segna come assente",
   "noShow": "Assente",
   "noShowEarningsHint": "Segnare l’assenza rimuove questo importo dalle entrate e dalle metriche."
+  ,"earningsPeriod": "Periodo"
+  ,"currentWeek": "Questa settimana"
+  ,"previousWeek": "Settimana scorsa"
+  ,"currentMonth": "Questo mese"
+  ,"previousMonth": "Mese scorso"
+  ,"currentYear": "Quest’anno"
+  ,"previousYear": "L’anno scorso"
+  ,"customRange": "Intervallo personalizzato"
+  ,"selectDateRange": "Seleziona il periodo"
+  ,"startDate": "Data di inizio"
+  ,"endDate": "Data di fine"
+  ,"providerCommissionRateHint": "Commissione del dipendente (%)"
+  ,"providerCommissionRateDescription": "Percentuale del prezzo del servizio che il dipendente guadagna per ogni cliente servito."
+  ,"providerCommissionRateRangeHint": "0 - 100"
+  ,"allEmployees": "Tutti i dipendenti"
+  ,"grossEarnings": "Entrate lorde"
+  ,"providerEarnings": "Entrate del dipendente"
 }

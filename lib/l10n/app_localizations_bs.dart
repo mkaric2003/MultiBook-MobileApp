@@ -1780,4 +1780,56 @@ class AppLocalizationsBs extends AppLocalizations {
   @override
   String get noShowEarningsHint =>
       'Označavanjem nedolaska iznos će biti uklonjen iz zarade i statistike.';
+
+  @override
+  String get earningsPeriod => 'Period';
+
+  @override
+  String get currentWeek => 'Ova sedmica';
+
+  @override
+  String get previousWeek => 'Prošla sedmica';
+
+  @override
+  String get currentMonth => 'Ovaj mjesec';
+
+  @override
+  String get previousMonth => 'Prošli mjesec';
+
+  @override
+  String get currentYear => 'Ova godina';
+
+  @override
+  String get previousYear => 'Prošla godina';
+
+  @override
+  String get customRange => 'Prilagođeni period';
+
+  @override
+  String get selectDateRange => 'Odaberite period';
+
+  @override
+  String get startDate => 'Početni datum';
+
+  @override
+  String get endDate => 'Završni datum';
+
+  @override
+  String get providerCommissionRateHint => 'Provizija zaposlenika (%)';
+
+  @override
+  String get providerCommissionRateDescription =>
+      'Postotak cijene usluge koji zaposlenik zarađuje za svakog odrađenog klijenta.';
+
+  @override
+  String get providerCommissionRateRangeHint => '0 - 100';
+
+  @override
+  String get allEmployees => 'Svi zaposlenici';
+
+  @override
+  String get grossEarnings => 'Bruto zarada';
+
+  @override
+  String get providerEarnings => 'Zarada zaposlenika';
 }

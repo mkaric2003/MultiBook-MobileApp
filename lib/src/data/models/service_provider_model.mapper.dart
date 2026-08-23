@@ -35,6 +35,13 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
     _$title,
     opt: true,
   );
+  static double _$commissionRate(ServiceProviderModel v) => v.commissionRate;
+  static const Field<ServiceProviderModel, double> _f$commissionRate = Field(
+    'commissionRate',
+    _$commissionRate,
+    opt: true,
+    def: 100,
+  );
   static List<ServiceAvailabilitySlotModel> _$availabilitySlots(
     ServiceProviderModel v,
   ) => v.availabilitySlots;
@@ -51,6 +58,7 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
     #id: _f$id,
     #name: _f$name,
     #title: _f$title,
+    #commissionRate: _f$commissionRate,
     #availabilitySlots: _f$availabilitySlots,
   };
 
@@ -59,6 +67,7 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
       id: data.dec(_f$id),
       name: data.dec(_f$name),
       title: data.dec(_f$title),
+      commissionRate: data.dec(_f$commissionRate),
       availabilitySlots: data.dec(_f$availabilitySlots),
     );
   }
@@ -147,6 +156,7 @@ abstract class ServiceProviderModelCopyWith<
     String? id,
     String? name,
     String? title,
+    double? commissionRate,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
   });
   ServiceProviderModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -182,12 +192,14 @@ class _ServiceProviderModelCopyWithImpl<$R, $Out>
     String? id,
     String? name,
     Object? title = $none,
+    double? commissionRate,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
       if (name != null) #name: name,
       if (title != $none) #title: title,
+      if (commissionRate != null) #commissionRate: commissionRate,
       if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
     }),
   );
@@ -196,6 +208,7 @@ class _ServiceProviderModelCopyWithImpl<$R, $Out>
     id: data.get(#id, or: $value.id),
     name: data.get(#name, or: $value.name),
     title: data.get(#title, or: $value.title),
+    commissionRate: data.get(#commissionRate, or: $value.commissionRate),
     availabilitySlots: data.get(
       #availabilitySlots,
       or: $value.availabilitySlots,
