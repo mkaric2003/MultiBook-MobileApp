@@ -8,6 +8,8 @@ import '../src/data/enums/stay_amenity.dart';
 import '../src/data/enums/stay_collection.dart';
 import '../src/data/enums/stay_extra_type.dart';
 import '../src/features/shared/localization/cubit/locale_cubit.dart';
+import '../src/features/customer-side/help_center/domain/enums/help_article_id.dart';
+import '../src/features/customer-side/help_center/domain/enums/help_center_topic.dart';
 
 extension L10nBuildContext on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
@@ -115,6 +117,58 @@ extension BusinessCategoryL10n on AppLocalizations {
     'accounting_consultation' => categoryAccountingConsultation,
     'professional_service' => categoryProfessionalService,
     _ => id,
+  };
+}
+
+extension HelpCenterL10n on AppLocalizations {
+  String helpTopicTitle(HelpCenterTopic topic) => switch (topic) {
+    HelpCenterTopic.stays => helpTopicStays,
+    HelpCenterTopic.appointments => helpTopicAppointments,
+    HelpCenterTopic.changesAndCancellations => helpTopicChanges,
+    HelpCenterTopic.payments => helpTopicPayments,
+    HelpCenterTopic.accountAndPrivacy => helpTopicAccount,
+    HelpCenterTopic.messagesAndNotifications => helpTopicMessages,
+    HelpCenterTopic.technicalSupport => helpTopicTechnical,
+    HelpCenterTopic.safetyAndSupport => helpTopicSafety,
+  };
+
+  String helpArticleTitle(HelpArticleId article) => switch (article) {
+    HelpArticleId.findingAndBookingStay => helpFindingBookingStayTitle,
+    HelpArticleId.stayDatesGuestsAndRooms => helpStayDatesRoomsTitle,
+    HelpArticleId.bookingAndAppointmentStatuses => helpStatusesTitle,
+    HelpArticleId.reschedulingAndCancelling => helpChangesTitle,
+    HelpArticleId.paymentsCashAndNoShows => helpCashNoShowTitle,
+    HelpArticleId.paymentSecurityAndReceipts => helpPaymentSecurityTitle,
+    HelpArticleId.profileAndPersonalData => helpProfileDataTitle,
+    HelpArticleId.messagesNotificationsAndSupport => helpMessagesTitle,
+    HelpArticleId.locationAndSearch => helpLocationSearchTitle,
+    HelpArticleId.reportingAndStayingSafe => helpSafetyTitle,
+  };
+
+  String helpArticleSummary(HelpArticleId article) => switch (article) {
+    HelpArticleId.findingAndBookingStay => helpFindingBookingStaySummary,
+    HelpArticleId.stayDatesGuestsAndRooms => helpStayDatesRoomsSummary,
+    HelpArticleId.bookingAndAppointmentStatuses => helpStatusesSummary,
+    HelpArticleId.reschedulingAndCancelling => helpChangesSummary,
+    HelpArticleId.paymentsCashAndNoShows => helpCashNoShowSummary,
+    HelpArticleId.paymentSecurityAndReceipts => helpPaymentSecuritySummary,
+    HelpArticleId.profileAndPersonalData => helpProfileDataSummary,
+    HelpArticleId.messagesNotificationsAndSupport => helpMessagesSummary,
+    HelpArticleId.locationAndSearch => helpLocationSearchSummary,
+    HelpArticleId.reportingAndStayingSafe => helpSafetySummary,
+  };
+
+  String helpArticleBody(HelpArticleId article) => switch (article) {
+    HelpArticleId.findingAndBookingStay => helpFindingBookingStayBody,
+    HelpArticleId.stayDatesGuestsAndRooms => helpStayDatesRoomsBody,
+    HelpArticleId.bookingAndAppointmentStatuses => helpStatusesBody,
+    HelpArticleId.reschedulingAndCancelling => helpChangesBody,
+    HelpArticleId.paymentsCashAndNoShows => helpCashNoShowBody,
+    HelpArticleId.paymentSecurityAndReceipts => helpPaymentSecurityBody,
+    HelpArticleId.profileAndPersonalData => helpProfileDataBody,
+    HelpArticleId.messagesNotificationsAndSupport => helpMessagesBody,
+    HelpArticleId.locationAndSearch => helpLocationSearchBody,
+    HelpArticleId.reportingAndStayingSafe => helpSafetyBody,
   };
 }
 

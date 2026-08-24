@@ -69,6 +69,8 @@ import 'package:aquabook/src/data/repositories/service_search_repository.dart'
     as _i760;
 import 'package:aquabook/src/data/repositories/stay_search_repository.dart'
     as _i285;
+import 'package:aquabook/src/data/repositories/support_ticket_repository.dart'
+    as _i258;
 import 'package:aquabook/src/data/repositories/user_location_repository.dart'
     as _i417;
 import 'package:aquabook/src/data/repositories/user_repository.dart' as _i747;
@@ -130,6 +132,10 @@ import 'package:aquabook/src/features/customer-side/service_detail/cubit/service
     as _i390;
 import 'package:aquabook/src/features/customer-side/stay_detail/cubit/stay_detail_cubit.dart'
     as _i386;
+import 'package:aquabook/src/features/customer-side/support_tickets/cubit/create_support_ticket_cubit.dart'
+    as _i440;
+import 'package:aquabook/src/features/customer-side/support_tickets/cubit/support_tickets_cubit.dart'
+    as _i104;
 import 'package:aquabook/src/features/shared/chat/cubit/chat_conversation_cubit.dart'
     as _i1047;
 import 'package:aquabook/src/features/shared/chat/cubit/chat_list_cubit.dart'
@@ -264,6 +270,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i83.FirebaseStorageDataSource>(),
       ),
     );
+    gh.lazySingleton<_i258.SupportTicketRepository>(
+      () => _i258.SupportTicketRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i747.UserRepository>(),
+      ),
+    );
     gh.lazySingleton<_i1065.BusinessRepository>(
       () => _i1065.BusinessRepository(
         gh<_i137.AuthenticationDataSource>(),
@@ -307,6 +320,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i409.ChatListCubit>(
       () => _i409.ChatListCubit(gh<_i525.ChatRepository>()),
+    );
+    gh.factory<_i104.SupportTicketsCubit>(
+      () => _i104.SupportTicketsCubit(gh<_i258.SupportTicketRepository>()),
+    );
+    gh.factory<_i440.CreateSupportTicketCubit>(
+      () => _i440.CreateSupportTicketCubit(gh<_i258.SupportTicketRepository>()),
     );
     gh.lazySingleton<_i113.NotificationRepository>(
       () => _i113.NotificationRepository(

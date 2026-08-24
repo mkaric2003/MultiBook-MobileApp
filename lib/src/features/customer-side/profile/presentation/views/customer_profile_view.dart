@@ -134,11 +134,13 @@ class CustomerProfileView extends StatelessWidget {
                 CustomerProfileMenuItem(
                   icon: Icons.help_outline,
                   label: context.l10n.helpCenter,
+                  onTap: () => context.push(AppRoutes.HELP_CENTER),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.chat_bubble_outline,
                   label: context.l10n.contactUs,
+                  onTap: () => context.push(AppRoutes.SUPPORT_TICKETS),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(

@@ -3573,6 +3573,432 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'USLOVI KORIŠTENJA\n\nKorištenjem MultiBooka prihvatate ove uslove. MultiBook povezuje korisnike s nezavisnim businessima koji nude smještaj i usluge.\n\n1. Vaš račun\nDužni ste unijeti tačne podatke i čuvati pristup svom računu. Ne smijete koristiti tuđi račun, slati neželjene poruke, zaobilaziti sigurnosne mjere ili zloupotrebljavati aplikaciju.\n\n2. Rezervacije i termini\nPrije potvrde provjerite datume, vrijeme, broj gostiju, odabranu sobu ili uslugu i ukupnu cijenu. Potvrđena rezervacija ili appointment predstavlja dogovor između vas i odabranog businessa.\n\n3. Plaćanje, otkazivanje i promjene\nOvisno o ponudi, plaćanje može biti online ili gotovinom. Kod gotovinskog plaćanja obavezni ste platiti businessu prema potvrđenim detaljima. Pravila otkazivanja, reschedule opcije i dostupnost zavise od businessa i vrste rezervacije. Pravovremeno otkažite termin ako ne možete doći.\n\n4. Businessi i kvalitet usluge\nBusinessi su nezavisni pružaoci i odgovorni su za tačnost oglasa, dostupnost, kvalitet i pružanje usluge. MultiBook pruža recenzije i podršku, ali ne garantuje da će svaka usluga ili smještaj odgovarati vašim očekivanjima.\n\n5. Recenzije i ponašanje\nPišite iskrene, relevantne i pristojne recenzije. Zabranjeni su uvredljiv sadržaj, lažne rezervacije, prevara, diskriminacija i ponašanje koje ugrožava druge korisnike ili businesse.\n\n6. Izmjene uslova\nMožemo ažurirati ove uslove zbog novih funkcija, sigurnosti ili zakonskih zahtjeva. Nastavak korištenja nakon objave izmjena znači da ih prihvatate.'**
   String get termsOfServiceContent;
+
+  /// No description provided for @supportRequests.
+  ///
+  /// In bs, this message translates to:
+  /// **'Zahtjevi za podršku'**
+  String get supportRequests;
+
+  /// No description provided for @noSupportRequests.
+  ///
+  /// In bs, this message translates to:
+  /// **'Još nemate zahtjeva za podršku.'**
+  String get noSupportRequests;
+
+  /// No description provided for @newSupportRequest.
+  ///
+  /// In bs, this message translates to:
+  /// **'Novi zahtjev'**
+  String get newSupportRequest;
+
+  /// No description provided for @supportRequestDescription.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pošaljite nam detalje problema, a naš tim će pregledati vaš zahtjev.'**
+  String get supportRequestDescription;
+
+  /// No description provided for @selectSupportTopic.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite temu'**
+  String get selectSupportTopic;
+
+  /// No description provided for @supportSubject.
+  ///
+  /// In bs, this message translates to:
+  /// **'Naslov'**
+  String get supportSubject;
+
+  /// No description provided for @supportSubjectHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kratko opišite problem'**
+  String get supportSubjectHint;
+
+  /// No description provided for @supportMessage.
+  ///
+  /// In bs, this message translates to:
+  /// **'Poruka'**
+  String get supportMessage;
+
+  /// No description provided for @supportMessageHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodajte što više korisnih detalja...'**
+  String get supportMessageHint;
+
+  /// No description provided for @sendSupportRequest.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pošalji zahtjev'**
+  String get sendSupportRequest;
+
+  /// No description provided for @supportRequestSent.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vaš zahtjev je uspješno poslan.'**
+  String get supportRequestSent;
+
+  /// No description provided for @supportRequestFailed.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nismo uspjeli poslati zahtjev. Pokušajte ponovo.'**
+  String get supportRequestFailed;
+
+  /// No description provided for @supportCategoryAccount.
+  ///
+  /// In bs, this message translates to:
+  /// **'Račun i profil'**
+  String get supportCategoryAccount;
+
+  /// No description provided for @supportCategoryBooking.
+  ///
+  /// In bs, this message translates to:
+  /// **'Rezervacija smještaja'**
+  String get supportCategoryBooking;
+
+  /// No description provided for @supportCategoryAppointment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Termin usluge'**
+  String get supportCategoryAppointment;
+
+  /// No description provided for @supportCategoryPayment.
+  ///
+  /// In bs, this message translates to:
+  /// **'Plaćanje'**
+  String get supportCategoryPayment;
+
+  /// No description provided for @supportCategoryTechnical.
+  ///
+  /// In bs, this message translates to:
+  /// **'Tehnički problem'**
+  String get supportCategoryTechnical;
+
+  /// No description provided for @supportCategoryOther.
+  ///
+  /// In bs, this message translates to:
+  /// **'Ostalo'**
+  String get supportCategoryOther;
+
+  /// No description provided for @supportStatusOpen.
+  ///
+  /// In bs, this message translates to:
+  /// **'Otvoren'**
+  String get supportStatusOpen;
+
+  /// No description provided for @supportStatusInProgress.
+  ///
+  /// In bs, this message translates to:
+  /// **'U obradi'**
+  String get supportStatusInProgress;
+
+  /// No description provided for @supportStatusResolved.
+  ///
+  /// In bs, this message translates to:
+  /// **'Riješen'**
+  String get supportStatusResolved;
+
+  /// No description provided for @helpCenterHeading.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako vam možemo pomoći?'**
+  String get helpCenterHeading;
+
+  /// No description provided for @helpCenterIntro.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pronađite jasne odgovore o smještajima, uslugama, plaćanju, promjenama rezervacija i sigurnom korištenju MultiBooka.'**
+  String get helpCenterIntro;
+
+  /// No description provided for @helpCenterSearchHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pretražite pitanja i odgovore'**
+  String get helpCenterSearchHint;
+
+  /// No description provided for @helpCenterBrowseTopics.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pregledajte po temi'**
+  String get helpCenterBrowseTopics;
+
+  /// No description provided for @helpCenterPopularArticles.
+  ///
+  /// In bs, this message translates to:
+  /// **'Najčešća pitanja'**
+  String get helpCenterPopularArticles;
+
+  /// No description provided for @helpCenterSearchResults.
+  ///
+  /// In bs, this message translates to:
+  /// **'Rezultati pretrage'**
+  String get helpCenterSearchResults;
+
+  /// No description provided for @helpCenterShowAll.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prikaži sve'**
+  String get helpCenterShowAll;
+
+  /// No description provided for @helpCenterNoResultsTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Nismo pronašli odgovor'**
+  String get helpCenterNoResultsTitle;
+
+  /// No description provided for @helpCenterNoResultsBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pokušajte s drugim pojmom ili nam pošaljite zahtjev za podršku.'**
+  String get helpCenterNoResultsBody;
+
+  /// No description provided for @helpCenterContactTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Još vam je potrebna pomoć?'**
+  String get helpCenterContactTitle;
+
+  /// No description provided for @helpCenterContactBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pošaljite zahtjev s što više detalja. Naš tim ga može pregledati i pratiti njegov status u aplikaciji.'**
+  String get helpCenterContactBody;
+
+  /// No description provided for @helpCenterContactButton.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kontaktirajte podršku'**
+  String get helpCenterContactButton;
+
+  /// No description provided for @helpTopicStays.
+  ///
+  /// In bs, this message translates to:
+  /// **'Smještaji i rezervacije'**
+  String get helpTopicStays;
+
+  /// No description provided for @helpTopicAppointments.
+  ///
+  /// In bs, this message translates to:
+  /// **'Termini usluga'**
+  String get helpTopicAppointments;
+
+  /// No description provided for @helpTopicChanges.
+  ///
+  /// In bs, this message translates to:
+  /// **'Promjene i otkazivanja'**
+  String get helpTopicChanges;
+
+  /// No description provided for @helpTopicPayments.
+  ///
+  /// In bs, this message translates to:
+  /// **'Plaćanja i cijene'**
+  String get helpTopicPayments;
+
+  /// No description provided for @helpTopicAccount.
+  ///
+  /// In bs, this message translates to:
+  /// **'Račun i privatnost'**
+  String get helpTopicAccount;
+
+  /// No description provided for @helpTopicMessages.
+  ///
+  /// In bs, this message translates to:
+  /// **'Poruke i obavijesti'**
+  String get helpTopicMessages;
+
+  /// No description provided for @helpTopicTechnical.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pretraga i lokacija'**
+  String get helpTopicTechnical;
+
+  /// No description provided for @helpTopicSafety.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sigurnost i podrška'**
+  String get helpTopicSafety;
+
+  /// No description provided for @helpFindingBookingStayTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako pronaći i rezervisati smještaj?'**
+  String get helpFindingBookingStayTitle;
+
+  /// No description provided for @helpFindingBookingStaySummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Koraci od pretrage oglasa do potvrđene rezervacije.'**
+  String get helpFindingBookingStaySummary;
+
+  /// No description provided for @helpFindingBookingStayBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'1. Na početnoj stranici odaberite Smještaji, unesite grad ili naziv oglasa i po potrebi otvorite Filtere. Možete birati datume, broj gostiju, grad, cijenu, ocjenu, kategoriju i pogodnosti.\n\n2. Otvorite oglas i provjerite fotografije, lokaciju, cijenu po noći, pogodnosti, pravila i raspoložive jedinice ili sobe.\n\n3. Odaberite datume i goste. Ako business nudi više soba ili jedinica, izaberite željeni tip; ako ga ne izaberete, koristi se osnovna dostupna jedinica navedena uz cijenu oglasa.\n\n4. Na pregledu rezervacije provjerite ukupnu cijenu, poreze, naknade i dodatke. Nakon uspješnog plaćanja ili izbora gotovine, rezervacija je potvrđena i dostupna u Rezervacijama.'**
+  String get helpFindingBookingStayBody;
+
+  /// No description provided for @helpStayDatesRoomsTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Datumi, gosti i raspoloživost soba'**
+  String get helpStayDatesRoomsTitle;
+
+  /// No description provided for @helpStayDatesRoomsSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako MultiBook računa raspoloživost za privatne objekte i hotele.'**
+  String get helpStayDatesRoomsSummary;
+
+  /// No description provided for @helpStayDatesRoomsBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Za privatnu jedinicu, poput apartmana ili vile s jednom jedinicom, zauzeti datumi ne mogu se odabrati. Provjerite datum prijave i odjave prije nastavka.\n\nZa objekte s više jedinica, poput hotela, raspoloživost se računa po odabranom tipu sobe i kapacitetu. Zato isti datum može ostati dostupan dok god postoji slobodna soba odgovarajućeg tipa.\n\nBroj odraslih i djece utiče na prikaz dostupnih opcija. Ako ne vidite željenu sobu, promijenite broj gostiju ili datume. Cijena se prikazuje po noći; dodatne usluge, porezi i naknade prikazuju se prije potvrde.'**
+  String get helpStayDatesRoomsBody;
+
+  /// No description provided for @helpStatusesTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Statusi rezervacija i termina'**
+  String get helpStatusesTitle;
+
+  /// No description provided for @helpStatusesSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Šta znače potvrđeno, završeno, otkazano i odbijeno.'**
+  String get helpStatusesSummary;
+
+  /// No description provided for @helpStatusesBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Potvrđeno znači da je rezervacija smještaja ili termin usluge uspješno kreiran. Za online plaćanje to nastaje nakon uspješne potvrde plaćanja, a za gotovinu nakon potvrde rezervacije.\n\nZavršeno označava raniji termin ili boravak koji je protekao. Tada možete ostaviti jednu recenziju za business.\n\nOtkazano znači da je korisnik otkazao rezervaciju ili termin. Odbijeno označava promjenu statusa koju je napravio business. Ako imate pitanja o konkretnom statusu, otvorite detalje rezervacije ili pošaljite zahtjev podršci.'**
+  String get helpStatusesBody;
+
+  /// No description provided for @helpChangesTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako promijeniti ili otkazati rezervaciju?'**
+  String get helpChangesTitle;
+
+  /// No description provided for @helpChangesSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pravila za otkazivanje i jednokratno pomjeranje termina usluge.'**
+  String get helpChangesSummary;
+
+  /// No description provided for @helpChangesBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Otvorite Rezervacije, izaberite aktivnu stavku i pogledajte dostupne radnje. Rezervaciju smještaja ili termin možete otkazati dok je ta opcija dostupna u detaljima.\n\nZa termin usluge korisnik može jednom odabrati Promijeni termin. Nakon toga birate novi datum i samo slobodne slotove odgovarajuće dužine. Business može promijeniti termin više puta kada je to potrebno.\n\nOtkazivanje i promjena mogu uticati na dostupnost i naplatu prema pravilima businessa. Prije potvrde pažljivo provjerite novi datum, vrijeme, odabrane usluge i ukupan iznos.'**
+  String get helpChangesBody;
+
+  /// No description provided for @helpCashNoShowTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Online plaćanje, gotovina i nedolazak'**
+  String get helpCashNoShowTitle;
+
+  /// No description provided for @helpCashNoShowSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Razlika između načina plaćanja i šta se dešava ako ne dođete.'**
+  String get helpCashNoShowSummary;
+
+  /// No description provided for @helpCashNoShowBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Business može ponuditi online plaćanje ili plaćanje gotovinom. Kod online plaćanja unosite podatke kartice u sigurnom koraku plaćanja. Kod gotovine iznos plaćate direktno businessu pri dolasku ili nakon usluge, prema potvrđenim detaljima.\n\nBez obzira na način plaćanja, potvrđena stavka ulazi u evidenciju businessa. Za prošlu gotovinsku rezervaciju ili termin business može označiti nedolazak ako se klijent nije pojavio. Time se iznos uklanja iz zarade, statistike i trendova businessa.\n\nAko smatrate da je status ili iznos pogrešan, prvo provjerite detalje rezervacije, zatim kontaktirajte business porukom ili otvorite zahtjev podršci.'**
+  String get helpCashNoShowBody;
+
+  /// No description provided for @helpPaymentSecurityTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sigurnost kartice, cijene i potvrde'**
+  String get helpPaymentSecurityTitle;
+
+  /// No description provided for @helpPaymentSecuritySummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Šta se prikazuje prije plaćanja i koje podatke business vidi.'**
+  String get helpPaymentSecuritySummary;
+
+  /// No description provided for @helpPaymentSecurityBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Prije plaćanja MultiBook prikazuje detaljan obračun: osnovnu cijenu smještaja ili usluga, izabrane dodatke, naknade i poreze. Potvrdite plaćanje tek kada su iznos, datumi i vrijeme tačni.\n\nBusiness ne dobija puni broj vaše kartice. U detaljima može biti prikazan samo način plaćanja i maskirani završetak kartice, kada je dostupan.\n\nSačuvajte potvrdu rezervacije ili termina i njen kod. On pomaže pri komunikaciji s businessom i podrškom. Nikada ne šaljite puni broj kartice, CVV, lozinku ili kodove za prijavu kroz chat.'**
+  String get helpPaymentSecurityBody;
+
+  /// No description provided for @helpProfileDataTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Profil, lokacija i lični podaci'**
+  String get helpProfileDataTitle;
+
+  /// No description provided for @helpProfileDataSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako urediti podatke, upravljati dozvolom lokacije i zaštititi račun.'**
+  String get helpProfileDataSummary;
+
+  /// No description provided for @helpProfileDataBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'U Profilu možete urediti ime, broj telefona, adresu, grad, datum rođenja, državni pozivni broj i profilnu sliku. Email je povezan s vašim načinom prijave i zato može biti zaključan za direktnu izmjenu.\n\nLokaciju tražimo uz vašu dozvolu kako bismo prikazali oglase u vašem gradu, karte i rezultate u blizini. Dozvolu možete odbiti ili promijeniti u postavkama uređaja; grad zatim možete ručno urediti u profilu.\n\nČuvajte lozinku i pristup računu. Ako primijetite nepoznatu aktivnost ili želite brisanje računa, odmah pošaljite zahtjev podršci.'**
+  String get helpProfileDataBody;
+
+  /// No description provided for @helpMessagesTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Poruke, obavijesti i podrška'**
+  String get helpMessagesTitle;
+
+  /// No description provided for @helpMessagesSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako komunicirati s businessom i upravljati obavijestima.'**
+  String get helpMessagesSummary;
+
+  /// No description provided for @helpMessagesBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Poruke u MultiBooku uvijek se vode između korisnika i konkretnog businessa, ne samo vlasnika businessa. Chat možete otvoriti iz detalja rezervacije ili termina, a listu svih razgovora pronaći ćete u Profilu ili More sekciji.\n\nPush obavijest za novu poruku se ne šalje dok je taj chat otvoren. Nepročitane poruke su označene u listi razgovora i na relevantnim stavkama navigacije.\n\nZa problem koji ne može riješiti business, otvorite Kontaktirajte nas. Zahtjev uključuje temu, naslov i poruku, a njegov status možete pratiti u Zahtjevima za podršku.'**
+  String get helpMessagesBody;
+
+  /// No description provided for @helpLocationSearchTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pretraga, filteri i lokacija'**
+  String get helpLocationSearchTitle;
+
+  /// No description provided for @helpLocationSearchSummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kako dobiti relevantnije rezultate za smještaje i usluge.'**
+  String get helpLocationSearchSummary;
+
+  /// No description provided for @helpLocationSearchBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Za smještaj možete pretraživati grad ili naziv oglasa te koristiti filtre za datume, goste, cijenu, ocjenu, kategoriju i pogodnosti. Za usluge možete birati datum, vrijeme, vrstu businessa, grad, cijenu i sortiranje.\n\nKada filtrirate uslugu po vremenu, MultiBook uzima u obzir trajanje odabranih usluga i stvarno zauzete slotove svih zaposlenika. Rezultat se prikazuje samo ako je kod najmanje jednog odgovarajućeg zaposlenika moguć cijeli termin.\n\nAko ne pronalazite rezultate, odaberite Sve gradove, proširite raspon cijene, promijenite datum ili uklonite dio filtera.'**
+  String get helpLocationSearchBody;
+
+  /// No description provided for @helpSafetyTitle.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sigurnost, recenzije i prijava problema'**
+  String get helpSafetyTitle;
+
+  /// No description provided for @helpSafetySummary.
+  ///
+  /// In bs, this message translates to:
+  /// **'Pravila za sigurnu komunikaciju, tačne recenzije i prijavu sumnjivog sadržaja.'**
+  String get helpSafetySummary;
+
+  /// No description provided for @helpSafetyBody.
+  ///
+  /// In bs, this message translates to:
+  /// **'Koristite MultiBook chat za komunikaciju o rezervaciji ili terminu i dijelite samo podatke koji su potrebni. Ne šaljite lozinke, CVV, jednokratne kodove ni pune podatke kartice.\n\nNakon završenog boravka ili termina možete ostaviti jednu iskrenu recenziju po businessu. Ocjena i komentar trebaju opisivati stvarno iskustvo, bez uvreda, diskriminacije, prijetnji ili lažnih navoda.\n\nAko je oglas netačan, komunikacija neprimjerena ili sumnjate na prevaru, sačuvajte relevantne detalje i pošaljite zahtjev podršci. U hitnim ili sigurnosno osjetljivim situacijama kontaktirajte lokalne nadležne službe.'**
+  String get helpSafetyBody;
 }
 
 class _AppLocalizationsDelegate

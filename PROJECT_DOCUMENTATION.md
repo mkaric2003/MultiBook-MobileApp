@@ -283,6 +283,8 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - **My bookings** razdvaja stays i services na upcoming/past, uz live osvježavanje nakon cancel akcije.
 - **Saved** je vezan za usera; animirano uklanjanje iz liste, toast feedback i trenutno stanje srca na detailu.
 - **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
+- **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).
+- Ticketi se čuvaju u `support_tickets`; Firestore pravila dozvoljavaju customeru kreiranje i čitanje samo vlastitih zahtjeva, dok status kasnije mijenja interni support/admin alat.
 - **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed.
 - Recently viewed se sprema po useru i po businessu; naslov se ne prikazuje kada nema podataka.
 - Rezultati kategorije/kolekcije koriste cursor paginaciju.

@@ -61,6 +61,11 @@ import 'package:aquabook/src/features/shared/localization/cubit/locale_state.dar
 import 'package:aquabook/src/features/shared/localization/presentation/views/language_currency_view.dart';
 import 'package:aquabook/src/features/shared/legal/domain/enums/legal_document_type.dart';
 import 'package:aquabook/src/features/shared/legal/presentation/views/legal_document_view.dart';
+import 'package:aquabook/src/features/customer-side/support_tickets/presentation/views/create_support_ticket_view.dart';
+import 'package:aquabook/src/features/customer-side/support_tickets/presentation/views/support_tickets_view.dart';
+import 'package:aquabook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
+import 'package:aquabook/src/features/customer-side/help_center/presentation/views/help_article_detail_view.dart';
+import 'package:aquabook/src/features/customer-side/help_center/presentation/views/help_center_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

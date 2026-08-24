@@ -206,6 +206,27 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: AppRoutes.SUPPORT_TICKETS,
+      name: AppRoutes.SUPPORT_TICKETS,
+      builder: (context, state) => const SupportTicketsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.CREATE_SUPPORT_TICKET,
+      name: AppRoutes.CREATE_SUPPORT_TICKET,
+      builder: (context, state) => const CreateSupportTicketView(),
+    ),
+    GoRoute(
+      path: AppRoutes.HELP_CENTER,
+      name: AppRoutes.HELP_CENTER,
+      builder: (context, state) => const HelpCenterView(),
+    ),
+    GoRoute(
+      path: AppRoutes.HELP_ARTICLE_DETAIL,
+      name: AppRoutes.HELP_ARTICLE_DETAIL,
+      builder: (context, state) =>
+          HelpArticleDetailView(article: state.extra! as HelpArticleModel),
+    ),
+    GoRoute(
       path: AppRoutes.AVAILABILITY_CALENDAR,
       name: AppRoutes.AVAILABILITY_CALENDAR,
       builder: (context, state) => const AvailabilityCalendarView(),
