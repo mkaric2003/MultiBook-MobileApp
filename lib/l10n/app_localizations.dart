@@ -3999,6 +3999,42 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Koristite MultiBook chat za komunikaciju o rezervaciji ili terminu i dijelite samo podatke koji su potrebni. Ne šaljite lozinke, CVV, jednokratne kodove ni pune podatke kartice.\n\nNakon završenog boravka ili termina možete ostaviti jednu iskrenu recenziju po businessu. Ocjena i komentar trebaju opisivati stvarno iskustvo, bez uvreda, diskriminacije, prijetnji ili lažnih navoda.\n\nAko je oglas netačan, komunikacija neprimjerena ili sumnjate na prevaru, sačuvajte relevantne detalje i pošaljite zahtjev podršci. U hitnim ili sigurnosno osjetljivim situacijama kontaktirajte lokalne nadležne službe.'**
   String get helpSafetyBody;
+
+  /// No description provided for @savedPaymentMethods.
+  ///
+  /// In bs, this message translates to:
+  /// **'Sačuvane metode plaćanja'**
+  String get savedPaymentMethods;
+
+  /// No description provided for @savedPaymentMethodsDescription.
+  ///
+  /// In bs, this message translates to:
+  /// **'Odaberite podrazumijevanu karticu za brže plaćanje.'**
+  String get savedPaymentMethodsDescription;
+
+  /// No description provided for @noSavedPaymentMethods.
+  ///
+  /// In bs, this message translates to:
+  /// **'Još nemate sačuvanih kartica.'**
+  String get noSavedPaymentMethods;
+
+  /// No description provided for @addPaymentMethod.
+  ///
+  /// In bs, this message translates to:
+  /// **'Dodaj karticu'**
+  String get addPaymentMethod;
+
+  /// No description provided for @defaultPaymentMethod.
+  ///
+  /// In bs, this message translates to:
+  /// **'Podrazumijevana'**
+  String get defaultPaymentMethod;
+
+  /// No description provided for @setAsDefault.
+  ///
+  /// In bs, this message translates to:
+  /// **'Postavi kao glavnu'**
+  String get setAsDefault;
 }
 
 class _AppLocalizationsDelegate

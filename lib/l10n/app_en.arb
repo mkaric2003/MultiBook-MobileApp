@@ -674,4 +674,10 @@
   ,"helpSafetyTitle": "Safety, reviews and reporting issues"
   ,"helpSafetySummary": "Guidance for safe communication, accurate reviews and reporting suspicious content."
   ,"helpSafetyBody": "Use MultiBook chat for booking or appointment communication and share only necessary information. Never send passwords, CVV numbers, one-time codes or full card data.\n\nAfter a completed stay or appointment, you can leave one honest review per business. Ratings and comments should reflect real experience and must not contain abuse, discrimination, threats or false claims.\n\nIf a listing is inaccurate, communication is inappropriate or you suspect fraud, keep relevant details and send a support request. For urgent safety situations, contact local emergency services."
+  ,"savedPaymentMethods": "Saved payment methods"
+  ,"savedPaymentMethodsDescription": "Choose a default card for faster payments."
+  ,"noSavedPaymentMethods": "You do not have any saved cards yet."
+  ,"addPaymentMethod": "Add card"
+  ,"defaultPaymentMethod": "Default"
+  ,"setAsDefault": "Set as default"
 }

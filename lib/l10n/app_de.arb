@@ -759,4 +759,10 @@
   ,"supportStatusOpen": "Offen"
   ,"supportStatusInProgress": "In Bearbeitung"
   ,"supportStatusResolved": "Gelöst"
+  ,"savedPaymentMethods": "Gespeicherte Zahlungsmethoden"
+  ,"savedPaymentMethodsDescription": "Wählen Sie eine Standardkarte für schnellere Zahlungen."
+  ,"noSavedPaymentMethods": "Sie haben noch keine gespeicherten Karten."
+  ,"addPaymentMethod": "Karte hinzufügen"
+  ,"defaultPaymentMethod": "Standard"
+  ,"setAsDefault": "Als Standard festlegen"
 }

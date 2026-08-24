@@ -759,4 +759,10 @@
   ,"supportStatusOpen": "Aperta"
   ,"supportStatusInProgress": "In lavorazione"
   ,"supportStatusResolved": "Risolta"
+  ,"savedPaymentMethods": "Metodi di pagamento salvati"
+  ,"savedPaymentMethodsDescription": "Scegli una carta predefinita per pagamenti più rapidi."
+  ,"noSavedPaymentMethods": "Non hai ancora carte salvate."
+  ,"addPaymentMethod": "Aggiungi carta"
+  ,"defaultPaymentMethod": "Predefinita"
+  ,"setAsDefault": "Imposta come predefinita"
 }

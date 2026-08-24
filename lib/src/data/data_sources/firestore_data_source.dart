@@ -35,6 +35,12 @@ abstract class FirestoreDataSource {
     bool descending = false,
   });
 
+  Stream<List<Map<String, dynamic>>> watchDocumentsOrdered({
+    required String collection,
+    required String orderBy,
+    bool descending = false,
+  });
+
   Future<List<Map<String, dynamic>>> getDocuments({required String collection});
 
   Future<List<Map<String, dynamic>>> getDocumentsOrdered({
@@ -175,6 +181,19 @@ class FirestoreDataSourceImpl implements FirestoreDataSource {
   }) => _firestore
       .collection(collection)
       .where(field, isEqualTo: value)
+      .orderBy(orderBy, descending: descending)
+      .snapshots()
+      .map(
+        (snapshot) => snapshot.docs.map((document) => document.data()).toList(),
+      );
+
+  @override
+  Stream<List<Map<String, dynamic>>> watchDocumentsOrdered({
+    required String collection,
+    required String orderBy,
+    bool descending = false,
+  }) => _firestore
+      .collection(collection)
       .orderBy(orderBy, descending: descending)
       .snapshots()
       .map(

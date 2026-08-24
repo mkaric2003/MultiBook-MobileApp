@@ -103,6 +103,7 @@ class CustomerProfileView extends StatelessWidget {
                 CustomerProfileMenuItem(
                   icon: Icons.credit_card,
                   label: context.l10n.paymentMethods,
+                  onTap: () => context.push(AppRoutes.PAYMENT_METHODS),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(

@@ -227,6 +227,16 @@ final router = GoRouter(
           HelpArticleDetailView(article: state.extra! as HelpArticleModel),
     ),
     GoRoute(
+      path: AppRoutes.PAYMENT_METHODS,
+      name: AppRoutes.PAYMENT_METHODS,
+      builder: (context, state) => const PaymentMethodsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.ADD_PAYMENT_METHOD,
+      name: AppRoutes.ADD_PAYMENT_METHOD,
+      builder: (context, state) => const AddPaymentMethodView(),
+    ),
+    GoRoute(
       path: AppRoutes.AVAILABILITY_CALENDAR,
       name: AppRoutes.AVAILABILITY_CALENDAR,
       builder: (context, state) => const AvailabilityCalendarView(),

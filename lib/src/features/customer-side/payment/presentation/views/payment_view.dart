@@ -12,6 +12,10 @@ import 'package:aquabook/src/features/customer-side/payment/presentation/widgets
 import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/payment_card_form.dart';
 import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/payment_price_breakdown.dart';
 import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/payment_wallet_option.dart';
+import 'package:aquabook/src/features/customer-side/payment_methods/cubit/payment_methods_cubit.dart';
+import 'package:aquabook/src/features/customer-side/payment_methods/cubit/payment_methods_state.dart';
+import 'package:aquabook/src/features/customer-side/payment_methods/domain/models/saved_payment_method_model.dart';
+import 'package:aquabook/src/features/customer-side/payment_methods/presentation/widgets/saved_payment_method_selector.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +38,7 @@ class PaymentView extends HookWidget {
     final address = useTextEditingController();
     final agreed = useState(false);
     final paymentType = useState(PaymentMethodType.card);
-    final paymentCubit = useMemoized(() => getIt<PaymentCubit>());
-    useEffect(() => paymentCubit.close, [paymentCubit]);
+    final selectedMethod = useState<SavedPaymentMethodModel?>(null);
     useListenable(cardNumber);
     useListenable(expiry);
     useListenable(cvv);
@@ -48,14 +51,18 @@ class PaymentView extends HookWidget {
       pricePerNight: price,
     ).total();
     final isCardValid =
-        PaymentInputValidation.isCardNumberValid(cardNumber.text) &&
-        PaymentInputValidation.isExpiryValid(expiry.text) &&
-        PaymentInputValidation.isCvvValid(cvv.text);
+        selectedMethod.value != null ||
+        (PaymentInputValidation.isCardNumberValid(cardNumber.text) &&
+            PaymentInputValidation.isExpiryValid(expiry.text) &&
+            PaymentInputValidation.isCvvValid(cvv.text));
     final isCashPayment = paymentType.value == PaymentMethodType.cash;
     final requiresCardDetails = paymentType.value == PaymentMethodType.card;
     final canConfirm = agreed.value && (!requiresCardDetails || isCardValid);
-    return BlocProvider.value(
-      value: paymentCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<PaymentCubit>()),
+        BlocProvider(create: (_) => getIt<PaymentMethodsCubit>()..load()),
+      ],
       child: BlocListener<PaymentCubit, PaymentState>(
         listener: (context, state) {
           if (state.booking != null) {
@@ -108,11 +115,25 @@ class PaymentView extends HookWidget {
                         ),
                         const SizedBox(height: 14),
                         if (paymentType.value == PaymentMethodType.card)
-                          PaymentCardForm(
-                            cardNumber: cardNumber,
-                            expiry: expiry,
-                            cvv: cvv,
-                            cardholder: cardholder,
+                          BlocBuilder<PaymentMethodsCubit, PaymentMethodsState>(
+                            builder: (context, state) => Column(
+                              children: [
+                                SavedPaymentMethodSelector(
+                                  methods: state.methods,
+                                  selectedMethod: selectedMethod.value,
+                                  onSelected: (method) =>
+                                      selectedMethod.value = method,
+                                ),
+                                if (state.methods.isNotEmpty)
+                                  const SizedBox(height: 14),
+                                PaymentCardForm(
+                                  cardNumber: cardNumber,
+                                  expiry: expiry,
+                                  cvv: cvv,
+                                  cardholder: cardholder,
+                                ),
+                              ],
+                            ),
                           ),
                         if (paymentType.value == PaymentMethodType.card)
                           const SizedBox(height: 14),
@@ -213,14 +234,16 @@ class PaymentView extends HookWidget {
                                 context.l10n.formatCurrency(total),
                               ),
                         enabled: canConfirm,
-                        onPressed: () async => paymentCubit.confirm(
-                          arguments,
-                          paymentType: paymentType.value,
-                          paymentMethod: _paymentMethod(
-                            paymentType.value,
-                            cardNumber.text,
-                          ),
-                        ),
+                        onPressed: () async =>
+                            context.read<PaymentCubit>().confirm(
+                              arguments,
+                              paymentType: paymentType.value,
+                              paymentMethod: _paymentMethod(
+                                paymentType.value,
+                                cardNumber.text,
+                                selectedMethod.value,
+                              ),
+                            ),
                       ),
                     ],
                   ),
@@ -234,11 +257,16 @@ class PaymentView extends HookWidget {
   }
 }
 
-String _paymentMethod(PaymentMethodType type, String cardNumber) =>
-    switch (type) {
-      PaymentMethodType.card =>
-        'Card ending in ${cardNumber.replaceAll(' ', '').substring(12)}',
-      PaymentMethodType.applePay => 'Apple Pay',
-      PaymentMethodType.googlePay => 'Google Pay',
-      PaymentMethodType.cash => 'cash',
-    };
+String _paymentMethod(
+  PaymentMethodType type,
+  String cardNumber,
+  SavedPaymentMethodModel? selectedMethod,
+) => switch (type) {
+  PaymentMethodType.card =>
+    selectedMethod == null
+        ? 'Card ending in ${cardNumber.replaceAll(' ', '').substring(12)}'
+        : 'Card ending in ${selectedMethod.last4}',
+  PaymentMethodType.applePay => 'Apple Pay',
+  PaymentMethodType.googlePay => 'Google Pay',
+  PaymentMethodType.cash => 'cash',
+};

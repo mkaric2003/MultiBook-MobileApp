@@ -2091,4 +2091,24 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get helpSafetyBody =>
       'Koristite MultiBook chat za komunikaciju o rezervaciji ili terminu i dijelite samo podatke koji su potrebni. Ne šaljite lozinke, CVV, jednokratne kodove ni pune podatke kartice.\n\nNakon završenog boravka ili termina možete ostaviti jednu iskrenu recenziju po businessu. Ocjena i komentar trebaju opisivati stvarno iskustvo, bez uvreda, diskriminacije, prijetnji ili lažnih navoda.\n\nAko je oglas netačan, komunikacija neprimjerena ili sumnjate na prevaru, sačuvajte relevantne detalje i pošaljite zahtjev podršci. U hitnim ili sigurnosno osjetljivim situacijama kontaktirajte lokalne nadležne službe.';
+
+  @override
+  String get savedPaymentMethods => 'Gespeicherte Zahlungsmethoden';
+
+  @override
+  String get savedPaymentMethodsDescription =>
+      'Wählen Sie eine Standardkarte für schnellere Zahlungen.';
+
+  @override
+  String get noSavedPaymentMethods =>
+      'Sie haben noch keine gespeicherten Karten.';
+
+  @override
+  String get addPaymentMethod => 'Karte hinzufügen';
+
+  @override
+  String get defaultPaymentMethod => 'Standard';
+
+  @override
+  String get setAsDefault => 'Als Standard festlegen';
 }

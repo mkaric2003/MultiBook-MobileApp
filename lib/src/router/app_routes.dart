@@ -33,6 +33,8 @@ class AppRoutes {
   static const CREATE_SUPPORT_TICKET = '/create-support-ticket';
   static const HELP_CENTER = '/help-center';
   static const HELP_ARTICLE_DETAIL = '/help-article-detail';
+  static const PAYMENT_METHODS = '/payment-methods';
+  static const ADD_PAYMENT_METHOD = '/add-payment-method';
   static const AVAILABILITY_CALENDAR = '/availability-calendar';
   static const CHAT_LIST = '/messages';
   static const CHAT_CONVERSATION = '/conversation';

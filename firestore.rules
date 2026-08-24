@@ -29,6 +29,23 @@ service cloud.firestore {
         allow read, create, update, delete: if request.auth != null
           && request.auth.uid == userId;
       }
+
+      // Development-only saved payment-method metadata. Full card numbers and
+      // CVV values are never written to Firestore.
+      match /payment_methods/{paymentMethodId} {
+        // The parent document path already scopes this subcollection to the
+        // authenticated user, so reads do not need an additional document
+        // predicate (which Firestore would require the query to prove).
+        allow read, delete: if request.auth != null
+          && request.auth.uid == userId;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.userId == userId;
+        allow update: if request.auth != null
+          && request.auth.uid == userId
+          && resource.data.userId == userId
+          && request.resource.data.userId == resource.data.userId;
+      }
     }
 
     match /businesses/{businessId} {
