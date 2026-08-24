@@ -144,11 +144,13 @@ class CustomerProfileView extends StatelessWidget {
                 CustomerProfileMenuItem(
                   icon: Icons.description_outlined,
                   label: context.l10n.termsOfService,
+                  onTap: () => context.push(AppRoutes.TERMS_OF_SERVICE),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.shield_outlined,
                   label: context.l10n.privacyPolicy,
+                  onTap: () => context.push(AppRoutes.PRIVACY_POLICY),
                 ),
                 const SizedBox(height: 32),
                 CustomButton(

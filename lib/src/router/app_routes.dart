@@ -27,6 +27,8 @@ class AppRoutes {
   static const ACCOUNT_SETTINGS = '/account-settings';
   static const LANGUAGE_CURRENCY = '/language-currency';
   static const CUSTOMER_EDIT_PROFILE = '/customer-edit-profile';
+  static const TERMS_OF_SERVICE = '/terms-of-service';
+  static const PRIVACY_POLICY = '/privacy-policy';
   static const AVAILABILITY_CALENDAR = '/availability-calendar';
   static const CHAT_LIST = '/messages';
   static const CHAT_CONVERSATION = '/conversation';

@@ -192,6 +192,20 @@ final router = GoRouter(
       builder: (context, state) => const CustomerEditProfileView(),
     ),
     GoRoute(
+      path: AppRoutes.TERMS_OF_SERVICE,
+      name: AppRoutes.TERMS_OF_SERVICE,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.termsOfService,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.PRIVACY_POLICY,
+      name: AppRoutes.PRIVACY_POLICY,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.privacyPolicy,
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.AVAILABILITY_CALENDAR,
       name: AppRoutes.AVAILABILITY_CALENDAR,
       builder: (context, state) => const AvailabilityCalendarView(),
