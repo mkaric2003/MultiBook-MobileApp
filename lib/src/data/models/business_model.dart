@@ -33,6 +33,7 @@ class BusinessModel with BusinessModelMappable {
   final int reviewCount;
   final StayDetailsModel? stayDetails;
   final ServiceDetailsModel? serviceDetails;
+  final bool isPromotionActive;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -55,6 +56,7 @@ class BusinessModel with BusinessModelMappable {
     this.reviewCount = 0,
     this.stayDetails,
     this.serviceDetails,
+    this.isPromotionActive = false,
     this.createdAt,
     this.updatedAt,
   });

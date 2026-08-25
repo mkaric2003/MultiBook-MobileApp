@@ -48,6 +48,7 @@ import 'package:aquabook/src/features/customer-side/booking_confirmed/presentati
 import 'package:aquabook/src/features/customer-side/customer_booking_details/presentation/views/customer_booking_details_view.dart';
 import 'package:aquabook/src/data/models/booking_model.dart';
 import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/shared/onboarding/presentation/views/onboarding_view.dart';
 import 'package:aquabook/src/features/shared/sign_in/presentation/views/signin_view.dart';
 import 'package:aquabook/src/features/shared/sign_up/presentation/views/signup_view.dart';
@@ -68,6 +69,8 @@ import 'package:aquabook/src/features/customer-side/help_center/presentation/vie
 import 'package:aquabook/src/features/customer-side/help_center/presentation/views/help_center_view.dart';
 import 'package:aquabook/src/features/customer-side/payment_methods/presentation/views/payment_methods_view.dart';
 import 'package:aquabook/src/features/customer-side/payment_methods/presentation/views/add_payment_method_view.dart';
+import 'package:aquabook/src/features/business-side/promotions/presentation/views/create_promotion_view.dart';
+import 'package:aquabook/src/features/business-side/promotions/presentation/views/promotions_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

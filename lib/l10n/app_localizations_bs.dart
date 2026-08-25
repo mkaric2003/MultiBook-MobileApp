@@ -743,6 +743,12 @@ class AppLocalizationsBs extends AppLocalizations {
   String get serviceFee => 'Naknada za uslugu';
 
   @override
+  String get serviceCost => 'Cijena usluge';
+
+  @override
+  String get discountApplied => 'Popust je primijenjen';
+
+  @override
   String get taxes => 'Porezi';
 
   @override
@@ -2098,4 +2104,67 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get setAsDefault => 'Postavi kao glavnu';
+
+  @override
+  String get activePromotions => 'Aktivne promocije';
+
+  @override
+  String get noPromotions => 'Još nemate kreiranih promocija.';
+
+  @override
+  String get createPromotion => 'Kreiraj promociju';
+
+  @override
+  String get promotionName => 'Naziv promocije';
+
+  @override
+  String get promotionNameHint => 'npr. Ljetni popust';
+
+  @override
+  String get discountType => 'Tip popusta';
+
+  @override
+  String get discountValue => 'Vrijednost popusta';
+
+  @override
+  String get promoCodeOptional => 'Promo kod (opcionalno)';
+
+  @override
+  String get startsOn => 'Počinje';
+
+  @override
+  String get endsOn => 'Završava';
+
+  @override
+  String get minimumBookingValue => 'Minimalna vrijednost rezervacije';
+
+  @override
+  String get minimumNights => 'Minimalan broj noći';
+
+  @override
+  String get usageLimitOptional => 'Limit korištenja (opcionalno)';
+
+  @override
+  String get percentageDiscount => 'Postotak';
+
+  @override
+  String get fixedDiscount => 'Fiksni iznos';
+
+  @override
+  String get couponDiscount => 'Kod kupona';
+
+  @override
+  String get promotionActive => 'Aktivna';
+
+  @override
+  String get promotionInactive => 'Neaktivna';
+
+  @override
+  String get discountValueHint => 'npr. 10';
+
+  @override
+  String get promoCodeHint => 'npr. LJETO10';
+
+  @override
+  String get promotion => 'Popust';
 }

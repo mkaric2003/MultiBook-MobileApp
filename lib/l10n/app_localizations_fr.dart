@@ -748,6 +748,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get serviceFee => 'Frais de service';
 
   @override
+  String get serviceCost => 'Coût du service';
+
+  @override
+  String get discountApplied => 'Réduction appliquée';
+
+  @override
   String get taxes => 'Impôts';
 
   @override
@@ -2109,4 +2115,67 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get setAsDefault => 'Définir par défaut';
+
+  @override
+  String get activePromotions => 'Promotions actives';
+
+  @override
+  String get noPromotions => 'Vous n’avez encore créé aucune promotion.';
+
+  @override
+  String get createPromotion => 'Créer une promotion';
+
+  @override
+  String get promotionName => 'Nom de la promotion';
+
+  @override
+  String get promotionNameHint => 'ex. Réduction d’été';
+
+  @override
+  String get discountType => 'Type de réduction';
+
+  @override
+  String get discountValue => 'Valeur de la réduction';
+
+  @override
+  String get promoCodeOptional => 'Code promo (facultatif)';
+
+  @override
+  String get startsOn => 'Commence';
+
+  @override
+  String get endsOn => 'Se termine';
+
+  @override
+  String get minimumBookingValue => 'Montant minimum de réservation';
+
+  @override
+  String get minimumNights => 'Nombre minimum de nuits';
+
+  @override
+  String get usageLimitOptional => 'Limite d’utilisation (facultatif)';
+
+  @override
+  String get percentageDiscount => 'Pourcentage';
+
+  @override
+  String get fixedDiscount => 'Montant fixe';
+
+  @override
+  String get couponDiscount => 'Code promo';
+
+  @override
+  String get promotionActive => 'Active';
+
+  @override
+  String get promotionInactive => 'Inactive';
+
+  @override
+  String get discountValueHint => 'ex. 10';
+
+  @override
+  String get promoCodeHint => 'ex. ETE10';
+
+  @override
+  String get promotion => 'Réduction';
 }

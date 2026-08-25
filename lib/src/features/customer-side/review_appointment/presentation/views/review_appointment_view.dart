@@ -3,6 +3,8 @@ import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/injectable/injectable.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
+import 'package:aquabook/src/features/customer-side/appointment_payment/cubit/appointment_promotion_cubit.dart';
+import 'package:aquabook/src/features/customer-side/appointment_payment/cubit/appointment_promotion_state.dart';
 import 'package:aquabook/src/features/customer-side/create_appointment/cubit/appointment_draft_cubit.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/presentation/widgets/appointment_price_summary.dart';
@@ -10,6 +12,7 @@ import 'package:aquabook/src/features/customer-side/review_appointment/presentat
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,7 +26,10 @@ class ReviewAppointmentView extends HookWidget {
     final draftCubit = useMemoized(() => getIt<AppointmentDraftCubit>());
     useEffect(() => draftCubit.close, [draftCubit]);
 
-    return Scaffold(
+    return BlocProvider(
+      create: (_) =>
+          getIt<AppointmentPromotionCubit>()..load(arguments.business.id),
+      child: Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
@@ -74,7 +80,15 @@ class ReviewAppointmentView extends HookWidget {
                   children: [
                     AppointmentReviewSummaryCard(arguments: arguments),
                     const SizedBox(height: 26),
-                    AppointmentPriceSummary(offerings: arguments.offerings),
+                    BlocBuilder<
+                      AppointmentPromotionCubit,
+                      AppointmentPromotionState
+                    >(
+                      builder: (context, state) => AppointmentPriceSummary(
+                        offerings: arguments.offerings,
+                        promotion: state.promotion,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -97,6 +111,7 @@ class ReviewAppointmentView extends HookWidget {
           ],
         ),
       ),
-    );
+    ),
+  );
   }
 }

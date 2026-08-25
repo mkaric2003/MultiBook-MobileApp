@@ -7,6 +7,8 @@ import 'package:aquabook/src/features/customer-side/review_stay/domain/models/re
 import 'package:aquabook/src/features/customer-side/review_stay/presentation/widgets/review_extra_tile.dart';
 import 'package:aquabook/src/features/customer-side/review_stay/presentation/widgets/review_price_breakdown.dart';
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
+import 'package:aquabook/src/features/customer-side/payment/cubit/booking_promotion_cubit.dart';
+import 'package:aquabook/src/features/customer-side/payment/cubit/booking_promotion_state.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/l10n/l10n.dart';
@@ -19,12 +21,21 @@ class ReviewStayView extends StatelessWidget {
   const ReviewStayView({super.key, required this.arguments});
   final ReviewStayArguments arguments;
   @override
-  Widget build(BuildContext context) => BlocProvider(
-    create: (_) => getIt<ReviewStayCubit>()
-      ..loadStay(
-        arguments.booking.stay.id,
-        selectedExtras: arguments.booking.draft?.selectedExtras ?? const [],
+  Widget build(BuildContext context) => MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (_) => getIt<ReviewStayCubit>()
+          ..loadStay(
+            arguments.booking.stay.id,
+            selectedExtras: arguments.booking.draft?.selectedExtras ?? const [],
+          ),
       ),
+      BlocProvider(
+        create: (_) =>
+            getIt<BookingPromotionCubit>()
+              ..load(arguments.booking.stay.id),
+      ),
+    ],
     child: BlocBuilder<ReviewStayCubit, ReviewStayState>(
       builder: (context, state) {
         if (state.isLoading || state.business == null) {
@@ -169,10 +180,14 @@ class ReviewStayView extends StatelessWidget {
                           const SizedBox(height: 14),
                         ],
                         const SizedBox(height: 18),
-                        ReviewPriceBreakdown(
-                          state: booking,
-                          pricePerNight: price,
-                          extras: state.selectedExtras,
+                        BlocBuilder<BookingPromotionCubit, BookingPromotionState>(
+                          builder: (context, promotionState) =>
+                              ReviewPriceBreakdown(
+                                state: booking,
+                                pricePerNight: price,
+                                extras: state.selectedExtras,
+                                promotion: promotionState.promotion,
+                              ),
                         ),
                       ],
                     ),

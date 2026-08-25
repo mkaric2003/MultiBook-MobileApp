@@ -10,6 +10,7 @@ class ServiceListing {
     required this.imageUrl,
     this.price,
     this.durationMinutes,
+    this.isPromotionActive = false,
   });
 
   final String id;
@@ -20,6 +21,7 @@ class ServiceListing {
   final String imageUrl;
   final int? price;
   final int? durationMinutes;
+  final bool isPromotionActive;
 
   factory ServiceListing.fromBusiness(BusinessModel business) {
     final primaryOffering = business.serviceDetails?.offerings.firstOrNull;
@@ -34,6 +36,7 @@ class ServiceListing {
       imageUrl: business.coverPhotoUrl ?? business.logoUrl ?? '',
       price: primaryOffering?.price,
       durationMinutes: primaryOffering?.durationMinutes,
+      isPromotionActive: business.isPromotionActive,
     );
   }
 }

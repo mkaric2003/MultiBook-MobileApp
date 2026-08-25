@@ -2,6 +2,7 @@ import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/app.dart';
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:aquabook/src/features/business-side/promotions/presentation/widgets/promotion_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -71,7 +72,9 @@ class ServiceListingCard extends StatelessWidget {
                 else
                   const SizedBox(height: 6),
                 Text(
-                  context.l10n.fromPrice(context.l10n.formatCurrency(service.price ?? 0)),
+                  context.l10n.fromPrice(
+                    context.l10n.formatCurrency(service.price ?? 0),
+                  ),
                   style: const TextStyle(
                     color: AppColors.primary,
                     fontSize: 15,
@@ -94,15 +97,27 @@ class ServiceListingCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  service.imageUrl,
-                  height: imageHeight,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => SizedBox(
-                    height: imageHeight,
-                    child: const ColoredBox(color: AppColors.surfaceHighlight),
-                  ),
+                Stack(
+                  children: [
+                    Image.network(
+                      service.imageUrl,
+                      height: imageHeight,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => SizedBox(
+                        height: imageHeight,
+                        child: const ColoredBox(
+                          color: AppColors.surfaceHighlight,
+                        ),
+                      ),
+                    ),
+                    if (service.isPromotionActive)
+                      Positioned(
+                        right: -25,
+                        top: 14,
+                        child: const PromotionBadge(),
+                      ),
+                  ],
                 ),
                 if (pinPriceToBottom) Expanded(child: details) else details,
               ],

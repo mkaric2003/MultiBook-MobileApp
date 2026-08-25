@@ -23,7 +23,7 @@ import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/utils/image_utils.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
@@ -2228,6 +2228,7 @@ class BusinessRepository {
                   .toList(),
             )
           : null,
+      isPromotionActive: data['isPromotionActive'] as bool? ?? false,
     );
   }
 

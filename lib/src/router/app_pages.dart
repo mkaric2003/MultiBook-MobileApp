@@ -237,6 +237,17 @@ final router = GoRouter(
       builder: (context, state) => const AddPaymentMethodView(),
     ),
     GoRoute(
+      path: AppRoutes.PROMOTIONS,
+      name: AppRoutes.PROMOTIONS,
+      builder: (context, state) => const PromotionsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.CREATE_PROMOTION,
+      name: AppRoutes.CREATE_PROMOTION,
+      builder: (context, state) =>
+          CreatePromotionView(business: state.extra! as BusinessModel),
+    ),
+    GoRoute(
       path: AppRoutes.AVAILABILITY_CALENDAR,
       name: AppRoutes.AVAILABILITY_CALENDAR,
       builder: (context, state) => const AvailabilityCalendarView(),

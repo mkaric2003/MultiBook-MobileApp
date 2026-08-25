@@ -16,6 +16,7 @@ class PaymentCubit extends Cubit<PaymentState> {
     PaymentArguments arguments, {
     required PaymentMethodType paymentType,
     required String paymentMethod,
+    String? promoCode,
   }) async {
     if (state.isProcessing) return;
     emit(const PaymentState(isProcessing: true));
@@ -24,6 +25,7 @@ class PaymentCubit extends Cubit<PaymentState> {
         arguments,
         paymentType: paymentType,
         paymentMethod: paymentMethod,
+        promoCode: promoCode,
       );
       await _draftRepository.deleteDraft();
       emit(PaymentState(booking: booking));

@@ -306,6 +306,8 @@
     }
   },
   "serviceFee": "Frais de service",
+  "serviceCost": "Coût du service",
+  "discountApplied": "Réduction appliquée",
   "taxes": "Impôts",
   "total": "Total",
   "appointmentDetails": "Détails du rendez-vous",
@@ -765,4 +767,25 @@
   ,"addPaymentMethod": "Ajouter une carte"
   ,"defaultPaymentMethod": "Par défaut"
   ,"setAsDefault": "Définir par défaut"
+  ,"activePromotions": "Promotions actives"
+  ,"noPromotions": "Vous n’avez encore créé aucune promotion."
+  ,"createPromotion": "Créer une promotion"
+  ,"promotionName": "Nom de la promotion"
+  ,"promotionNameHint": "ex. Réduction d’été"
+  ,"discountType": "Type de réduction"
+  ,"discountValue": "Valeur de la réduction"
+  ,"discountValueHint": "ex. 10"
+  ,"promoCodeOptional": "Code promo (facultatif)"
+  ,"promoCodeHint": "ex. ETE10"
+  ,"startsOn": "Commence"
+  ,"endsOn": "Se termine"
+  ,"minimumBookingValue": "Montant minimum de réservation"
+  ,"minimumNights": "Nombre minimum de nuits"
+  ,"usageLimitOptional": "Limite d’utilisation (facultatif)"
+  ,"percentageDiscount": "Pourcentage"
+  ,"fixedDiscount": "Montant fixe"
+  ,"couponDiscount": "Code promo"
+  ,"promotionActive": "Active"
+  ,"promotionInactive": "Inactive"
+  ,"promotion": "Réduction"
 }

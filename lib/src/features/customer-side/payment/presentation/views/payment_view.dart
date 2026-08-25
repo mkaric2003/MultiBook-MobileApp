@@ -8,6 +8,8 @@ import 'package:aquabook/src/features/customer-side/payment/domain/models/paymen
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_input_formatters.dart';
 import 'package:aquabook/src/features/customer-side/payment/cubit/payment_cubit.dart';
 import 'package:aquabook/src/features/customer-side/payment/cubit/payment_state.dart';
+import 'package:aquabook/src/features/customer-side/payment/cubit/booking_promotion_cubit.dart';
+import 'package:aquabook/src/features/customer-side/payment/cubit/booking_promotion_state.dart';
 import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/billing_information_form.dart';
 import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/payment_card_form.dart';
 import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/payment_price_breakdown.dart';
@@ -18,6 +20,7 @@ import 'package:aquabook/src/features/customer-side/payment_methods/domain/model
 import 'package:aquabook/src/features/customer-side/payment_methods/presentation/widgets/saved_payment_method_selector.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:aquabook/src/global_widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,20 +39,18 @@ class PaymentView extends HookWidget {
     final email = useTextEditingController();
     final phone = useTextEditingController();
     final address = useTextEditingController();
+    final promoCode = useTextEditingController();
     final agreed = useState(false);
     final paymentType = useState(PaymentMethodType.card);
     final selectedMethod = useState<SavedPaymentMethodModel?>(null);
     useListenable(cardNumber);
     useListenable(expiry);
     useListenable(cvv);
+    useListenable(promoCode);
     final price =
         arguments.review.booking.pricePerNight ??
         arguments.review.booking.stay.pricePerNight ??
         0;
-    final total = PaymentPriceBreakdown(
-      arguments: arguments,
-      pricePerNight: price,
-    ).total();
     final isCardValid =
         selectedMethod.value != null ||
         (PaymentInputValidation.isCardNumberValid(cardNumber.text) &&
@@ -62,6 +63,11 @@ class PaymentView extends HookWidget {
       providers: [
         BlocProvider(create: (_) => getIt<PaymentCubit>()),
         BlocProvider(create: (_) => getIt<PaymentMethodsCubit>()..load()),
+        BlocProvider(
+          create: (_) =>
+              getIt<BookingPromotionCubit>()
+                ..load(arguments.review.booking.stay.id),
+        ),
       ],
       child: BlocListener<PaymentCubit, PaymentState>(
         listener: (context, state) {
@@ -92,10 +98,26 @@ class PaymentView extends HookWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        PaymentPriceBreakdown(
-                          arguments: arguments,
-                          pricePerNight: price,
+                        BlocBuilder<BookingPromotionCubit, BookingPromotionState>(
+                          builder: (context, state) => PaymentPriceBreakdown(
+                            arguments: arguments,
+                            pricePerNight: price,
+                            promotion: state.promotion,
+                          ),
                         ),
+                        if (arguments
+                            .review
+                            .booking
+                            .stay
+                            .isPromotionActive) ...[
+                          const SizedBox(height: 18),
+                          Text(context.l10n.promoCodeOptional),
+                          const SizedBox(height: 8),
+                          CustomTextField(
+                            controller: promoCode,
+                            hintText: context.l10n.promoCodeHint,
+                          ),
+                        ],
                         const SizedBox(height: 30),
                         Text(
                           context.l10n.payment,
@@ -205,7 +227,8 @@ class PaymentView extends HookWidget {
                     ),
                   ),
                 ),
-                Container(
+                BlocBuilder<BookingPromotionCubit, BookingPromotionState>(
+                  builder: (context, promotionState) => Container(
                   padding: const EdgeInsets.fromLTRB(22, 12, 22, 22),
                   decoration: const BoxDecoration(
                     border: Border(
@@ -231,7 +254,12 @@ class PaymentView extends HookWidget {
                         buttonName: isCashPayment
                             ? context.l10n.confirmBooking
                             : context.l10n.confirmAndPay(
-                                context.l10n.formatCurrency(total),
+                                context.l10n.formatCurrency(
+                                  PaymentPriceBreakdown(
+                                    arguments: arguments,
+                                    pricePerNight: price,
+                                  ).total(promotion: promotionState.promotion),
+                                ),
                               ),
                         enabled: canConfirm,
                         onPressed: () async =>
@@ -243,9 +271,11 @@ class PaymentView extends HookWidget {
                                 cardNumber.text,
                                 selectedMethod.value,
                               ),
+                              promoCode: promoCode.text,
                             ),
                       ),
                     ],
+                  ),
                   ),
                 ),
               ],

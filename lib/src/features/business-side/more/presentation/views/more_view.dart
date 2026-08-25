@@ -54,6 +54,7 @@ class MoreView extends StatelessWidget {
                         MoreMenuItem(
                           label: context.l10n.promotionsAndDiscounts,
                           icon: Icons.percent_rounded,
+                          onTap: () => context.push(AppRoutes.PROMOTIONS),
                         ),
                       ],
                     ),

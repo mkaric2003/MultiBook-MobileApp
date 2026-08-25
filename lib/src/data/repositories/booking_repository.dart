@@ -13,6 +13,8 @@ import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
+import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:aquabook/src/data/repositories/promotion_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
@@ -23,15 +25,22 @@ class BookingException implements Exception {
 
 @lazySingleton
 class BookingRepository {
-  BookingRepository(this._auth, this._firestore, this._businessRepository);
+  BookingRepository(
+    this._auth,
+    this._firestore,
+    this._businessRepository,
+    this._promotionRepository,
+  );
   final AuthenticationDataSource _auth;
   final FirestoreDataSource _firestore;
   final BusinessRepository _businessRepository;
+  final PromotionRepository _promotionRepository;
   static const _collection = 'bookings';
   Future<BookingModel> createBooking(
     PaymentArguments arguments, {
     required PaymentMethodType paymentType,
     required String paymentMethod,
+    String? promoCode,
   }) async {
     final customerId = _auth.currentUser?.uid;
     if (customerId == null) {
@@ -61,9 +70,25 @@ class BookingRepository {
         0;
     final roomSubtotal = price * booking.nightCount;
     final extras = _extrasTotal(arguments.selectedExtras, booking.nightCount);
+    final promotion = await _promotionRepository.getActiveForBusiness(
+      business.id,
+      promoCode: promoCode,
+    );
+    if (promoCode?.trim().isNotEmpty == true && promotion == null) {
+      throw const BookingException('The promo code is invalid or expired.');
+    }
+    final discount = PromotionPriceCalculator.discount(
+      subtotal: roomSubtotal + extras,
+      promotion: promotion,
+      nights: booking.nightCount,
+    );
     final cleaning = 2500;
-    final service = ((roomSubtotal + extras) * .05).round();
-    final taxes = ((roomSubtotal + extras + cleaning + service) * .08).round();
+    final discountedSubtotal = roomSubtotal + extras - discount;
+    final service = (discountedSubtotal * .05).round();
+    final taxes = ((discountedSubtotal + cleaning + service) * .08).round();
+    final originalService = ((roomSubtotal + extras) * .05).round();
+    final originalTaxes =
+        ((roomSubtotal + extras + cleaning + originalService) * .08).round();
     final id = _firestore.createDocumentId(collection: _collection);
     final result = BookingModel(
       id: id,
@@ -86,10 +111,13 @@ class BookingRepository {
       roomTypeId: room?.id,
       selectedExtras: arguments.selectedExtras,
       roomSubtotal: roomSubtotal,
+      discountAmount: discount,
       cleaningFee: cleaning,
       serviceFee: service,
       taxes: taxes,
-      total: roomSubtotal + extras + cleaning + service + taxes,
+      total: discountedSubtotal + cleaning + service + taxes,
+      originalTotal:
+          roomSubtotal + extras + cleaning + originalService + originalTaxes,
       status: BookingStatus.confirmed,
       paymentStatus: paymentType == PaymentMethodType.cash
           ? PaymentStatus.pending
@@ -132,10 +160,12 @@ class BookingRepository {
               )
               .toList(),
           'roomSubtotal': result.roomSubtotal,
+          'discountAmount': result.discountAmount,
           'cleaningFee': result.cleaningFee,
           'serviceFee': result.serviceFee,
           'taxes': result.taxes,
           'total': result.total,
+          'originalTotal': result.originalTotal,
           'status': result.status.name,
           'paymentStatus': result.paymentStatus.name,
           'paymentType': paymentType.name,
@@ -410,10 +440,15 @@ class BookingRepository {
       pricePerNight: (document['pricePerNight'] as num?)?.toInt() ?? 0,
       selectedExtras: extras,
       roomSubtotal: (document['roomSubtotal'] as num?)?.toInt() ?? 0,
+      discountAmount: (document['discountAmount'] as num?)?.toInt() ?? 0,
       cleaningFee: (document['cleaningFee'] as num?)?.toInt() ?? 0,
       serviceFee: (document['serviceFee'] as num?)?.toInt() ?? 0,
       taxes: (document['taxes'] as num?)?.toInt() ?? 0,
       total: (document['total'] as num?)?.toInt() ?? 0,
+      originalTotal:
+          (document['originalTotal'] as num?)?.toInt() ??
+          (document['total'] as num?)?.toInt() ??
+          0,
       status: _enumByName(
         BookingStatus.values,
         document['status'],

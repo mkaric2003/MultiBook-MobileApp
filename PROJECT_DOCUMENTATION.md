@@ -193,6 +193,7 @@ Ne treba hardkodirati korisnički vidljiv tekst u novim widgetima. Za dinamički
 - identitet i vlasništvo: `id`, `ownerId`, `type`;
 - sadržaj: naziv, kategorija, opis, lokacija, logo, cover i do sedam dodatnih slika;
 - discovery: aktivnost, prosječna ocjena, broj recenzija i `featuredCollectionIds`;
+- promotion signal: `isPromotionActive` je lagani discovery indikator za badge na karticama; puni promotion podaci se ne dupliciraju u business dokumentu;
 - tip-specifični podaci: `stayDetails` ili `serviceDetails`.
 
 ### 8.1 Stays
@@ -229,6 +230,17 @@ Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedini
 
 Razvojni seed metod puni bazu realističnim stay i service podacima (različiti gradovi, kategorije, cijene, rating, slike, rooms, extras, staff i ponuda). Seed je samo za development/testiranje i ne treba biti dostupan u produkcijskom UI-ju.
 
+### 8.4 Promotions & Discounts
+
+Provider za pojedinačni business upravlja promocijama kroz **Promotions & Discounts** feature. Promotion je zaseban dokument u `promotions` kolekciji i sadrži business/vlasnika, naziv, tip, vrijednost, period važenja, opcionalni promo kod, minimum iznosa, stay-only minimum noći, usage limit i aktivno stanje.
+
+- Tipovi su `percentage`, `fixedAmount` i `couponCode`. Coupon code koristi definisanu procentualnu vrijednost tek nakon ispravnog unosa koda.
+- Nakon create, activate/deactivate ili delete akcije repository ažurira samo `business.isPromotionActive`. Time kartice mogu odmah prikazati dijagonalni **Popust** banner bez čitanja kompletne promotion definicije za svaki business u feedu.
+- Automatski percentage/fixed popust se učitava u review/payment toku. Coupon se server-side ponovo validira pri potvrdi plaćanja; nepostojeći ili istekao kod zaustavlja kreiranje rezervacije.
+- Popust se računa nad stay subtotalom (room + extras) odnosno appointment service subtotalom, prije service fee i poreza. Kod staya se provjerava i minimalan broj noći; appointment nema minimum-nights pravilo.
+- Review, payment, confirmation i details ekrani prikazuju popust i umanjeni total. Payment/confirmation prikaz dodatno koristi precrtanu izvornu vrijednost gdje je relevantno.
+- Snapshoti se čuvaju uz rezultat transakcije: booking ima `discountAmount` i `originalTotal`, a appointment ima `originalServiceCost` i `discountAmount`. Stare rezervacije bez tih polja sigurno koriste postojeći total kao fallback.
+
 ---
 
 ## 9. Customer featurei
@@ -255,7 +267,7 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - Prikazani su cijena, ocjene, lokacija i mapa, rooms, amenities, extras, opis i recenzije.
 - Ako customer ne odabere room type, flow koristi default jedinicu/cijenu businessa gdje je to dozvoljeno.
 - Booking details bira raspon datuma (ponedjeljak je prvi dan sedmice), goste i provjerava dostupnost.
-- Review stay bira extras i izračunava room subtotal, cleaning/service fee, taxes i total.
+- Review stay bira extras i izračunava room subtotal, cleaning/service fee, taxes i total. Ako business ima aktivnu promociju, review/payment koriste umanjeni subtotal, jasno prikazuju popust i sniženi ukupni iznos.
 - Payment podržava karticu, Apple Pay, Google Pay i **plaćanje gotovinom**. Kartica validira format broja, expiry i 3-cifreni CVV; gotovina ne traži kartične podatke.
 - Booking se kreira kao `confirmed`; mogući statusi su `confirmed`, `declined`, `cancelled`, `completed` i `noShow`.
 - Customer može otkazati booking; providerovo odbijanje je `declined`, customerovo otkazivanje je `cancelled`.
@@ -266,7 +278,7 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - Detail prikazuje galeriju, kategoriju, ocjenu, mapu, service offeringe, cijene/trajanja, opis i staff.
 - Customer može odabrati više usluga; ukupno trajanje određuje koliko susjednih 30-minutnih slotova mora ostati slobodno.
 - Dostupnost se provjerava po konkretnom provideru; zauzeti ili blokirani slotovi nisu selektabilni.
-- Review appointment prikazuje odabrane usluge i add-ons; special requests su namjerno izbačeni iz sadašnjeg flowa.
+- Review appointment prikazuje odabrane usluge i add-ons; special requests su namjerno izbačeni iz sadašnjeg flowa. Aktivni popust se prikazuje prije payment koraka, a konačni obračun se ponovo validira pri kreiranju appointmenta.
 - Payment kreira `confirmed` appointment i atomarno zauzima njegove slotove. Dostupni su kartica, Apple Pay, Google Pay i gotovina.
 - Appointment detail prikazuje business, izvođača, usluge, datum/vrijeme, cijene, payment metodu i confirmation code.
 - Customer može otkazati appointment i može ga rescheduleati samo jednom; provider može rescheduleati bez tog ograničenja. Past cash appointment može biti označen kao `no_show` kada customer ne dođe.
@@ -383,6 +395,7 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `users/{uid}/notifications/{id}` | in-app notifikacije |
 | `users/{uid}/recently_viewed/{businessId}` | nedavno otvoreni businessi |
 | `businesses/{businessId}` | stay ili service business, detalji, mediji, lokacija i discovery polja |
+| `promotions/{id}` | ownerov promotion konfigurisan za jedan business; business čuva samo `isPromotionActive` signal |
 | `bookings/{id}` | stay rezervacije i payment/guest snapshot |
 | `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
 | `business_metrics/{businessId}` | agregat aktivnih booking/appointment KPI-jeva i verzija migracije metrika |
@@ -410,6 +423,7 @@ profiles/{userId}/{fileName}
 Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules).
 
 - Business je čitljiv prijavljenim korisnicima, ali create/update/delete radi samo owner.
+- Promotion dokument može kreirati, mijenjati ili obrisati samo owner pripadajućeg businessa; customer ga ne može mijenjati niti proizvoljno postaviti `isPromotionActive`.
 - Booking i appointment mogu čitati/mijenjati samo customer ili business owner; ID-jevi customer/owner ne mogu se prepisati updateom.
 - Customer može rescheduleati appointment najviše jednom; owner nema taj limit.
 - Appointment slotovi izlažu samo dostupnost, a ne privatne podatke customera.
@@ -460,6 +474,8 @@ Za pouzdan search/filter gradova koriste se normalizovana polja, posebno `locati
 | Limitirani candidate batch i opaque endpoint cursor | Funkcija obrađuje kontrolisan broj dokumenata po pozivu |
 | Composite indeksi | Firestore može izvršiti query bez punog skeniranja kolekcije |
 | City denormalizacija | `location.cityLowercase` omogućava efikasan city query |
+| Lagani promotion signal | Feed kartice čitaju samo `isPromotionActive`, a detalji promocije se učitavaju tek u checkoutu |
+| Checkout revalidacija popusta | Čuva integritet cijene bez stalnog učitavanja promotion dokumenata kroz feedove |
 | `appointment_slots` metadata | Dostupnost se čita bez preuzimanja privatnih appointment dokumenata |
 | Precomputed business metrics | Dashboard i Earnings čitaju mali agregat umjesto svih historijskih rezervacija |
 | Debounced text search | Smanjuje broj requestova dok korisnik tipka |

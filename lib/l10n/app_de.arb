@@ -302,6 +302,8 @@
     }
   },
   "serviceFee": "Servicegebühr",
+  "serviceCost": "Dienstleistungskosten",
+  "discountApplied": "Rabatt angewendet",
   "taxes": "Steuern",
   "total": "Gesamt",
   "appointmentDetails": "Termindetails",
@@ -765,4 +767,25 @@
   ,"addPaymentMethod": "Karte hinzufügen"
   ,"defaultPaymentMethod": "Standard"
   ,"setAsDefault": "Als Standard festlegen"
+  ,"activePromotions": "Aktive Aktionen"
+  ,"noPromotions": "Sie haben noch keine Aktionen erstellt."
+  ,"createPromotion": "Aktion erstellen"
+  ,"promotionName": "Name der Aktion"
+  ,"promotionNameHint": "z. B. Sommerrabatt"
+  ,"discountType": "Rabattart"
+  ,"discountValue": "Rabattwert"
+  ,"discountValueHint": "z. B. 10"
+  ,"promoCodeOptional": "Aktionscode (optional)"
+  ,"promoCodeHint": "z. B. SOMMER10"
+  ,"startsOn": "Beginnt"
+  ,"endsOn": "Endet"
+  ,"minimumBookingValue": "Mindestbuchungswert"
+  ,"minimumNights": "Mindestnächte"
+  ,"usageLimitOptional": "Nutzungslimit (optional)"
+  ,"percentageDiscount": "Prozentsatz"
+  ,"fixedDiscount": "Fester Betrag"
+  ,"couponDiscount": "Gutscheincode"
+  ,"promotionActive": "Aktiv"
+  ,"promotionInactive": "Inaktiv"
+  ,"promotion": "Rabatt"
 }

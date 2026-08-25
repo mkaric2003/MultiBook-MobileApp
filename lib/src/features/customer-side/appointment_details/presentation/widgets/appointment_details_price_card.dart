@@ -30,9 +30,17 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           AppointmentDetailsRow(
-            label: 'Services',
+            label: context.l10n.serviceCost,
             value: context.l10n.formatCurrency(appointment.serviceCost),
           ),
+          if (appointment.discountAmount > 0) ...[
+            const SizedBox(height: 12),
+            AppointmentDetailsRow(
+              label: context.l10n.promotion,
+              value: '-${context.l10n.formatCurrency(appointment.discountAmount)}',
+              valueColor: AppColors.success,
+            ),
+          ],
           if (appointment.addOnsCost > 0) ...[
             const SizedBox(height: 12),
             AppointmentDetailsRow(

@@ -26,10 +26,12 @@ class BookingModel with BookingModelMappable {
     required this.pricePerNight,
     required this.selectedExtras,
     required this.roomSubtotal,
+    this.discountAmount = 0,
     required this.cleaningFee,
     required this.serviceFee,
     required this.taxes,
     required this.total,
+    this.originalTotal = 0,
     required this.status,
     required this.paymentStatus,
     required this.paymentMethod,
@@ -57,10 +59,12 @@ class BookingModel with BookingModelMappable {
   final int pricePerNight;
   final List<StayExtraModel> selectedExtras;
   final int roomSubtotal;
+  final int discountAmount;
   final int cleaningFee;
   final int serviceFee;
   final int taxes;
   final int total;
+  final int originalTotal;
   final BookingStatus status;
   final PaymentStatus paymentStatus;
   final String paymentMethod;

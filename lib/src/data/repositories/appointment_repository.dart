@@ -12,6 +12,8 @@ import 'package:aquabook/src/data/models/firestore_document_write.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/service_availability_repository.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
+import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:aquabook/src/data/repositories/promotion_repository.dart';
 import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
@@ -29,6 +31,7 @@ class AppointmentRepository {
     this._firestore,
     this._businessRepository,
     this._serviceAvailabilityRepository,
+    this._promotionRepository,
   );
 
   static const _collection = 'appointments';
@@ -38,10 +41,12 @@ class AppointmentRepository {
   final FirestoreDataSource _firestore;
   final BusinessRepository _businessRepository;
   final ServiceAvailabilityRepository _serviceAvailabilityRepository;
+  final PromotionRepository _promotionRepository;
 
   Future<AppointmentModel> createAppointment({
     required AppointmentPaymentArguments arguments,
     required AppointmentPaymentRequest request,
+    String? promoCode,
   }) async {
     final customerId = _auth.currentUser?.uid;
     if (customerId == null) {
@@ -98,6 +103,20 @@ class AppointmentRepository {
     final dateKey = _dateKey(arguments.review.date);
 
     final id = _firestore.createDocumentId(collection: _collection);
+    final promotion = await _promotionRepository.getActiveForBusiness(
+      business.id,
+      promoCode: promoCode,
+    );
+    if (promoCode?.trim().isNotEmpty == true && promotion == null) {
+      throw const AppointmentException('The promo code is invalid or expired.');
+    }
+    final discount = PromotionPriceCalculator.discount(
+      subtotal: arguments.serviceCost,
+      promotion: promotion,
+    );
+    final discountedServiceCost = arguments.serviceCost - discount;
+    final discountedServiceFee = discountedServiceCost * .085;
+    final discountedTaxes = (discountedServiceCost + discountedServiceFee) * .1;
     final result = AppointmentModel(
       id: id,
       businessId: business.id,
@@ -112,7 +131,7 @@ class AppointmentRepository {
       providerId: provider.id,
       providerName: provider.name,
       providerCommissionRate: provider.commissionRate,
-      providerEarnings: arguments.serviceCost * (provider.commissionRate / 100),
+      providerEarnings: discountedServiceCost * (provider.commissionRate / 100),
       serviceIds: arguments.review.offerings.map((item) => item.id).toList(),
       serviceNames: arguments.review.offerings
           .map((item) => item.name)
@@ -124,11 +143,13 @@ class AppointmentRepository {
       ),
       startMinutes: start,
       endMinutes: end,
-      serviceCost: arguments.serviceCost,
+      serviceCost: discountedServiceCost,
+      originalServiceCost: arguments.serviceCost,
+      discountAmount: discount,
       addOnsCost: 0,
-      serviceFee: arguments.serviceFee,
-      taxes: arguments.taxes,
-      total: arguments.total,
+      serviceFee: discountedServiceFee,
+      taxes: discountedTaxes,
+      total: discountedServiceCost + discountedServiceFee + discountedTaxes,
       paymentStatus: request.paymentType == PaymentMethodType.cash
           ? PaymentStatus.pending
           : PaymentStatus.paid,
@@ -162,6 +183,8 @@ class AppointmentRepository {
           'startMinutes': result.startMinutes,
           'endMinutes': result.endMinutes,
           'serviceCost': result.serviceCost,
+          'originalServiceCost': result.originalServiceCost,
+          'discountAmount': result.discountAmount,
           'addOnsCost': result.addOnsCost,
           'serviceFee': result.serviceFee,
           'taxes': result.taxes,
@@ -613,6 +636,11 @@ class AppointmentRepository {
       startMinutes: (document['startMinutes'] as num?)?.toInt() ?? 0,
       endMinutes: (document['endMinutes'] as num?)?.toInt() ?? 0,
       serviceCost: (document['serviceCost'] as num?)?.toInt() ?? 0,
+      originalServiceCost:
+          (document['originalServiceCost'] as num?)?.toInt() ??
+          (document['serviceCost'] as num?)?.toInt() ??
+          0,
+      discountAmount: (document['discountAmount'] as num?)?.toInt() ?? 0,
       addOnsCost: (document['addOnsCost'] as num?)?.toInt() ?? 0,
       serviceFee: (document['serviceFee'] as num?)?.toDouble() ?? 0,
       taxes: (document['taxes'] as num?)?.toDouble() ?? 0,

@@ -1456,6 +1456,18 @@ abstract class AppLocalizations {
   /// **'Naknada za uslugu'**
   String get serviceFee;
 
+  /// No description provided for @serviceCost.
+  ///
+  /// In bs, this message translates to:
+  /// **'Cijena usluge'**
+  String get serviceCost;
+
+  /// No description provided for @discountApplied.
+  ///
+  /// In bs, this message translates to:
+  /// **'Popust je primijenjen'**
+  String get discountApplied;
+
   /// No description provided for @taxes.
   ///
   /// In bs, this message translates to:
@@ -4035,6 +4047,132 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Postavi kao glavnu'**
   String get setAsDefault;
+
+  /// No description provided for @activePromotions.
+  ///
+  /// In bs, this message translates to:
+  /// **'Aktivne promocije'**
+  String get activePromotions;
+
+  /// No description provided for @noPromotions.
+  ///
+  /// In bs, this message translates to:
+  /// **'Još nemate kreiranih promocija.'**
+  String get noPromotions;
+
+  /// No description provided for @createPromotion.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kreiraj promociju'**
+  String get createPromotion;
+
+  /// No description provided for @promotionName.
+  ///
+  /// In bs, this message translates to:
+  /// **'Naziv promocije'**
+  String get promotionName;
+
+  /// No description provided for @promotionNameHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'npr. Ljetni popust'**
+  String get promotionNameHint;
+
+  /// No description provided for @discountType.
+  ///
+  /// In bs, this message translates to:
+  /// **'Tip popusta'**
+  String get discountType;
+
+  /// No description provided for @discountValue.
+  ///
+  /// In bs, this message translates to:
+  /// **'Vrijednost popusta'**
+  String get discountValue;
+
+  /// No description provided for @promoCodeOptional.
+  ///
+  /// In bs, this message translates to:
+  /// **'Promo kod (opcionalno)'**
+  String get promoCodeOptional;
+
+  /// No description provided for @startsOn.
+  ///
+  /// In bs, this message translates to:
+  /// **'Počinje'**
+  String get startsOn;
+
+  /// No description provided for @endsOn.
+  ///
+  /// In bs, this message translates to:
+  /// **'Završava'**
+  String get endsOn;
+
+  /// No description provided for @minimumBookingValue.
+  ///
+  /// In bs, this message translates to:
+  /// **'Minimalna vrijednost rezervacije'**
+  String get minimumBookingValue;
+
+  /// No description provided for @minimumNights.
+  ///
+  /// In bs, this message translates to:
+  /// **'Minimalan broj noći'**
+  String get minimumNights;
+
+  /// No description provided for @usageLimitOptional.
+  ///
+  /// In bs, this message translates to:
+  /// **'Limit korištenja (opcionalno)'**
+  String get usageLimitOptional;
+
+  /// No description provided for @percentageDiscount.
+  ///
+  /// In bs, this message translates to:
+  /// **'Postotak'**
+  String get percentageDiscount;
+
+  /// No description provided for @fixedDiscount.
+  ///
+  /// In bs, this message translates to:
+  /// **'Fiksni iznos'**
+  String get fixedDiscount;
+
+  /// No description provided for @couponDiscount.
+  ///
+  /// In bs, this message translates to:
+  /// **'Kod kupona'**
+  String get couponDiscount;
+
+  /// No description provided for @promotionActive.
+  ///
+  /// In bs, this message translates to:
+  /// **'Aktivna'**
+  String get promotionActive;
+
+  /// No description provided for @promotionInactive.
+  ///
+  /// In bs, this message translates to:
+  /// **'Neaktivna'**
+  String get promotionInactive;
+
+  /// No description provided for @discountValueHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'npr. 10'**
+  String get discountValueHint;
+
+  /// No description provided for @promoCodeHint.
+  ///
+  /// In bs, this message translates to:
+  /// **'npr. LJETO10'**
+  String get promoCodeHint;
+
+  /// No description provided for @promotion.
+  ///
+  /// In bs, this message translates to:
+  /// **'Popust'**
+  String get promotion;
 }
 
 class _AppLocalizationsDelegate

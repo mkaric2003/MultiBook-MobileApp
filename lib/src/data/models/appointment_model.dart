@@ -23,6 +23,8 @@ class AppointmentModel {
     required this.startMinutes,
     required this.endMinutes,
     required this.serviceCost,
+    this.originalServiceCost = 0,
+    this.discountAmount = 0,
     required this.addOnsCost,
     required this.serviceFee,
     required this.taxes,
@@ -55,6 +57,8 @@ class AppointmentModel {
   final int startMinutes;
   final int endMinutes;
   final int serviceCost;
+  final int originalServiceCost;
+  final int discountAmount;
   final int addOnsCost;
   final double serviceFee;
   final double taxes;
@@ -95,6 +99,8 @@ class AppointmentModel {
     startMinutes: startMinutes ?? this.startMinutes,
     endMinutes: endMinutes ?? this.endMinutes,
     serviceCost: serviceCost,
+    originalServiceCost: originalServiceCost,
+    discountAmount: discountAmount,
     addOnsCost: addOnsCost,
     serviceFee: serviceFee,
     taxes: taxes,
