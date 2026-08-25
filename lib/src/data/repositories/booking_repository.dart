@@ -54,7 +54,9 @@ class BookingRepository {
     if (business == null) {
       throw const BookingException('This stay is no longer available.');
     }
-    final stayRooms = business.stayDetails?.rooms ?? const [];
+    final stayRooms = (business.stayDetails?.rooms ?? const [])
+        .where((room) => room.isActive)
+        .toList();
     final selectedRoom = arguments.review.booking.room;
     final defaultRoom = _defaultRoom(
       rooms: stayRooms,

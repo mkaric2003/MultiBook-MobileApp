@@ -52,6 +52,13 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
     opt: true,
     def: const [],
   );
+  static bool _$isActive(ServiceProviderModel v) => v.isActive;
+  static const Field<ServiceProviderModel, bool> _f$isActive = Field(
+    'isActive',
+    _$isActive,
+    opt: true,
+    def: true,
+  );
 
   @override
   final MappableFields<ServiceProviderModel> fields = const {
@@ -60,6 +67,7 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
     #title: _f$title,
     #commissionRate: _f$commissionRate,
     #availabilitySlots: _f$availabilitySlots,
+    #isActive: _f$isActive,
   };
 
   static ServiceProviderModel _instantiate(DecodingData data) {
@@ -69,6 +77,7 @@ class ServiceProviderModelMapper extends ClassMapperBase<ServiceProviderModel> {
       title: data.dec(_f$title),
       commissionRate: data.dec(_f$commissionRate),
       availabilitySlots: data.dec(_f$availabilitySlots),
+      isActive: data.dec(_f$isActive),
     );
   }
 
@@ -158,6 +167,7 @@ abstract class ServiceProviderModelCopyWith<
     String? title,
     double? commissionRate,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
+    bool? isActive,
   });
   ServiceProviderModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -194,6 +204,7 @@ class _ServiceProviderModelCopyWithImpl<$R, $Out>
     Object? title = $none,
     double? commissionRate,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
+    bool? isActive,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -201,6 +212,7 @@ class _ServiceProviderModelCopyWithImpl<$R, $Out>
       if (title != $none) #title: title,
       if (commissionRate != null) #commissionRate: commissionRate,
       if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
+      if (isActive != null) #isActive: isActive,
     }),
   );
   @override
@@ -213,6 +225,7 @@ class _ServiceProviderModelCopyWithImpl<$R, $Out>
       #availabilitySlots,
       or: $value.availabilitySlots,
     ),
+    isActive: data.get(#isActive, or: $value.isActive),
   );
 
   @override

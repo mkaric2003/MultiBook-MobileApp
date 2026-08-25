@@ -44,6 +44,7 @@ class MoreView extends StatelessWidget {
                         MoreMenuItem(
                           label: context.l10n.manageStaysAndServices,
                           icon: Icons.bed_rounded,
+                          onTap: () => context.push(AppRoutes.MANAGE_CATALOG),
                         ),
                         MoreMenuItem(
                           label: context.l10n.availabilityAndCalendar,

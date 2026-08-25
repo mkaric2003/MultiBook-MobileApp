@@ -22,7 +22,13 @@ class BusinessPhotoThumbnail extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: Image.file(File(imagePath), fit: BoxFit.cover),
+          child: _isRemoteImage
+              ? Image.network(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                )
+              : Image.file(File(imagePath), fit: BoxFit.cover),
         ),
         Positioned(
           top: 3,
@@ -43,4 +49,9 @@ class BusinessPhotoThumbnail extends StatelessWidget {
       ],
     ),
   );
+
+  bool get _isRemoteImage {
+    final uri = Uri.tryParse(imagePath);
+    return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
+  }
 }

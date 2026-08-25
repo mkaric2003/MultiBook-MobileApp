@@ -8,6 +8,7 @@ import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
 import 'package:aquabook/src/data/models/service_provider_model.dart';
+import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,6 +20,30 @@ class BusinessTypeChanged extends AddBusinessEvent {
   const BusinessTypeChanged(this.type);
 
   final BusinessType type;
+}
+
+class BusinessEditLoaded extends AddBusinessEvent {
+  const BusinessEditLoaded(this.business);
+
+  final BusinessModel business;
+}
+
+class StayRoomAdded extends AddBusinessEvent {
+  const StayRoomAdded(this.room);
+
+  final StayRoomModel room;
+}
+
+class StayRoomRemoved extends AddBusinessEvent {
+  const StayRoomRemoved(this.roomId);
+
+  final String roomId;
+}
+
+class StayRoomUpdated extends AddBusinessEvent {
+  const StayRoomUpdated(this.room);
+
+  final StayRoomModel room;
 }
 
 class BusinessCategoryChanged extends AddBusinessEvent {

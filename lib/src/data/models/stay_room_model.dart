@@ -11,6 +11,7 @@ class StayRoomModel with StayRoomModelMappable {
     required this.sizeSquareMeters,
     required this.pricePerNight,
     this.quantity = 1,
+    this.isActive = true,
   });
 
   final String id;
@@ -19,4 +20,5 @@ class StayRoomModel with StayRoomModelMappable {
   final int sizeSquareMeters;
   final int pricePerNight;
   final int quantity;
+  final bool isActive;
 }

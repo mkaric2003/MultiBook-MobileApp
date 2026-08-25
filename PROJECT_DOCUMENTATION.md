@@ -30,10 +30,11 @@ Ključna poslovna odluka je da razgovor i rezervacija pripadaju **businessu**, a
 
 ### Provider
 
-1. Provider kreira stay ili service business, unosi lokaciju, slike, ponudu i dostupnost.
+1. Provider kreira ili uređuje stay/service business, unosi lokaciju, slike, ponudu i dostupnost.
 2. Nakon prvog businessa početni ekran postaje dashboard; selektovani business se čuva u user profilu.
 3. Provider mijenja business na dashboardu / business selectoru, pregleda njegove bookinge ili appointmente i upravlja njima.
-4. Za stays vidi zauzete dane; za services vidi zauzete i blokirane 30-minutne slotove po radniku.
+4. Iz **Manage Stays & Services** otvara puni, unaprijed popunjeni editor selektovanog businessa i sprema izmjene u postojeći dokument.
+5. Za stays vidi zauzete dane; za services vidi zauzete i blokirane 30-minutne slotove po radniku.
 
 ---
 
@@ -230,7 +231,18 @@ Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedini
 
 Razvojni seed metod puni bazu realističnim stay i service podacima (različiti gradovi, kategorije, cijene, rating, slike, rooms, extras, staff i ponuda). Seed je samo za development/testiranje i ne treba biti dostupan u produkcijskom UI-ju.
 
-### 8.4 Promotions & Discounts
+### 8.4 Upravljanje i uređivanje businessa
+
+**Manage Stays & Services** nije zaseban, ograničen katalog editor. Nakon što učita trenutno selektovani provider business, otvara isti puni **Add Business** obrazac u edit modu. Time create i update dijele istu validaciju, strukturu forme i data model, pa ne može doći do razlike između polja koja se mogu unijeti pri kreiranju i onih koja se mogu izmijeniti kasnije.
+
+- Formu unaprijed popunjavaju naziv, kategorija, grad/adresa, koordinate, opis, inventory tip, cijena, amenities, extras i njihove cijene, featured collections, ponude, zaposlenici, provizije i availability slotovi.
+- Za multiple-unit stay provider može uređivati, dodavati i uklanjati više bookable room/unit stavki. Svaka stavka nosi naziv, kapacitet, kvadraturu, cijenu po noći, količinu i aktivnost.
+- Service business zadržava uređivanje kompletne liste offeringsa i provider/staff članova zajedno s njihovim slotovima i commission rate-om.
+- Tip businessa je zaključan tokom izmjene kako postojeći stay/service dokument ne bi promijenio domenski tip i ostavio nekonzistentne rezervacije ili appointmente.
+- Postojeći logo, cover i `photoUrls` se prikažu kao mrežne slike i ne uploaduju se ponovo. Novoizabrane slike se kompresuju u WebP i uploaduju; uklonjene Firestore/Storage galerijske slike se nakon uspješnog updatea uklanjaju iz Storagea. Galerija ostaje ograničena na najviše sedam dodatnih slika.
+- Update zadržava identitet businessa, ownera, valutu, rating, broj recenzija, aktivno stanje i `isPromotionActive`; mijenja samo poslovne podatke koje provider smije uređivati. Za pretragu se u istom zapisu obnavljaju `nameLowercase`, `cityLowercase`, `stayPricePerNight` i `maxGuestCapacity`.
+
+### 8.5 Promotions & Discounts
 
 Provider za pojedinačni business upravlja promocijama kroz **Promotions & Discounts** feature. Promotion je zaseban dokument u `promotions` kolekciji i sadrži business/vlasnika, naziv, tip, vrijednost, period važenja, opcionalni promo kod, minimum iznosa, stay-only minimum noći, usage limit i aktivno stanje.
 

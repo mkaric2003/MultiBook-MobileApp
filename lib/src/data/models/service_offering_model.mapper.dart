@@ -44,6 +44,13 @@ class ServiceOfferingModelMapper extends ClassMapperBase<ServiceOfferingModel> {
     _$description,
     opt: true,
   );
+  static bool _$isActive(ServiceOfferingModel v) => v.isActive;
+  static const Field<ServiceOfferingModel, bool> _f$isActive = Field(
+    'isActive',
+    _$isActive,
+    opt: true,
+    def: true,
+  );
 
   @override
   final MappableFields<ServiceOfferingModel> fields = const {
@@ -52,6 +59,7 @@ class ServiceOfferingModelMapper extends ClassMapperBase<ServiceOfferingModel> {
     #durationMinutes: _f$durationMinutes,
     #price: _f$price,
     #description: _f$description,
+    #isActive: _f$isActive,
   };
 
   static ServiceOfferingModel _instantiate(DecodingData data) {
@@ -61,6 +69,7 @@ class ServiceOfferingModelMapper extends ClassMapperBase<ServiceOfferingModel> {
       durationMinutes: data.dec(_f$durationMinutes),
       price: data.dec(_f$price),
       description: data.dec(_f$description),
+      isActive: data.dec(_f$isActive),
     );
   }
 
@@ -140,6 +149,7 @@ abstract class ServiceOfferingModelCopyWith<
     int? durationMinutes,
     int? price,
     String? description,
+    bool? isActive,
   });
   ServiceOfferingModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -161,6 +171,7 @@ class _ServiceOfferingModelCopyWithImpl<$R, $Out>
     int? durationMinutes,
     int? price,
     Object? description = $none,
+    bool? isActive,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -168,6 +179,7 @@ class _ServiceOfferingModelCopyWithImpl<$R, $Out>
       if (durationMinutes != null) #durationMinutes: durationMinutes,
       if (price != null) #price: price,
       if (description != $none) #description: description,
+      if (isActive != null) #isActive: isActive,
     }),
   );
   @override
@@ -177,6 +189,7 @@ class _ServiceOfferingModelCopyWithImpl<$R, $Out>
     durationMinutes: data.get(#durationMinutes, or: $value.durationMinutes),
     price: data.get(#price, or: $value.price),
     description: data.get(#description, or: $value.description),
+    isActive: data.get(#isActive, or: $value.isActive),
   );
 
   @override

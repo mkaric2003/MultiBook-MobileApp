@@ -177,6 +177,11 @@ final router = GoRouter(
       builder: (context, state) => const MyBusinessesView(),
     ),
     GoRoute(
+      path: AppRoutes.MANAGE_CATALOG,
+      name: AppRoutes.MANAGE_CATALOG,
+      builder: (context, state) => const ManageCatalogView(),
+    ),
+    GoRoute(
       path: AppRoutes.ACCOUNT_SETTINGS,
       name: AppRoutes.ACCOUNT_SETTINGS,
       builder: (context, state) => const AccountSettingsView(),

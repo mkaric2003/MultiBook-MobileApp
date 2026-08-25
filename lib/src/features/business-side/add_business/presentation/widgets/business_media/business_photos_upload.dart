@@ -27,7 +27,7 @@ class BusinessPhotosUpload extends StatelessWidget {
       ),
       const SizedBox(height: 12),
       Wrap(
-        spacing: 10,
+        spacing: 15,
         runSpacing: 10,
         children: [
           ...imagePaths.map(

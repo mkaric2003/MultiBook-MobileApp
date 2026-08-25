@@ -38,6 +38,7 @@ class AppRoutes {
   static const PROMOTIONS = '/promotions';
   static const CREATE_PROMOTION = '/create-promotion';
   static const AVAILABILITY_CALENDAR = '/availability-calendar';
+  static const MANAGE_CATALOG = '/manage-catalog';
   static const CHAT_LIST = '/messages';
   static const CHAT_CONVERSATION = '/conversation';
   static const NOTIFICATIONS = '/notifications';
