@@ -90,7 +90,7 @@ lib/
  ├─ main.dart                         # inicijalizacija DI-ja i aplikacije
  ├─ app.dart                          # MaterialApp, router i inicijalizacija notifikacija
  ├─ src/
- │   ├─ core/                         # konfiguracija, tema, Firebase modul, DI
+ │   ├─ core/                         # konfiguracija, tema, Firebase modul, DI, session lifecycle
  │   ├─ data/
  │   │   ├─ data_sources/             # Firebase/HTTP/plugin adapteri
  │   │   ├─ repositories/             # poslovna i pristupna logika
@@ -126,7 +126,7 @@ functions/src/
 `GoRouter` koristi tri zaštitna nivoa:
 
 1. **Onboarding**: dok `has_seen_onboarding` nije postavljen u Shared Preferences, korisnik ostaje na `/onboarding`.
-2. **Autentikacija**: neprijavljen korisnik ide na `/sign-in`; prijavljen ne može ostati na sign-in/sign-up ekranu.
+2. **Autentikacija**: neprijavljen korisnik ide na `/sign-in`. `GoRouter` prati Firebase Auth stanje preko `refreshListenable`, pa se zaštićene rute odmah uklanjaju nakon odjave. Nakon uspješnog sign-ina `SigninCubit` eksplicitno bira Home ili User Type Checker, kako novi Google/email account ne bi preskočio izbor tipa korisnika.
 3. **Tip korisnika i entry screen**: user profil određuje customer/provider tok. Provider entry dodatno provjerava ima li business i otvara Add Business ili dashboard.
 
 Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app_routes.dart) i [lib/src/router/app_pages.dart](lib/src/router/app_pages.dart).
@@ -152,7 +152,20 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 - Google Sign-In je integrisan kroz `google_sign_in` i Firebase credential.
 - Prilikom registracije se kreira Firestore dokument u `users/{uid}`.
 - Ako kreiranje profila ne uspije nakon email sign-upa, aplikacija uklanja nepotpun Firebase Auth account da ne ostane nekonzistentan korisnik.
-- Logout briše aktivnu sesiju i vraća korisnika na sign-in.
+- Logout koristi replacement navigaciju (`context.go`) na sign-in, bez vraćanja na dashboard u navigation stacku.
+- `AuthenticationRepository` izlaže Firebase `authStateChanges` kroz router notifier. Time auth redirect reaguje na stvarno Firebase stanje, a ne na zakašnjeli UI callback.
+
+### Session stream lifecycle
+
+Firestore stream nakon Firebase Auth odjave više nema pravo čitanja dokumenata. Zato aplikacija ne prepušta zatvaranje streamova slučajnom redoslijedu rebuilda i navigacije:
+
+1. Root view odmah zamijeni trenutnu rutu sa sign-in ekranom.
+2. `AuthenticationRepository.signOut()` poziva `SessionStreamRegistry.cancelAll()` **prije** `FirebaseAuth.signOut()`.
+3. Registry otkazuje aktivne, autentikacijom vezane pretplate (dashboard summary/month metrics, earnings metrics i unread-message indikatore).
+4. Dok je session u završavanju, registry odmah otkazuje svaku pretplatu koju neki sporiji async `load()` pokuša otvoriti.
+5. Tek nakon toga briše se notification device registracija i poziva Firebase sign-out.
+
+Ovaj redoslijed sprečava `cloud_firestore/permission-denied` race condition i `Cannot emit new states after calling close` greške pri prelazu između prijavljenog i neprijavljenog stanja. Cubiti/BLoC-i dodatno provjeravaju `isClosed` / `emit.isDone` poslije async granica.
 
 ### User model
 
@@ -495,6 +508,7 @@ Za pouzdan search/filter gradova koriste se normalizovana polja, posebno `locati
 | Max 7 business fotografija | Kontrolisan Storage i payload obim |
 | Nominatim reverse geocoding | Izbjegava plaćeni Google Geocoding API |
 | Lazy/feature-scoped streamovi | Unread/chat stream nije globalno aktivan kroz cijelu aplikaciju |
+| Centralni session stream cleanup | Sve registrirane root Firestore pretplate se otkažu prije Auth sign-outa; nema zabranjenih read pokušaja ni nepotrebnih reconnecta |
 | FCM token cleanup | Ne troši push attempt na nevalidne tokena |
 | Idempotent notification dispatcher | Retry ne šalje i ne broji duplikate |
 | Chat bez in-app duplikata | Chat poruke koriste push samo kada chat nije otvoren |
@@ -583,7 +597,7 @@ npm --prefix functions run build
 
 Za kritične flowove treba ručno provjeriti:
 
-1. email, Google i logout autentikaciju;
+1. email, Google i logout autentikaciju, uključujući direktan prelaz na sign-in bez dashboard flasha i bez `permission-denied` stream grešaka;
 2. kreiranje stay/service businessa sa slikama;
 3. direktni i endpoint search/filter rezultat;
 4. booking i appointment create/cancel/reschedule, cash plaćanje i past-cash No-show;
