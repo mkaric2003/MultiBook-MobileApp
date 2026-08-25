@@ -1,9 +1,12 @@
 part of '../../../app.dart';
 
 final router = GoRouter(
-  initialLocation: getIt<OnboardingRepository>().hasSeenOnboarding
-      ? AppRoutes.SIGNIN
-      : AppRoutes.ONBOARDING,
+  refreshListenable: getIt<AuthenticationRepository>().authStateListenable,
+  initialLocation: !getIt<OnboardingRepository>().hasSeenOnboarding
+      ? AppRoutes.ONBOARDING
+      : getIt<AuthenticationRepository>().isSignedIn
+      ? AppRoutes.HOME
+      : AppRoutes.SIGNIN,
   redirect: (context, state) {
     final isSignedIn = getIt<AuthenticationRepository>().isSignedIn;
     final hasSeenOnboarding = getIt<OnboardingRepository>().hasSeenOnboarding;
@@ -17,7 +20,6 @@ final router = GoRouter(
       return isSignedIn ? AppRoutes.HOME : AppRoutes.SIGNIN;
     }
 
-    if (isSignedIn && isAuthenticationRoute) return AppRoutes.HOME;
     if (!isSignedIn && !isAuthenticationRoute && !isOnboardingRoute) {
       return AppRoutes.SIGNIN;
     }
@@ -185,6 +187,11 @@ final router = GoRouter(
       path: AppRoutes.ACCOUNT_SETTINGS,
       name: AppRoutes.ACCOUNT_SETTINGS,
       builder: (context, state) => const AccountSettingsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.CHANGE_PASSWORD,
+      name: AppRoutes.CHANGE_PASSWORD,
+      builder: (context, state) => const ChangePasswordView(),
     ),
     GoRoute(
       path: AppRoutes.LANGUAGE_CURRENCY,

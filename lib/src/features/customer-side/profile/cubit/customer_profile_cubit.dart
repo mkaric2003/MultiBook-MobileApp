@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:aquabook/src/data/repositories/authentication_repository.dart';
+import 'package:aquabook/src/core/session/session_stream_registry.dart';
 import 'package:aquabook/src/data/repositories/chat_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/src/features/customer-side/profile/cubit/customer_profile_state.dart';
@@ -13,11 +15,13 @@ class CustomerProfileCubit extends Cubit<CustomerProfileState> {
     this._authenticationRepository,
     this._userRepository,
     this._chatRepository,
+    this._sessionStreamRegistry,
   ) : super(const CustomerProfileState());
 
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
   final ChatRepository _chatRepository;
+  final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription<int>? _unreadMessagesSubscription;
 
   Future<void> load() async {
@@ -25,13 +29,30 @@ class CustomerProfileCubit extends Cubit<CustomerProfileState> {
     emit(CustomerProfileState(user: user));
     await _chatRepository.ensureUnreadMessagesCount();
     await _unreadMessagesSubscription?.cancel();
+    _sessionStreamRegistry.unregister(_unreadMessagesSubscription);
     _unreadMessagesSubscription = _chatRepository
         .watchUnreadMessagesCount()
         .listen(
-          (count) => emit(
-            CustomerProfileState(user: state.user, unreadMessagesCount: count),
-          ),
+          (count) {
+            if (!isClosed) {
+              emit(
+                CustomerProfileState(
+                  user: state.user,
+                  unreadMessagesCount: count,
+                ),
+              );
+            }
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            log(
+              'Could not watch unread messages.',
+              name: 'CustomerProfileCubit',
+              error: error,
+              stackTrace: stackTrace,
+            );
+          },
         );
+    _sessionStreamRegistry.register(_unreadMessagesSubscription!);
   }
 
   Future<void> signOut() async {
@@ -42,14 +63,19 @@ class CustomerProfileCubit extends Cubit<CustomerProfileState> {
     emit(const CustomerProfileState(isLoading: true));
     try {
       await _authenticationRepository.signOut();
-      emit(const CustomerProfileState(isSignedOut: true));
+      if (!isClosed) {
+        emit(const CustomerProfileState(isSignedOut: true));
+      }
     } on AuthenticationException catch (error) {
-      emit(CustomerProfileState(errorMessage: error.message));
+      if (!isClosed) {
+        emit(CustomerProfileState(errorMessage: error.message));
+      }
     }
   }
 
   @override
   Future<void> close() async {
+    _sessionStreamRegistry.unregister(_unreadMessagesSubscription);
     await _unreadMessagesSubscription?.cancel();
     return super.close();
   }

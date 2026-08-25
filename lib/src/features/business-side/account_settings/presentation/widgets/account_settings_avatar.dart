@@ -28,17 +28,17 @@ class AccountSettingsAvatar extends HookWidget {
         ? Image.memory(snapshot.data!, fit: BoxFit.cover)
         : (imageUrl?.isNotEmpty ?? false)
         ? Image.network(imageUrl!, fit: BoxFit.cover)
-        : const Icon(Icons.person_rounded, size: 72, color: AppColors.muted);
+        : const Icon(Icons.person_rounded, size: 56, color: AppColors.muted);
 
     return Center(
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           CircleAvatar(
-            radius: 72,
+            radius: 58,
             backgroundColor: AppColors.border,
             child: ClipOval(
-              child: SizedBox(height: 136, width: 136, child: image),
+              child: SizedBox(height: 110, width: 110, child: image),
             ),
           ),
           Positioned(
@@ -48,8 +48,8 @@ class AccountSettingsAvatar extends HookWidget {
               onTap: onTap,
               customBorder: const CircleBorder(),
               child: Container(
-                height: 55,
-                width: 55,
+                height: 46,
+                width: 46,
                 decoration: const BoxDecoration(
                   color: AppColors.primary,
                   shape: BoxShape.circle,

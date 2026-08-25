@@ -7,6 +7,12 @@ import 'package:injectable/injectable.dart';
 abstract class AuthenticationDataSource {
   User? get currentUser;
 
+  /// Emits whenever Firebase Auth changes its authenticated user.
+  ///
+  /// The app router listens to this stream so protected screens are removed
+  /// before their Firestore listeners can outlive an authenticated session.
+  Stream<User?> get authStateChanges;
+
   Future<User> createUserWithEmailAndPassword({
     required String email,
     required String password,
@@ -20,6 +26,11 @@ abstract class AuthenticationDataSource {
   });
 
   Future<void> sendPasswordResetEmail({required String email});
+
+  Future<void> reauthenticateAndUpdatePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
 
   Future<void> updateDisplayName({
     required User user,
@@ -41,6 +52,9 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
 
   @override
   User? get currentUser => _firebaseAuth.currentUser;
+
+  @override
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   @override
   Future<User> createUserWithEmailAndPassword({
@@ -89,6 +103,32 @@ class AuthenticationDataSourceImpl implements AuthenticationDataSource {
   @override
   Future<void> sendPasswordResetEmail({required String email}) =>
       _firebaseAuth.sendPasswordResetEmail(email: email);
+
+  @override
+  Future<void> reauthenticateAndUpdatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _firebaseAuth.currentUser;
+    final email = user?.email;
+    final supportsPassword =
+        user?.providerData.any(
+          (provider) => provider.providerId == EmailAuthProvider.PROVIDER_ID,
+        ) ??
+        false;
+    if (user == null || email == null || !supportsPassword) {
+      throw FirebaseAuthException(
+        code: 'password-change-not-supported',
+        message: 'Password changes are available for email/password accounts.',
+      );
+    }
+    final credential = EmailAuthProvider.credential(
+      email: email,
+      password: currentPassword,
+    );
+    await user.reauthenticateWithCredential(credential);
+    await user.updatePassword(newPassword);
+  }
 
   @override
   Future<void> updateDisplayName({

@@ -2186,4 +2186,25 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get providerTermsOfServiceContent =>
       'CONDITIONS D’UTILISATION POUR LES PRESTATAIRES\n\nEn exploitant une entreprise sur MultiBook, vous acceptez ces conditions prestataire. MultiBook fournit aux entreprises indépendantes des outils pour publier des séjours ou services, gérer les disponibilités et communiquer avec les clients.\n\n1. Annonces exactes\nGardez les informations de l\'entreprise, les prix, les disponibilités, les équipements, le personnel et les descriptions exacts. Ne publiez pas de photos, offres ou disponibilités trompeuses.\n\n2. Réservations et paiements\nUne réservation ou un rendez-vous confirmé est un accord entre votre entreprise et le client. Honorez-le sauf motif exceptionnel valable. Utilisez correctement les contrôles de refus, d\'annulation, de reprogrammation et d\'absence en espèces. Vous restez responsable des taxes, factures, remboursements et obligations légales applicables.\n\n3. Conduite\nUtilisez les données client uniquement pour fournir la prestation réservée. La discrimination, le harcèlement, le spam, la manipulation des avis et les demandes de paiement hors des flux approuvés sont interdits. Nous pouvons restreindre des annonces ou comptes en cas d\'abus.';
+
+  @override
+  String get changePassword => 'Modifier le mot de passe';
+
+  @override
+  String get currentPassword => 'Mot de passe actuel';
+
+  @override
+  String get newPassword => 'Nouveau mot de passe';
+
+  @override
+  String get confirmNewPassword => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get passwordsDoNotMatch => 'Les mots de passe ne correspondent pas.';
+
+  @override
+  String get passwordMinimumLength => 'Utilisez au moins 6 caractères.';
+
+  @override
+  String get passwordChangedSuccessfully => 'Mot de passe modifié avec succès.';
 }

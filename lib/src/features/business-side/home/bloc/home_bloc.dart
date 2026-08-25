@@ -21,9 +21,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     try {
       await _authenticationRepository.signOut();
-      emit(const HomeState(isSignedOut: true));
+      if (!emit.isDone) {
+        emit(const HomeState(isSignedOut: true));
+      }
     } on AuthenticationException catch (error) {
-      emit(HomeState(errorMessage: error.message));
+      if (!emit.isDone) {
+        emit(HomeState(errorMessage: error.message));
+      }
     }
   }
 

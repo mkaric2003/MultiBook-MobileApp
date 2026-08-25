@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aquabook/src/core/session/session_stream_registry.dart';
 import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/data/models/service_provider_model.dart';
 import 'package:aquabook/src/data/repositories/business_metrics_repository.dart';
@@ -19,11 +20,13 @@ class EarningsCubit extends Cubit<EarningsState> {
     this._userRepository,
     this._businessRepository,
     this._businessMetricsRepository,
+    this._sessionStreamRegistry,
   ) : super(const EarningsState());
 
   final UserRepository _userRepository;
   final BusinessRepository _businessRepository;
   final BusinessMetricsRepository _businessMetricsRepository;
+  final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription? _metricsSubscription;
   int _loadRequestId = 0;
 
@@ -142,6 +145,7 @@ class EarningsCubit extends Cubit<EarningsState> {
               if (!isClosed) emit(state.copyWith(hasError: true));
             },
           );
+      _sessionStreamRegistry.register(_metricsSubscription!);
       return;
     }
     _metricsSubscription = _businessMetricsRepository
@@ -158,6 +162,7 @@ class EarningsCubit extends Cubit<EarningsState> {
             if (!isClosed) emit(state.copyWith(hasError: true));
           },
         );
+    _sessionStreamRegistry.register(_metricsSubscription!);
   }
 
   EarningsDateRange _rangeFor(EarningsPeriod period) {
@@ -215,8 +220,10 @@ class EarningsCubit extends Cubit<EarningsState> {
   }
 
   Future<void> _cancelMetricsSubscription() async {
-    await _metricsSubscription?.cancel();
+    final metricsSubscription = _metricsSubscription;
     _metricsSubscription = null;
+    _sessionStreamRegistry.unregister(metricsSubscription);
+    await metricsSubscription?.cancel();
   }
 
   @override

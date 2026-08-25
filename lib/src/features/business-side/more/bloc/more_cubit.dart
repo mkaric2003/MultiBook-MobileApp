@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:aquabook/src/core/session/session_stream_registry.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/chat_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
@@ -14,11 +16,13 @@ class MoreCubit extends Cubit<MoreState> {
     this._businessRepository,
     this._userRepository,
     this._chatRepository,
+    this._sessionStreamRegistry,
   ) : super(const MoreState());
 
   final BusinessRepository _businessRepository;
   final UserRepository _userRepository;
   final ChatRepository _chatRepository;
+  final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription? _conversationsSubscription;
 
   Future<void> load() async {
@@ -44,13 +48,30 @@ class MoreCubit extends Cubit<MoreState> {
     );
     await _chatRepository.ensureUnreadMessagesCount();
     await _conversationsSubscription?.cancel();
+    _sessionStreamRegistry.unregister(_conversationsSubscription);
     _conversationsSubscription = _chatRepository
         .watchUnreadMessagesCount()
-        .listen((count) => emit(state.copyWith(unreadMessagesCount: count)));
+        .listen(
+          (count) {
+            if (!isClosed) {
+              emit(state.copyWith(unreadMessagesCount: count));
+            }
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            log(
+              'Could not watch unread messages.',
+              name: 'MoreCubit',
+              error: error,
+              stackTrace: stackTrace,
+            );
+          },
+        );
+    _sessionStreamRegistry.register(_conversationsSubscription!);
   }
 
   @override
   Future<void> close() async {
+    _sessionStreamRegistry.unregister(_conversationsSubscription);
     await _conversationsSubscription?.cancel();
     return super.close();
   }

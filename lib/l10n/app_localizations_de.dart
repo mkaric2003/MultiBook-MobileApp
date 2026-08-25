@@ -2187,5 +2187,26 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get providerTermsOfServiceContent =>
-      'NUTZUNGSBEDINGUNGEN FÜR ANBIETER\n\nMit dem Betrieb eines Unternehmens auf MultiBook akzeptieren Sie diese Anbieterbedingungen. MultiBook stellt unabhängigen Unternehmen Werkzeuge zur Veröffentlichung von Aufenthalten oder Dienstleistungen, zur Verwaltung der Verfügbarkeit und zur Kommunikation mit Kunden bereit.\n\n1. Korrekte Inserate\nHalten Sie Unternehmensdaten, Preise, Verfügbarkeit, Ausstattung, Mitarbeitende und Leistungsbeschreibungen korrekt. Veröffentlichen Sie keine irreführenden Fotos, Angebote oder Verfügbarkeiten.\n\n2. Reservierungen und Zahlungen\nEine bestätigte Buchung oder ein Termin ist eine Vereinbarung zwischen Ihrem Unternehmen und dem Kunden. Erfüllen Sie diese, sofern kein berechtigter Ausnahmegrund vorliegt. Nutzen Sie Ablehnungs-, Stornierungs-, Umbuchungs- und Cash-No-Show-Funktionen korrekt. Für Steuern, Rechnungen, Rückerstattungen und gesetzliche Pflichten bleiben Sie verantwortlich.\n\n3. Verhalten\nVerwenden Sie Kundendaten nur für die gebuchte Leistung. Diskriminierung, Belästigung, Spam, Bewertungsmanipulation und Zahlungsaufforderungen außerhalb der vorgesehenen Abläufe sind verboten. Wir können Inserate oder Konten bei Missbrauch einschränken.';
+      'NUTZUNGSBEDINGUNGEN FÜR ANBIETER\n\nMit dem Betrieb eines Unternehmens auf MultiBook akzeptieren Sie diese Anbieterbedingungen. MultiBook stellt unabhängigen Unternehmen Werkzeuge zur Veröffentlichung von Aufenthalten oder Dienstleistungen, zur Verwaltung der Verfügbarkeit und zur Kommunikation mit Kunden bereit.\n\n1. Korrekte Inserate\nHalten Sie Unternehmensdaten, Preise, Verfügbarkeit, Ausstattung, Mitarbeitende und Leistungsbeschreibungen korrekt. Veröffentlichen Sie keine irreführenden Fotos, Angebote oder Verfügbarkeiten.\n\n2. Reservierungen und Zahlungen\nEine bestätigte Buchung oder ein Termin ist eine Vereinbarung zwischen Ihrem Unternehmen und dem Kunden. Erfüllen Sie diese, sofern kein berechtigter Ausnahmegrund vorliegt. Nutzen Sie Ablehnungs-, Stornierungs-, Umbuchungs- und Cash-No-Show-Funktionen korrekt. Für Steuern, Rechnungen, Rückerstattungen und gesetzliche Pflichten bleiben Sie verantwortlich.\n\n3. Verhalten\nVerwenden Sie Kundendaten nur für die gebuchte Leistung. Diskriminierung, Belästigung, Spam, Bewertungsmanipulation und Zahlungsaufforderungen außerhalb der vorgesehenen Abläufe sind verboten. Wir können Inserate oder Konten bei Missbrauch einschrken.';
+
+  @override
+  String get changePassword => 'Passwort ändern';
+
+  @override
+  String get currentPassword => 'Aktuelles Passwort';
+
+  @override
+  String get newPassword => 'Neues Passwort';
+
+  @override
+  String get confirmNewPassword => 'Neues Passwort bestätigen';
+
+  @override
+  String get passwordsDoNotMatch => 'Die Passwörter stimmen nicht überein.';
+
+  @override
+  String get passwordMinimumLength => 'Verwenden Sie mindestens 6 Zeichen.';
+
+  @override
+  String get passwordChangedSuccessfully => 'Passwort erfolgreich geändert.';
 }

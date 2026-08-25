@@ -19,7 +19,9 @@ class CustomerProfileView extends StatelessWidget {
     create: (_) => getIt<CustomerProfileCubit>()..load(),
     child: BlocConsumer<CustomerProfileCubit, CustomerProfileState>(
       listener: (context, state) {
-        if (state.isSignedOut) context.go(AppRoutes.SIGNIN);
+        if (state.isLoading && state.errorMessage == null) {
+          context.go(AppRoutes.SIGNIN);
+        }
       },
       builder: (context, state) {
         final user = state.user;

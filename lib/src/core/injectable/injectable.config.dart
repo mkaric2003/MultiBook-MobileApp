@@ -12,6 +12,8 @@
 import 'package:aquabook/src/core/modules/firebase_module.dart' as _i211;
 import 'package:aquabook/src/core/modules/shared_preferences_module.dart'
     as _i144;
+import 'package:aquabook/src/core/session/session_stream_registry.dart'
+    as _i522;
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart'
     as _i137;
 import 'package:aquabook/src/data/data_sources/business_metrics_data_source.dart'
@@ -86,6 +88,8 @@ import 'package:aquabook/src/features/business-side/availability_calendar/bloc/a
     as _i519;
 import 'package:aquabook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart'
     as _i488;
+import 'package:aquabook/src/features/business-side/change_password/cubit/change_password_cubit.dart'
+    as _i725;
 import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart'
     as _i758;
 import 'package:aquabook/src/features/business-side/earnings/bloc/earnings_cubit.dart'
@@ -202,6 +206,9 @@ extension GetItInjectableX on _i174.GetIt {
     await gh.factoryAsync<_i460.SharedPreferences>(
       () => sharedPrefsModule.prefs,
       preResolve: true,
+    );
+    gh.lazySingleton<_i522.SessionStreamRegistry>(
+      () => _i522.SessionStreamRegistry(),
     );
     gh.lazySingleton<_i377.NominatimDataSource>(
       () => _i377.NominatimDataSourceImpl(),
@@ -340,6 +347,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
       ),
     );
+    gh.factory<_i556.MoreCubit>(
+      () => _i556.MoreCubit(
+        gh<_i1065.BusinessRepository>(),
+        gh<_i747.UserRepository>(),
+        gh<_i525.ChatRepository>(),
+        gh<_i522.SessionStreamRegistry>(),
+      ),
+    );
     gh.factory<_i409.ChatListCubit>(
       () => _i409.ChatListCubit(gh<_i525.ChatRepository>()),
     );
@@ -391,6 +406,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
         gh<_i1065.BusinessRepository>(),
         gh<_i1034.BusinessMetricsRepository>(),
+        gh<_i522.SessionStreamRegistry>(),
       ),
     );
     gh.factory<_i721.EarningsCubit>(
@@ -398,6 +414,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i747.UserRepository>(),
         gh<_i1065.BusinessRepository>(),
         gh<_i1034.BusinessMetricsRepository>(),
+        gh<_i522.SessionStreamRegistry>(),
       ),
     );
     gh.factory<_i1047.ChatConversationCubit>(
@@ -446,13 +463,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i309.PromotionRepository(
         gh<_i137.AuthenticationDataSource>(),
         gh<_i151.FirestoreDataSource>(),
-      ),
-    );
-    gh.factory<_i556.MoreCubit>(
-      () => _i556.MoreCubit(
-        gh<_i1065.BusinessRepository>(),
-        gh<_i747.UserRepository>(),
-        gh<_i525.ChatRepository>(),
       ),
     );
     gh.factory<_i749.RecentlyViewedCubit>(
@@ -570,6 +580,15 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i567.AppointmentRepository>(),
       ),
     );
+    gh.lazySingleton<_i472.AuthenticationRepository>(
+      () => _i472.AuthenticationRepository(
+        gh<_i137.AuthenticationDataSource>(),
+        gh<_i151.FirestoreDataSource>(),
+        gh<_i113.NotificationRepository>(),
+        gh<_i522.SessionStreamRegistry>(),
+      ),
+      dispose: (i) => i.dispose(),
+    );
     gh.factory<_i569.RescheduleAppointmentCubit>(
       () => _i569.RescheduleAppointmentCubit(gh<_i567.AppointmentRepository>()),
     );
@@ -592,11 +611,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i64.BookingDraftRepository>(),
       ),
     );
-    gh.lazySingleton<_i472.AuthenticationRepository>(
-      () => _i472.AuthenticationRepository(
-        gh<_i137.AuthenticationDataSource>(),
-        gh<_i151.FirestoreDataSource>(),
-        gh<_i113.NotificationRepository>(),
+    gh.factory<_i44.SigninCubit>(
+      () => _i44.SigninCubit(
+        gh<_i472.AuthenticationRepository>(),
+        gh<_i747.UserRepository>(),
       ),
     );
     gh.factory<_i255.ExploreServiceResultsCubit>(
@@ -642,17 +660,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i952.HomeBloc>(
       () => _i952.HomeBloc(gh<_i472.AuthenticationRepository>()),
     );
+    gh.factory<_i725.ChangePasswordCubit>(
+      () => _i725.ChangePasswordCubit(gh<_i472.AuthenticationRepository>()),
+    );
     gh.factory<_i897.CustomerProfileCubit>(
       () => _i897.CustomerProfileCubit(
         gh<_i472.AuthenticationRepository>(),
         gh<_i747.UserRepository>(),
         gh<_i525.ChatRepository>(),
-      ),
-    );
-    gh.factory<_i44.SigninCubit>(
-      () => _i44.SigninCubit(
-        gh<_i472.AuthenticationRepository>(),
-        gh<_i747.UserRepository>(),
+        gh<_i522.SessionStreamRegistry>(),
       ),
     );
     return this;

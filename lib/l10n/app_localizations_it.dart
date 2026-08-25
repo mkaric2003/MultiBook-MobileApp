@@ -2183,4 +2183,25 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get providerTermsOfServiceContent =>
       'TERMINI DI SERVIZIO PER I FORNITORI\n\nGestendo un\'attività su MultiBook accetti questi termini per fornitori. MultiBook offre alle attività indipendenti strumenti per pubblicare soggiorni o servizi, gestire la disponibilità e comunicare con i clienti.\n\n1. Annunci accurati\nMantieni accurate informazioni dell\'attività, prezzi, disponibilità, servizi, personale e descrizioni. Non pubblicare foto, offerte o disponibilità fuorvianti.\n\n2. Prenotazioni e pagamenti\nUna prenotazione o un appuntamento confermato è un accordo tra la tua attività e il cliente. Onoralo salvo un valido motivo eccezionale. Usa correttamente i controlli di rifiuto, annullamento, riprogrammazione e mancata presentazione in contanti. Rimani responsabile di tasse, fatture, rimborsi e obblighi legali applicabili.\n\n3. Condotta\nUsa i dati dei clienti solo per fornire il servizio prenotato. Sono vietati discriminazione, molestie, spam, manipolazione delle recensioni e richieste di pagamento al di fuori dei flussi approvati. Possiamo limitare annunci o account in caso di abuso.';
+
+  @override
+  String get changePassword => 'Cambia password';
+
+  @override
+  String get currentPassword => 'Password attuale';
+
+  @override
+  String get newPassword => 'Nuova password';
+
+  @override
+  String get confirmNewPassword => 'Conferma nuova password';
+
+  @override
+  String get passwordsDoNotMatch => 'Le password non corrispondono.';
+
+  @override
+  String get passwordMinimumLength => 'Usa almeno 6 caratteri.';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password modificata con successo.';
 }

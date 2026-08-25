@@ -15,6 +15,7 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = UserModelMapper._());
       UserTypeMapper.ensureInitialized();
+      CurrencyCodeMapper.ensureInitialized();
     }
     return _instance!;
   }

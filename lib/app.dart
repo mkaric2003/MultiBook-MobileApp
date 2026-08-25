@@ -9,6 +9,7 @@ import 'package:aquabook/src/data/repositories/onboarding_repository.dart';
 import 'package:aquabook/src/data/repositories/notification_repository.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
 import 'package:aquabook/src/features/business-side/account_settings/presentation/views/account_settings_view.dart';
+import 'package:aquabook/src/features/business-side/change_password/presentation/views/change_password_view.dart';
 import 'package:aquabook/src/features/business-side/availability_calendar/presentation/views/availability_calendar_view.dart';
 import 'package:aquabook/src/features/business-side/home/presentation/views/client_entry_view.dart';
 import 'package:aquabook/src/features/business-side/home/presentation/views/home_view.dart';

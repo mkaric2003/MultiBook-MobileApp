@@ -20,9 +20,12 @@ class SigninCubit extends Cubit<SigninState> {
         email: email,
         password: password,
       );
+      if (isClosed) return;
       await _completeSignIn();
     } on AuthenticationException catch (error) {
-      emit(SigninState(errorMessage: error.message));
+      if (!isClosed) {
+        emit(SigninState(errorMessage: error.message));
+      }
     }
   }
 
@@ -31,21 +34,26 @@ class SigninCubit extends Cubit<SigninState> {
 
     try {
       final isNewUser = await _authenticationRepository.signInWithGoogle();
+      if (isClosed) return;
       if (isNewUser) {
         emit(SigninState(isSuccess: true, requiresUserTypeSelection: true));
         return;
       }
       await _completeSignIn();
     } on AuthenticationCancelledException {
-      emit(SigninState());
+      if (!isClosed) emit(SigninState());
     } on AuthenticationException catch (error) {
-      emit(SigninState(errorMessage: error.message));
+      if (!isClosed) {
+        emit(SigninState(errorMessage: error.message));
+      }
     }
   }
 
   Future<void> _completeSignIn() async {
     final user = await _userRepository.getCurrentUser();
-    emit(SigninState(isSuccess: true, userType: user?.type));
+    if (!isClosed) {
+      emit(SigninState(isSuccess: true, userType: user?.type));
+    }
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
@@ -53,13 +61,17 @@ class SigninCubit extends Cubit<SigninState> {
 
     try {
       await _authenticationRepository.sendPasswordResetEmail(email: email);
-      emit(
-        SigninState(
-          successMessage: 'Password reset email sent. Check your inbox.',
-        ),
-      );
+      if (!isClosed) {
+        emit(
+          SigninState(
+            successMessage: 'Password reset email sent. Check your inbox.',
+          ),
+        );
+      }
     } on AuthenticationException catch (error) {
-      emit(SigninState(errorMessage: error.message));
+      if (!isClosed) {
+        emit(SigninState(errorMessage: error.message));
+      }
     }
   }
 }

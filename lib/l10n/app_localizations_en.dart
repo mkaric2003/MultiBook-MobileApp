@@ -2171,4 +2171,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get providerTermsOfServiceContent =>
       'TERMS OF SERVICE FOR PROVIDERS\n\nBy operating a business on MultiBook, you agree to these provider terms. MultiBook gives independent businesses tools to publish stays or services, manage availability and communicate with customers.\n\n1. Accurate listings\nKeep business information, prices, availability, amenities, staff and service descriptions accurate. Do not publish misleading photos, offers or availability.\n\n2. Reservations and payments\nA confirmed booking or appointment is an agreement between your business and the customer. Honor it unless a valid exceptional reason applies. Use decline, cancellation, rescheduling and cash no-show controls accurately. Online and cash payments are recorded separately; you remain responsible for taxes, invoices, refunds and applicable legal obligations.\n\n3. Conduct and enforcement\nUse customer data only to provide the reserved stay or service. Professional communication is required; discrimination, harassment, spam, review manipulation and payment requests outside approved flows are prohibited. We may restrict listings or accounts that endanger users or misuse the platform.\n\n4. Changes\nWe may update these terms for legal, security or product reasons. Continued use after publication means acceptance of the updated terms.';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get confirmNewPassword => 'Confirm new password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get passwordMinimumLength => 'Use at least 6 characters.';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully.';
 }

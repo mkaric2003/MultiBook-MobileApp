@@ -21,8 +21,9 @@ class HomeView extends StatelessWidget {
       create: (_) => getIt<HomeBloc>(),
       child: BlocConsumer<HomeBloc, HomeState>(
         listener: (context, state) {
-          if (state.isSignedOut) {
+          if (state.isLoading && state.errorMessage == null) {
             context.go(AppRoutes.SIGNIN);
+            return;
           }
 
           if (state.errorMessage != null) {

@@ -2175,4 +2175,25 @@ class AppLocalizationsBs extends AppLocalizations {
   @override
   String get providerTermsOfServiceContent =>
       'USLOVI KORIŠTENJA ZA PROVIDERE\n\nUpravljanjem businessom na MultiBooku prihvatate ove uslove za providere. MultiBook nezavisnim businessima daje alate za objavu smještaja ili usluga, upravljanje dostupnošću i komunikaciju s customerima.\n\n1. Tačni oglasi\nPodaci o businessu, cijenama, dostupnosti, pogodnostima, zaposlenicima i uslugama moraju biti tačni. Ne objavljujte obmanjujuće slike, ponude ili dostupnost.\n\n2. Rezervacije i plaćanja\nPotvrđena rezervacija ili termin predstavljaju dogovor između businessa i customera. Ispunite ga osim u opravdanim izuzetnim okolnostima. Kontrole za odbijanje, otkazivanje, promjenu termina i cash no-show koristite tačno. Online i gotovinska plaćanja vode se odvojeno; odgovorni ste za poreze, račune, povrate i primjenjive zakonske obaveze.\n\n3. Ponašanje i mjere\nPodatke customera koristite samo za izvršenje rezervisanog smještaja ili usluge. Komunikacija mora biti profesionalna; zabranjeni su diskriminacija, uznemiravanje, spam, manipulacija recenzijama i preusmjeravanje plaćanja izvan odobrenih tokova. Možemo ograničiti oglase ili račune koji ugrožavaju korisnike ili zloupotrebljavaju platformu.\n\n4. Izmjene\nUslove možemo izmijeniti iz pravnih, sigurnosnih ili produktnih razloga. Nastavak korištenja nakon objave znači prihvatanje ažuriranih uslova.';
+
+  @override
+  String get changePassword => 'Promijeni lozinku';
+
+  @override
+  String get currentPassword => 'Trenutna lozinka';
+
+  @override
+  String get newPassword => 'Nova lozinka';
+
+  @override
+  String get confirmNewPassword => 'Potvrdite novu lozinku';
+
+  @override
+  String get passwordsDoNotMatch => 'Lozinke se ne podudaraju.';
+
+  @override
+  String get passwordMinimumLength => 'Koristite najmanje 6 znakova.';
+
+  @override
+  String get passwordChangedSuccessfully => 'Lozinka je uspješno promijenjena.';
 }

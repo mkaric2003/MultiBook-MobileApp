@@ -16,6 +16,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       MapperContainer.globals.use(_instance = BusinessModelMapper._());
       BusinessTypeMapper.ensureInitialized();
       BusinessLocationModelMapper.ensureInitialized();
+      CurrencyCodeMapper.ensureInitialized();
       StayDetailsModelMapper.ensureInitialized();
       ServiceDetailsModelMapper.ensureInitialized();
     }
