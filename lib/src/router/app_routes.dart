@@ -29,6 +29,8 @@ class AppRoutes {
   static const CUSTOMER_EDIT_PROFILE = '/customer-edit-profile';
   static const TERMS_OF_SERVICE = '/terms-of-service';
   static const PRIVACY_POLICY = '/privacy-policy';
+  static const PROVIDER_TERMS_OF_SERVICE = '/provider-terms-of-service';
+  static const PROVIDER_PRIVACY_POLICY = '/provider-privacy-policy';
   static const SUPPORT_TICKETS = '/support-tickets';
   static const CREATE_SUPPORT_TICKET = '/create-support-ticket';
   static const HELP_CENTER = '/help-center';

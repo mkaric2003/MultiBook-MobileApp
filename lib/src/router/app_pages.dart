@@ -211,6 +211,22 @@ final router = GoRouter(
       ),
     ),
     GoRoute(
+      path: AppRoutes.PROVIDER_TERMS_OF_SERVICE,
+      name: AppRoutes.PROVIDER_TERMS_OF_SERVICE,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.termsOfService,
+        audience: LegalDocumentAudience.provider,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.PROVIDER_PRIVACY_POLICY,
+      name: AppRoutes.PROVIDER_PRIVACY_POLICY,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.privacyPolicy,
+        audience: LegalDocumentAudience.provider,
+      ),
+    ),
+    GoRoute(
       path: AppRoutes.SUPPORT_TICKETS,
       name: AppRoutes.SUPPORT_TICKETS,
       builder: (context, state) => const SupportTicketsView(),

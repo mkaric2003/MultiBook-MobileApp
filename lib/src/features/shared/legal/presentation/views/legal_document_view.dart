@@ -1,12 +1,18 @@
 import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/features/shared/legal/domain/enums/legal_document_type.dart';
+import 'package:aquabook/src/features/shared/legal/domain/enums/legal_document_audience.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class LegalDocumentView extends StatelessWidget {
-  const LegalDocumentView({required this.documentType, super.key});
+  const LegalDocumentView({
+    required this.documentType,
+    this.audience = LegalDocumentAudience.customer,
+    super.key,
+  });
 
   final LegalDocumentType documentType;
+  final LegalDocumentAudience audience;
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +20,15 @@ class LegalDocumentView extends StatelessWidget {
       LegalDocumentType.termsOfService => context.l10n.termsOfService,
       LegalDocumentType.privacyPolicy => context.l10n.privacyPolicy,
     };
-    final content = switch (documentType) {
-      LegalDocumentType.termsOfService => context.l10n.termsOfServiceContent,
-      LegalDocumentType.privacyPolicy => context.l10n.privacyPolicyContent,
+    final content = switch ((audience, documentType)) {
+      (LegalDocumentAudience.customer, LegalDocumentType.termsOfService) =>
+        context.l10n.termsOfServiceContent,
+      (LegalDocumentAudience.customer, LegalDocumentType.privacyPolicy) =>
+        context.l10n.privacyPolicyContent,
+      (LegalDocumentAudience.provider, LegalDocumentType.termsOfService) =>
+        context.l10n.providerTermsOfServiceContent,
+      (LegalDocumentAudience.provider, LegalDocumentType.privacyPolicy) =>
+        context.l10n.providerPrivacyPolicyContent,
     };
 
     return Scaffold(

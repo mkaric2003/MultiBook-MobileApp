@@ -2174,4 +2174,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get promotion => 'Descuento';
+
+  @override
+  String get providerPrivacyPolicyContent =>
+      'POLÍTICA DE PRIVACIDAD PARA PROVEEDORES\n\nMultiBook procesa los datos de la cuenta y del negocio del proveedor para publicar y gestionar estancias o servicios. Incluye el perfil del negocio, ubicación, fotos, precios, disponibilidad, personal, promociones, reservas, citas, ingresos y mensajes con clientes.\n\n1. Datos de clientes\nPara una reserva confirmada recibe solo los datos necesarios para prestar la estancia o el servicio: nombre, contacto, fecha/hora, servicio elegido y detalles relevantes. Úselos únicamente para esa reserva y no para marketing no solicitado.\n\n2. Seguridad y registros\nProteja el acceso a la cuenta de proveedor y limítelo al personal autorizado. Nunca solicite contraseñas, CVV o datos completos de tarjeta en el chat. Los mensajes, reseñas, cancelaciones, registros de no presentación y datos de transacciones pueden conservarse para soporte, prevención de fraude, disputas, informes financieros y obligaciones legales.\n\n3. Sus opciones\nPuede actualizar los datos del negocio en Gestionar estancias y servicios. Para eliminar la cuenta, acceder a los datos o consultar sobre privacidad, contacte al soporte de MultiBook.';
+
+  @override
+  String get providerTermsOfServiceContent =>
+      'TÉRMINOS DE SERVICIO PARA PROVEEDORES\n\nAl operar un negocio en MultiBook acepta estos términos para proveedores. MultiBook ofrece a negocios independientes herramientas para publicar estancias o servicios, gestionar disponibilidad y comunicarse con clientes.\n\n1. Anuncios precisos\nMantenga correctos los datos del negocio, precios, disponibilidad, comodidades, personal y descripciones. No publique fotos, ofertas o disponibilidad engañosas.\n\n2. Reservas y pagos\nUna reserva o cita confirmada es un acuerdo entre su negocio y el cliente. Cúmplala salvo una razón excepcional válida. Use correctamente los controles de rechazo, cancelación, reprogramación y no presentación en efectivo. Usted sigue siendo responsable de impuestos, facturas, reembolsos y obligaciones legales.\n\n3. Conducta\nUtilice los datos de clientes solo para prestar el servicio reservado. Están prohibidos la discriminación, acoso, spam, manipulación de reseñas y solicitudes de pago fuera de los flujos aprobados. Podemos restringir anuncios o cuentas por uso indebido.';
 }

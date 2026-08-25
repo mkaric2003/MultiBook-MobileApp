@@ -62,6 +62,7 @@ import 'package:aquabook/src/features/shared/localization/cubit/locale_cubit.dar
 import 'package:aquabook/src/features/shared/localization/cubit/locale_state.dart';
 import 'package:aquabook/src/features/shared/localization/presentation/views/language_currency_view.dart';
 import 'package:aquabook/src/features/shared/legal/domain/enums/legal_document_type.dart';
+import 'package:aquabook/src/features/shared/legal/domain/enums/legal_document_audience.dart';
 import 'package:aquabook/src/features/shared/legal/presentation/views/legal_document_view.dart';
 import 'package:aquabook/src/features/customer-side/support_tickets/presentation/views/create_support_ticket_view.dart';
 import 'package:aquabook/src/features/customer-side/support_tickets/presentation/views/support_tickets_view.dart';

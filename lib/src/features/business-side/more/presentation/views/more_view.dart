@@ -114,14 +114,19 @@ class MoreView extends StatelessWidget {
                         MoreMenuItem(
                           label: context.l10n.helpAndSupport,
                           icon: Icons.help_rounded,
+                          onTap: () => context.push(AppRoutes.HELP_CENTER),
                         ),
                         MoreMenuItem(
                           label: context.l10n.termsOfService,
                           icon: Icons.article_outlined,
+                          onTap: () =>
+                              context.push(AppRoutes.PROVIDER_TERMS_OF_SERVICE),
                         ),
                         MoreMenuItem(
                           label: context.l10n.privacyPolicy,
                           icon: Icons.shield_outlined,
+                          onTap: () =>
+                              context.push(AppRoutes.PROVIDER_PRIVACY_POLICY),
                         ),
                       ],
                     ),
