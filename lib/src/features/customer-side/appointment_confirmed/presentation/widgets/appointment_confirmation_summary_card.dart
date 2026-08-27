@@ -100,11 +100,25 @@ class AppointmentConfirmationSummaryCard extends StatelessWidget {
             label: 'DURATION',
             value: '$duration minutes',
           ),
+          if (arguments.appointment.discountAmount > 0) ...[
+            const SizedBox(height: 14),
+            AppointmentConfirmationInfo(
+              icon: Icons.local_offer_outlined,
+              label: context.l10n.promotion.toUpperCase(),
+              value:
+                  '-${context.l10n.formatCurrency(arguments.appointment.discountAmount)}',
+              iconBackground: AppColors.success.withValues(alpha: .2),
+              iconColor: AppColors.success,
+            ),
+          ],
           const SizedBox(height: 14),
           AppointmentConfirmationInfo(
             icon: Icons.attach_money_rounded,
             label: 'TOTAL AMOUNT',
             value: context.l10n.formatCurrency(arguments.appointment.total),
+            originalValue: arguments.appointment.discountAmount > 0
+                ? context.l10n.formatCurrency(arguments.payment.total)
+                : null,
             detail: arguments.appointment.paymentStatus.name == 'pending'
                 ? context.l10n.cashPaymentDue
                 : 'Paid via ${arguments.appointment.paymentMethod}',

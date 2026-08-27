@@ -5,6 +5,8 @@ import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
 import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
 import 'package:aquabook/src/data/models/service_offering_model.dart';
 import 'package:aquabook/src/data/models/service_provider_model.dart';
+import 'package:aquabook/src/data/models/stay_room_model.dart';
+import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'add_business_state.mapper.dart';
@@ -22,6 +24,8 @@ class AddBusinessState with AddBusinessStateMappable {
     this.serviceOfferings = const [],
     this.availabilitySlots = const [],
     this.serviceProviders = const [],
+    this.stayRooms = const [],
+    this.editingBusiness,
     this.latitude,
     this.longitude,
     this.resolvedCity,
@@ -47,6 +51,8 @@ class AddBusinessState with AddBusinessStateMappable {
   final List<ServiceOfferingModel> serviceOfferings;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
   final List<ServiceProviderModel> serviceProviders;
+  final List<StayRoomModel> stayRooms;
+  final BusinessModel? editingBusiness;
   final double? latitude;
   final double? longitude;
   final String? resolvedCity;
@@ -60,4 +66,6 @@ class AddBusinessState with AddBusinessStateMappable {
   final String? errorMessage;
   final String? successMessage;
   final bool hasExistingBusiness;
+
+  bool get isEditing => editingBusiness != null;
 }

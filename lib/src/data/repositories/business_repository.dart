@@ -23,7 +23,7 @@ import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
 import 'package:aquabook/utils/image_utils.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
@@ -1727,6 +1727,385 @@ class BusinessRepository {
       ? _demoServiceCollectionIds(categoryId)
       : selectedCollectionIds;
 
+  Future<void> updateManageableCatalog({
+    required BusinessModel business,
+    required List<StayRoomModel> rooms,
+    required List<ServiceOfferingModel> offerings,
+    required List<ServiceProviderModel> providers,
+  }) async {
+    final userId = _authenticationDataSource.currentUser?.uid;
+    if (userId == null || userId != business.ownerId) {
+      throw const BusinessException('You cannot edit this business.');
+    }
+    final stayDetails = business.stayDetails;
+    final serviceDetails = business.serviceDetails;
+    await _firestoreDataSource.updateDocument(
+      collection: _businessesCollection,
+      documentId: business.id,
+      data: {
+        if (stayDetails != null) ...{
+          'stayDetails.rooms': rooms
+              .map(
+                (room) => {
+                  'id': room.id,
+                  'name': room.name,
+                  'maxGuests': room.maxGuests,
+                  'sizeSquareMeters': room.sizeSquareMeters,
+                  'pricePerNight': room.pricePerNight,
+                  'quantity': room.quantity,
+                  'isActive': room.isActive,
+                },
+              )
+              .toList(),
+          'stayPricePerNight': rooms.isEmpty
+              ? stayDetails.pricePerNight
+              : rooms
+                    .where((room) => room.isActive)
+                    .map((room) => room.pricePerNight)
+                    .fold<int?>(
+                      null,
+                      (min, price) => min == null || price < min ? price : min,
+                    ),
+        },
+        if (serviceDetails != null)
+          'serviceDetails.offerings': offerings
+              .map(
+                (offering) => {
+                  'id': offering.id,
+                  'name': offering.name,
+                  'durationMinutes': offering.durationMinutes,
+                  'price': offering.price,
+                  'description': offering.description,
+                  'isActive': offering.isActive,
+                },
+              )
+              .toList(),
+        if (serviceDetails != null)
+          'serviceDetails.providers': providers
+              .map(
+                (provider) => {
+                  'id': provider.id,
+                  'name': provider.name,
+                  'title': provider.title,
+                  'commissionRate': provider.commissionRate,
+                  'isActive': provider.isActive,
+                  'availabilitySlots': provider.availabilitySlots
+                      .map(
+                        (slot) => {
+                          'id': slot.id,
+                          'weekday': slot.weekday.name,
+                          'startMinutes': slot.startMinutes,
+                          'endMinutes': slot.endMinutes,
+                        },
+                      )
+                      .toList(),
+                },
+              )
+              .toList(),
+        'updatedAt': _firestoreDataSource.serverTimestamp,
+      },
+    );
+  }
+
+  /// Updates every editable business field while keeping its identity, ratings,
+  /// reviews and promotion state intact.
+  Future<BusinessModel> updateBusiness({
+    required BusinessModel business,
+    required String name,
+    required String categoryId,
+    required String city,
+    required String address,
+    required String shortDescription,
+    required double? latitude,
+    required double? longitude,
+    int? pricePerNight,
+    StayInventoryType stayInventoryType = StayInventoryType.singleUnit,
+    List<StayAmenity> amenities = const [],
+    List<StayRoomModel> rooms = const [],
+    List<StayExtraModel> extras = const [],
+    List<String> featuredCollectionIds = const [],
+    List<ServiceOfferingModel> serviceOfferings = const [],
+    List<ServiceAvailabilitySlotModel> availabilitySlots = const [],
+    String? serviceProviderName,
+    List<ServiceProviderModel> serviceProviders = const [],
+    String? logoPath,
+    String? coverPhotoPath,
+    List<String> photoPaths = const [],
+  }) async {
+    final ownerId = _authenticationDataSource.currentUser?.uid;
+    if (ownerId == null || ownerId != business.ownerId) {
+      throw const BusinessException('You cannot edit this business.');
+    }
+    if (latitude == null || longitude == null) {
+      throw const BusinessException(
+        'Please select your business location on the map.',
+      );
+    }
+    if (photoPaths.length > 7) {
+      throw const BusinessException('You can upload up to 7 business photos.');
+    }
+    if (business.type == BusinessType.stays &&
+        stayInventoryType == StayInventoryType.singleUnit &&
+        (pricePerNight == null || pricePerNight <= 0)) {
+      throw const BusinessException('Please enter a valid price per night.');
+    }
+    if (business.type == BusinessType.stays &&
+        stayInventoryType == StayInventoryType.multipleUnits &&
+        rooms.isEmpty) {
+      throw const BusinessException('Please add at least one stay unit.');
+    }
+    if (business.type == BusinessType.services && serviceOfferings.isEmpty) {
+      throw const BusinessException('Please add at least one service.');
+    }
+    if (business.type == BusinessType.services && serviceProviders.isEmpty) {
+      throw const BusinessException(
+        'Please add at least one service provider.',
+      );
+    }
+    if (business.type == BusinessType.services &&
+        serviceProviders.any(
+          (provider) => provider.availabilitySlots.isEmpty,
+        )) {
+      throw const BusinessException(
+        'Please add availability for every service provider.',
+      );
+    }
+
+    final uploadedStoragePaths = <String>[];
+    try {
+      final logoUrl = await _uploadImage(
+        ownerId: ownerId,
+        businessId: business.id,
+        imagePath: logoPath,
+        fileName: 'logo',
+        uploadedStoragePaths: uploadedStoragePaths,
+      );
+      final coverPhotoUrl = await _uploadImage(
+        ownerId: ownerId,
+        businessId: business.id,
+        imagePath: coverPhotoPath,
+        fileName: 'cover_photo',
+        uploadedStoragePaths: uploadedStoragePaths,
+      );
+      final photoUrls = <String>[];
+      final uploadBatch = DateTime.now().microsecondsSinceEpoch;
+      for (var index = 0; index < photoPaths.length; index++) {
+        final imagePath = photoPaths[index];
+        final imageUrl = await _uploadImage(
+          ownerId: ownerId,
+          businessId: business.id,
+          imagePath: imagePath,
+          fileName: _isRemoteImageUrl(imagePath)
+              ? 'photo_$index'
+              : 'photo_${uploadBatch}_$index',
+          uploadedStoragePaths: uploadedStoragePaths,
+        );
+        if (imageUrl != null) photoUrls.add(imageUrl);
+      }
+
+      final stayPrice = business.type == BusinessType.stays
+          ? stayInventoryType == StayInventoryType.multipleUnits
+                ? rooms
+                      .map((room) => room.pricePerNight)
+                      .reduce(
+                        (first, second) => first < second ? first : second,
+                      )
+                : pricePerNight
+          : null;
+      final updated = BusinessModel(
+        id: business.id,
+        ownerId: business.ownerId,
+        type: business.type,
+        name: name.trim(),
+        categoryId: categoryId,
+        location: BusinessLocationModel(
+          city: city.trim(),
+          address: address.trim(),
+          latitude: latitude,
+          longitude: longitude,
+        ),
+        currency: business.currency,
+        shortDescription: shortDescription.trim().isEmpty
+            ? null
+            : shortDescription.trim(),
+        logoUrl: logoUrl,
+        coverPhotoUrl: coverPhotoUrl,
+        photoUrls: photoUrls,
+        featuredCollectionIds: _resolveFeaturedCollectionIds(
+          type: business.type,
+          categoryId: categoryId,
+          selectedCollectionIds: featuredCollectionIds,
+        ),
+        isActive: business.isActive,
+        isPromotionActive: business.isPromotionActive,
+        averageRating: business.averageRating,
+        reviewCount: business.reviewCount,
+        createdAt: business.createdAt,
+        stayDetails: business.type == BusinessType.stays
+            ? StayDetailsModel(
+                pricePerNight: stayPrice,
+                inventoryType: stayInventoryType,
+                amenities: amenities,
+                rooms: rooms,
+                extras: extras,
+              )
+            : null,
+        serviceDetails: business.type == BusinessType.services
+            ? ServiceDetailsModel(
+                offerings: serviceOfferings,
+                availabilitySlots: availabilitySlots,
+                provider: serviceProviders.first,
+                providers: serviceProviders,
+              )
+            : null,
+      );
+
+      await _firestoreDataSource.updateDocument(
+        collection: _businessesCollection,
+        documentId: business.id,
+        data: _editableBusinessDocumentData(updated),
+      );
+      await _deleteRemovedBusinessPhotos(business.photoUrls, photoUrls);
+      log('Business ${business.id} updated.', name: 'BusinessRepository');
+      return updated;
+    } on FirebaseException catch (error, stackTrace) {
+      log(
+        'Firebase business update failed: ${error.code}',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      await _deleteUploadedImages(uploadedStoragePaths);
+      throw const BusinessException(
+        'We could not update this business. Please try again.',
+      );
+    } on BusinessException {
+      rethrow;
+    } catch (error, stackTrace) {
+      log(
+        'Unexpected business update failure.',
+        name: 'BusinessRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      await _deleteUploadedImages(uploadedStoragePaths);
+      throw const BusinessException(
+        'We could not update this business. Please try again.',
+      );
+    }
+  }
+
+  Map<String, dynamic> _editableBusinessDocumentData(BusinessModel business) =>
+      {
+        'name': business.name,
+        'nameLowercase': _normalizeSearchValue(business.name),
+        'categoryId': business.categoryId,
+        'cityLowercase': _normalizeSearchValue(business.location.city),
+        'location': {
+          'city': business.location.city,
+          'cityLowercase': _normalizeSearchValue(business.location.city),
+          'address': business.location.address,
+          'latitude': business.location.latitude,
+          'longitude': business.location.longitude,
+        },
+        'shortDescription': business.shortDescription,
+        'logoUrl': business.logoUrl,
+        'coverPhotoUrl': business.coverPhotoUrl,
+        'photoUrls': business.photoUrls,
+        'featuredCollectionIds': business.featuredCollectionIds,
+        'stayPricePerNight': business.stayDetails?.pricePerNight,
+        'maxGuestCapacity': business.stayDetails == null
+            ? null
+            : business.stayDetails!.rooms.isEmpty
+            ? 99
+            : business.stayDetails!.rooms
+                  .map((room) => room.maxGuests)
+                  .reduce((first, second) => first > second ? first : second),
+        'stayDetails': business.stayDetails == null
+            ? null
+            : _stayDetailsData(business.stayDetails!),
+        'serviceDetails': business.serviceDetails == null
+            ? null
+            : _serviceDetailsData(business.serviceDetails!),
+        'updatedAt': _firestoreDataSource.serverTimestamp,
+      };
+
+  Map<String, dynamic> _stayDetailsData(StayDetailsModel details) => {
+    'pricePerNight': details.pricePerNight,
+    'inventoryType': details.inventoryType.name,
+    'amenities': details.amenities.map((amenity) => amenity.name).toList(),
+    'rooms': details.rooms.map(_stayRoomData).toList(),
+    'extras': details.extras
+        .map(
+          (extra) => {
+            'type': extra.type.name,
+            'price': extra.price,
+            'isPerNight': extra.isPerNight,
+            'isPerHour': extra.isPerHour,
+          },
+        )
+        .toList(),
+  };
+
+  Map<String, dynamic> _stayRoomData(StayRoomModel room) => {
+    'id': room.id,
+    'name': room.name,
+    'maxGuests': room.maxGuests,
+    'sizeSquareMeters': room.sizeSquareMeters,
+    'pricePerNight': room.pricePerNight,
+    'quantity': room.quantity,
+    'isActive': room.isActive,
+  };
+
+  Map<String, dynamic> _serviceDetailsData(ServiceDetailsModel details) => {
+    'offerings': details.offerings
+        .map(
+          (offering) => {
+            'id': offering.id,
+            'name': offering.name,
+            'durationMinutes': offering.durationMinutes,
+            'price': offering.price,
+            'description': offering.description,
+            'isActive': offering.isActive,
+          },
+        )
+        .toList(),
+    'availabilitySlots': details.availabilitySlots
+        .map(
+          (slot) => {
+            'id': slot.id,
+            'weekday': slot.weekday.name,
+            'startMinutes': slot.startMinutes,
+            'endMinutes': slot.endMinutes,
+          },
+        )
+        .toList(),
+    'provider': details.provider == null
+        ? null
+        : {'name': details.provider!.name, 'title': details.provider!.title},
+    'providers': details.providers
+        .map(
+          (provider) => {
+            'id': provider.id,
+            'name': provider.name,
+            'title': provider.title,
+            'commissionRate': provider.commissionRate,
+            'isActive': provider.isActive,
+            'availabilitySlots': provider.availabilitySlots
+                .map(
+                  (slot) => {
+                    'id': slot.id,
+                    'weekday': slot.weekday.name,
+                    'startMinutes': slot.startMinutes,
+                    'endMinutes': slot.endMinutes,
+                  },
+                )
+                .toList(),
+          },
+        )
+        .toList(),
+  };
+
   Future<void> deleteBusiness(BusinessModel business) async {
     final ownerId = _authenticationDataSource.currentUser?.uid;
     if (ownerId == null || business.ownerId != ownerId) {
@@ -1957,6 +2336,7 @@ class BusinessRepository {
                           'sizeSquareMeters': room.sizeSquareMeters,
                           'pricePerNight': room.pricePerNight,
                           'quantity': room.quantity,
+                          'isActive': room.isActive,
                         },
                       )
                       .toList(),
@@ -1982,6 +2362,7 @@ class BusinessRepository {
                           'durationMinutes': offering.durationMinutes,
                           'price': offering.price,
                           'description': offering.description,
+                          'isActive': offering.isActive,
                         },
                       )
                       .toList(),
@@ -2009,6 +2390,8 @@ class BusinessRepository {
                           'id': provider.id,
                           'name': provider.name,
                           'title': provider.title,
+                          'commissionRate': provider.commissionRate,
+                          'isActive': provider.isActive,
                           'availabilitySlots': provider.availabilitySlots
                               .map(
                                 (slot) => {
@@ -2128,6 +2511,7 @@ class BusinessRepository {
                       pricePerNight:
                           (room['pricePerNight'] as num?)?.toInt() ?? 0,
                       quantity: (room['quantity'] as num?)?.toInt() ?? 1,
+                      isActive: room['isActive'] as bool? ?? true,
                     ),
                   )
                   .toList(),
@@ -2161,6 +2545,7 @@ class BusinessRepository {
                           (offering['durationMinutes'] as num?)?.toInt() ?? 0,
                       price: (offering['price'] as num?)?.toInt() ?? 0,
                       description: offering['description'] as String?,
+                      isActive: offering['isActive'] as bool? ?? true,
                     ),
                   )
                   .toList(),
@@ -2202,6 +2587,10 @@ class BusinessRepository {
                       id: provider['id'] as String? ?? '',
                       name: provider['name'] as String? ?? '',
                       title: provider['title'] as String?,
+                      commissionRate:
+                          (provider['commissionRate'] as num?)?.toDouble() ??
+                          100,
+                      isActive: provider['isActive'] as bool? ?? true,
                       availabilitySlots:
                           (provider['availabilitySlots'] as List? ?? const [])
                               .whereType<Map>()
@@ -2228,6 +2617,7 @@ class BusinessRepository {
                   .toList(),
             )
           : null,
+      isPromotionActive: data['isPromotionActive'] as bool? ?? false,
     );
   }
 
@@ -2443,6 +2833,9 @@ class BusinessRepository {
     if (imagePath == null) {
       return null;
     }
+    if (_isRemoteImageUrl(imagePath)) {
+      return imagePath;
+    }
 
     final compressedImageBytes = await compressImage(XFile(imagePath));
     final storagePath = 'businesses/$ownerId/$businessId/$fileName.webp';
@@ -2453,6 +2846,30 @@ class BusinessRepository {
     );
     uploadedStoragePaths.add(storagePath);
     return imageUrl;
+  }
+
+  bool _isRemoteImageUrl(String value) {
+    final uri = Uri.tryParse(value);
+    return uri != null && (uri.scheme == 'http' || uri.scheme == 'https');
+  }
+
+  Future<void> _deleteRemovedBusinessPhotos(
+    List<String> previousUrls,
+    List<String> currentUrls,
+  ) async {
+    for (final url in previousUrls.where((url) => !currentUrls.contains(url))) {
+      if (!_isRemoteImageUrl(url) || !url.contains('firebasestorage')) continue;
+      try {
+        await _storageDataSource.deleteFileByUrl(downloadUrl: url);
+      } catch (error, stackTrace) {
+        log(
+          'Could not remove an obsolete business photo.',
+          name: 'BusinessRepository',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      }
+    }
   }
 
   Future<void> _deleteUploadedImages(List<String> storagePaths) async {

@@ -2,6 +2,8 @@ import 'package:aquabook/l10n/l10n.dart';
 import 'package:aquabook/src/core/theme/app_colors.dart';
 import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
+import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
 import 'package:aquabook/src/features/customer-side/review_stay/presentation/widgets/review_price_row.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +13,12 @@ class ReviewPriceBreakdown extends StatelessWidget {
     required this.state,
     required this.pricePerNight,
     required this.extras,
+    this.promotion,
   });
   final BookingDetailsState state;
   final int pricePerNight;
   final List<StayExtraModel> extras;
+  final PromotionModel? promotion;
   @override
   Widget build(BuildContext context) {
     final room = state.nightCount * pricePerNight;
@@ -23,8 +27,14 @@ class ReviewPriceBreakdown extends StatelessWidget {
       (sum, extra) =>
           sum + extra.price * (extra.isPerNight ? state.nightCount : 1),
     );
-    final taxes = ((room + extrasTotal) * .08).round();
-    final total = room + extrasTotal + taxes;
+    final discount = PromotionPriceCalculator.discount(
+      subtotal: room + extrasTotal,
+      promotion: promotion,
+      nights: state.nightCount,
+    );
+    final discountedSubtotal = room + extrasTotal - discount;
+    final taxes = (discountedSubtotal * .08).round();
+    final total = discountedSubtotal + taxes;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -49,6 +59,13 @@ class ReviewPriceBreakdown extends StatelessWidget {
             ReviewPriceRow(
               label: 'Extras',
               value: context.l10n.formatCurrency(extrasTotal),
+            ),
+          ],
+          if (discount > 0) ...[
+            const SizedBox(height: 12),
+            ReviewPriceRow(
+              label: context.l10n.promotion,
+              value: '-${context.l10n.formatCurrency(discount)}',
             ),
           ],
           const SizedBox(height: 12),

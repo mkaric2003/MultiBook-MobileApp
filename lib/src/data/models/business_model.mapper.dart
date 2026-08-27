@@ -16,6 +16,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       MapperContainer.globals.use(_instance = BusinessModelMapper._());
       BusinessTypeMapper.ensureInitialized();
       BusinessLocationModelMapper.ensureInitialized();
+      CurrencyCodeMapper.ensureInitialized();
       StayDetailsModelMapper.ensureInitialized();
       ServiceDetailsModelMapper.ensureInitialized();
     }
@@ -121,6 +122,13 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       v.serviceDetails;
   static const Field<BusinessModel, ServiceDetailsModel> _f$serviceDetails =
       Field('serviceDetails', _$serviceDetails, opt: true);
+  static bool _$isPromotionActive(BusinessModel v) => v.isPromotionActive;
+  static const Field<BusinessModel, bool> _f$isPromotionActive = Field(
+    'isPromotionActive',
+    _$isPromotionActive,
+    opt: true,
+    def: false,
+  );
   static DateTime? _$createdAt(BusinessModel v) => v.createdAt;
   static const Field<BusinessModel, DateTime> _f$createdAt = Field(
     'createdAt',
@@ -153,6 +161,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
     #reviewCount: _f$reviewCount,
     #stayDetails: _f$stayDetails,
     #serviceDetails: _f$serviceDetails,
+    #isPromotionActive: _f$isPromotionActive,
     #createdAt: _f$createdAt,
     #updatedAt: _f$updatedAt,
   };
@@ -176,6 +185,7 @@ class BusinessModelMapper extends ClassMapperBase<BusinessModel> {
       reviewCount: data.dec(_f$reviewCount),
       stayDetails: data.dec(_f$stayDetails),
       serviceDetails: data.dec(_f$serviceDetails),
+      isPromotionActive: data.dec(_f$isPromotionActive),
       createdAt: data.dec(_f$createdAt),
       updatedAt: data.dec(_f$updatedAt),
     );
@@ -274,6 +284,7 @@ abstract class BusinessModelCopyWith<$R, $In extends BusinessModel, $Out>
     int? reviewCount,
     StayDetailsModel? stayDetails,
     ServiceDetailsModel? serviceDetails,
+    bool? isPromotionActive,
     DateTime? createdAt,
     DateTime? updatedAt,
   });
@@ -336,6 +347,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     int? reviewCount,
     Object? stayDetails = $none,
     Object? serviceDetails = $none,
+    bool? isPromotionActive,
     Object? createdAt = $none,
     Object? updatedAt = $none,
   }) => $apply(
@@ -358,6 +370,7 @@ class _BusinessModelCopyWithImpl<$R, $Out>
       if (reviewCount != null) #reviewCount: reviewCount,
       if (stayDetails != $none) #stayDetails: stayDetails,
       if (serviceDetails != $none) #serviceDetails: serviceDetails,
+      if (isPromotionActive != null) #isPromotionActive: isPromotionActive,
       if (createdAt != $none) #createdAt: createdAt,
       if (updatedAt != $none) #updatedAt: updatedAt,
     }),
@@ -384,6 +397,10 @@ class _BusinessModelCopyWithImpl<$R, $Out>
     reviewCount: data.get(#reviewCount, or: $value.reviewCount),
     stayDetails: data.get(#stayDetails, or: $value.stayDetails),
     serviceDetails: data.get(#serviceDetails, or: $value.serviceDetails),
+    isPromotionActive: data.get(
+      #isPromotionActive,
+      or: $value.isPromotionActive,
+    ),
     createdAt: data.get(#createdAt, or: $value.createdAt),
     updatedAt: data.get(#updatedAt, or: $value.updatedAt),
   );

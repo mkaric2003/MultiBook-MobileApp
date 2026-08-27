@@ -7,9 +7,13 @@ class BookingConfirmationDetails extends StatelessWidget {
     super.key,
     required this.code,
     required this.total,
+    this.discountAmount = 0,
+    this.originalTotal = 0,
   });
   final String code;
   final int total;
+  final int discountAmount;
+  final int originalTotal;
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(18),
@@ -25,6 +29,22 @@ class BookingConfirmationDetails extends StatelessWidget {
           context.l10n.confirmationDetails,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
         ),
+        if (discountAmount > 0) ...[
+          const SizedBox(height: 18),
+          Text(
+            context.l10n.promotion,
+            style: const TextStyle(color: AppColors.muted),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            '-${context.l10n.formatCurrency(discountAmount)}',
+            style: const TextStyle(
+              color: AppColors.success,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
         const SizedBox(height: 18),
         Text(
           context.l10n.confirmationCode,
@@ -60,13 +80,28 @@ class BookingConfirmationDetails extends StatelessWidget {
           style: const TextStyle(color: AppColors.muted),
         ),
         const SizedBox(height: 5),
-        Text(
-          context.l10n.formatCurrency(total),
-          style: const TextStyle(
-            color: Color(0xFF10B981),
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-          ),
+        Row(
+          children: [
+            if (discountAmount > 0) ...[
+              Text(
+                context.l10n.formatCurrency(originalTotal),
+                style: const TextStyle(
+                  color: AppColors.muted,
+                  decoration: TextDecoration.lineThrough,
+                  decorationColor: AppColors.muted,
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
+            Text(
+              context.l10n.formatCurrency(total),
+              style: const TextStyle(
+                color: Color(0xFF10B981),
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
         ),
       ],
     ),

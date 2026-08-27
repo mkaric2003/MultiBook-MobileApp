@@ -47,6 +47,13 @@ class StayRoomModelMapper extends ClassMapperBase<StayRoomModel> {
     opt: true,
     def: 1,
   );
+  static bool _$isActive(StayRoomModel v) => v.isActive;
+  static const Field<StayRoomModel, bool> _f$isActive = Field(
+    'isActive',
+    _$isActive,
+    opt: true,
+    def: true,
+  );
 
   @override
   final MappableFields<StayRoomModel> fields = const {
@@ -56,6 +63,7 @@ class StayRoomModelMapper extends ClassMapperBase<StayRoomModel> {
     #sizeSquareMeters: _f$sizeSquareMeters,
     #pricePerNight: _f$pricePerNight,
     #quantity: _f$quantity,
+    #isActive: _f$isActive,
   };
 
   static StayRoomModel _instantiate(DecodingData data) {
@@ -66,6 +74,7 @@ class StayRoomModelMapper extends ClassMapperBase<StayRoomModel> {
       sizeSquareMeters: data.dec(_f$sizeSquareMeters),
       pricePerNight: data.dec(_f$pricePerNight),
       quantity: data.dec(_f$quantity),
+      isActive: data.dec(_f$isActive),
     );
   }
 
@@ -138,6 +147,7 @@ abstract class StayRoomModelCopyWith<$R, $In extends StayRoomModel, $Out>
     int? sizeSquareMeters,
     int? pricePerNight,
     int? quantity,
+    bool? isActive,
   });
   StayRoomModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -158,6 +168,7 @@ class _StayRoomModelCopyWithImpl<$R, $Out>
     int? sizeSquareMeters,
     int? pricePerNight,
     int? quantity,
+    bool? isActive,
   }) => $apply(
     FieldCopyWithData({
       if (id != null) #id: id,
@@ -166,6 +177,7 @@ class _StayRoomModelCopyWithImpl<$R, $Out>
       if (sizeSquareMeters != null) #sizeSquareMeters: sizeSquareMeters,
       if (pricePerNight != null) #pricePerNight: pricePerNight,
       if (quantity != null) #quantity: quantity,
+      if (isActive != null) #isActive: isActive,
     }),
   );
   @override
@@ -176,6 +188,7 @@ class _StayRoomModelCopyWithImpl<$R, $Out>
     sizeSquareMeters: data.get(#sizeSquareMeters, or: $value.sizeSquareMeters),
     pricePerNight: data.get(#pricePerNight, or: $value.pricePerNight),
     quantity: data.get(#quantity, or: $value.quantity),
+    isActive: data.get(#isActive, or: $value.isActive),
   );
 
   @override

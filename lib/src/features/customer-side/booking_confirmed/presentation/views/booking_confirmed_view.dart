@@ -36,6 +36,8 @@ class BookingConfirmedView extends StatelessWidget {
                       BookingConfirmationDetails(
                         code: arguments.booking.confirmationCode,
                         total: total,
+                        discountAmount: arguments.booking.discountAmount,
+                        originalTotal: arguments.booking.originalTotal,
                       ),
                       const SizedBox(height: 18),
                       Container(

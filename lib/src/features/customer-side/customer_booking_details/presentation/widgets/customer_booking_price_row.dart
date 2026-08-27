@@ -8,10 +8,12 @@ class CustomerBookingPriceRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.highlighted = false,
+    this.valueColor,
   });
   final String label;
   final int value;
   final bool highlighted;
+  final Color? valueColor;
   @override
   Widget build(BuildContext context) => Row(
     children: [
@@ -28,7 +30,7 @@ class CustomerBookingPriceRow extends StatelessWidget {
       Text(
         context.l10n.formatCurrency(value),
         style: TextStyle(
-          color: highlighted ? AppColors.primary : Colors.white,
+            color: valueColor ?? (highlighted ? AppColors.primary : Colors.white),
           fontSize: 17,
           fontWeight: FontWeight.w800,
         ),

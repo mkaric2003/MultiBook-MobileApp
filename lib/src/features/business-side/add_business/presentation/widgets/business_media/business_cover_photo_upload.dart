@@ -33,7 +33,11 @@ class BusinessCoverPhotoUpload extends StatelessWidget {
           fallback: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.image_outlined, color: AppColors.iconMuted, size: 28),
+              const Icon(
+                Icons.image_outlined,
+                color: AppColors.iconMuted,
+                size: 28,
+              ),
               const SizedBox(height: 9),
               Text(
                 context.l10n.uploadCoverPhoto,

@@ -21,6 +21,8 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       ServiceOfferingModelMapper.ensureInitialized();
       ServiceAvailabilitySlotModelMapper.ensureInitialized();
       ServiceProviderModelMapper.ensureInitialized();
+      StayRoomModelMapper.ensureInitialized();
+      BusinessModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -102,6 +104,13 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     opt: true,
     def: const [],
   );
+  static List<StayRoomModel> _$stayRooms(AddBusinessState v) => v.stayRooms;
+  static const Field<AddBusinessState, List<StayRoomModel>> _f$stayRooms =
+      Field('stayRooms', _$stayRooms, opt: true, def: const []);
+  static BusinessModel? _$editingBusiness(AddBusinessState v) =>
+      v.editingBusiness;
+  static const Field<AddBusinessState, BusinessModel> _f$editingBusiness =
+      Field('editingBusiness', _$editingBusiness, opt: true);
   static double? _$latitude(AddBusinessState v) => v.latitude;
   static const Field<AddBusinessState, double> _f$latitude = Field(
     'latitude',
@@ -202,6 +211,8 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #serviceOfferings: _f$serviceOfferings,
     #availabilitySlots: _f$availabilitySlots,
     #serviceProviders: _f$serviceProviders,
+    #stayRooms: _f$stayRooms,
+    #editingBusiness: _f$editingBusiness,
     #latitude: _f$latitude,
     #longitude: _f$longitude,
     #resolvedCity: _f$resolvedCity,
@@ -229,6 +240,8 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       serviceOfferings: data.dec(_f$serviceOfferings),
       availabilitySlots: data.dec(_f$availabilitySlots),
       serviceProviders: data.dec(_f$serviceProviders),
+      stayRooms: data.dec(_f$stayRooms),
+      editingBusiness: data.dec(_f$editingBusiness),
       latitude: data.dec(_f$latitude),
       longitude: data.dec(_f$longitude),
       resolvedCity: data.dec(_f$resolvedCity),
@@ -340,6 +353,13 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     ServiceProviderModelCopyWith<$R, ServiceProviderModel, ServiceProviderModel>
   >
   get serviceProviders;
+  ListCopyWith<
+    $R,
+    StayRoomModel,
+    StayRoomModelCopyWith<$R, StayRoomModel, StayRoomModel>
+  >
+  get stayRooms;
+  BusinessModelCopyWith<$R, BusinessModel, BusinessModel>? get editingBusiness;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
   get businessPhotoPaths;
   $R call({
@@ -353,6 +373,8 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     List<ServiceOfferingModel>? serviceOfferings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
     List<ServiceProviderModel>? serviceProviders,
+    List<StayRoomModel>? stayRooms,
+    BusinessModel? editingBusiness,
     double? latitude,
     double? longitude,
     String? resolvedCity,
@@ -450,6 +472,21 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     (v) => call(serviceProviders: v),
   );
   @override
+  ListCopyWith<
+    $R,
+    StayRoomModel,
+    StayRoomModelCopyWith<$R, StayRoomModel, StayRoomModel>
+  >
+  get stayRooms => ListCopyWith(
+    $value.stayRooms,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(stayRooms: v),
+  );
+  @override
+  BusinessModelCopyWith<$R, BusinessModel, BusinessModel>?
+  get editingBusiness =>
+      $value.editingBusiness?.copyWith.$chain((v) => call(editingBusiness: v));
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
   get businessPhotoPaths => ListCopyWith(
     $value.businessPhotoPaths,
@@ -468,6 +505,8 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     List<ServiceOfferingModel>? serviceOfferings,
     List<ServiceAvailabilitySlotModel>? availabilitySlots,
     List<ServiceProviderModel>? serviceProviders,
+    List<StayRoomModel>? stayRooms,
+    Object? editingBusiness = $none,
     Object? latitude = $none,
     Object? longitude = $none,
     Object? resolvedCity = $none,
@@ -494,6 +533,8 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       if (serviceOfferings != null) #serviceOfferings: serviceOfferings,
       if (availabilitySlots != null) #availabilitySlots: availabilitySlots,
       if (serviceProviders != null) #serviceProviders: serviceProviders,
+      if (stayRooms != null) #stayRooms: stayRooms,
+      if (editingBusiness != $none) #editingBusiness: editingBusiness,
       if (latitude != $none) #latitude: latitude,
       if (longitude != $none) #longitude: longitude,
       if (resolvedCity != $none) #resolvedCity: resolvedCity,
@@ -535,6 +576,8 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       or: $value.availabilitySlots,
     ),
     serviceProviders: data.get(#serviceProviders, or: $value.serviceProviders),
+    stayRooms: data.get(#stayRooms, or: $value.stayRooms),
+    editingBusiness: data.get(#editingBusiness, or: $value.editingBusiness),
     latitude: data.get(#latitude, or: $value.latitude),
     longitude: data.get(#longitude, or: $value.longitude),
     resolvedCity: data.get(#resolvedCity, or: $value.resolvedCity),

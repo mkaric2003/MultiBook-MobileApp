@@ -17,6 +17,7 @@ class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
   Future<void> confirm({
     required AppointmentPaymentArguments arguments,
     required AppointmentPaymentRequest request,
+    String? promoCode,
   }) async {
     if (state.isProcessing) return;
     emit(const AppointmentPaymentState(isProcessing: true));
@@ -24,6 +25,7 @@ class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
       final appointment = await _repository.createAppointment(
         arguments: arguments,
         request: request,
+        promoCode: promoCode,
       );
       await _draftRepository.deleteDraft();
       emit(AppointmentPaymentState(appointment: appointment));

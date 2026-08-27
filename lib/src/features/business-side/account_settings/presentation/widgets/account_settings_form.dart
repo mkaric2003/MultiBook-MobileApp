@@ -47,7 +47,7 @@ class AccountSettingsForm extends HookWidget {
           hintText: context.l10n.firstName,
           onChanged: (_) => notifyChanges(),
         ),
-        const SizedBox(height: 27),
+        const SizedBox(height: 20),
         Text(context.l10n.currency, style: _labelStyle),
         const SizedBox(height: 10),
         DropdownButtonFormField<CurrencyCode>(
@@ -67,7 +67,7 @@ class AccountSettingsForm extends HookWidget {
             notifyChanges();
           },
         ),
-        const SizedBox(height: 27),
+        const SizedBox(height: 20),
         Text(context.l10n.lastNameRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
@@ -75,7 +75,7 @@ class AccountSettingsForm extends HookWidget {
           hintText: context.l10n.lastName,
           onChanged: (_) => notifyChanges(),
         ),
-        const SizedBox(height: 27),
+        const SizedBox(height: 20),
         Text(context.l10n.emailAddressRequired, style: _labelStyle),
         const SizedBox(height: 10),
         CustomTextField(
@@ -98,7 +98,7 @@ class AccountSettingsForm extends HookWidget {
 
   static const _labelStyle = TextStyle(
     color: Colors.white,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: FontWeight.w600,
   );
 }

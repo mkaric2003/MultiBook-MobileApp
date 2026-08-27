@@ -15,6 +15,7 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = BookingModelMapper._());
       StayExtraModelMapper.ensureInitialized();
+      CurrencyCodeMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -100,6 +101,13 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     'roomSubtotal',
     _$roomSubtotal,
   );
+  static int _$discountAmount(BookingModel v) => v.discountAmount;
+  static const Field<BookingModel, int> _f$discountAmount = Field(
+    'discountAmount',
+    _$discountAmount,
+    opt: true,
+    def: 0,
+  );
   static int _$cleaningFee(BookingModel v) => v.cleaningFee;
   static const Field<BookingModel, int> _f$cleaningFee = Field(
     'cleaningFee',
@@ -114,6 +122,13 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
   static const Field<BookingModel, int> _f$taxes = Field('taxes', _$taxes);
   static int _$total(BookingModel v) => v.total;
   static const Field<BookingModel, int> _f$total = Field('total', _$total);
+  static int _$originalTotal(BookingModel v) => v.originalTotal;
+  static const Field<BookingModel, int> _f$originalTotal = Field(
+    'originalTotal',
+    _$originalTotal,
+    opt: true,
+    def: 0,
+  );
   static BookingStatus _$status(BookingModel v) => v.status;
   static const Field<BookingModel, BookingStatus> _f$status = Field(
     'status',
@@ -185,10 +200,12 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     #pricePerNight: _f$pricePerNight,
     #selectedExtras: _f$selectedExtras,
     #roomSubtotal: _f$roomSubtotal,
+    #discountAmount: _f$discountAmount,
     #cleaningFee: _f$cleaningFee,
     #serviceFee: _f$serviceFee,
     #taxes: _f$taxes,
     #total: _f$total,
+    #originalTotal: _f$originalTotal,
     #status: _f$status,
     #paymentStatus: _f$paymentStatus,
     #paymentMethod: _f$paymentMethod,
@@ -219,10 +236,12 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
       pricePerNight: data.dec(_f$pricePerNight),
       selectedExtras: data.dec(_f$selectedExtras),
       roomSubtotal: data.dec(_f$roomSubtotal),
+      discountAmount: data.dec(_f$discountAmount),
       cleaningFee: data.dec(_f$cleaningFee),
       serviceFee: data.dec(_f$serviceFee),
       taxes: data.dec(_f$taxes),
       total: data.dec(_f$total),
+      originalTotal: data.dec(_f$originalTotal),
       status: data.dec(_f$status),
       paymentStatus: data.dec(_f$paymentStatus),
       paymentMethod: data.dec(_f$paymentMethod),
@@ -321,10 +340,12 @@ abstract class BookingModelCopyWith<$R, $In extends BookingModel, $Out>
     int? pricePerNight,
     List<StayExtraModel>? selectedExtras,
     int? roomSubtotal,
+    int? discountAmount,
     int? cleaningFee,
     int? serviceFee,
     int? taxes,
     int? total,
+    int? originalTotal,
     BookingStatus? status,
     PaymentStatus? paymentStatus,
     String? paymentMethod,
@@ -376,10 +397,12 @@ class _BookingModelCopyWithImpl<$R, $Out>
     int? pricePerNight,
     List<StayExtraModel>? selectedExtras,
     int? roomSubtotal,
+    int? discountAmount,
     int? cleaningFee,
     int? serviceFee,
     int? taxes,
     int? total,
+    int? originalTotal,
     BookingStatus? status,
     PaymentStatus? paymentStatus,
     String? paymentMethod,
@@ -408,10 +431,12 @@ class _BookingModelCopyWithImpl<$R, $Out>
       if (pricePerNight != null) #pricePerNight: pricePerNight,
       if (selectedExtras != null) #selectedExtras: selectedExtras,
       if (roomSubtotal != null) #roomSubtotal: roomSubtotal,
+      if (discountAmount != null) #discountAmount: discountAmount,
       if (cleaningFee != null) #cleaningFee: cleaningFee,
       if (serviceFee != null) #serviceFee: serviceFee,
       if (taxes != null) #taxes: taxes,
       if (total != null) #total: total,
+      if (originalTotal != null) #originalTotal: originalTotal,
       if (status != null) #status: status,
       if (paymentStatus != null) #paymentStatus: paymentStatus,
       if (paymentMethod != null) #paymentMethod: paymentMethod,
@@ -442,10 +467,12 @@ class _BookingModelCopyWithImpl<$R, $Out>
     pricePerNight: data.get(#pricePerNight, or: $value.pricePerNight),
     selectedExtras: data.get(#selectedExtras, or: $value.selectedExtras),
     roomSubtotal: data.get(#roomSubtotal, or: $value.roomSubtotal),
+    discountAmount: data.get(#discountAmount, or: $value.discountAmount),
     cleaningFee: data.get(#cleaningFee, or: $value.cleaningFee),
     serviceFee: data.get(#serviceFee, or: $value.serviceFee),
     taxes: data.get(#taxes, or: $value.taxes),
     total: data.get(#total, or: $value.total),
+    originalTotal: data.get(#originalTotal, or: $value.originalTotal),
     status: data.get(#status, or: $value.status),
     paymentStatus: data.get(#paymentStatus, or: $value.paymentStatus),
     paymentMethod: data.get(#paymentMethod, or: $value.paymentMethod),

@@ -21,7 +21,7 @@ class ServiceDetailsModel with ServiceDetailsModelMappable {
   final List<ServiceProviderModel> providers;
 
   List<ServiceProviderModel> get availableProviders => providers.isNotEmpty
-      ? providers
+      ? providers.where((provider) => provider.isActive).toList()
       : provider == null
       ? const []
       : [
@@ -30,6 +30,7 @@ class ServiceDetailsModel with ServiceDetailsModelMappable {
             name: provider!.name,
             title: provider!.title,
             availabilitySlots: availabilitySlots,
+            isActive: true,
           ),
         ];
 }

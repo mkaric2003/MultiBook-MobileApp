@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
+import 'package:aquabook/src/core/session/session_stream_registry.dart';
 import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
 import 'package:aquabook/src/data/enums/user_type.dart';
 import 'package:aquabook/src/data/repositories/notification_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 class AuthenticationException implements Exception {
@@ -24,13 +27,48 @@ class AuthenticationRepository {
     this._authenticationDataSource,
     this._firestoreDataSource,
     this._notificationRepository,
-  );
+    this._sessionStreamRegistry,
+  ) {
+    _authStateNotifier = ValueNotifier<User?>(
+      _authenticationDataSource.currentUser,
+    );
+    _authStateSubscription = _authenticationDataSource.authStateChanges.listen(
+      (user) {
+        if (user != null) {
+          _sessionStreamRegistry.beginSession();
+        }
+        _authStateNotifier.value = user;
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        log(
+          'Firebase Auth state stream failed.',
+          name: 'AuthenticationRepository',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      },
+    );
+  }
 
   final AuthenticationDataSource _authenticationDataSource;
   final FirestoreDataSource _firestoreDataSource;
   final NotificationRepository _notificationRepository;
+  final SessionStreamRegistry _sessionStreamRegistry;
+  late final ValueNotifier<User?> _authStateNotifier;
+  late final StreamSubscription<User?> _authStateSubscription;
 
   bool get isSignedIn => _authenticationDataSource.currentUser != null;
+
+  /// A router-safe auth notifier. This causes protected routes to be disposed
+  /// as soon as Firebase reports a sign-out, cancelling their Firestore
+  /// subscriptions instead of briefly rendering the previous dashboard.
+  ValueListenable<User?> get authStateListenable => _authStateNotifier;
+
+  @disposeMethod
+  Future<void> dispose() async {
+    await _authStateSubscription.cancel();
+    _authStateNotifier.dispose();
+  }
 
   Future<void> signUp({
     required String firstName,
@@ -260,12 +298,53 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    if (currentPassword.isEmpty) {
+      throw const AuthenticationException('Enter your current password.');
+    }
+    if (newPassword.length < 6) {
+      throw const AuthenticationException(
+        'Choose a password with at least 6 characters.',
+      );
+    }
+    try {
+      await _authenticationDataSource.reauthenticateAndUpdatePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
+      log('Password changed.', name: 'AuthenticationRepository');
+    } on FirebaseAuthException catch (error, stackTrace) {
+      log(
+        'Password change failed: ${error.code}',
+        name: 'AuthenticationRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw AuthenticationException(_passwordChangeErrorMessage(error));
+    } catch (error, stackTrace) {
+      log(
+        'Unexpected password change failure.',
+        name: 'AuthenticationRepository',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const AuthenticationException(
+        'We could not change your password. Please try again.',
+      );
+    }
+  }
+
   Future<void> signOut() async {
     try {
+      await _sessionStreamRegistry.cancelAll();
       await _unregisterNotificationDevice();
       await _authenticationDataSource.signOut();
       log('User signed out.', name: 'AuthenticationRepository');
     } on FirebaseAuthException catch (error, stackTrace) {
+      _sessionStreamRegistry.beginSession();
       log(
         'Firebase Auth sign-out failed: ${error.code}',
         name: 'AuthenticationRepository',
@@ -276,6 +355,7 @@ class AuthenticationRepository {
         error.message ?? 'We could not sign you out.',
       );
     } catch (error, stackTrace) {
+      _sessionStreamRegistry.beginSession();
       log(
         'Unexpected sign-out failure.',
         name: 'AuthenticationRepository',
@@ -383,6 +463,24 @@ class AuthenticationRepository {
         return 'Check your internet connection and try again.';
       default:
         return error.message ?? 'We could not sign you in.';
+    }
+  }
+
+  String _passwordChangeErrorMessage(FirebaseAuthException error) {
+    switch (error.code) {
+      case 'invalid-credential':
+      case 'wrong-password':
+        return 'Your current password is incorrect.';
+      case 'weak-password':
+        return 'Choose a stronger password.';
+      case 'requires-recent-login':
+        return 'Please sign in again before changing your password.';
+      case 'password-change-not-supported':
+        return 'Password changes are available for email/password accounts.';
+      case 'too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      default:
+        return error.message ?? 'We could not change your password.';
     }
   }
 

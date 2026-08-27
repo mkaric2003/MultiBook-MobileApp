@@ -50,7 +50,9 @@ class StayExtraPriceField extends StatelessWidget {
           width: 92,
           child: TextFormField(
             key: ValueKey(extra),
-            initialValue: (price / 100).toStringAsFixed(price % 100 == 0 ? 0 : 2),
+            initialValue: (price / 100).toStringAsFixed(
+              price % 100 == 0 ? 0 : 2,
+            ),
             onChanged: (value) =>
                 onPriceChanged(((double.tryParse(value) ?? 0) * 100).round()),
             keyboardType: TextInputType.number,

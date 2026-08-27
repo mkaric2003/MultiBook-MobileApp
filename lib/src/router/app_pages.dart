@@ -1,9 +1,12 @@
 part of '../../../app.dart';
 
 final router = GoRouter(
-  initialLocation: getIt<OnboardingRepository>().hasSeenOnboarding
-      ? AppRoutes.SIGNIN
-      : AppRoutes.ONBOARDING,
+  refreshListenable: getIt<AuthenticationRepository>().authStateListenable,
+  initialLocation: !getIt<OnboardingRepository>().hasSeenOnboarding
+      ? AppRoutes.ONBOARDING
+      : getIt<AuthenticationRepository>().isSignedIn
+      ? AppRoutes.HOME
+      : AppRoutes.SIGNIN,
   redirect: (context, state) {
     final isSignedIn = getIt<AuthenticationRepository>().isSignedIn;
     final hasSeenOnboarding = getIt<OnboardingRepository>().hasSeenOnboarding;
@@ -17,7 +20,6 @@ final router = GoRouter(
       return isSignedIn ? AppRoutes.HOME : AppRoutes.SIGNIN;
     }
 
-    if (isSignedIn && isAuthenticationRoute) return AppRoutes.HOME;
     if (!isSignedIn && !isAuthenticationRoute && !isOnboardingRoute) {
       return AppRoutes.SIGNIN;
     }
@@ -177,9 +179,19 @@ final router = GoRouter(
       builder: (context, state) => const MyBusinessesView(),
     ),
     GoRoute(
+      path: AppRoutes.MANAGE_CATALOG,
+      name: AppRoutes.MANAGE_CATALOG,
+      builder: (context, state) => const ManageCatalogView(),
+    ),
+    GoRoute(
       path: AppRoutes.ACCOUNT_SETTINGS,
       name: AppRoutes.ACCOUNT_SETTINGS,
       builder: (context, state) => const AccountSettingsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.CHANGE_PASSWORD,
+      name: AppRoutes.CHANGE_PASSWORD,
+      builder: (context, state) => const ChangePasswordView(),
     ),
     GoRoute(
       path: AppRoutes.LANGUAGE_CURRENCY,
@@ -190,6 +202,78 @@ final router = GoRouter(
       path: AppRoutes.CUSTOMER_EDIT_PROFILE,
       name: AppRoutes.CUSTOMER_EDIT_PROFILE,
       builder: (context, state) => const CustomerEditProfileView(),
+    ),
+    GoRoute(
+      path: AppRoutes.TERMS_OF_SERVICE,
+      name: AppRoutes.TERMS_OF_SERVICE,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.termsOfService,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.PRIVACY_POLICY,
+      name: AppRoutes.PRIVACY_POLICY,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.privacyPolicy,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.PROVIDER_TERMS_OF_SERVICE,
+      name: AppRoutes.PROVIDER_TERMS_OF_SERVICE,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.termsOfService,
+        audience: LegalDocumentAudience.provider,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.PROVIDER_PRIVACY_POLICY,
+      name: AppRoutes.PROVIDER_PRIVACY_POLICY,
+      builder: (context, state) => const LegalDocumentView(
+        documentType: LegalDocumentType.privacyPolicy,
+        audience: LegalDocumentAudience.provider,
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.SUPPORT_TICKETS,
+      name: AppRoutes.SUPPORT_TICKETS,
+      builder: (context, state) => const SupportTicketsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.CREATE_SUPPORT_TICKET,
+      name: AppRoutes.CREATE_SUPPORT_TICKET,
+      builder: (context, state) => const CreateSupportTicketView(),
+    ),
+    GoRoute(
+      path: AppRoutes.HELP_CENTER,
+      name: AppRoutes.HELP_CENTER,
+      builder: (context, state) => const HelpCenterView(),
+    ),
+    GoRoute(
+      path: AppRoutes.HELP_ARTICLE_DETAIL,
+      name: AppRoutes.HELP_ARTICLE_DETAIL,
+      builder: (context, state) =>
+          HelpArticleDetailView(article: state.extra! as HelpArticleModel),
+    ),
+    GoRoute(
+      path: AppRoutes.PAYMENT_METHODS,
+      name: AppRoutes.PAYMENT_METHODS,
+      builder: (context, state) => const PaymentMethodsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.ADD_PAYMENT_METHOD,
+      name: AppRoutes.ADD_PAYMENT_METHOD,
+      builder: (context, state) => const AddPaymentMethodView(),
+    ),
+    GoRoute(
+      path: AppRoutes.PROMOTIONS,
+      name: AppRoutes.PROMOTIONS,
+      builder: (context, state) => const PromotionsView(),
+    ),
+    GoRoute(
+      path: AppRoutes.CREATE_PROMOTION,
+      name: AppRoutes.CREATE_PROMOTION,
+      builder: (context, state) =>
+          CreatePromotionView(business: state.extra! as BusinessModel),
     ),
     GoRoute(
       path: AppRoutes.AVAILABILITY_CALENDAR,

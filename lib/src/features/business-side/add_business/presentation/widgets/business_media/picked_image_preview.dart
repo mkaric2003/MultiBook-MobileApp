@@ -38,13 +38,28 @@ class _PickedImagePreviewState extends State<PickedImagePreview> {
   }
 
   void _loadImage() {
-    _imageBytes = widget.imagePath == null
+    final imagePath = widget.imagePath;
+    final uri = imagePath == null ? null : Uri.tryParse(imagePath);
+    _imageBytes =
+        imagePath == null ||
+            (uri != null && (uri.scheme == 'http' || uri.scheme == 'https'))
         ? null
-        : XFile(widget.imagePath!).readAsBytes();
+        : XFile(imagePath).readAsBytes();
   }
 
   @override
   Widget build(BuildContext context) {
+    final imagePath = widget.imagePath;
+    final uri = imagePath == null ? null : Uri.tryParse(imagePath);
+    if (uri != null && (uri.scheme == 'http' || uri.scheme == 'https')) {
+      return Image.network(
+        imagePath!,
+        width: double.infinity,
+        height: double.infinity,
+        fit: widget.fit,
+        errorBuilder: (_, _, _) => widget.fallback,
+      );
+    }
     if (_imageBytes == null) {
       return widget.fallback;
     }

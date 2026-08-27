@@ -20,7 +20,9 @@ class AvailableRoomsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rooms = business.stayDetails?.rooms ?? const [];
+    final rooms = (business.stayDetails?.rooms ?? const [])
+        .where((room) => room.isActive)
+        .toList();
     if (rooms.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.fromLTRB(22, 28, 22, 10),

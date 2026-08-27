@@ -7,6 +7,7 @@ class AppointmentConfirmationInfo extends StatelessWidget {
     required this.label,
     required this.value,
     this.detail,
+    this.originalValue,
     this.iconBackground,
     this.iconColor,
     super.key,
@@ -16,6 +17,7 @@ class AppointmentConfirmationInfo extends StatelessWidget {
   final String label;
   final String value;
   final String? detail;
+  final String? originalValue;
   final Color? iconBackground;
   final Color? iconColor;
 
@@ -48,12 +50,27 @@ class AppointmentConfirmationInfo extends StatelessWidget {
                 style: const TextStyle(color: AppColors.muted, fontSize: 12),
               ),
               const SizedBox(height: 3),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                ),
+              Row(
+                children: [
+                  if (originalValue != null) ...[
+                    Text(
+                      originalValue!,
+                      style: const TextStyle(
+                        color: AppColors.muted,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor: AppColors.muted,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
               ),
               if (detail != null) ...[
                 const SizedBox(height: 2),

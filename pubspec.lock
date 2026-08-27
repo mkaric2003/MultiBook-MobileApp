@@ -1490,6 +1490,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  u_credit_card:
+    dependency: "direct main"
+    description:
+      name: u_credit_card
+      sha256: eea4edb78e143247ad682c81094bd1b510e1c794964889fd99c8d987883cfd64
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.0"
   universal_io:
     dependency: transitive
     description:

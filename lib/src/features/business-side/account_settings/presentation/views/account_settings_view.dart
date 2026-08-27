@@ -12,6 +12,8 @@ import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
+import 'package:aquabook/app.dart';
 
 class AccountSettingsView extends HookWidget {
   const AccountSettingsView({super.key});
@@ -40,18 +42,10 @@ class AccountSettingsView extends HookWidget {
                   child: state.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(35, 38, 35, 32),
+                          padding: const EdgeInsets.fromLTRB(24, 24, 24, 28),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                context.l10n.personalInformation,
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              const SizedBox(height: 30),
                               AccountSettingsAvatar(
                                 imagePath: state.profileImagePath,
                                 imageUrl: state.user?.profileImageUrl,
@@ -68,21 +62,24 @@ class AccountSettingsView extends HookWidget {
                                       ),
                                 ),
                               ),
-                              const SizedBox(height: 45),
+                              const SizedBox(height: 28),
                               AccountSettingsForm(
                                 user: state.user,
                                 onChanged: (data) => formData.value = data,
                               ),
-                              const SizedBox(height: 55),
+                              const SizedBox(height: 36),
                               Text(
                                 context.l10n.security,
-                                style: TextStyle(
-                                  fontSize: 28,
+                                style: const TextStyle(
+                                  fontSize: 22,
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
-                              const SizedBox(height: 27),
-                              const AccountSettingsSecurityTile(),
+                              const SizedBox(height: 18),
+                              AccountSettingsSecurityTile(
+                                onTap: () =>
+                                    context.push(AppRoutes.CHANGE_PASSWORD),
+                              ),
                             ],
                           ),
                         ),
@@ -93,7 +90,7 @@ class AccountSettingsView extends HookWidget {
           bottomNavigationBar: SafeArea(
             top: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(35, 16, 35, 24),
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
               child: CustomButton(
                 buttonName: context.l10n.saveChanges,
                 enabled: !state.isSaving,

@@ -741,6 +741,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get serviceFee => 'Service fee';
 
   @override
+  String get serviceCost => 'Service cost';
+
+  @override
+  String get discountApplied => 'Discount applied';
+
+  @override
   String get taxes => 'Taxes';
 
   @override
@@ -1828,4 +1834,362 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get providerEarnings => 'Employee earnings';
+
+  @override
+  String get privacyPolicyContent =>
+      'PRIVACY POLICY\n\nMultiBook processes data only to provide an app for discovering and booking stays and services.\n\n1. Data we collect\nWe collect account information you provide (name, email, phone number, profile image and optional date of birth), booking and appointment information, messages, saved listings, ratings and technical data needed to secure the app.\n\n2. Location\nWe use your location only after you grant permission. Your city and address help us show relevant listings, maps and nearby searches. You may decline location access or update it later in your profile.\n\n3. How we use and share data\nWe use data for bookings, appointments, payments, communication with businesses, notifications, security and improving the app. When you book, we share only the information a business needs: your name, contact details, selected time or dates and relevant requests. We do not sell personal data.\n\n4. Payments and security\nBusinesses do not receive your full card details. We retain only payment-status and transaction-confirmation information required for a booking. We use Firebase infrastructure for authentication, database services, image storage and notifications.\n\n5. Your choices\nYou can edit your profile, remove saved listings, manage location permission and request account deletion through support. Messages and booking data may be retained where needed for security, dispute resolution and legal obligations.\n\n6. Changes\nWe may update this policy as the app evolves. We will notify you in the app about material changes.';
+
+  @override
+  String get termsOfServiceContent =>
+      'TERMS OF SERVICE\n\nBy using MultiBook, you accept these terms. MultiBook connects customers with independent businesses that offer stays and services.\n\n1. Your account\nYou must provide accurate information and keep access to your account secure. You may not use another person\'s account, send unsolicited messages, bypass security controls or misuse the app.\n\n2. Bookings and appointments\nBefore confirming, check the dates, time, guest count, chosen room or service and total price. A confirmed booking or appointment forms an agreement between you and the selected business.\n\n3. Payment, cancellation and changes\nDepending on the listing, payment may be online or in cash. For cash payments, you must pay the business according to the confirmed details. Cancellation rules, rescheduling options and availability depend on the business and reservation type. Please cancel promptly if you cannot attend.\n\n4. Businesses and service quality\nBusinesses are independent providers responsible for listing accuracy, availability, quality and delivery. MultiBook provides reviews and support tools, but does not guarantee that every stay or service will meet your expectations.\n\n5. Reviews and conduct\nWrite honest, relevant and respectful reviews. Offensive content, fake bookings, fraud, discrimination and conduct that harms other users or businesses are prohibited.\n\n6. Changes to these terms\nWe may update these terms for new features, security or legal requirements. Continued use after changes are published means you accept them.';
+
+  @override
+  String get supportRequests => 'Support requests';
+
+  @override
+  String get noSupportRequests => 'You do not have any support requests yet.';
+
+  @override
+  String get newSupportRequest => 'New request';
+
+  @override
+  String get supportRequestDescription =>
+      'Send us the details of your issue and our team will review your request.';
+
+  @override
+  String get selectSupportTopic => 'Select a topic';
+
+  @override
+  String get supportSubject => 'Subject';
+
+  @override
+  String get supportSubjectHint => 'Briefly describe the issue';
+
+  @override
+  String get supportMessage => 'Message';
+
+  @override
+  String get supportMessageHint => 'Add as many useful details as possible...';
+
+  @override
+  String get sendSupportRequest => 'Send request';
+
+  @override
+  String get supportRequestSent => 'Your request was sent successfully.';
+
+  @override
+  String get supportRequestFailed =>
+      'We could not send the request. Please try again.';
+
+  @override
+  String get supportCategoryAccount => 'Account and profile';
+
+  @override
+  String get supportCategoryBooking => 'Stay booking';
+
+  @override
+  String get supportCategoryAppointment => 'Service appointment';
+
+  @override
+  String get supportCategoryPayment => 'Payment';
+
+  @override
+  String get supportCategoryTechnical => 'Technical issue';
+
+  @override
+  String get supportCategoryOther => 'Other';
+
+  @override
+  String get supportStatusOpen => 'Open';
+
+  @override
+  String get supportStatusInProgress => 'In progress';
+
+  @override
+  String get supportStatusResolved => 'Resolved';
+
+  @override
+  String get helpCenterHeading => 'How can we help?';
+
+  @override
+  String get helpCenterIntro =>
+      'Find clear answers about stays, services, payments, reservation changes and using MultiBook safely.';
+
+  @override
+  String get helpCenterSearchHint => 'Search questions and answers';
+
+  @override
+  String get helpCenterBrowseTopics => 'Browse by topic';
+
+  @override
+  String get helpCenterPopularArticles => 'Popular questions';
+
+  @override
+  String get helpCenterSearchResults => 'Search results';
+
+  @override
+  String get helpCenterShowAll => 'Show all';
+
+  @override
+  String get helpCenterNoResultsTitle => 'We could not find an answer';
+
+  @override
+  String get helpCenterNoResultsBody =>
+      'Try another term or send our support team a request.';
+
+  @override
+  String get helpCenterContactTitle => 'Still need help?';
+
+  @override
+  String get helpCenterContactBody =>
+      'Send a request with as much detail as possible. Our team can review it and you can follow its status in the app.';
+
+  @override
+  String get helpCenterContactButton => 'Contact support';
+
+  @override
+  String get helpTopicStays => 'Stays and bookings';
+
+  @override
+  String get helpTopicAppointments => 'Service appointments';
+
+  @override
+  String get helpTopicChanges => 'Changes and cancellations';
+
+  @override
+  String get helpTopicPayments => 'Payments and prices';
+
+  @override
+  String get helpTopicAccount => 'Account and privacy';
+
+  @override
+  String get helpTopicMessages => 'Messages and notifications';
+
+  @override
+  String get helpTopicTechnical => 'Search and location';
+
+  @override
+  String get helpTopicSafety => 'Safety and support';
+
+  @override
+  String get helpFindingBookingStayTitle => 'How do I find and book a stay?';
+
+  @override
+  String get helpFindingBookingStaySummary =>
+      'Steps from searching for a listing to a confirmed reservation.';
+
+  @override
+  String get helpFindingBookingStayBody =>
+      '1. On Home, select Stays, enter a city or listing name, and open Filters when needed. You can choose dates, guests, city, price, rating, category and amenities.\n\n2. Open a listing and review its photos, location, nightly rate, amenities, rules and available units or rooms.\n\n3. Choose dates and guests. If the business offers multiple rooms or units, choose a room type; otherwise the listing\'s default available unit is used.\n\n4. Review the total, taxes, fees and extras. After successful payment or selecting cash, the reservation is confirmed and available in Bookings.';
+
+  @override
+  String get helpStayDatesRoomsTitle => 'Dates, guests and room availability';
+
+  @override
+  String get helpStayDatesRoomsSummary =>
+      'How MultiBook calculates availability for private stays and hotels.';
+
+  @override
+  String get helpStayDatesRoomsBody =>
+      'For a private property with one unit, such as an apartment or villa, occupied dates cannot be selected. Check check-in and check-out before continuing.\n\nFor properties with multiple units, such as hotels, availability is calculated for the selected room type and capacity. The same date can remain available while an appropriate room still exists.\n\nAdult and child counts affect the available options. If you cannot find the room you want, change guests or dates. Nightly prices, extras, taxes and fees are shown before confirmation.';
+
+  @override
+  String get helpStatusesTitle => 'Booking and appointment statuses';
+
+  @override
+  String get helpStatusesSummary =>
+      'What confirmed, completed, cancelled and declined mean.';
+
+  @override
+  String get helpStatusesBody =>
+      'Confirmed means that a stay booking or service appointment was created successfully. For online payment this follows a successful payment confirmation; for cash it follows reservation confirmation.\n\nCompleted marks an earlier appointment or stay that has ended. You can then leave one review for that business.\n\nCancelled means the customer cancelled the reservation or appointment. Declined means the business changed its status. For questions about a specific status, open its details or send a support request.';
+
+  @override
+  String get helpChangesTitle => 'How do I change or cancel a reservation?';
+
+  @override
+  String get helpChangesSummary =>
+      'Rules for cancellations and the one-time service appointment reschedule.';
+
+  @override
+  String get helpChangesBody =>
+      'Open Bookings, choose an active item and review its available actions. You can cancel a stay booking or appointment while that option is available in its details.\n\nFor service appointments, a customer can reschedule once. You then choose a new date and only free slots with the required duration. A business can reschedule when needed.\n\nChanges and cancellations can affect availability and charges under the business\'s rules. Check the new date, time, selected services and total before confirming.';
+
+  @override
+  String get helpCashNoShowTitle => 'Online payment, cash and no-shows';
+
+  @override
+  String get helpCashNoShowSummary =>
+      'The difference between payment methods and what happens when a customer does not attend.';
+
+  @override
+  String get helpCashNoShowBody =>
+      'A business can offer online payment or cash payment. For online payment, enter your card details in the secure payment step. For cash, pay the business on arrival or after the service according to confirmed details.\n\nRegardless of payment method, a confirmed item enters the business record. For a past cash booking or appointment, a business can mark a no-show when the customer did not arrive. The amount is removed from business earnings, statistics and trends.\n\nIf you believe a status or amount is incorrect, check reservation details, contact the business through messages, or open a support request.';
+
+  @override
+  String get helpPaymentSecurityTitle =>
+      'Card security, prices and confirmations';
+
+  @override
+  String get helpPaymentSecuritySummary =>
+      'What is shown before payment and which card data a business can see.';
+
+  @override
+  String get helpPaymentSecurityBody =>
+      'Before payment, MultiBook shows the itemized total: stay or service cost, selected extras, fees and taxes. Confirm only after dates, time and amount are correct.\n\nBusinesses do not receive your full card number. Details may show only a payment method and masked card ending when available.\n\nKeep your confirmation and reference code. Never send your full card number, CVV, password or sign-in codes in chat.';
+
+  @override
+  String get helpProfileDataTitle => 'Profile, location and personal data';
+
+  @override
+  String get helpProfileDataSummary =>
+      'How to edit your details, manage location permission and protect your account.';
+
+  @override
+  String get helpProfileDataBody =>
+      'In Profile, you can edit your name, phone number, address, city, date of birth, country calling code and profile image. Your email belongs to your sign-in provider and may be locked for direct editing.\n\nWe request location permission to show nearby listings, maps and city-based results. You can deny it or change it in device settings, then manually edit your city in Profile.\n\nKeep your password and account access private. If you notice unknown activity or want to delete your account, send a support request immediately.';
+
+  @override
+  String get helpMessagesTitle => 'Messages, notifications and support';
+
+  @override
+  String get helpMessagesSummary =>
+      'How to communicate with a business and manage notifications.';
+
+  @override
+  String get helpMessagesBody =>
+      'MultiBook messages are always between a customer and a specific business, not only its owner. Open chat from booking or appointment details; all conversations are also available from Profile or More.\n\nA push notification for a new message is not sent while that conversation is open. Unread messages are shown in the conversation list and navigation indicators.\n\nFor an issue a business cannot solve, use Contact us. Your request has a topic, subject and message, and its status is available in Support requests.';
+
+  @override
+  String get helpLocationSearchTitle => 'Search, filters and location';
+
+  @override
+  String get helpLocationSearchSummary =>
+      'How to get more relevant results for stays and services.';
+
+  @override
+  String get helpLocationSearchBody =>
+      'For stays, search by city or listing name and filter by dates, guests, price, rating, category and amenities. For services, choose date, time, business type, city, price and sorting.\n\nWhen a service is filtered by time, MultiBook considers service duration and occupied slots across all employees. A business appears only when at least one appropriate employee can complete the full appointment.\n\nIf no results appear, choose All cities, expand the price range, change dates or remove some filters.';
+
+  @override
+  String get helpSafetyTitle => 'Safety, reviews and reporting issues';
+
+  @override
+  String get helpSafetySummary =>
+      'Guidance for safe communication, accurate reviews and reporting suspicious content.';
+
+  @override
+  String get helpSafetyBody =>
+      'Use MultiBook chat for booking or appointment communication and share only necessary information. Never send passwords, CVV numbers, one-time codes or full card data.\n\nAfter a completed stay or appointment, you can leave one honest review per business. Ratings and comments should reflect real experience and must not contain abuse, discrimination, threats or false claims.\n\nIf a listing is inaccurate, communication is inappropriate or you suspect fraud, keep relevant details and send a support request. For urgent safety situations, contact local emergency services.';
+
+  @override
+  String get savedPaymentMethods => 'Saved payment methods';
+
+  @override
+  String get savedPaymentMethodsDescription =>
+      'Choose a default card for faster payments.';
+
+  @override
+  String get noSavedPaymentMethods => 'You do not have any saved cards yet.';
+
+  @override
+  String get addPaymentMethod => 'Add card';
+
+  @override
+  String get defaultPaymentMethod => 'Default';
+
+  @override
+  String get setAsDefault => 'Set as default';
+
+  @override
+  String get activePromotions => 'Active promotions';
+
+  @override
+  String get noPromotions => 'You have not created any promotions yet.';
+
+  @override
+  String get createPromotion => 'Create promotion';
+
+  @override
+  String get promotionName => 'Promotion name';
+
+  @override
+  String get promotionNameHint => 'e.g. Summer discount';
+
+  @override
+  String get discountType => 'Discount type';
+
+  @override
+  String get discountValue => 'Discount value';
+
+  @override
+  String get promoCodeOptional => 'Promo code (optional)';
+
+  @override
+  String get startsOn => 'Starts';
+
+  @override
+  String get endsOn => 'Ends';
+
+  @override
+  String get minimumBookingValue => 'Minimum booking value';
+
+  @override
+  String get minimumNights => 'Minimum nights';
+
+  @override
+  String get usageLimitOptional => 'Usage limit (optional)';
+
+  @override
+  String get percentageDiscount => 'Percentage';
+
+  @override
+  String get fixedDiscount => 'Fixed amount';
+
+  @override
+  String get couponDiscount => 'Coupon code';
+
+  @override
+  String get promotionActive => 'Active';
+
+  @override
+  String get promotionInactive => 'Inactive';
+
+  @override
+  String get discountValueHint => 'e.g. 10';
+
+  @override
+  String get promoCodeHint => 'e.g. SUMMER10';
+
+  @override
+  String get promotion => 'Discount';
+
+  @override
+  String get providerPrivacyPolicyContent =>
+      'PRIVACY POLICY FOR PROVIDERS\n\nMultiBook processes provider account and business data to publish and manage stays or services. This includes your business profile, location, photos, prices, availability, staff, promotions, bookings, appointments, earnings and customer messages.\n\n1. Customer data\nFor confirmed reservations you receive only the data needed to deliver the stay or service: name, contact details, selected dates/time, offering and relevant booking details. Use it only for that reservation. Do not sell it, share it without a legal basis or use it for unsolicited marketing.\n\n2. Security and records\nKeep provider access secure and limit staff access to authorized people. Never request passwords, CVV codes or full card details in chat. Messages, reviews, cancellations, no-show records and transaction snapshots may be retained for support, fraud prevention, disputes, financial reporting and legal obligations.\n\n3. Your choices\nYou can update business data in Manage Stays & Services. For account deletion, data access or privacy questions, contact MultiBook support. Material policy changes will be communicated in the app.';
+
+  @override
+  String get providerTermsOfServiceContent =>
+      'TERMS OF SERVICE FOR PROVIDERS\n\nBy operating a business on MultiBook, you agree to these provider terms. MultiBook gives independent businesses tools to publish stays or services, manage availability and communicate with customers.\n\n1. Accurate listings\nKeep business information, prices, availability, amenities, staff and service descriptions accurate. Do not publish misleading photos, offers or availability.\n\n2. Reservations and payments\nA confirmed booking or appointment is an agreement between your business and the customer. Honor it unless a valid exceptional reason applies. Use decline, cancellation, rescheduling and cash no-show controls accurately. Online and cash payments are recorded separately; you remain responsible for taxes, invoices, refunds and applicable legal obligations.\n\n3. Conduct and enforcement\nUse customer data only to provide the reserved stay or service. Professional communication is required; discrimination, harassment, spam, review manipulation and payment requests outside approved flows are prohibited. We may restrict listings or accounts that endanger users or misuse the platform.\n\n4. Changes\nWe may update these terms for legal, security or product reasons. Continued use after publication means acceptance of the updated terms.';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get confirmNewPassword => 'Confirm new password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get passwordMinimumLength => 'Use at least 6 characters.';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully.';
 }

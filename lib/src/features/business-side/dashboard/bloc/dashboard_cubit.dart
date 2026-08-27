@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:aquabook/src/data/enums/user_type.dart';
+import 'package:aquabook/src/core/session/session_stream_registry.dart';
 import 'package:aquabook/src/data/repositories/business_metrics_repository.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/data/repositories/user_repository.dart';
@@ -14,11 +16,13 @@ class DashboardCubit extends Cubit<DashboardState> {
     this._userRepository,
     this._businessRepository,
     this._businessMetricsRepository,
+    this._sessionStreamRegistry,
   ) : super(const DashboardState());
 
   final UserRepository _userRepository;
   final BusinessRepository _businessRepository;
   final BusinessMetricsRepository _businessMetricsRepository;
+  final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription? _summarySubscription;
   StreamSubscription? _monthSubscription;
 
@@ -51,20 +55,49 @@ class DashboardCubit extends Cubit<DashboardState> {
     }
     _summarySubscription = _businessMetricsRepository
         .watchSummary(business.id)
-        .listen((metrics) => emit(state.copyWith(metrics: metrics)));
+        .listen(
+          (metrics) {
+            if (!isClosed) emit(state.copyWith(metrics: metrics));
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            log(
+              'Could not watch dashboard summary.',
+              name: 'DashboardCubit',
+              error: error,
+              stackTrace: stackTrace,
+            );
+          },
+        );
+    _sessionStreamRegistry.register(_summarySubscription!);
     _monthSubscription = _businessMetricsRepository
         .watchCurrentMonth(business.id)
         .listen(
-          (monthlyMetrics) =>
-              emit(state.copyWith(monthlyMetrics: monthlyMetrics)),
+          (monthlyMetrics) {
+            if (!isClosed) {
+              emit(state.copyWith(monthlyMetrics: monthlyMetrics));
+            }
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            log(
+              'Could not watch dashboard month metrics.',
+              name: 'DashboardCubit',
+              error: error,
+              stackTrace: stackTrace,
+            );
+          },
         );
+    _sessionStreamRegistry.register(_monthSubscription!);
   }
 
   Future<void> _cancelMetricSubscriptions() async {
-    await _summarySubscription?.cancel();
-    await _monthSubscription?.cancel();
+    final summarySubscription = _summarySubscription;
+    final monthSubscription = _monthSubscription;
     _summarySubscription = null;
     _monthSubscription = null;
+    _sessionStreamRegistry.unregister(summarySubscription);
+    _sessionStreamRegistry.unregister(monthSubscription);
+    await summarySubscription?.cancel();
+    await monthSubscription?.cancel();
   }
 
   @override

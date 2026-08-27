@@ -11,6 +11,7 @@ class StayListing {
     required this.imageUrl,
     this.imageUrls = const [],
     this.isFeatured = false,
+    this.isPromotionActive = false,
   });
 
   final String id;
@@ -22,6 +23,7 @@ class StayListing {
   final String imageUrl;
   final List<String> imageUrls;
   final bool isFeatured;
+  final bool isPromotionActive;
 
   factory StayListing.fromBusiness(BusinessModel business) {
     return StayListing(
@@ -40,6 +42,7 @@ class StayListing {
         if (business.coverPhotoUrl == null && business.logoUrl != null)
           business.logoUrl!,
       }.toList(),
+      isPromotionActive: business.isPromotionActive,
     );
   }
 }

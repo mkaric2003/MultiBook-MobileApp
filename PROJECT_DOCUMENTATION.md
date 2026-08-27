@@ -30,10 +30,11 @@ Ključna poslovna odluka je da razgovor i rezervacija pripadaju **businessu**, a
 
 ### Provider
 
-1. Provider kreira stay ili service business, unosi lokaciju, slike, ponudu i dostupnost.
+1. Provider kreira ili uređuje stay/service business, unosi lokaciju, slike, ponudu i dostupnost.
 2. Nakon prvog businessa početni ekran postaje dashboard; selektovani business se čuva u user profilu.
 3. Provider mijenja business na dashboardu / business selectoru, pregleda njegove bookinge ili appointmente i upravlja njima.
-4. Za stays vidi zauzete dane; za services vidi zauzete i blokirane 30-minutne slotove po radniku.
+4. Iz **Manage Stays & Services** otvara puni, unaprijed popunjeni editor selektovanog businessa i sprema izmjene u postojeći dokument.
+5. Za stays vidi zauzete dane; za services vidi zauzete i blokirane 30-minutne slotove po radniku.
 
 ---
 
@@ -89,7 +90,7 @@ lib/
  ├─ main.dart                         # inicijalizacija DI-ja i aplikacije
  ├─ app.dart                          # MaterialApp, router i inicijalizacija notifikacija
  ├─ src/
- │   ├─ core/                         # konfiguracija, tema, Firebase modul, DI
+ │   ├─ core/                         # konfiguracija, tema, Firebase modul, DI, session lifecycle
  │   ├─ data/
  │   │   ├─ data_sources/             # Firebase/HTTP/plugin adapteri
  │   │   ├─ repositories/             # poslovna i pristupna logika
@@ -125,7 +126,7 @@ functions/src/
 `GoRouter` koristi tri zaštitna nivoa:
 
 1. **Onboarding**: dok `has_seen_onboarding` nije postavljen u Shared Preferences, korisnik ostaje na `/onboarding`.
-2. **Autentikacija**: neprijavljen korisnik ide na `/sign-in`; prijavljen ne može ostati na sign-in/sign-up ekranu.
+2. **Autentikacija**: neprijavljen korisnik ide na `/sign-in`. `GoRouter` prati Firebase Auth stanje preko `refreshListenable`, pa se zaštićene rute odmah uklanjaju nakon odjave. Nakon uspješnog sign-ina `SigninCubit` eksplicitno bira Home ili User Type Checker, kako novi Google/email account ne bi preskočio izbor tipa korisnika.
 3. **Tip korisnika i entry screen**: user profil određuje customer/provider tok. Provider entry dodatno provjerava ima li business i otvara Add Business ili dashboard.
 
 Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app_routes.dart) i [lib/src/router/app_pages.dart](lib/src/router/app_pages.dart).
@@ -151,7 +152,20 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 - Google Sign-In je integrisan kroz `google_sign_in` i Firebase credential.
 - Prilikom registracije se kreira Firestore dokument u `users/{uid}`.
 - Ako kreiranje profila ne uspije nakon email sign-upa, aplikacija uklanja nepotpun Firebase Auth account da ne ostane nekonzistentan korisnik.
-- Logout briše aktivnu sesiju i vraća korisnika na sign-in.
+- Logout koristi replacement navigaciju (`context.go`) na sign-in, bez vraćanja na dashboard u navigation stacku.
+- `AuthenticationRepository` izlaže Firebase `authStateChanges` kroz router notifier. Time auth redirect reaguje na stvarno Firebase stanje, a ne na zakašnjeli UI callback.
+
+### Session stream lifecycle
+
+Firestore stream nakon Firebase Auth odjave više nema pravo čitanja dokumenata. Zato aplikacija ne prepušta zatvaranje streamova slučajnom redoslijedu rebuilda i navigacije:
+
+1. Root view odmah zamijeni trenutnu rutu sa sign-in ekranom.
+2. `AuthenticationRepository.signOut()` poziva `SessionStreamRegistry.cancelAll()` **prije** `FirebaseAuth.signOut()`.
+3. Registry otkazuje aktivne, autentikacijom vezane pretplate (dashboard summary/month metrics, earnings metrics i unread-message indikatore).
+4. Dok je session u završavanju, registry odmah otkazuje svaku pretplatu koju neki sporiji async `load()` pokuša otvoriti.
+5. Tek nakon toga briše se notification device registracija i poziva Firebase sign-out.
+
+Ovaj redoslijed sprečava `cloud_firestore/permission-denied` race condition i `Cannot emit new states after calling close` greške pri prelazu između prijavljenog i neprijavljenog stanja. Cubiti/BLoC-i dodatno provjeravaju `isClosed` / `emit.isDone` poslije async granica.
 
 ### User model
 
@@ -193,6 +207,7 @@ Ne treba hardkodirati korisnički vidljiv tekst u novim widgetima. Za dinamički
 - identitet i vlasništvo: `id`, `ownerId`, `type`;
 - sadržaj: naziv, kategorija, opis, lokacija, logo, cover i do sedam dodatnih slika;
 - discovery: aktivnost, prosječna ocjena, broj recenzija i `featuredCollectionIds`;
+- promotion signal: `isPromotionActive` je lagani discovery indikator za badge na karticama; puni promotion podaci se ne dupliciraju u business dokumentu;
 - tip-specifični podaci: `stayDetails` ili `serviceDetails`.
 
 ### 8.1 Stays
@@ -229,6 +244,28 @@ Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedini
 
 Razvojni seed metod puni bazu realističnim stay i service podacima (različiti gradovi, kategorije, cijene, rating, slike, rooms, extras, staff i ponuda). Seed je samo za development/testiranje i ne treba biti dostupan u produkcijskom UI-ju.
 
+### 8.4 Upravljanje i uređivanje businessa
+
+**Manage Stays & Services** nije zaseban, ograničen katalog editor. Nakon što učita trenutno selektovani provider business, otvara isti puni **Add Business** obrazac u edit modu. Time create i update dijele istu validaciju, strukturu forme i data model, pa ne može doći do razlike između polja koja se mogu unijeti pri kreiranju i onih koja se mogu izmijeniti kasnije.
+
+- Formu unaprijed popunjavaju naziv, kategorija, grad/adresa, koordinate, opis, inventory tip, cijena, amenities, extras i njihove cijene, featured collections, ponude, zaposlenici, provizije i availability slotovi.
+- Za multiple-unit stay provider može uređivati, dodavati i uklanjati više bookable room/unit stavki. Svaka stavka nosi naziv, kapacitet, kvadraturu, cijenu po noći, količinu i aktivnost.
+- Service business zadržava uređivanje kompletne liste offeringsa i provider/staff članova zajedno s njihovim slotovima i commission rate-om.
+- Tip businessa je zaključan tokom izmjene kako postojeći stay/service dokument ne bi promijenio domenski tip i ostavio nekonzistentne rezervacije ili appointmente.
+- Postojeći logo, cover i `photoUrls` se prikažu kao mrežne slike i ne uploaduju se ponovo. Novoizabrane slike se kompresuju u WebP i uploaduju; uklonjene Firestore/Storage galerijske slike se nakon uspješnog updatea uklanjaju iz Storagea. Galerija ostaje ograničena na najviše sedam dodatnih slika.
+- Update zadržava identitet businessa, ownera, valutu, rating, broj recenzija, aktivno stanje i `isPromotionActive`; mijenja samo poslovne podatke koje provider smije uređivati. Za pretragu se u istom zapisu obnavljaju `nameLowercase`, `cityLowercase`, `stayPricePerNight` i `maxGuestCapacity`.
+
+### 8.5 Promotions & Discounts
+
+Provider za pojedinačni business upravlja promocijama kroz **Promotions & Discounts** feature. Promotion je zaseban dokument u `promotions` kolekciji i sadrži business/vlasnika, naziv, tip, vrijednost, period važenja, opcionalni promo kod, minimum iznosa, stay-only minimum noći, usage limit i aktivno stanje.
+
+- Tipovi su `percentage`, `fixedAmount` i `couponCode`. Coupon code koristi definisanu procentualnu vrijednost tek nakon ispravnog unosa koda.
+- Nakon create, activate/deactivate ili delete akcije repository ažurira samo `business.isPromotionActive`. Time kartice mogu odmah prikazati dijagonalni **Popust** banner bez čitanja kompletne promotion definicije za svaki business u feedu.
+- Automatski percentage/fixed popust se učitava u review/payment toku. Coupon se server-side ponovo validira pri potvrdi plaćanja; nepostojeći ili istekao kod zaustavlja kreiranje rezervacije.
+- Popust se računa nad stay subtotalom (room + extras) odnosno appointment service subtotalom, prije service fee i poreza. Kod staya se provjerava i minimalan broj noći; appointment nema minimum-nights pravilo.
+- Review, payment, confirmation i details ekrani prikazuju popust i umanjeni total. Payment/confirmation prikaz dodatno koristi precrtanu izvornu vrijednost gdje je relevantno.
+- Snapshoti se čuvaju uz rezultat transakcije: booking ima `discountAmount` i `originalTotal`, a appointment ima `originalServiceCost` i `discountAmount`. Stare rezervacije bez tih polja sigurno koriste postojeći total kao fallback.
+
 ---
 
 ## 9. Customer featurei
@@ -255,7 +292,7 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - Prikazani su cijena, ocjene, lokacija i mapa, rooms, amenities, extras, opis i recenzije.
 - Ako customer ne odabere room type, flow koristi default jedinicu/cijenu businessa gdje je to dozvoljeno.
 - Booking details bira raspon datuma (ponedjeljak je prvi dan sedmice), goste i provjerava dostupnost.
-- Review stay bira extras i izračunava room subtotal, cleaning/service fee, taxes i total.
+- Review stay bira extras i izračunava room subtotal, cleaning/service fee, taxes i total. Ako business ima aktivnu promociju, review/payment koriste umanjeni subtotal, jasno prikazuju popust i sniženi ukupni iznos.
 - Payment podržava karticu, Apple Pay, Google Pay i **plaćanje gotovinom**. Kartica validira format broja, expiry i 3-cifreni CVV; gotovina ne traži kartične podatke.
 - Booking se kreira kao `confirmed`; mogući statusi su `confirmed`, `declined`, `cancelled`, `completed` i `noShow`.
 - Customer može otkazati booking; providerovo odbijanje je `declined`, customerovo otkazivanje je `cancelled`.
@@ -266,7 +303,7 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - Detail prikazuje galeriju, kategoriju, ocjenu, mapu, service offeringe, cijene/trajanja, opis i staff.
 - Customer može odabrati više usluga; ukupno trajanje određuje koliko susjednih 30-minutnih slotova mora ostati slobodno.
 - Dostupnost se provjerava po konkretnom provideru; zauzeti ili blokirani slotovi nisu selektabilni.
-- Review appointment prikazuje odabrane usluge i add-ons; special requests su namjerno izbačeni iz sadašnjeg flowa.
+- Review appointment prikazuje odabrane usluge i add-ons; special requests su namjerno izbačeni iz sadašnjeg flowa. Aktivni popust se prikazuje prije payment koraka, a konačni obračun se ponovo validira pri kreiranju appointmenta.
 - Payment kreira `confirmed` appointment i atomarno zauzima njegove slotove. Dostupni su kartica, Apple Pay, Google Pay i gotovina.
 - Appointment detail prikazuje business, izvođača, usluge, datum/vrijeme, cijene, payment metodu i confirmation code.
 - Customer može otkazati appointment i može ga rescheduleati samo jednom; provider može rescheduleati bez tog ograničenja. Past cash appointment može biti označen kao `no_show` kada customer ne dođe.
@@ -283,6 +320,8 @@ Razvojni seed metod puni bazu realističnim stay i service podacima (različiti 
 - **My bookings** razdvaja stays i services na upcoming/past, uz live osvježavanje nakon cancel akcije.
 - **Saved** je vezan za usera; animirano uklanjanje iz liste, toast feedback i trenutno stanje srca na detailu.
 - **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
+- **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).
+- Ticketi se čuvaju u `support_tickets`; Firestore pravila dozvoljavaju customeru kreiranje i čitanje samo vlastitih zahtjeva, dok status kasnije mijenja interni support/admin alat.
 - **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed.
 - Recently viewed se sprema po useru i po businessu; naslov se ne prikazuje kada nema podataka.
 - Rezultati kategorije/kolekcije koriste cursor paginaciju.
@@ -381,6 +420,7 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `users/{uid}/notifications/{id}` | in-app notifikacije |
 | `users/{uid}/recently_viewed/{businessId}` | nedavno otvoreni businessi |
 | `businesses/{businessId}` | stay ili service business, detalji, mediji, lokacija i discovery polja |
+| `promotions/{id}` | ownerov promotion konfigurisan za jedan business; business čuva samo `isPromotionActive` signal |
 | `bookings/{id}` | stay rezervacije i payment/guest snapshot |
 | `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
 | `business_metrics/{businessId}` | agregat aktivnih booking/appointment KPI-jeva i verzija migracije metrika |
@@ -408,6 +448,7 @@ profiles/{userId}/{fileName}
 Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules).
 
 - Business je čitljiv prijavljenim korisnicima, ali create/update/delete radi samo owner.
+- Promotion dokument može kreirati, mijenjati ili obrisati samo owner pripadajućeg businessa; customer ga ne može mijenjati niti proizvoljno postaviti `isPromotionActive`.
 - Booking i appointment mogu čitati/mijenjati samo customer ili business owner; ID-jevi customer/owner ne mogu se prepisati updateom.
 - Customer može rescheduleati appointment najviše jednom; owner nema taj limit.
 - Appointment slotovi izlažu samo dostupnost, a ne privatne podatke customera.
@@ -458,6 +499,8 @@ Za pouzdan search/filter gradova koriste se normalizovana polja, posebno `locati
 | Limitirani candidate batch i opaque endpoint cursor | Funkcija obrađuje kontrolisan broj dokumenata po pozivu |
 | Composite indeksi | Firestore može izvršiti query bez punog skeniranja kolekcije |
 | City denormalizacija | `location.cityLowercase` omogućava efikasan city query |
+| Lagani promotion signal | Feed kartice čitaju samo `isPromotionActive`, a detalji promocije se učitavaju tek u checkoutu |
+| Checkout revalidacija popusta | Čuva integritet cijene bez stalnog učitavanja promotion dokumenata kroz feedove |
 | `appointment_slots` metadata | Dostupnost se čita bez preuzimanja privatnih appointment dokumenata |
 | Precomputed business metrics | Dashboard i Earnings čitaju mali agregat umjesto svih historijskih rezervacija |
 | Debounced text search | Smanjuje broj requestova dok korisnik tipka |
@@ -465,6 +508,7 @@ Za pouzdan search/filter gradova koriste se normalizovana polja, posebno `locati
 | Max 7 business fotografija | Kontrolisan Storage i payload obim |
 | Nominatim reverse geocoding | Izbjegava plaćeni Google Geocoding API |
 | Lazy/feature-scoped streamovi | Unread/chat stream nije globalno aktivan kroz cijelu aplikaciju |
+| Centralni session stream cleanup | Sve registrirane root Firestore pretplate se otkažu prije Auth sign-outa; nema zabranjenih read pokušaja ni nepotrebnih reconnecta |
 | FCM token cleanup | Ne troši push attempt na nevalidne tokena |
 | Idempotent notification dispatcher | Retry ne šalje i ne broji duplikate |
 | Chat bez in-app duplikata | Chat poruke koriste push samo kada chat nije otvoren |
@@ -553,7 +597,7 @@ npm --prefix functions run build
 
 Za kritične flowove treba ručno provjeriti:
 
-1. email, Google i logout autentikaciju;
+1. email, Google i logout autentikaciju, uključujući direktan prelaz na sign-in bez dashboard flasha i bez `permission-denied` stream grešaka;
 2. kreiranje stay/service businessa sa slikama;
 3. direktni i endpoint search/filter rezultat;
 4. booking i appointment create/cancel/reschedule, cash plaćanje i past-cash No-show;

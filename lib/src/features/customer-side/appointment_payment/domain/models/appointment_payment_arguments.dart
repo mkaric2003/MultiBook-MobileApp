@@ -1,3 +1,5 @@
+import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
 import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
 
 class AppointmentPaymentArguments {
@@ -8,9 +10,29 @@ class AppointmentPaymentArguments {
   int get serviceCost =>
       review.offerings.fold(0, (total, offering) => total + offering.price);
 
-  double get serviceFee => serviceCost * 0.085;
+  int discount(PromotionModel? promotion) => PromotionPriceCalculator.discount(
+    subtotal: serviceCost,
+    promotion: promotion,
+  );
 
-  double get taxes => (serviceCost + serviceFee) * 0.1;
+  int discountedServiceCost(PromotionModel? promotion) =>
+      serviceCost - discount(promotion);
 
-  double get total => serviceCost + serviceFee + taxes;
+  double serviceFeeWithPromotion(PromotionModel? promotion) =>
+      discountedServiceCost(promotion) * 0.085;
+
+  double taxesWithPromotion(PromotionModel? promotion) =>
+      (discountedServiceCost(promotion) + serviceFeeWithPromotion(promotion)) *
+      0.1;
+
+  double totalWithPromotion(PromotionModel? promotion) =>
+      discountedServiceCost(promotion) +
+      serviceFeeWithPromotion(promotion) +
+      taxesWithPromotion(promotion);
+
+  double get serviceFee => serviceFeeWithPromotion(null);
+
+  double get taxes => taxesWithPromotion(null);
+
+  double get total => totalWithPromotion(null);
 }

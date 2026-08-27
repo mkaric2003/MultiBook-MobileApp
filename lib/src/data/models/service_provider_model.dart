@@ -12,6 +12,7 @@ class ServiceProviderModel with ServiceProviderModelMappable {
     this.title,
     this.commissionRate = 100,
     this.availabilitySlots = const [],
+    this.isActive = true,
   });
 
   final String id;
@@ -19,4 +20,5 @@ class ServiceProviderModel with ServiceProviderModelMappable {
   final String? title;
   final double commissionRate;
   final List<ServiceAvailabilitySlotModel> availabilitySlots;
+  final bool isActive;
 }

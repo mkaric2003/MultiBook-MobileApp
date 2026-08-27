@@ -7,6 +7,7 @@ import 'package:aquabook/src/data/enums/stay_extra_type.dart';
 import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
 import 'package:aquabook/src/data/models/stay_extra_model.dart';
 import 'package:aquabook/src/data/models/stay_room_model.dart';
+import 'package:aquabook/src/data/models/business_model.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_bloc.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_event.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_state.dart';
@@ -23,7 +24,7 @@ import 'package:aquabook/src/features/business-side/add_business/presentation/wi
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_collections_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_extras_selector.dart';
 import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_inventory_type_selector.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_unit_form.dart';
+import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_units_editor.dart';
 import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
 import 'package:aquabook/src/global_widgets/custom_button.dart';
 import 'package:aquabook/src/global_widgets/custom_textfield.dart';
@@ -36,7 +37,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddBusinessView extends HookWidget {
-  const AddBusinessView({super.key});
+  const AddBusinessView({this.editingBusiness, super.key});
+
+  final BusinessModel? editingBusiness;
 
   @override
   Widget build(BuildContext context) {
@@ -45,24 +48,31 @@ class AddBusinessView extends HookWidget {
     final addressController = useTextEditingController();
     final descriptionController = useTextEditingController();
     final priceController = useTextEditingController();
-    final roomNameController = useTextEditingController();
-    final roomGuestsController = useTextEditingController();
-    final roomSizeController = useTextEditingController();
-    final roomPriceController = useTextEditingController();
-    final roomQuantityController = useTextEditingController();
+    useEffect(() {
+      final business = editingBusiness;
+      if (business == null) return null;
+      nameController.text = business.name;
+      cityController.text = business.location.city;
+      addressController.text = business.location.address;
+      descriptionController.text = business.shortDescription ?? '';
+      final price = business.stayDetails?.pricePerNight;
+      if (price != null) {
+        priceController.text = (price / 100).toStringAsFixed(2);
+      }
+      return null;
+    }, [editingBusiness?.id]);
 
     useListenable(nameController);
     useListenable(cityController);
     useListenable(addressController);
     useListenable(priceController);
-    useListenable(roomNameController);
-    useListenable(roomGuestsController);
-    useListenable(roomSizeController);
-    useListenable(roomPriceController);
-    useListenable(roomQuantityController);
-
     return BlocProvider(
-      create: (_) => getIt<AddBusinessBloc>(),
+      create: (_) {
+        final bloc = getIt<AddBusinessBloc>();
+        final business = editingBusiness;
+        if (business != null) bloc.add(BusinessEditLoaded(business));
+        return bloc;
+      },
       child: BlocConsumer<AddBusinessBloc, AddBusinessState>(
         listenWhen: (previous, current) =>
             previous.errorMessage != current.errorMessage ||
@@ -108,13 +118,15 @@ class AddBusinessView extends HookWidget {
               (state.businessType != BusinessType.stays ||
                   (state.stayInventoryType == StayInventoryType.singleUnit
                       ? parsePrice(priceController.text) > 0
-                      : (roomNameController.text.trim().isNotEmpty &&
-                            (int.tryParse(roomGuestsController.text) ?? 0) >
-                                0 &&
-                            (int.tryParse(roomSizeController.text) ?? 0) > 0 &&
-                            parsePrice(roomPriceController.text) > 0 &&
-                            (int.tryParse(roomQuantityController.text) ?? 0) >
-                                0))) &&
+                      : state.stayRooms.isNotEmpty &&
+                            state.stayRooms.every(
+                              (room) =>
+                                  room.name.trim().isNotEmpty &&
+                                  room.maxGuests > 0 &&
+                                  room.sizeSquareMeters > 0 &&
+                                  room.pricePerNight > 0 &&
+                                  room.quantity > 0,
+                            ))) &&
               (state.businessType != BusinessType.services ||
                   (state.serviceOfferings.isNotEmpty &&
                       state.serviceProviders.isNotEmpty &&
@@ -146,7 +158,9 @@ class AddBusinessView extends HookWidget {
               child: Column(
                 children: [
                   CustomAppBar(
-                    title: state.hasExistingBusiness
+                    title: state.isEditing
+                        ? context.l10n.saveChanges
+                        : state.hasExistingBusiness
                         ? context.l10n.addBusiness
                         : context.l10n.addYourFirstBusiness,
                   ),
@@ -166,11 +180,17 @@ class AddBusinessView extends HookWidget {
                           const SizedBox(height: 30),
                           FormFieldLabel(context.l10n.businessType),
                           const SizedBox(height: 12),
-                          BusinessTypeSelector(
-                            selectedType: state.businessType,
-                            onChanged: (type) => context
-                                .read<AddBusinessBloc>()
-                                .add(BusinessTypeChanged(type)),
+                          IgnorePointer(
+                            ignoring: state.isEditing,
+                            child: Opacity(
+                              opacity: state.isEditing ? 0.7 : 1,
+                              child: BusinessTypeSelector(
+                                selectedType: state.businessType,
+                                onChanged: (type) => context
+                                    .read<AddBusinessBloc>()
+                                    .add(BusinessTypeChanged(type)),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 10),
                           Text(
@@ -235,7 +255,9 @@ class AddBusinessView extends HookWidget {
                             const SizedBox(height: 26),
                             if (state.stayInventoryType ==
                                 StayInventoryType.singleUnit) ...[
-                              FormFieldLabel(context.l10n.pricePerNightRequired),
+                              FormFieldLabel(
+                                context.l10n.pricePerNightRequired,
+                              ),
                               const SizedBox(height: 10),
                               CustomTextField(
                                 hintText: context.l10n.enterPricePerNight,
@@ -289,12 +311,26 @@ class AddBusinessView extends HookWidget {
                                 StayInventoryType.multipleUnits) ...[
                               FormFieldLabel(context.l10n.bookableUnits),
                               const SizedBox(height: 10),
-                              StayUnitForm(
-                                nameController: roomNameController,
-                                guestsController: roomGuestsController,
-                                sizeController: roomSizeController,
-                                priceController: roomPriceController,
-                                quantityController: roomQuantityController,
+                              StayUnitsEditor(
+                                rooms: state.stayRooms,
+                                onRoomChanged: (room) => context
+                                    .read<AddBusinessBloc>()
+                                    .add(StayRoomUpdated(room)),
+                                onRoomRemoved: (roomId) => context
+                                    .read<AddBusinessBloc>()
+                                    .add(StayRoomRemoved(roomId)),
+                                onRoomAdded: () =>
+                                    context.read<AddBusinessBloc>().add(
+                                      StayRoomAdded(
+                                        StayRoomModel(
+                                          id: 'room-${DateTime.now().microsecondsSinceEpoch}',
+                                          name: '',
+                                          maxGuests: 0,
+                                          sizeSquareMeters: 0,
+                                          pricePerNight: 0,
+                                        ),
+                                      ),
+                                    ),
                               ),
                               const SizedBox(height: 28),
                             ],
@@ -387,7 +423,8 @@ class AddBusinessView extends HookWidget {
                                 .add(BusinessPhotoRemoved(imagePath)),
                           ),
                           const SizedBox(height: 30),
-                          if (state.businessType == BusinessType.stays) ...[
+                          if (!state.isEditing &&
+                              state.businessType == BusinessType.stays) ...[
                             CustomButton(
                               buttonName: context.l10n.seedDemoStays,
                               color: AppColors.surface,
@@ -402,7 +439,8 @@ class AddBusinessView extends HookWidget {
                             ),
                             const SizedBox(height: 14),
                           ],
-                          if (state.businessType == BusinessType.services) ...[
+                          if (!state.isEditing &&
+                              state.businessType == BusinessType.services) ...[
                             CustomButton(
                               buttonName: context.l10n.seedDemoServices,
                               color: AppColors.surface,
@@ -418,7 +456,9 @@ class AddBusinessView extends HookWidget {
                             const SizedBox(height: 14),
                           ],
                           CustomButton(
-                            buttonName: context.l10n.createBusiness,
+                            buttonName: state.isEditing
+                                ? context.l10n.saveChanges
+                                : context.l10n.createBusiness,
                             onPressed: canCreate && !state.isLoading
                                 ? () => context.read<AddBusinessBloc>().add(
                                     BusinessCreationRequested(
@@ -438,26 +478,7 @@ class AddBusinessView extends HookWidget {
                                       rooms:
                                           state.stayInventoryType ==
                                               StayInventoryType.multipleUnits
-                                          ? [
-                                              StayRoomModel(
-                                                id: 'room-${DateTime.now().microsecondsSinceEpoch}',
-                                                name: roomNameController.text
-                                                    .trim(),
-                                                maxGuests: int.parse(
-                                                  roomGuestsController.text,
-                                                ),
-                                                sizeSquareMeters: int.parse(
-                                                  roomSizeController.text,
-                                                ),
-                                                pricePerNight:
-                                                    parsePrice(
-                                                      roomPriceController.text,
-                                                    ),
-                                                quantity: int.parse(
-                                                  roomQuantityController.text,
-                                                ),
-                                              ),
-                                            ]
+                                          ? state.stayRooms
                                           : const [],
                                       extras: state.selectedExtras
                                           .map(

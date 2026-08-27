@@ -18,8 +18,6 @@ class CustomerHomeTopBar extends StatelessWidget {
           ),
         ),
         NotificationBell(onTap: () => context.push(AppRoutes.NOTIFICATIONS)),
-        const SizedBox(width: 20),
-        const Icon(Icons.help_outline_rounded, size: 23),
       ],
     );
   }

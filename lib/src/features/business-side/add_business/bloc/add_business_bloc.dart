@@ -1,5 +1,8 @@
 import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart';
 import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:aquabook/src/data/enums/stay_amenity.dart';
+import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
+import 'package:aquabook/src/data/models/stay_room_model.dart';
 import 'package:aquabook/src/data/repositories/business_repository.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_event.dart';
 import 'package:aquabook/src/features/business-side/add_business/bloc/add_business_state.dart';
@@ -17,6 +20,10 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     this._businessRepository,
   ) : super(const AddBusinessState()) {
     on<BusinessTypeChanged>(_onBusinessTypeChanged);
+    on<BusinessEditLoaded>(_onBusinessEditLoaded);
+    on<StayRoomAdded>(_onStayRoomAdded);
+    on<StayRoomRemoved>(_onStayRoomRemoved);
+    on<StayRoomUpdated>(_onStayRoomUpdated);
     on<BusinessCategoryChanged>(_onBusinessCategoryChanged);
     on<StayInventoryTypeChanged>(_onStayInventoryTypeChanged);
     on<BusinessAmenityToggled>(_onBusinessAmenityToggled);
@@ -67,6 +74,66 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     );
   }
 
+  void _onBusinessEditLoaded(
+    BusinessEditLoaded event,
+    Emitter<AddBusinessState> emit,
+  ) {
+    final business = event.business;
+    final stayDetails = business.stayDetails;
+    final serviceDetails = business.serviceDetails;
+    final extras = stayDetails?.extras ?? const [];
+    emit(
+      state.copyWith(
+        editingBusiness: business,
+        businessType: business.type,
+        categoryId: business.categoryId,
+        stayInventoryType:
+            stayDetails?.inventoryType ?? StayInventoryType.singleUnit,
+        selectedAmenities: stayDetails?.amenities ?? const <StayAmenity>[],
+        selectedCollectionIds: business.featuredCollectionIds,
+        selectedExtras: extras.map((extra) => extra.type).toList(),
+        extraPrices: {for (final extra in extras) extra.type.name: extra.price},
+        stayRooms: stayDetails?.rooms ?? const [],
+        serviceOfferings: serviceDetails?.offerings ?? const [],
+        availabilitySlots: serviceDetails?.availabilitySlots ?? const [],
+        serviceProviders: serviceDetails?.providers ?? const [],
+        latitude: business.location.latitude,
+        longitude: business.location.longitude,
+        resolvedCity: business.location.city,
+        resolvedAddress: business.location.address,
+        logoPath: business.logoUrl,
+        coverPhotoPath: business.coverPhotoUrl,
+        businessPhotoPaths: business.photoUrls,
+        hasExistingBusiness: true,
+      ),
+    );
+  }
+
+  void _onStayRoomAdded(StayRoomAdded event, Emitter<AddBusinessState> emit) =>
+      emit(state.copyWith(stayRooms: [...state.stayRooms, event.room]));
+
+  void _onStayRoomRemoved(
+    StayRoomRemoved event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      stayRooms: state.stayRooms
+          .where((room) => room.id != event.roomId)
+          .toList(),
+    ),
+  );
+
+  void _onStayRoomUpdated(
+    StayRoomUpdated event,
+    Emitter<AddBusinessState> emit,
+  ) => emit(
+    state.copyWith(
+      stayRooms: state.stayRooms
+          .map((room) => room.id == event.room.id ? event.room : room)
+          .toList(),
+    ),
+  );
+
   void _onBusinessCategoryChanged(
     BusinessCategoryChanged event,
     Emitter<AddBusinessState> emit,
@@ -77,7 +144,24 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   void _onStayInventoryTypeChanged(
     StayInventoryTypeChanged event,
     Emitter<AddBusinessState> emit,
-  ) => emit(state.copyWith(stayInventoryType: event.inventoryType));
+  ) {
+    final rooms =
+        event.inventoryType == StayInventoryType.multipleUnits &&
+            state.stayRooms.isEmpty
+        ? [
+            StayRoomModel(
+              id: 'room-${DateTime.now().microsecondsSinceEpoch}',
+              name: '',
+              maxGuests: 0,
+              sizeSquareMeters: 0,
+              pricePerNight: 0,
+            ),
+          ]
+        : state.stayRooms;
+    emit(
+      state.copyWith(stayInventoryType: event.inventoryType, stayRooms: rooms),
+    );
+  }
 
   void _onBusinessAmenityToggled(
     BusinessAmenityToggled event,
@@ -378,29 +462,56 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       ),
     );
     try {
-      await _businessRepository.createBusiness(
-        type: state.businessType,
-        name: event.name,
-        categoryId: state.categoryId!,
-        city: event.city,
-        address: event.address,
-        shortDescription: event.shortDescription,
-        pricePerNight: event.pricePerNight,
-        stayInventoryType: state.stayInventoryType,
-        amenities: event.amenities,
-        rooms: event.rooms,
-        extras: event.extras,
-        featuredCollectionIds: state.selectedCollectionIds,
-        serviceOfferings: event.serviceOfferings,
-        availabilitySlots: event.availabilitySlots,
-        serviceProviderName: event.serviceProviderName,
-        serviceProviders: event.serviceProviders,
-        latitude: state.latitude,
-        longitude: state.longitude,
-        logoPath: state.logoPath,
-        coverPhotoPath: state.coverPhotoPath,
-        photoPaths: state.businessPhotoPaths,
-      );
+      final existingBusiness = state.editingBusiness;
+      if (existingBusiness != null) {
+        await _businessRepository.updateBusiness(
+          business: existingBusiness,
+          name: event.name,
+          categoryId: state.categoryId!,
+          city: event.city,
+          address: event.address,
+          shortDescription: event.shortDescription,
+          pricePerNight: event.pricePerNight,
+          stayInventoryType: state.stayInventoryType,
+          amenities: event.amenities,
+          rooms: event.rooms,
+          extras: event.extras,
+          featuredCollectionIds: state.selectedCollectionIds,
+          serviceOfferings: event.serviceOfferings,
+          availabilitySlots: event.availabilitySlots,
+          serviceProviderName: event.serviceProviderName,
+          serviceProviders: event.serviceProviders,
+          latitude: state.latitude,
+          longitude: state.longitude,
+          logoPath: state.logoPath,
+          coverPhotoPath: state.coverPhotoPath,
+          photoPaths: state.businessPhotoPaths,
+        );
+      } else {
+        await _businessRepository.createBusiness(
+          type: state.businessType,
+          name: event.name,
+          categoryId: state.categoryId!,
+          city: event.city,
+          address: event.address,
+          shortDescription: event.shortDescription,
+          pricePerNight: event.pricePerNight,
+          stayInventoryType: state.stayInventoryType,
+          amenities: event.amenities,
+          rooms: event.rooms,
+          extras: event.extras,
+          featuredCollectionIds: state.selectedCollectionIds,
+          serviceOfferings: event.serviceOfferings,
+          availabilitySlots: event.availabilitySlots,
+          serviceProviderName: event.serviceProviderName,
+          serviceProviders: event.serviceProviders,
+          latitude: state.latitude,
+          longitude: state.longitude,
+          logoPath: state.logoPath,
+          coverPhotoPath: state.coverPhotoPath,
+          photoPaths: state.businessPhotoPaths,
+        );
+      }
       emit(
         state.copyWith(
           isLoading: false,

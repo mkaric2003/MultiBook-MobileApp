@@ -28,6 +28,14 @@ class CustomerBookingPriceCard extends StatelessWidget {
               'Room (${booking.checkOut.difference(booking.checkIn).inDays} nights)',
           value: booking.roomSubtotal,
         ),
+        if (booking.discountAmount > 0) ...[
+          const SizedBox(height: 14),
+          CustomerBookingPriceRow(
+            label: context.l10n.promotion,
+            value: -booking.discountAmount,
+            valueColor: AppColors.success,
+          ),
+        ],
         const SizedBox(height: 14),
         CustomerBookingPriceRow(
           label: 'Cleaning fee',

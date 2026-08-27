@@ -748,6 +748,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get serviceFee => 'Servicegebühr';
 
   @override
+  String get serviceCost => 'Dienstleistungskosten';
+
+  @override
+  String get discountApplied => 'Rabatt angewendet';
+
+  @override
   String get taxes => 'Steuern';
 
   @override
@@ -1843,4 +1849,364 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get providerEarnings => 'Mitarbeitereinnahmen';
+
+  @override
+  String get privacyPolicyContent =>
+      'DATENSCHUTZERKLÄRUNG\n\nMultiBook verarbeitet Daten nur, um eine App zum Finden und Buchen von Unterkünften und Dienstleistungen bereitzustellen.\n\n1. Erhobene Daten\nWir erfassen die von Ihnen angegebenen Kontodaten, Buchungs- und Termindaten, Nachrichten, gespeicherte Anzeigen, Bewertungen sowie technische Daten zur Sicherheit der App.\n\n2. Standort\nWir verwenden Ihren Standort nur mit Ihrer Zustimmung. Stadt und Adresse helfen uns, passende Anzeigen, Karten und Suchen in der Nähe anzuzeigen.\n\n3. Nutzung und Weitergabe\nWir verwenden Daten für Buchungen, Termine, Zahlungen, Kommunikation, Benachrichtigungen, Sicherheit und die Verbesserung der App. Bei einer Buchung erhält das Unternehmen nur die nötigen Daten: Name, Kontaktdaten, gewählte Zeit oder Daten und relevante Wünsche. Wir verkaufen keine personenbezogenen Daten.\n\n4. Zahlungen und Sicherheit\nUnternehmen erhalten keine vollständigen Kartendaten. Wir speichern nur Zahlungsstatus und Transaktionsbestätigung. Firebase wird für Authentifizierung, Datenbank, Bildspeicher und Benachrichtigungen genutzt.\n\n5. Ihre Rechte\nSie können Ihr Profil bearbeiten, gespeicherte Anzeigen entfernen, Standortfreigaben verwalten und über den Support die Löschung Ihres Kontos anfordern.\n\n6. Änderungen\nWir können diese Erklärung bei Weiterentwicklung der App aktualisieren und informieren Sie in der App über wesentliche Änderungen.';
+
+  @override
+  String get termsOfServiceContent =>
+      'NUTZUNGSBEDINGUNGEN\n\nMit der Nutzung von MultiBook akzeptieren Sie diese Bedingungen. MultiBook verbindet Kunden mit unabhängigen Unternehmen für Unterkünfte und Dienstleistungen.\n\n1. Ihr Konto\nSie müssen korrekte Angaben machen und den Zugriff auf Ihr Konto schützen. Die Nutzung fremder Konten, unerwünschte Nachrichten, das Umgehen von Sicherheitsmaßnahmen und Missbrauch der App sind untersagt.\n\n2. Buchungen und Termine\nPrüfen Sie vor der Bestätigung Daten, Uhrzeit, Gästezahl, gewähltes Zimmer oder Service und Gesamtpreis. Eine bestätigte Buchung oder ein Termin ist eine Vereinbarung zwischen Ihnen und dem Unternehmen.\n\n3. Zahlung, Stornierung und Änderungen\nJe nach Angebot erfolgt die Zahlung online oder bar. Stornierungsregeln, Umbuchungen und Verfügbarkeit hängen vom Unternehmen und der Reservierungsart ab. Sagen Sie rechtzeitig ab, wenn Sie nicht teilnehmen können.\n\n4. Unternehmen und Qualität\nUnternehmen sind unabhängige Anbieter und für Angaben, Verfügbarkeit, Qualität und Leistung verantwortlich. MultiBook bietet Bewertungen und Support, garantiert aber keine bestimmte Erfahrung.\n\n5. Bewertungen und Verhalten\nVerfassen Sie ehrliche und respektvolle Bewertungen. Beleidigungen, Fake-Buchungen, Betrug, Diskriminierung und schädigendes Verhalten sind verboten.\n\n6. Änderungen\nWir können diese Bedingungen wegen neuer Funktionen, Sicherheit oder rechtlicher Anforderungen ändern. Die weitere Nutzung bedeutet Zustimmung.';
+
+  @override
+  String get supportRequests => 'Supportanfragen';
+
+  @override
+  String get noSupportRequests => 'Sie haben noch keine Supportanfragen.';
+
+  @override
+  String get newSupportRequest => 'Neue Anfrage';
+
+  @override
+  String get supportRequestDescription =>
+      'Senden Sie uns die Details Ihres Problems; unser Team prüft Ihre Anfrage.';
+
+  @override
+  String get selectSupportTopic => 'Thema auswählen';
+
+  @override
+  String get supportSubject => 'Betreff';
+
+  @override
+  String get supportSubjectHint => 'Beschreiben Sie das Problem kurz';
+
+  @override
+  String get supportMessage => 'Nachricht';
+
+  @override
+  String get supportMessageHint =>
+      'Fügen Sie möglichst viele hilfreiche Details hinzu...';
+
+  @override
+  String get sendSupportRequest => 'Anfrage senden';
+
+  @override
+  String get supportRequestSent => 'Ihre Anfrage wurde erfolgreich gesendet.';
+
+  @override
+  String get supportRequestFailed =>
+      'Die Anfrage konnte nicht gesendet werden.';
+
+  @override
+  String get supportCategoryAccount => 'Konto und Profil';
+
+  @override
+  String get supportCategoryBooking => 'Unterkunftsbuchung';
+
+  @override
+  String get supportCategoryAppointment => 'Servicetermin';
+
+  @override
+  String get supportCategoryPayment => 'Zahlung';
+
+  @override
+  String get supportCategoryTechnical => 'Technisches Problem';
+
+  @override
+  String get supportCategoryOther => 'Sonstiges';
+
+  @override
+  String get supportStatusOpen => 'Offen';
+
+  @override
+  String get supportStatusInProgress => 'In Bearbeitung';
+
+  @override
+  String get supportStatusResolved => 'Gelöst';
+
+  @override
+  String get helpCenterHeading => 'Kako vam možemo pomoći?';
+
+  @override
+  String get helpCenterIntro =>
+      'Pronađite jasne odgovore o smještajima, uslugama, plaćanju, promjenama rezervacija i sigurnom korištenju MultiBooka.';
+
+  @override
+  String get helpCenterSearchHint => 'Pretražite pitanja i odgovore';
+
+  @override
+  String get helpCenterBrowseTopics => 'Pregledajte po temi';
+
+  @override
+  String get helpCenterPopularArticles => 'Najčešća pitanja';
+
+  @override
+  String get helpCenterSearchResults => 'Rezultati pretrage';
+
+  @override
+  String get helpCenterShowAll => 'Prikaži sve';
+
+  @override
+  String get helpCenterNoResultsTitle => 'Nismo pronašli odgovor';
+
+  @override
+  String get helpCenterNoResultsBody =>
+      'Pokušajte s drugim pojmom ili nam pošaljite zahtjev za podršku.';
+
+  @override
+  String get helpCenterContactTitle => 'Još vam je potrebna pomoć?';
+
+  @override
+  String get helpCenterContactBody =>
+      'Pošaljite zahtjev s što više detalja. Naš tim ga može pregledati i pratiti njegov status u aplikaciji.';
+
+  @override
+  String get helpCenterContactButton => 'Kontaktirajte podršku';
+
+  @override
+  String get helpTopicStays => 'Smještaji i rezervacije';
+
+  @override
+  String get helpTopicAppointments => 'Termini usluga';
+
+  @override
+  String get helpTopicChanges => 'Promjene i otkazivanja';
+
+  @override
+  String get helpTopicPayments => 'Plaćanja i cijene';
+
+  @override
+  String get helpTopicAccount => 'Račun i privatnost';
+
+  @override
+  String get helpTopicMessages => 'Poruke i obavijesti';
+
+  @override
+  String get helpTopicTechnical => 'Pretraga i lokacija';
+
+  @override
+  String get helpTopicSafety => 'Sigurnost i podrška';
+
+  @override
+  String get helpFindingBookingStayTitle =>
+      'Kako pronaći i rezervisati smještaj?';
+
+  @override
+  String get helpFindingBookingStaySummary =>
+      'Koraci od pretrage oglasa do potvrđene rezervacije.';
+
+  @override
+  String get helpFindingBookingStayBody =>
+      '1. Na početnoj stranici odaberite Smještaji, unesite grad ili naziv oglasa i po potrebi otvorite Filtere. Možete birati datume, broj gostiju, grad, cijenu, ocjenu, kategoriju i pogodnosti.\n\n2. Otvorite oglas i provjerite fotografije, lokaciju, cijenu po noći, pogodnosti, pravila i raspoložive jedinice ili sobe.\n\n3. Odaberite datume i goste. Ako business nudi više soba ili jedinica, izaberite željeni tip; ako ga ne izaberete, koristi se osnovna dostupna jedinica navedena uz cijenu oglasa.\n\n4. Na pregledu rezervacije provjerite ukupnu cijenu, poreze, naknade i dodatke. Nakon uspješnog plaćanja ili izbora gotovine, rezervacija je potvrđena i dostupna u Rezervacijama.';
+
+  @override
+  String get helpStayDatesRoomsTitle => 'Datumi, gosti i raspoloživost soba';
+
+  @override
+  String get helpStayDatesRoomsSummary =>
+      'Kako MultiBook računa raspoloživost za privatne objekte i hotele.';
+
+  @override
+  String get helpStayDatesRoomsBody =>
+      'Za privatnu jedinicu, poput apartmana ili vile s jednom jedinicom, zauzeti datumi ne mogu se odabrati. Provjerite datum prijave i odjave prije nastavka.\n\nZa objekte s više jedinica, poput hotela, raspoloživost se računa po odabranom tipu sobe i kapacitetu. Zato isti datum može ostati dostupan dok god postoji slobodna soba odgovarajućeg tipa.\n\nBroj odraslih i djece utiče na prikaz dostupnih opcija. Ako ne vidite željenu sobu, promijenite broj gostiju ili datume. Cijena se prikazuje po noći; dodatne usluge, porezi i naknade prikazuju se prije potvrde.';
+
+  @override
+  String get helpStatusesTitle => 'Statusi rezervacija i termina';
+
+  @override
+  String get helpStatusesSummary =>
+      'Šta znače potvrđeno, završeno, otkazano i odbijeno.';
+
+  @override
+  String get helpStatusesBody =>
+      'Potvrđeno znači da je rezervacija smještaja ili termin usluge uspješno kreiran. Za online plaćanje to nastaje nakon uspješne potvrde plaćanja, a za gotovinu nakon potvrde rezervacije.\n\nZavršeno označava raniji termin ili boravak koji je protekao. Tada možete ostaviti jednu recenziju za business.\n\nOtkazano znači da je korisnik otkazao rezervaciju ili termin. Odbijeno označava promjenu statusa koju je napravio business. Ako imate pitanja o konkretnom statusu, otvorite detalje rezervacije ili pošaljite zahtjev podršci.';
+
+  @override
+  String get helpChangesTitle => 'Kako promijeniti ili otkazati rezervaciju?';
+
+  @override
+  String get helpChangesSummary =>
+      'Pravila za otkazivanje i jednokratno pomjeranje termina usluge.';
+
+  @override
+  String get helpChangesBody =>
+      'Otvorite Rezervacije, izaberite aktivnu stavku i pogledajte dostupne radnje. Rezervaciju smještaja ili termin možete otkazati dok je ta opcija dostupna u detaljima.\n\nZa termin usluge korisnik može jednom odabrati Promijeni termin. Nakon toga birate novi datum i samo slobodne slotove odgovarajuće dužine. Business može promijeniti termin više puta kada je to potrebno.\n\nOtkazivanje i promjena mogu uticati na dostupnost i naplatu prema pravilima businessa. Prije potvrde pažljivo provjerite novi datum, vrijeme, odabrane usluge i ukupan iznos.';
+
+  @override
+  String get helpCashNoShowTitle => 'Online plaćanje, gotovina i nedolazak';
+
+  @override
+  String get helpCashNoShowSummary =>
+      'Razlika između načina plaćanja i šta se dešava ako ne dođete.';
+
+  @override
+  String get helpCashNoShowBody =>
+      'Business može ponuditi online plaćanje ili plaćanje gotovinom. Kod online plaćanja unosite podatke kartice u sigurnom koraku plaćanja. Kod gotovine iznos plaćate direktno businessu pri dolasku ili nakon usluge, prema potvrđenim detaljima.\n\nBez obzira na način plaćanja, potvrđena stavka ulazi u evidenciju businessa. Za prošlu gotovinsku rezervaciju ili termin business može označiti nedolazak ako se klijent nije pojavio. Time se iznos uklanja iz zarade, statistike i trendova businessa.\n\nAko smatrate da je status ili iznos pogrešan, prvo provjerite detalje rezervacije, zatim kontaktirajte business porukom ili otvorite zahtjev podršci.';
+
+  @override
+  String get helpPaymentSecurityTitle => 'Sigurnost kartice, cijene i potvrde';
+
+  @override
+  String get helpPaymentSecuritySummary =>
+      'Šta se prikazuje prije plaćanja i koje podatke business vidi.';
+
+  @override
+  String get helpPaymentSecurityBody =>
+      'Prije plaćanja MultiBook prikazuje detaljan obračun: osnovnu cijenu smještaja ili usluga, izabrane dodatke, naknade i poreze. Potvrdite plaćanje tek kada su iznos, datumi i vrijeme tačni.\n\nBusiness ne dobija puni broj vaše kartice. U detaljima može biti prikazan samo način plaćanja i maskirani završetak kartice, kada je dostupan.\n\nSačuvajte potvrdu rezervacije ili termina i njen kod. On pomaže pri komunikaciji s businessom i podrškom. Nikada ne šaljite puni broj kartice, CVV, lozinku ili kodove za prijavu kroz chat.';
+
+  @override
+  String get helpProfileDataTitle => 'Profil, lokacija i lični podaci';
+
+  @override
+  String get helpProfileDataSummary =>
+      'Kako urediti podatke, upravljati dozvolom lokacije i zaštititi račun.';
+
+  @override
+  String get helpProfileDataBody =>
+      'U Profilu možete urediti ime, broj telefona, adresu, grad, datum rođenja, državni pozivni broj i profilnu sliku. Email je povezan s vašim načinom prijave i zato može biti zaključan za direktnu izmjenu.\n\nLokaciju tražimo uz vašu dozvolu kako bismo prikazali oglase u vašem gradu, karte i rezultate u blizini. Dozvolu možete odbiti ili promijeniti u postavkama uređaja; grad zatim možete ručno urediti u profilu.\n\nČuvajte lozinku i pristup računu. Ako primijetite nepoznatu aktivnost ili želite brisanje računa, odmah pošaljite zahtjev podršci.';
+
+  @override
+  String get helpMessagesTitle => 'Poruke, obavijesti i podrška';
+
+  @override
+  String get helpMessagesSummary =>
+      'Kako komunicirati s businessom i upravljati obavijestima.';
+
+  @override
+  String get helpMessagesBody =>
+      'Poruke u MultiBooku uvijek se vode između korisnika i konkretnog businessa, ne samo vlasnika businessa. Chat možete otvoriti iz detalja rezervacije ili termina, a listu svih razgovora pronaći ćete u Profilu ili More sekciji.\n\nPush obavijest za novu poruku se ne šalje dok je taj chat otvoren. Nepročitane poruke su označene u listi razgovora i na relevantnim stavkama navigacije.\n\nZa problem koji ne može riješiti business, otvorite Kontaktirajte nas. Zahtjev uključuje temu, naslov i poruku, a njegov status možete pratiti u Zahtjevima za podršku.';
+
+  @override
+  String get helpLocationSearchTitle => 'Pretraga, filteri i lokacija';
+
+  @override
+  String get helpLocationSearchSummary =>
+      'Kako dobiti relevantnije rezultate za smještaje i usluge.';
+
+  @override
+  String get helpLocationSearchBody =>
+      'Za smještaj možete pretraživati grad ili naziv oglasa te koristiti filtre za datume, goste, cijenu, ocjenu, kategoriju i pogodnosti. Za usluge možete birati datum, vrijeme, vrstu businessa, grad, cijenu i sortiranje.\n\nKada filtrirate uslugu po vremenu, MultiBook uzima u obzir trajanje odabranih usluga i stvarno zauzete slotove svih zaposlenika. Rezultat se prikazuje samo ako je kod najmanje jednog odgovarajućeg zaposlenika moguć cijeli termin.\n\nAko ne pronalazite rezultate, odaberite Sve gradove, proširite raspon cijene, promijenite datum ili uklonite dio filtera.';
+
+  @override
+  String get helpSafetyTitle => 'Sigurnost, recenzije i prijava problema';
+
+  @override
+  String get helpSafetySummary =>
+      'Pravila za sigurnu komunikaciju, tačne recenzije i prijavu sumnjivog sadržaja.';
+
+  @override
+  String get helpSafetyBody =>
+      'Koristite MultiBook chat za komunikaciju o rezervaciji ili terminu i dijelite samo podatke koji su potrebni. Ne šaljite lozinke, CVV, jednokratne kodove ni pune podatke kartice.\n\nNakon završenog boravka ili termina možete ostaviti jednu iskrenu recenziju po businessu. Ocjena i komentar trebaju opisivati stvarno iskustvo, bez uvreda, diskriminacije, prijetnji ili lažnih navoda.\n\nAko je oglas netačan, komunikacija neprimjerena ili sumnjate na prevaru, sačuvajte relevantne detalje i pošaljite zahtjev podršci. U hitnim ili sigurnosno osjetljivim situacijama kontaktirajte lokalne nadležne službe.';
+
+  @override
+  String get savedPaymentMethods => 'Gespeicherte Zahlungsmethoden';
+
+  @override
+  String get savedPaymentMethodsDescription =>
+      'Wählen Sie eine Standardkarte für schnellere Zahlungen.';
+
+  @override
+  String get noSavedPaymentMethods =>
+      'Sie haben noch keine gespeicherten Karten.';
+
+  @override
+  String get addPaymentMethod => 'Karte hinzufügen';
+
+  @override
+  String get defaultPaymentMethod => 'Standard';
+
+  @override
+  String get setAsDefault => 'Als Standard festlegen';
+
+  @override
+  String get activePromotions => 'Aktive Aktionen';
+
+  @override
+  String get noPromotions => 'Sie haben noch keine Aktionen erstellt.';
+
+  @override
+  String get createPromotion => 'Aktion erstellen';
+
+  @override
+  String get promotionName => 'Name der Aktion';
+
+  @override
+  String get promotionNameHint => 'z. B. Sommerrabatt';
+
+  @override
+  String get discountType => 'Rabattart';
+
+  @override
+  String get discountValue => 'Rabattwert';
+
+  @override
+  String get promoCodeOptional => 'Aktionscode (optional)';
+
+  @override
+  String get startsOn => 'Beginnt';
+
+  @override
+  String get endsOn => 'Endet';
+
+  @override
+  String get minimumBookingValue => 'Mindestbuchungswert';
+
+  @override
+  String get minimumNights => 'Mindestnächte';
+
+  @override
+  String get usageLimitOptional => 'Nutzungslimit (optional)';
+
+  @override
+  String get percentageDiscount => 'Prozentsatz';
+
+  @override
+  String get fixedDiscount => 'Fester Betrag';
+
+  @override
+  String get couponDiscount => 'Gutscheincode';
+
+  @override
+  String get promotionActive => 'Aktiv';
+
+  @override
+  String get promotionInactive => 'Inaktiv';
+
+  @override
+  String get discountValueHint => 'z. B. 10';
+
+  @override
+  String get promoCodeHint => 'z. B. SOMMER10';
+
+  @override
+  String get promotion => 'Rabatt';
+
+  @override
+  String get providerPrivacyPolicyContent =>
+      'DATENSCHUTZRICHTLINIE FÜR ANBIETER\n\nMultiBook verarbeitet Konto- und Unternehmensdaten von Anbietern, um Aufenthalte oder Dienstleistungen zu veröffentlichen und zu verwalten. Dazu gehören Unternehmensprofil, Standort, Fotos, Preise, Verfügbarkeit, Mitarbeitende, Aktionen, Buchungen, Termine, Einnahmen und Nachrichten mit Kunden.\n\n1. Kundendaten\nBei bestätigten Reservierungen erhalten Sie nur Daten, die zur Erbringung des Aufenthalts oder der Dienstleistung erforderlich sind: Name, Kontaktdaten, Datum/Uhrzeit, gewählte Leistung und relevante Reservierungsdaten. Verwenden Sie diese Daten nur für diese Reservierung und nicht für unerwünschtes Marketing.\n\n2. Sicherheit und Aufzeichnungen\nSchützen Sie den Zugang zum Anbieterkonto und beschränken Sie den Zugriff auf befugte Mitarbeitende. Fragen Sie im Chat niemals nach Passwörtern, CVV-Codes oder vollständigen Kartendaten. Nachrichten, Bewertungen, Stornierungen, No-Show-Einträge und Transaktionsdaten können für Support, Betrugsprävention, Streitfälle, Finanzberichte und gesetzliche Pflichten gespeichert werden.\n\n3. Ihre Wahlmöglichkeiten\nUnternehmensdaten können Sie unter Aufenthalte und Dienstleistungen verwalten ändern. Wenden Sie sich für Kontolöschung, Datenauskunft oder Datenschutzfragen an den MultiBook-Support.';
+
+  @override
+  String get providerTermsOfServiceContent =>
+      'NUTZUNGSBEDINGUNGEN FÜR ANBIETER\n\nMit dem Betrieb eines Unternehmens auf MultiBook akzeptieren Sie diese Anbieterbedingungen. MultiBook stellt unabhängigen Unternehmen Werkzeuge zur Veröffentlichung von Aufenthalten oder Dienstleistungen, zur Verwaltung der Verfügbarkeit und zur Kommunikation mit Kunden bereit.\n\n1. Korrekte Inserate\nHalten Sie Unternehmensdaten, Preise, Verfügbarkeit, Ausstattung, Mitarbeitende und Leistungsbeschreibungen korrekt. Veröffentlichen Sie keine irreführenden Fotos, Angebote oder Verfügbarkeiten.\n\n2. Reservierungen und Zahlungen\nEine bestätigte Buchung oder ein Termin ist eine Vereinbarung zwischen Ihrem Unternehmen und dem Kunden. Erfüllen Sie diese, sofern kein berechtigter Ausnahmegrund vorliegt. Nutzen Sie Ablehnungs-, Stornierungs-, Umbuchungs- und Cash-No-Show-Funktionen korrekt. Für Steuern, Rechnungen, Rückerstattungen und gesetzliche Pflichten bleiben Sie verantwortlich.\n\n3. Verhalten\nVerwenden Sie Kundendaten nur für die gebuchte Leistung. Diskriminierung, Belästigung, Spam, Bewertungsmanipulation und Zahlungsaufforderungen außerhalb der vorgesehenen Abläufe sind verboten. Wir können Inserate oder Konten bei Missbrauch einschrken.';
+
+  @override
+  String get changePassword => 'Passwort ändern';
+
+  @override
+  String get currentPassword => 'Aktuelles Passwort';
+
+  @override
+  String get newPassword => 'Neues Passwort';
+
+  @override
+  String get confirmNewPassword => 'Neues Passwort bestätigen';
+
+  @override
+  String get passwordsDoNotMatch => 'Die Passwörter stimmen nicht überein.';
+
+  @override
+  String get passwordMinimumLength => 'Verwenden Sie mindestens 6 Zeichen.';
+
+  @override
+  String get passwordChangedSuccessfully => 'Passwort erfolgreich geändert.';
 }

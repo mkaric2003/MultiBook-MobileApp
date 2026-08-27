@@ -19,7 +19,9 @@ class CustomerProfileView extends StatelessWidget {
     create: (_) => getIt<CustomerProfileCubit>()..load(),
     child: BlocConsumer<CustomerProfileCubit, CustomerProfileState>(
       listener: (context, state) {
-        if (state.isSignedOut) context.go(AppRoutes.SIGNIN);
+        if (state.isLoading && state.errorMessage == null) {
+          context.go(AppRoutes.SIGNIN);
+        }
       },
       builder: (context, state) {
         final user = state.user;
@@ -103,6 +105,7 @@ class CustomerProfileView extends StatelessWidget {
                 CustomerProfileMenuItem(
                   icon: Icons.credit_card,
                   label: context.l10n.paymentMethods,
+                  onTap: () => context.push(AppRoutes.PAYMENT_METHODS),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
@@ -134,21 +137,25 @@ class CustomerProfileView extends StatelessWidget {
                 CustomerProfileMenuItem(
                   icon: Icons.help_outline,
                   label: context.l10n.helpCenter,
+                  onTap: () => context.push(AppRoutes.HELP_CENTER),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.chat_bubble_outline,
                   label: context.l10n.contactUs,
+                  onTap: () => context.push(AppRoutes.SUPPORT_TICKETS),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.description_outlined,
                   label: context.l10n.termsOfService,
+                  onTap: () => context.push(AppRoutes.TERMS_OF_SERVICE),
                 ),
                 const SizedBox(height: 10),
                 CustomerProfileMenuItem(
                   icon: Icons.shield_outlined,
                   label: context.l10n.privacyPolicy,
+                  onTap: () => context.push(AppRoutes.PRIVACY_POLICY),
                 ),
                 const SizedBox(height: 32),
                 CustomButton(

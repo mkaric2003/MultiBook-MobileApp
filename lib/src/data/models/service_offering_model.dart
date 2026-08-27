@@ -10,6 +10,7 @@ class ServiceOfferingModel with ServiceOfferingModelMappable {
     required this.durationMinutes,
     required this.price,
     this.description,
+    this.isActive = true,
   });
 
   final String id;
@@ -17,4 +18,5 @@ class ServiceOfferingModel with ServiceOfferingModelMappable {
   final int durationMinutes;
   final int price;
   final String? description;
+  final bool isActive;
 }

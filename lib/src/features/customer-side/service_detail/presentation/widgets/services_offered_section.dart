@@ -16,7 +16,9 @@ class ServicesOfferedSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final offerings = business.serviceDetails?.offerings ?? const [];
+    final offerings = (business.serviceDetails?.offerings ?? const [])
+        .where((offering) => offering.isActive)
+        .toList();
     if (offerings.isEmpty) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.fromLTRB(22, 26, 22, 24),
