@@ -1,7 +1,7 @@
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/data/models/user_model.dart';
-import 'package:aquabook/src/features/shared/user_location/cubit/user_location_cubit.dart';
-import 'package:aquabook/src/features/shared/user_location/presentation/widgets/user_location_gate_content.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/data/models/user_model.dart';
+import 'package:multibook/src/features/shared/user_location/cubit/user_location_cubit.dart';
+import 'package:multibook/src/features/shared/user_location/presentation/widgets/user_location_gate_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

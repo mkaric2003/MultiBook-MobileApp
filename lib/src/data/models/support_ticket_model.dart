@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/support_ticket_category.dart';
-import 'package:aquabook/src/data/enums/support_ticket_status.dart';
+import 'package:multibook/src/data/enums/support_ticket_category.dart';
+import 'package:multibook/src/data/enums/support_ticket_status.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'support_ticket_model.mapper.dart';

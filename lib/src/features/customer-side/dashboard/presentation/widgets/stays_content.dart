@@ -1,13 +1,13 @@
-import 'package:aquabook/src/data/models/booking_draft_model.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/continue_booking_card.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_section_title.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/nearby_stays_list.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/other_stays_grid.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/quick_filter_chips.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/recommended_stays_list.dart';
+import 'package:multibook/src/data/models/booking_draft_model.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/continue_booking_card.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_section_title.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/nearby_stays_list.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/other_stays_grid.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/quick_filter_chips.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/recommended_stays_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

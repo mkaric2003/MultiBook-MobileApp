@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BusinessPhotoThumbnail extends StatelessWidget {

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/user_type.dart';
-import 'package:aquabook/src/data/models/user_model.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
+import 'package:multibook/src/data/models/user_model.dart';
 
 class ClientEntryState {
   const ClientEntryState({

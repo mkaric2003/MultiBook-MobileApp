@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/enums/booking_status.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
 
 class AvailabilityDaySummary {
   const AvailabilityDaySummary({

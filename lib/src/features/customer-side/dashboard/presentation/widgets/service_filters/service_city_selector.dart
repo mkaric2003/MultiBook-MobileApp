@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/global_widgets/searchable_city_picker_sheet.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/global_widgets/searchable_city_picker_sheet.dart';
 import 'package:flutter/material.dart';
 
 class ServiceCitySelector extends StatelessWidget {

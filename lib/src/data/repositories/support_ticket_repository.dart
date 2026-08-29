@@ -1,11 +1,11 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/enums/support_ticket_category.dart';
-import 'package:aquabook/src/data/enums/support_ticket_status.dart';
-import 'package:aquabook/src/data/models/support_ticket_model.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/enums/support_ticket_category.dart';
+import 'package:multibook/src/data/enums/support_ticket_status.dart';
+import 'package:multibook/src/data/models/support_ticket_model.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

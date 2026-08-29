@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/enums/booking_status.dart';
-import 'package:aquabook/src/data/models/booking_model.dart';
-import 'package:aquabook/src/data/models/appointment_model.dart';
-import 'package:aquabook/src/features/customer-side/bookings/domain/enums/customer_booking_type.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/features/customer-side/bookings/domain/enums/customer_booking_type.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBookingsState {

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/chat_conversation_model.dart';
-import 'package:aquabook/src/data/models/chat_message_model.dart';
+import 'package:multibook/src/data/models/chat_conversation_model.dart';
+import 'package:multibook/src/data/models/chat_message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

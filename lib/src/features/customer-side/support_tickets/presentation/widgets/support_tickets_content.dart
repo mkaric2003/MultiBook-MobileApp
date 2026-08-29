@@ -1,7 +1,7 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/support_tickets/cubit/support_tickets_state.dart';
-import 'package:aquabook/src/features/customer-side/support_tickets/presentation/widgets/support_ticket_card.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/support_tickets/cubit/support_tickets_state.dart';
+import 'package:multibook/src/features/customer-side/support_tickets/presentation/widgets/support_ticket_card.dart';
 import 'package:flutter/material.dart';
 
 class SupportTicketsContent extends StatelessWidget {

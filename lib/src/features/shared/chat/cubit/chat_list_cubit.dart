@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:aquabook/src/data/repositories/chat_repository.dart';
-import 'package:aquabook/src/features/shared/chat/cubit/chat_list_state.dart';
+import 'package:multibook/src/data/repositories/chat_repository.dart';
+import 'package:multibook/src/features/shared/chat/cubit/chat_list_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

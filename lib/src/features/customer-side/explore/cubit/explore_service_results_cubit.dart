@@ -1,8 +1,8 @@
-import 'package:aquabook/src/data/repositories/service_search_repository.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:aquabook/src/features/customer-side/explore/cubit/explore_service_results_state.dart';
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_results_arguments.dart';
+import 'package:multibook/src/data/repositories/service_search_repository.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/explore/cubit/explore_service_results_state.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_service_results_arguments.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

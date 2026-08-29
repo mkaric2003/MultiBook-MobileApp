@@ -1,5 +1,5 @@
-import 'package:aquabook/app.dart';
-import 'package:aquabook/src/core/injectable/injectable.dart';
+import 'package:multibook/app.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

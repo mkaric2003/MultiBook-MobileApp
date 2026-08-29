@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/booking_model.dart';
-import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_booking_card.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_booking_card.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBookingsSection extends StatelessWidget {

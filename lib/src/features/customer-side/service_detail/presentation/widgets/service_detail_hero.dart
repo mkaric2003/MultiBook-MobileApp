@@ -1,6 +1,6 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:aquabook/src/features/customer-side/service_detail/presentation/widgets/service_detail_action_button.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_detail_action_button.dart';
 import 'package:flutter/material.dart';
 
 class ServiceDetailHero extends StatelessWidget {

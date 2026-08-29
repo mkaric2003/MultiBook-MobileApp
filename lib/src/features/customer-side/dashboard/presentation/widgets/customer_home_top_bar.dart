@@ -1,6 +1,6 @@
-import 'package:aquabook/app.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/shared/notifications/presentation/widgets/notification_bell.dart';
+import 'package:multibook/app.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/shared/notifications/presentation/widgets/notification_bell.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

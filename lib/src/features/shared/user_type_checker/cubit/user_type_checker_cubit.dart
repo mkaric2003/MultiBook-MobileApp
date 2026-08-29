@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/enums/user_type.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/shared/user_type_checker/cubit/user_type_checker_state.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/shared/user_type_checker/cubit/user_type_checker_state.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';

@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/data/models/service_offering_model.dart';
-import 'package:aquabook/src/features/customer-side/service_detail/presentation/widgets/service_offering_card.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/data/models/service_offering_model.dart';
+import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_offering_card.dart';
 import 'package:flutter/material.dart';
 
 class ServicesOfferedSection extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/models/support_ticket_model.dart';
+import 'package:multibook/src/data/models/support_ticket_model.dart';
 
 class SupportTicketsState {
   const SupportTicketsState({

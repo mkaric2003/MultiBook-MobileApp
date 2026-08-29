@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:aquabook/src/data/enums/user_type.dart';
-import 'package:aquabook/src/core/session/session_stream_registry.dart';
-import 'package:aquabook/src/data/repositories/business_metrics_repository.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
+import 'package:multibook/src/core/session/session_stream_registry.dart';
+import 'package:multibook/src/data/repositories/business_metrics_repository.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

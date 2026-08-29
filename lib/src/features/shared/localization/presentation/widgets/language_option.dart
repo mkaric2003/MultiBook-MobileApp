@@ -1,4 +1,4 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:circle_flags/circle_flags.dart';
 import 'package:flutter/material.dart';
 

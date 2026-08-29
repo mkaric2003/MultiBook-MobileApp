@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:aquabook/src/data/data_cursor.dart';
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
-import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart';
-import 'package:aquabook/src/data/repositories/stay_search_repository.dart';
-import 'package:aquabook/src/data/repositories/service_search_repository.dart';
-import 'package:aquabook/src/data/repositories/user_location_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/data/models/appointment_draft_model.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
+import 'package:multibook/src/data/data_cursor.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
+import 'package:multibook/src/data/repositories/appointment_draft_repository.dart';
+import 'package:multibook/src/data/repositories/stay_search_repository.dart';
+import 'package:multibook/src/data/repositories/service_search_repository.dart';
+import 'package:multibook/src/data/repositories/user_location_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/data/models/appointment_draft_model.dart';
+import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

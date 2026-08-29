@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/service_listing_card.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/service_listing_card.dart';
 import 'package:flutter/material.dart';
 
 class OtherServicesGrid extends StatelessWidget {

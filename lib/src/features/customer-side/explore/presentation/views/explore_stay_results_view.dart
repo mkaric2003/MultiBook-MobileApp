@@ -1,10 +1,10 @@
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/other_stays_grid.dart';
-import 'package:aquabook/src/features/customer-side/explore/cubit/explore_stay_results_cubit.dart';
-import 'package:aquabook/src/features/customer-side/explore/cubit/explore_stay_results_state.dart';
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/other_stays_grid.dart';
+import 'package:multibook/src/features/customer-side/explore/cubit/explore_stay_results_cubit.dart';
+import 'package:multibook/src/features/customer-side/explore/cubit/explore_stay_results_state.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
+import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

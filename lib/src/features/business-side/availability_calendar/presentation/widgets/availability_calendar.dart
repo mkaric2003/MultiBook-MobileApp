@@ -1,7 +1,7 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_day.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_weekday_label.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_day.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_weekday_label.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

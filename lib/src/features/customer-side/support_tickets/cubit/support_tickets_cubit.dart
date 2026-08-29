@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:aquabook/src/data/repositories/support_ticket_repository.dart';
-import 'package:aquabook/src/features/customer-side/support_tickets/cubit/support_tickets_state.dart';
+import 'package:multibook/src/data/repositories/support_ticket_repository.dart';
+import 'package:multibook/src/features/customer-side/support_tickets/cubit/support_tickets_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

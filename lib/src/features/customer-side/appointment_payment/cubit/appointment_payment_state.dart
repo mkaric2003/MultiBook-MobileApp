@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
 
 class AppointmentPaymentState {
   const AppointmentPaymentState({

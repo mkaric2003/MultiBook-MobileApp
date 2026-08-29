@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/repositories/appointment_repository.dart';
-import 'package:aquabook/src/data/repositories/service_availability_repository.dart';
-import 'package:aquabook/src/features/customer-side/create_appointment/cubit/appointment_availability_state.dart';
+import 'package:multibook/src/data/repositories/appointment_repository.dart';
+import 'package:multibook/src/data/repositories/service_availability_repository.dart';
+import 'package:multibook/src/features/customer-side/create_appointment/cubit/appointment_availability_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

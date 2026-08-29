@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/data_sources/business_metrics_data_source.dart';
-import 'package:aquabook/src/features/business-side/dashboard/domain/models/business_metrics.dart';
-import 'package:aquabook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
-import 'package:aquabook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
+import 'package:multibook/src/data/data_sources/business_metrics_data_source.dart';
+import 'package:multibook/src/features/business-side/dashboard/domain/models/business_metrics.dart';
+import 'package:multibook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
+import 'package:multibook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton

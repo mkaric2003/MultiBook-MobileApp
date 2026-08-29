@@ -1,7 +1,7 @@
-import 'package:aquabook/src/features/customer-side/help_center/cubit/help_center_state.dart';
-import 'package:aquabook/src/features/customer-side/help_center/domain/data/help_center_articles.dart';
-import 'package:aquabook/src/features/customer-side/help_center/domain/enums/help_center_topic.dart';
-import 'package:aquabook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
+import 'package:multibook/src/features/customer-side/help_center/cubit/help_center_state.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/data/help_center_articles.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/enums/help_center_topic.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HelpCenterCubit extends Cubit<HelpCenterState> {

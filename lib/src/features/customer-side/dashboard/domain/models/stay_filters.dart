@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/stay_amenity.dart';
-import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
+import 'package:multibook/src/data/enums/stay_amenity.dart';
+import 'package:multibook/src/data/enums/stay_inventory_type.dart';
 
 class StayFilters {
   const StayFilters({

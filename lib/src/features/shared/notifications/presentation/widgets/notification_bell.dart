@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/data/repositories/notification_repository.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/data/repositories/notification_repository.dart';
 import 'package:flutter/material.dart';
 
 class NotificationBell extends StatelessWidget {

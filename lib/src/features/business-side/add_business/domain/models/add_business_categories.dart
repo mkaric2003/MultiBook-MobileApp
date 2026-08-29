@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/business_type.dart';
-import 'package:aquabook/src/data/models/business_category_model.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/models/business_category_model.dart';
 
 abstract final class AddBusinessCategories {
   static const all = <BusinessCategoryModel>[

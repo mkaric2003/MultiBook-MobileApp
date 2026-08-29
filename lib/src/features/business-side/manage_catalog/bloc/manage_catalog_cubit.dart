@@ -1,9 +1,9 @@
-import 'package:aquabook/src/data/models/service_offering_model.dart';
-import 'package:aquabook/src/data/models/service_provider_model.dart';
-import 'package:aquabook/src/data/models/stay_room_model.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/business-side/manage_catalog/bloc/manage_catalog_state.dart';
+import 'package:multibook/src/data/models/service_offering_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/data/models/stay_room_model.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/business-side/manage_catalog/bloc/manage_catalog_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

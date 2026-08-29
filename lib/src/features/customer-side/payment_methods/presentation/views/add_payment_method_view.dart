@@ -1,10 +1,10 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/features/customer-side/payment_methods/cubit/payment_methods_cubit.dart';
-import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_input_formatters.dart';
-import 'package:aquabook/src/features/customer-side/payment/presentation/widgets/payment_card_form.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
-import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/features/customer-side/payment_methods/cubit/payment_methods_cubit.dart';
+import 'package:multibook/src/features/customer-side/payment/domain/models/payment_input_formatters.dart';
+import 'package:multibook/src/features/customer-side/payment/presentation/widgets/payment_card_form.dart';
+import 'package:multibook/src/global_widgets/custom_app_bar.dart';
+import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
-import 'package:aquabook/src/features/customer-side/help_center/domain/enums/help_center_topic.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/enums/help_center_topic.dart';
 
 final class HelpCenterState {
   const HelpCenterState({

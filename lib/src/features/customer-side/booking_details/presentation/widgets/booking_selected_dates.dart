@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/customer-side/booking_details/presentation/widgets/booking_date_value.dart';
-import 'package:aquabook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/booking_details/presentation/widgets/booking_date_value.dart';
+import 'package:multibook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

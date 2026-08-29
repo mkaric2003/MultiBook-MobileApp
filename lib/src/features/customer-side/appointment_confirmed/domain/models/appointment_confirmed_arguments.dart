@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
-import 'package:aquabook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
 
 class AppointmentConfirmedArguments {
   const AppointmentConfirmedArguments({

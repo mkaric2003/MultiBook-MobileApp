@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/models/business_review_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/business_review_model.dart';
 
 class ServiceDetailState {
   const ServiceDetailState({

@@ -1,9 +1,9 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:aquabook/src/data/models/business_review_model.dart';
-import 'package:aquabook/src/features/shared/business_reviews/presentation/widgets/business_review_card.dart';
-import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/data/models/business_review_model.dart';
+import 'package:multibook/src/features/shared/business_reviews/presentation/widgets/business_review_card.dart';
+import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class ServiceReviewsSection extends StatelessWidget {

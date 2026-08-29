@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/models/app_notification_model.dart';
+import 'package:multibook/src/data/models/app_notification_model.dart';
 
 class NotificationsState {
   const NotificationsState({

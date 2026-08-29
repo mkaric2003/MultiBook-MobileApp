@@ -1,8 +1,8 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/appointment_details/domain/models/appointment_details_arguments.dart';
-import 'package:aquabook/src/features/customer-side/appointment_details/domain/utils/appointment_details_formatters.dart';
-import 'package:aquabook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_row.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/appointment_details/domain/models/appointment_details_arguments.dart';
+import 'package:multibook/src/features/customer-side/appointment_details/domain/utils/appointment_details_formatters.dart';
+import 'package:multibook/src/features/customer-side/appointment_details/presentation/widgets/appointment_details_row.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentDetailsPriceCard extends StatelessWidget {

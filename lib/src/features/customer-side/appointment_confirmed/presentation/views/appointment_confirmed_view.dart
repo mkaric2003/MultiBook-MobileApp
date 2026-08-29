@@ -1,11 +1,11 @@
-import 'package:aquabook/app.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/appointment_confirmed/domain/models/appointment_confirmed_arguments.dart';
-import 'package:aquabook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_code_card.dart';
-import 'package:aquabook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_header.dart';
-import 'package:aquabook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_summary_card.dart';
-import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:multibook/app.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/appointment_confirmed/domain/models/appointment_confirmed_arguments.dart';
+import 'package:multibook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_code_card.dart';
+import 'package:multibook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_header.dart';
+import 'package:multibook/src/features/customer-side/appointment_confirmed/presentation/widgets/appointment_confirmation_summary_card.dart';
+import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

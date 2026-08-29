@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:aquabook/src/data/repositories/promotion_repository.dart';
-import 'package:aquabook/src/features/customer-side/appointment_payment/cubit/appointment_promotion_state.dart';
+import 'package:multibook/src/data/repositories/promotion_repository.dart';
+import 'package:multibook/src/features/customer-side/appointment_payment/cubit/appointment_promotion_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

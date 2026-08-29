@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/data/repositories/promotion_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/business-side/promotions/bloc/promotions_state.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/promotion_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/business-side/promotions/bloc/promotions_state.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

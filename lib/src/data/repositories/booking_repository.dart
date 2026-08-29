@@ -1,20 +1,20 @@
 import 'dart:developer';
 import 'dart:math' show Random;
 
-import 'package:aquabook/src/data/data_cursor.dart';
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/enums/booking_status.dart';
-import 'package:aquabook/src/data/enums/payment_method_type.dart';
-import 'package:aquabook/src/data/enums/payment_status.dart';
-import 'package:aquabook/src/data/enums/stay_extra_type.dart';
-import 'package:aquabook/src/data/models/booking_model.dart';
-import 'package:aquabook/src/data/models/stay_extra_model.dart';
-import 'package:aquabook/src/data/models/stay_room_model.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
-import 'package:aquabook/src/data/repositories/promotion_repository.dart';
+import 'package:multibook/src/data/data_cursor.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
+import 'package:multibook/src/data/enums/payment_method_type.dart';
+import 'package:multibook/src/data/enums/payment_status.dart';
+import 'package:multibook/src/data/enums/stay_extra_type.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/data/models/stay_extra_model.dart';
+import 'package:multibook/src/data/models/stay_room_model.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:multibook/src/data/repositories/promotion_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/models/chat_conversation_model.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/models/chat_conversation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

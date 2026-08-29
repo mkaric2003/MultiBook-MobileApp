@@ -1,10 +1,10 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/models/user_model.dart';
-import 'package:aquabook/src/features/customer-side/profile/domain/models/customer_edit_profile_form_data.dart';
-import 'package:aquabook/src/features/customer-side/profile/presentation/widgets/customer_address_field.dart';
-import 'package:aquabook/src/features/customer-side/profile/presentation/widgets/customer_date_of_birth_picker_sheet.dart';
-import 'package:aquabook/src/global_widgets/custom_textfield.dart';
-import 'package:aquabook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/models/user_model.dart';
+import 'package:multibook/src/features/customer-side/profile/domain/models/customer_edit_profile_form_data.dart';
+import 'package:multibook/src/features/customer-side/profile/presentation/widgets/customer_address_field.dart';
+import 'package:multibook/src/features/customer-side/profile/presentation/widgets/customer_date_of_birth_picker_sheet.dart';
+import 'package:multibook/src/global_widgets/custom_textfield.dart';
+import 'package:multibook/l10n/l10n.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

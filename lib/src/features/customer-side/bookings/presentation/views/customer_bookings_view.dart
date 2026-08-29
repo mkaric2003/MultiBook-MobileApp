@@ -1,6 +1,6 @@
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
-import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_body.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_body.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

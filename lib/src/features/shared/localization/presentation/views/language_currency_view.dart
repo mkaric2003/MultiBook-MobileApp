@@ -1,10 +1,10 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/enums/currency_code.dart';
-import 'package:aquabook/src/features/shared/localization/cubit/locale_cubit.dart';
-import 'package:aquabook/src/features/shared/localization/presentation/widgets/language_option.dart';
-import 'package:aquabook/src/features/shared/localization/presentation/widgets/currency_option.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/features/shared/localization/cubit/locale_cubit.dart';
+import 'package:multibook/src/features/shared/localization/presentation/widgets/language_option.dart';
+import 'package:multibook/src/features/shared/localization/presentation/widgets/currency_option.dart';
+import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

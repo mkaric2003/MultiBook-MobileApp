@@ -1,10 +1,10 @@
-import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
-import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
-import 'package:aquabook/src/features/customer-side/bookings/domain/enums/customer_booking_type.dart';
-import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_header.dart';
-import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_list.dart';
-import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_appointments_list.dart';
-import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_type_selector.dart';
+import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
+import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
+import 'package:multibook/src/features/customer-side/bookings/domain/enums/customer_booking_type.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_header.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_list.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_appointments_list.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_type_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

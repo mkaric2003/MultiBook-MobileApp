@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/models/appointment_draft_model.dart';
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart';
+import 'package:multibook/src/data/models/appointment_draft_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/repositories/appointment_draft_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

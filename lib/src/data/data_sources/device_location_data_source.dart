@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/enums/device_location_status.dart';
-import 'package:aquabook/src/data/models/device_location_result.dart';
+import 'package:multibook/src/data/enums/device_location_status.dart';
+import 'package:multibook/src/data/models/device_location_result.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:injectable/injectable.dart';
 

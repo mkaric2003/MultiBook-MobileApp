@@ -1,10 +1,10 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
-import 'package:aquabook/src/data/models/stay_extra_model.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
-import 'package:aquabook/src/features/customer-side/review_stay/presentation/widgets/review_price_row.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
+import 'package:multibook/src/data/models/stay_extra_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:multibook/src/features/customer-side/review_stay/presentation/widgets/review_price_row.dart';
 import 'package:flutter/material.dart';
 
 class ReviewPriceBreakdown extends StatelessWidget {

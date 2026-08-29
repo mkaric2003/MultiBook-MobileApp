@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
 
 class PromotionPriceCalculator {
   const PromotionPriceCalculator._();

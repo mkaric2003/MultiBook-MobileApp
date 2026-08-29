@@ -1,7 +1,7 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/models/booking_model.dart';
-import 'package:aquabook/src/features/customer-side/customer_booking_details/presentation/widgets/customer_booking_price_row.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/features/customer-side/customer_booking_details/presentation/widgets/customer_booking_price_row.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBookingPriceCard extends StatelessWidget {

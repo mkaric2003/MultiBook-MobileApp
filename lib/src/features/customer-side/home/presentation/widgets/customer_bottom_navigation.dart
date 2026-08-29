@@ -1,6 +1,6 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/home/domain/models/customer_navigation_item.dart';
-import 'package:aquabook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/home/domain/models/customer_navigation_item.dart';
+import 'package:multibook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBottomNavigation extends StatelessWidget {

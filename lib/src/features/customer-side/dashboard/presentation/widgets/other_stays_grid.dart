@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_listing_card.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stay_listing_card.dart';
 import 'package:flutter/material.dart';
 
 class OtherStaysGrid extends StatelessWidget {

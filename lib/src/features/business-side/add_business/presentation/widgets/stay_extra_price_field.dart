@@ -1,6 +1,6 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/enums/stay_extra_type.dart';
-import 'package:aquabook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/enums/stay_extra_type.dart';
+import 'package:multibook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

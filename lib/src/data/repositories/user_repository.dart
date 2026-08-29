@@ -1,15 +1,15 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firebase_storage_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/enums/user_type.dart';
-import 'package:aquabook/src/data/enums/currency_code.dart';
-import 'package:aquabook/src/data/models/user_model.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:aquabook/utils/image_utils.dart';
+import 'package:multibook/utils/image_utils.dart';
 import 'package:flutter/foundation.dart';
 
 class UserException implements Exception {

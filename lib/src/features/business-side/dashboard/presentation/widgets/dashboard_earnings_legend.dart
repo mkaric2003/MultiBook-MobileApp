@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aquabook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_legend_item.dart';
+import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_legend_item.dart';
 
 class DashboardEarningsLegend extends StatelessWidget {
   const DashboardEarningsLegend({

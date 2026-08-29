@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class SocialSigninButton extends StatelessWidget {
   const SocialSigninButton({

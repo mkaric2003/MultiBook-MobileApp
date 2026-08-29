@@ -1,9 +1,9 @@
-import 'package:aquabook/src/data/enums/business_type.dart';
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/repositories/booking_repository.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/bloc/availability_calendar_state.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/repositories/booking_repository.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/bloc/availability_calendar_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

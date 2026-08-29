@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/models/appointment_draft_model.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/models/appointment_draft_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

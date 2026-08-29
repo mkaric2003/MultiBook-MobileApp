@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/repositories/authentication_repository.dart';
-import 'package:aquabook/src/features/business-side/home/bloc/home_event.dart';
-import 'package:aquabook/src/features/business-side/home/bloc/home_state.dart';
+import 'package:multibook/src/data/repositories/authentication_repository.dart';
+import 'package:multibook/src/features/business-side/home/bloc/home_event.dart';
+import 'package:multibook/src/features/business-side/home/bloc/home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/customer-side/home/bloc/customer_home_event.dart';
-import 'package:aquabook/src/features/customer-side/home/bloc/customer_home_state.dart';
+import 'package:multibook/src/features/customer-side/home/bloc/customer_home_event.dart';
+import 'package:multibook/src/features/customer-side/home/bloc/customer_home_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomerHomeBloc extends Bloc<CustomerHomeEvent, CustomerHomeState> {

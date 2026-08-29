@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:aquabook/src/data/models/chat_conversation_model.dart';
-import 'package:aquabook/src/data/repositories/chat_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/shared/chat/cubit/chat_conversation_state.dart';
-import 'package:aquabook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
+import 'package:multibook/src/data/models/chat_conversation_model.dart';
+import 'package:multibook/src/data/repositories/chat_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/shared/chat/cubit/chat_conversation_state.dart';
+import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';

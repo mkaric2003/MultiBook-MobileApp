@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/models/stay_search_page_model.dart';
+import 'package:multibook/src/data/models/stay_search_page_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:injectable/injectable.dart';
 

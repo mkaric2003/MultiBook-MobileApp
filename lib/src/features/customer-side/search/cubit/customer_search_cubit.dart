@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:aquabook/src/features/customer-side/search/cubit/customer_search_state.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/search/cubit/customer_search_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

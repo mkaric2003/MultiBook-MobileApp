@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/booking_status.dart';
-import 'package:aquabook/l10n/l10n.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
+import 'package:multibook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class CustomerBookingStatusPill extends StatelessWidget {

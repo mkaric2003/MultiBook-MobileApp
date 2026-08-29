@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/models/appointment_draft_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/appointment_draft_model.dart';
 
 class CreateAppointmentArguments {
   const CreateAppointmentArguments({

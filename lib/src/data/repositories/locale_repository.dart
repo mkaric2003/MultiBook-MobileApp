@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,8 +1,8 @@
-import 'package:aquabook/src/data/enums/payment_method_type.dart';
-import 'package:aquabook/src/data/repositories/booking_repository.dart';
-import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
-import 'package:aquabook/src/features/customer-side/payment/cubit/payment_state.dart';
-import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
+import 'package:multibook/src/data/enums/payment_method_type.dart';
+import 'package:multibook/src/data/repositories/booking_repository.dart';
+import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
+import 'package:multibook/src/features/customer-side/payment/cubit/payment_state.dart';
+import 'package:multibook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

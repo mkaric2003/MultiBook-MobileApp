@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/repositories/appointment_repository.dart';
-import 'package:aquabook/src/data/models/appointment_model.dart';
-import 'package:aquabook/src/data/repositories/service_availability_repository.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/bloc/service_availability_calendar_state.dart';
+import 'package:multibook/src/data/repositories/appointment_repository.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/repositories/service_availability_repository.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/bloc/service_availability_calendar_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ServiceAvailabilityCalendarCubit

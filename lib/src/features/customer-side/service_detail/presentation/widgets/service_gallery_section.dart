@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/l10n/l10n.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class ServiceGallerySection extends StatelessWidget {

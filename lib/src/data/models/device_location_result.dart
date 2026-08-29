@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/enums/device_location_status.dart';
+import 'package:multibook/src/data/enums/device_location_status.dart';
 
 class DeviceLocationResult {
   const DeviceLocationResult({

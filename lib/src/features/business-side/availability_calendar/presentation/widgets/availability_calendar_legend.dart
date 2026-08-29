@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_legend_item.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_legend_item.dart';
 import 'package:flutter/material.dart';
 
 class AvailabilityCalendarLegend extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:aquabook/src/data/data_sources/device_location_data_source.dart';
-import 'package:aquabook/src/data/data_sources/nominatim_data_source.dart';
-import 'package:aquabook/src/data/enums/device_location_status.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/data/data_sources/device_location_data_source.dart';
+import 'package:multibook/src/data/data_sources/nominatim_data_source.dart';
+import 'package:multibook/src/data/enums/device_location_status.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
 import 'package:injectable/injectable.dart';
 
 class UserLocationException implements Exception {

@@ -1,5 +1,5 @@
-name: aquabook
-description: "A new Flutter project."
+name: multibook
+description: "MultiBook marketplace for stays and services."
 
 publish_to: "none"
 version: 1.0.0+1

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/appointment_model.dart';
-import 'package:aquabook/src/data/models/service_availability_block_model.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/service_availability_block_model.dart';
 
 class ServiceAvailabilityCalendarState {
   const ServiceAvailabilityCalendarState({

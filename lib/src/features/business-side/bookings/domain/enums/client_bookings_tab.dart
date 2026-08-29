@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
 
 enum ClientBookingsTab { stays, services }
 

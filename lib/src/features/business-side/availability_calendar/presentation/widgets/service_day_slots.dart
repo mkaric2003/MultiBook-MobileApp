@@ -1,11 +1,11 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/enums/service_weekday.dart';
-import 'package:aquabook/src/data/models/appointment_model.dart';
-import 'package:aquabook/src/data/models/service_availability_block_model.dart';
-import 'package:aquabook/src/data/models/service_provider_model.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/appointment_customer_sheet.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/presentation/widgets/service_slot_block_sheet.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/enums/service_weekday.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/service_availability_block_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/appointment_customer_sheet.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/service_slot_block_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

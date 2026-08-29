@@ -1,12 +1,12 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_category.dart';
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_collection.dart';
-import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_featured_collections.dart';
-import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_promotion_carousel.dart';
-import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_recently_viewed.dart';
-import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_stay_category_grid.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_category.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_collection.dart';
+import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_featured_collections.dart';
+import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_promotion_carousel.dart';
+import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_recently_viewed.dart';
+import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_stay_category_grid.dart';
 import 'package:flutter/material.dart';
 
 class ExploreStaysContent extends StatelessWidget {
