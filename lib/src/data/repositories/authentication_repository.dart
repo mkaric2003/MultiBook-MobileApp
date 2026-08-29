@@ -3,9 +3,9 @@ import 'dart:developer';
 
 import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
-import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
-import 'package:multibook/src/data/enums/user_type.dart';
+import 'package:multibook/src/data/models/user_model.dart';
 import 'package:multibook/src/data/repositories/notification_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/update_user_profile_use_case.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +25,7 @@ class AuthenticationCancelledException implements Exception {
 class AuthenticationRepository {
   AuthenticationRepository(
     this._authenticationDataSource,
-    this._firestoreDataSource,
+    this._updateUserProfileUseCase,
     this._notificationRepository,
     this._sessionStreamRegistry,
   ) {
@@ -51,7 +51,7 @@ class AuthenticationRepository {
   }
 
   final AuthenticationDataSource _authenticationDataSource;
-  final FirestoreDataSource _firestoreDataSource;
+  final UpdateUserProfileUseCase _updateUserProfileUseCase;
   final NotificationRepository _notificationRepository;
   final SessionStreamRegistry _sessionStreamRegistry;
   late final ValueNotifier<User?> _authStateNotifier;
@@ -99,15 +99,16 @@ class AuthenticationRepository {
         user: createdUser,
         displayName: fullName,
       );
-      await _createUserProfile(
-        user: createdUser,
-        firstName: trimmedFirstName,
-        lastName: trimmedLastName,
-        fullName: fullName,
-        email: createdUser.email ?? trimmedEmail,
+      await createdUser.getIdToken(true);
+      await _updateUserProfileUseCase.execute(
+        UserModel(
+          id: createdUser.uid,
+          firstName: trimmedFirstName,
+          lastName: trimmedLastName,
+          fullName: fullName,
+          email: createdUser.email ?? trimmedEmail,
+        ),
       );
-
-      log('Firestore user profile created.', name: 'AuthenticationRepository');
       await _registerNotificationDevice();
     } on FirebaseAuthException catch (error, stackTrace) {
       log(
@@ -158,24 +159,6 @@ class AuthenticationRepository {
       }
 
       final isNewUser = credential.additionalUserInfo?.isNewUser ?? false;
-      if (isNewUser) {
-        final fullName = user.displayName?.trim() ?? '';
-        final nameParts = fullName.isEmpty
-            ? const <String>[]
-            : fullName.split(RegExp(r'\s+'));
-
-        await _createUserProfile(
-          user: user,
-          firstName: nameParts.isEmpty ? '' : nameParts.first,
-          lastName: nameParts.skip(1).join(' '),
-          fullName: fullName,
-          email: user.email ?? '',
-        );
-        log(
-          'Firestore profile created for Google user.',
-          name: 'AuthenticationRepository',
-        );
-      }
 
       log('Google sign-in completed.', name: 'AuthenticationRepository');
       await _registerNotificationDevice();
@@ -410,29 +393,6 @@ class AuthenticationRepository {
       );
     }
   }
-
-  Future<void> _createUserProfile({
-    required User user,
-    required String firstName,
-    required String lastName,
-    required String fullName,
-    required String email,
-  }) => _firestoreDataSource.setDocument(
-    collection: 'users',
-    documentId: user.uid,
-    data: {
-      'id': user.uid,
-      'firstName': firstName,
-      'lastName': lastName,
-      'fullName': fullName,
-      'email': email,
-      'type': UserType.provider.name,
-      'selectedBusinessId': null,
-      'phoneNumber': null,
-      'profileImageUrl': null,
-      'createdAt': _firestoreDataSource.serverTimestamp,
-    },
-  );
 
   String _authErrorMessage(FirebaseAuthException error) {
     switch (error.code) {

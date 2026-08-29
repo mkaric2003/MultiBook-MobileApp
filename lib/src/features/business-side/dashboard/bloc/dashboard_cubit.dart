@@ -5,7 +5,7 @@ import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
 import 'package:multibook/src/data/repositories/business_metrics_repository.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -19,7 +19,7 @@ class DashboardCubit extends Cubit<DashboardState> {
     this._sessionStreamRegistry,
   ) : super(const DashboardState());
 
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final BusinessRepository _businessRepository;
   final BusinessMetricsRepository _businessMetricsRepository;
   final SessionStreamRegistry _sessionStreamRegistry;

@@ -8,7 +8,7 @@ import 'package:multibook/src/data/repositories/appointment_draft_repository.dar
 import 'package:multibook/src/data/repositories/stay_search_repository.dart';
 import 'package:multibook/src/data/repositories/service_search_repository.dart';
 import 'package:multibook/src/data/repositories/user_location_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/data/models/appointment_draft_model.dart';
 import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
@@ -36,7 +36,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   final ServiceSearchRepository _serviceSearchRepository;
   final BookingDraftRepository _draftRepository;
   final AppointmentDraftRepository _appointmentDraftRepository;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final UserLocationRepository _userLocationRepository;
   StreamSubscription<String>? _locationCitySubscription;
   DataCursor<BusinessModel>? _nearbyStaysCursor;

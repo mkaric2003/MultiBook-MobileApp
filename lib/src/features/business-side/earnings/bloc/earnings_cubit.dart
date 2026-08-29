@@ -5,7 +5,7 @@ import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/data/models/service_provider_model.dart';
 import 'package:multibook/src/data/repositories/business_metrics_repository.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
 import 'package:multibook/src/features/business-side/earnings/bloc/earnings_state.dart';
 import 'package:multibook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
@@ -23,7 +23,7 @@ class EarningsCubit extends Cubit<EarningsState> {
     this._sessionStreamRegistry,
   ) : super(const EarningsState());
 
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final BusinessRepository _businessRepository;
   final BusinessMetricsRepository _businessMetricsRepository;
   final SessionStreamRegistry _sessionStreamRegistry;

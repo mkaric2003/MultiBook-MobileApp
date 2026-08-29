@@ -26,15 +26,15 @@ class CurrencyCodeMapper extends EnumMapper<CurrencyCode> {
   @override
   CurrencyCode decode(dynamic value) {
     switch (value) {
-      case r'bam':
+      case 'BAM':
         return CurrencyCode.bam;
-      case r'usd':
+      case 'USD':
         return CurrencyCode.usd;
-      case r'eur':
+      case 'EUR':
         return CurrencyCode.eur;
-      case r'chf':
+      case 'CHF':
         return CurrencyCode.chf;
-      case r'gbp':
+      case 'GBP':
         return CurrencyCode.gbp;
       default:
         throw MapperException.unknownEnumValue(value);
@@ -45,23 +45,23 @@ class CurrencyCodeMapper extends EnumMapper<CurrencyCode> {
   dynamic encode(CurrencyCode self) {
     switch (self) {
       case CurrencyCode.bam:
-        return r'bam';
+        return 'BAM';
       case CurrencyCode.usd:
-        return r'usd';
+        return 'USD';
       case CurrencyCode.eur:
-        return r'eur';
+        return 'EUR';
       case CurrencyCode.chf:
-        return r'chf';
+        return 'CHF';
       case CurrencyCode.gbp:
-        return r'gbp';
+        return 'GBP';
     }
   }
 }
 
 extension CurrencyCodeMapperExtension on CurrencyCode {
-  String toValue() {
+  dynamic toValue() {
     CurrencyCodeMapper.ensureInitialized();
-    return MapperContainer.globals.toValue<CurrencyCode>(this) as String;
+    return MapperContainer.globals.toValue<CurrencyCode>(this);
   }
 }
 

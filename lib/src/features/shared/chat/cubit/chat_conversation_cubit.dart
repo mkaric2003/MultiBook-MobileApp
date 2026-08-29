@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:multibook/src/data/models/chat_conversation_model.dart';
 import 'package:multibook/src/data/repositories/chat_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/shared/chat/cubit/chat_conversation_state.dart';
 import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:flutter/widgets.dart';
@@ -17,7 +17,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
     : super(const ChatConversationState());
 
   final ChatRepository _chatRepository;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   StreamSubscription? _messagesSubscription;
   StreamSubscription? _conversationSubscription;
   Timer? _typingDebounce;

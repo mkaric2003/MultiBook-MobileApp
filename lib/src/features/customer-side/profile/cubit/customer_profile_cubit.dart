@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:multibook/src/data/repositories/authentication_repository.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
 import 'package:multibook/src/data/repositories/chat_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/customer-side/profile/cubit/customer_profile_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -19,7 +19,7 @@ class CustomerProfileCubit extends Cubit<CustomerProfileState> {
   ) : super(const CustomerProfileState());
 
   final AuthenticationRepository _authenticationRepository;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final ChatRepository _chatRepository;
   final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription<int>? _unreadMessagesSubscription;

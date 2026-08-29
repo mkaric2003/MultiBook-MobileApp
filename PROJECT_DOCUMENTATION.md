@@ -69,19 +69,48 @@ Projekt prati odvajanje odgovornosti:
 Presentation (View / Widget / Cubit-BLoC)
                   │
                   ▼
-             Repository
+              Use case
+                  │
+                  ▼
+        Repository contract
+                  │
+                  ▼
+        Repository implementation
                   │
                   ▼
           Data source adapteri
                   │
                   ▼
-Firebase / HTTP / lokalni cache
+         ApiClient / Firebase / lokalni cache
 ```
 
 - **Presentation** prikazuje stanje i šalje korisničke akcije Cubit/BLoC-u. Nema direktnih Firebase poziva.
-- **Repository** sadrži poslovnu logiku, mapiranje modela, kombinovanje izvora podataka, logging i obradu greške.
+- **Use case** je obavezan ulaz u REST module. Svaki use case izlaže jednu tipiziranu operaciju kroz `execute()` i zavisi samo od repository ugovora; nalazi se u `src/domain/use_cases/<module>/`.
+- **Repository contract** je u `src/domain/repositories/`, a njegova `Impl` klasa u `src/data/repositories/`. Implementacija koordinira data sourcee, dok use case ne poznaje HTTP detalje.
 - **Data source** je jedino mjesto koje direktno razgovara sa Firebaseom, HTTP API-jem ili pluginom uređaja.
 - **Models/enums** su eksplicitni i tipizirani. Feature-specifični modeli idu u `feature/domain/models`, a zajednički persisted modeli u `src/data/models`.
+
+### 4.1.1 REST moduli i greške
+
+REST migracija se uvodi modul po modul. Standardni tok za migrirani modul je:
+
+```text
+Cubit → Use case → Repository contract → RepositoryImpl → Data source → ApiClient
+```
+
+`users` je prvi migrirani REST modul. Njegov contract je `UsersRepository`, implementacija `UsersRepositoryImpl`, a HTTP endpointi su u `UsersApiDataSource`.
+
+Očekivane REST greške ne putuju do Cubit-a kao `DioException` ili `ApiException`. `ApiClient` normalizuje Dio grešku u `ApiException`, a `RestRepositoryExecutor` iz `src/core/errors/` je centralno mjesto koje je mapira u `Result<T>` i `AppFailure`:
+
+- `401` → `UnauthorizedFailure`
+- `403` → `ForbiddenFailure`
+- `400` i `422` → `ValidationFailure`
+- `404` → `NotFoundFailure`
+- timeout/network i nepoznati HTTP status → `NetworkFailure`
+- `5xx` → `ServerFailure`
+- neočekivana lokalna greška → `UnknownFailure`
+
+Use case vraća `Success<T>` ili `FailureResult<T>`. Cubit grana po tom rezultatu i emituje odgovarajuće UI stanje; ne hvata exception za očekivani REST failure. Korisnički tekst ostaje u presentation/lokalizacijskom sloju, dok se tehnički detalji koriste samo za logovanje.
 
 ### 4.2 Struktura direktorija
 
@@ -90,10 +119,11 @@ lib/
  ├─ main.dart                         # inicijalizacija DI-ja i aplikacije
  ├─ app.dart                          # MaterialApp, router i inicijalizacija notifikacija
  ├─ src/
- │   ├─ core/                         # konfiguracija, tema, Firebase modul, DI, session lifecycle
+ │   ├─ core/                         # konfiguracija, tema, DI, session lifecycle i shared errors
+ │   ├─ domain/                       # use caseovi i repository ugovori
  │   ├─ data/
  │   │   ├─ data_sources/             # Firebase/HTTP/plugin adapteri
- │   │   ├─ repositories/             # poslovna i pristupna logika
+ │   │   ├─ repositories/             # repository implementacije
  │   │   ├─ models/ i enums/          # shared persisted modeli
  │   │   └─ data_cursor.dart          # Firestore cursor paginacija
  │   ├─ features/
@@ -116,6 +146,8 @@ functions/src/
 - Ne koristiti `setState`; za lokalne interakcije koristiti `HookWidget`, `useState`, `useEffect` ili Cubit stanje.
 - Ne stavljati privatne pomoćne UI klase u veliki view fajl. Svaki custom widget ima svoj fajl u `presentation/widgets`.
 - Feature modeli/enumi nisu u presentation fajlovima; idu u `domain/models` ili `domain/enums`.
+- Novi REST repository koristi `RestRepositoryExecutor`; ne kopirati HTTP-to-failure mapping u pojedinačne `RepositoryImpl` klase.
+- Novi REST Cubit prima use case, a ne `RepositoryImpl`, `DataSource` ili `ApiClient`.
 - Globalno ponovljive komponente su u `src/global_widgets`: `CustomAppBar`, `CustomButton`, `CustomTextfield`, `SearchableCityPickerSheet` i `LabeledDivider`.
 - Tamna tema i boje dolaze iz `AppTheme` i `AppColors`, ne iz nasumičnih hardkodiranih boja u viewu.
 
@@ -440,6 +472,8 @@ Storage putanje:
 businesses/{ownerId}/{businessId}/{fileName}
 profiles/{userId}/{fileName}
 ```
+
+Za Go/PostgreSQL backend Storage path je trajni podatak, dok Firebase download URL nije. PostgreSQL čuva samo path, npr. `profiles/{userId}/profile.webp`. Flutter preko Firebase Storage SDK-a iz tog patha dobija trenutni download URL samo za prikaz slike; URL se ne upisuje u PostgreSQL niti šalje nazad Go API-ju.
 
 ---
 

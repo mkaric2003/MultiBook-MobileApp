@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/data/repositories/promotion_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/promotions/bloc/promotions_state.dart';
 import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +12,7 @@ class PromotionsCubit extends Cubit<PromotionsState> {
   PromotionsCubit(this._businesses, this._users, this._promotions)
     : super(const PromotionsState());
   final BusinessRepository _businesses;
-  final UserRepository _users;
+  final UserProfileUseCase _users;
   final PromotionRepository _promotions;
   StreamSubscription<List<PromotionModel>>? _subscription;
   Future<void> load() async {

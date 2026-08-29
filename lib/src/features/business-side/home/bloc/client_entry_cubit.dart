@@ -1,5 +1,5 @@
 import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/home/bloc/client_entry_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -10,7 +10,7 @@ class ClientEntryCubit extends Cubit<ClientEntryState> {
     : super(const ClientEntryState());
 
   final BusinessRepository _businessRepository;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
 
   Future<void> load() async {
     final user = await _userRepository.getCurrentUser();

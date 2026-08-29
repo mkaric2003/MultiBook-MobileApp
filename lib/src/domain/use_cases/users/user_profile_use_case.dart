@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
-import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/data/enums/currency_code.dart';
 import 'package:multibook/src/data/models/user_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:multibook/src/domain/repositories/users_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multibook/utils/image_utils.dart';
@@ -19,18 +19,16 @@ class UserException implements Exception {
 }
 
 @lazySingleton
-class UserRepository {
-  UserRepository(
+class UserProfileUseCase {
+  UserProfileUseCase(
     this._authenticationDataSource,
-    this._firestoreDataSource,
     this._storageDataSource,
+    this._usersRepository,
   );
 
-  static const _usersCollection = 'users';
-
   final AuthenticationDataSource _authenticationDataSource;
-  final FirestoreDataSource _firestoreDataSource;
   final FirebaseStorageDataSource _storageDataSource;
+  final UsersRepository _usersRepository;
   final ValueNotifier<String?> selectedBusinessId = ValueNotifier(null);
 
   Future<UserModel?> getCurrentUser() async {
@@ -39,26 +37,17 @@ class UserRepository {
       return null;
     }
 
-    try {
-      final userData = await _firestoreDataSource.getDocument(
-        collection: _usersCollection,
-        documentId: userId,
-      );
-      if (userData == null) {
+    final result = await _usersRepository.getCurrentUser();
+    switch (result) {
+      case Success(value: final user):
+        selectedBusinessId.value = user.selectedBusinessId;
+        return user;
+      case FailureResult(failure: final failure):
+        log(
+          'Could not load the current user: $failure',
+          name: 'UserProfileUseCase',
+        );
         return null;
-      }
-
-      final user = UserModelMapper.fromMap(_normalizeUserData(userData));
-      selectedBusinessId.value = user.selectedBusinessId;
-      return user;
-    } on FirebaseException catch (error, stackTrace) {
-      log(
-        'Could not load the current user: ${error.code}',
-        name: 'UserRepository',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      return null;
     }
   }
 
@@ -68,14 +57,14 @@ class UserRepository {
       return;
     }
 
-    await _firestoreDataSource.updateDocument(
-      collection: _usersCollection,
-      documentId: userId,
-      data: {
-        'type': UserType.provider.name,
-        'selectedBusinessId': businessId,
-        'updatedAt': _firestoreDataSource.serverTimestamp,
-      },
+    final user = await getCurrentUser();
+    if (user == null) {
+      throw const UserException('We could not find your profile.');
+    }
+    _requireSuccess(
+      await _usersRepository.updateProfile(
+        user.copyWith(selectedBusinessId: businessId),
+      ),
     );
     selectedBusinessId.value = businessId;
   }
@@ -86,14 +75,7 @@ class UserRepository {
       return;
     }
 
-    await _firestoreDataSource.updateDocument(
-      collection: _usersCollection,
-      documentId: userId,
-      data: {
-        'type': type.name,
-        'updatedAt': _firestoreDataSource.serverTimestamp,
-      },
-    );
+    _requireSuccess(await _usersRepository.updateRole(type));
   }
 
   Future<void> updateCurrentLocation({
@@ -105,14 +87,14 @@ class UserRepository {
       throw const UserException('You need to sign in to save your location.');
     }
 
-    await _firestoreDataSource.updateDocument(
-      collection: _usersCollection,
-      documentId: userId,
-      data: {
-        'city': city,
-        'address': address,
-        'updatedAt': _firestoreDataSource.serverTimestamp,
-      },
+    final user = await getCurrentUser();
+    if (user == null) {
+      throw const UserException('We could not find your profile.');
+    }
+    _requireSuccess(
+      await _usersRepository.updateProfile(
+        user.copyWith(city: city.trim(), address: address.trim()),
+      ),
     );
   }
 
@@ -166,46 +148,33 @@ class UserRepository {
         displayName: fullName,
       );
       final normalizedCity = city?.trim();
-      final data = <String, dynamic>{
-        'firstName': trimmedFirstName,
-        'lastName': trimmedLastName,
-        'fullName': fullName,
-        'phoneNumber': trimmedPhoneNumber.isEmpty ? null : trimmedPhoneNumber,
-        'profileImageUrl': profileImageUrl,
-        'countryCode': countryCode,
-        'dateOfBirth': dateOfBirth,
-        'address': address?.trim().isEmpty ?? true ? null : address!.trim(),
-        'businessCurrency': (businessCurrency ?? user.businessCurrency).name,
-        'updatedAt': _firestoreDataSource.serverTimestamp,
-      };
-      if (city != null) {
-        data['city'] = normalizedCity?.isEmpty ?? true ? null : normalizedCity;
-      }
-
-      await _firestoreDataSource.updateDocument(
-        collection: _usersCollection,
-        documentId: currentUser.uid,
-        data: data,
+      final response = _requireSuccess(
+        await _usersRepository.updateProfile(
+          user.copyWith(
+            firstName: trimmedFirstName,
+            lastName: trimmedLastName,
+            phoneNumber: trimmedPhoneNumber.isEmpty ? null : trimmedPhoneNumber,
+            countryCode: countryCode ?? user.countryCode,
+            dateOfBirth: dateOfBirth ?? user.dateOfBirth,
+            address: address?.trim() ?? user.address,
+            city: normalizedCity ?? user.city,
+            businessCurrency: businessCurrency ?? user.businessCurrency,
+          ),
+          storagePath: profileImagePath == null
+              ? null
+              : 'profiles/${currentUser.uid}/profile.webp',
+        ),
       );
-
-      return user.copyWith(
-        firstName: trimmedFirstName,
-        lastName: trimmedLastName,
+      return response.copyWith(
         fullName: fullName,
-        phoneNumber: trimmedPhoneNumber.isEmpty ? null : trimmedPhoneNumber,
         profileImageUrl: profileImageUrl,
-        countryCode: countryCode,
-        dateOfBirth: dateOfBirth,
-        address: address?.trim().isEmpty ?? true ? null : address!.trim(),
-        city: city == null
-            ? user.city
-            : (normalizedCity?.isEmpty ?? true ? null : normalizedCity),
-        businessCurrency: businessCurrency ?? user.businessCurrency,
       );
-    } on FirebaseException catch (error, stackTrace) {
+    } on UserException {
+      rethrow;
+    } catch (error, stackTrace) {
       log(
-        'Could not update the user profile: ${error.code}',
-        name: 'UserRepository',
+        'Could not update the user profile.',
+        name: 'UserProfileUseCase',
         error: error,
         stackTrace: stackTrace,
       );
@@ -213,12 +182,10 @@ class UserRepository {
     }
   }
 
-  Map<String, dynamic> _normalizeUserData(Map<String, dynamic> userData) {
-    final normalizedData = Map<String, dynamic>.from(userData);
-    final dateOfBirth = normalizedData['dateOfBirth'];
-    if (dateOfBirth is Timestamp) {
-      normalizedData['dateOfBirth'] = dateOfBirth.millisecondsSinceEpoch;
-    }
-    return normalizedData;
-  }
+  UserModel _requireSuccess(Result<UserModel> result) => switch (result) {
+    Success(value: final user) => user,
+    FailureResult() => throw const UserException(
+      'We could not update your profile. Please try again.',
+    ),
+  };
 }

@@ -5,7 +5,7 @@ import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
 import 'package:multibook/src/data/enums/support_ticket_category.dart';
 import 'package:multibook/src/data/enums/support_ticket_status.dart';
 import 'package:multibook/src/data/models/support_ticket_model.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 
@@ -23,7 +23,7 @@ class SupportTicketRepository {
 
   final AuthenticationDataSource _auth;
   final FirestoreDataSource _firestore;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
 
   Stream<List<SupportTicketModel>> watchMyTickets() {
     final customerId = _auth.currentUser?.uid;

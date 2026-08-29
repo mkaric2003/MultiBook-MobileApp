@@ -5,7 +5,7 @@ import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/data/repositories/chat_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/more/bloc/more_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -20,7 +20,7 @@ class MoreCubit extends Cubit<MoreState> {
   ) : super(const MoreState());
 
   final BusinessRepository _businessRepository;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final ChatRepository _chatRepository;
   final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription? _conversationsSubscription;

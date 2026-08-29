@@ -7,7 +7,7 @@ import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/data/repositories/booking_repository.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
 import 'package:multibook/src/features/business-side/bookings/domain/enums/client_booking_filter.dart';
 import 'package:multibook/src/features/business-side/bookings/domain/enums/client_bookings_tab.dart';
@@ -26,7 +26,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
   final BookingRepository _bookingRepository;
   final AppointmentRepository _appointmentRepository;
   final BusinessRepository _businessRepository;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   DataCursor<BookingModel>? _cursor;
   int _loadRequestId = 0;
 

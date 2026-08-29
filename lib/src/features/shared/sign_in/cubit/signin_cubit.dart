@@ -1,5 +1,5 @@
 import 'package:multibook/src/data/repositories/authentication_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/shared/sign_in/cubit/signin_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -10,7 +10,7 @@ class SigninCubit extends Cubit<SigninState> {
     : super(SigninState());
 
   final AuthenticationRepository _authenticationRepository;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
 
   Future<void> signIn({required String email, required String password}) async {
     emit(SigninState(isLoading: true));

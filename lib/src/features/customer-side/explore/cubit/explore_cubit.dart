@@ -1,7 +1,7 @@
 import 'package:multibook/src/data/data_cursor.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:multibook/src/features/customer-side/explore/cubit/explore_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +12,7 @@ class ExploreCubit extends Cubit<ExploreState> {
   ExploreCubit(this._userRepository, this._businessRepository)
     : super(const ExploreState());
 
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final BusinessRepository _businessRepository;
   DataCursor<BusinessModel>? _trendingServicesCursor;
 

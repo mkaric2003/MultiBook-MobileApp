@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:multibook/src/data/data_sources/device_location_data_source.dart';
 import 'package:multibook/src/data/data_sources/nominatim_data_source.dart';
 import 'package:multibook/src/data/enums/device_location_status.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:injectable/injectable.dart';
 
 class UserLocationException implements Exception {
@@ -23,7 +23,7 @@ class UserLocationRepository {
 
   final DeviceLocationDataSource _deviceLocationDataSource;
   final NominatimDataSource _nominatimDataSource;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final _cityUpdates = StreamController<String>.broadcast();
 
   Stream<String> get cityUpdates => _cityUpdates.stream;

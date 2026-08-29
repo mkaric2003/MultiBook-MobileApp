@@ -2,7 +2,7 @@ import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/shared/chat/cubit/chat_list_cubit.dart';
 import 'package:multibook/src/features/shared/chat/cubit/chat_list_state.dart';
 import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
@@ -19,7 +19,7 @@ class ChatListView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final currentUser = useFuture(
-      useMemoized(getIt<UserRepository>().getCurrentUser),
+      useMemoized(getIt<UserProfileUseCase>().getCurrentUser),
     );
     return BlocProvider(
       create: (_) => getIt<ChatListCubit>()..load(),

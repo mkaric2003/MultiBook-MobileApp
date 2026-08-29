@@ -1,5 +1,5 @@
 import 'package:multibook/src/core/injectable/injectable.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart';
 import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
 import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_booking_filter_chips.dart';
@@ -16,7 +16,7 @@ class BookingsView extends HookWidget {
     final cubit = useMemoized(() => getIt<ClientBookingsCubit>());
     final scrollController = useScrollController();
     final selectedBusinessId = useValueListenable(
-      getIt<UserRepository>().selectedBusinessId,
+      getIt<UserProfileUseCase>().selectedBusinessId,
     );
 
     useEffect(() {

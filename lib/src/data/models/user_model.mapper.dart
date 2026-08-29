@@ -29,23 +29,38 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
   static const Field<UserModel, String> _f$firstName = Field(
     'firstName',
     _$firstName,
+    key: r'first_name',
+    opt: true,
+    def: '',
   );
   static String _$lastName(UserModel v) => v.lastName;
   static const Field<UserModel, String> _f$lastName = Field(
     'lastName',
     _$lastName,
+    key: r'last_name',
+    opt: true,
+    def: '',
   );
   static String _$fullName(UserModel v) => v.fullName;
   static const Field<UserModel, String> _f$fullName = Field(
     'fullName',
     _$fullName,
+    key: r'full_name',
+    opt: true,
+    def: '',
   );
   static String _$email(UserModel v) => v.email;
-  static const Field<UserModel, String> _f$email = Field('email', _$email);
+  static const Field<UserModel, String> _f$email = Field(
+    'email',
+    _$email,
+    opt: true,
+    def: '',
+  );
   static UserType _$type(UserModel v) => v.type;
   static const Field<UserModel, UserType> _f$type = Field(
     'type',
     _$type,
+    key: r'role',
     opt: true,
     def: UserType.provider,
   );
@@ -53,30 +68,35 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
   static const Field<UserModel, String> _f$selectedBusinessId = Field(
     'selectedBusinessId',
     _$selectedBusinessId,
+    key: r'selected_business_id',
     opt: true,
   );
   static String? _$phoneNumber(UserModel v) => v.phoneNumber;
   static const Field<UserModel, String> _f$phoneNumber = Field(
     'phoneNumber',
     _$phoneNumber,
+    key: r'phone_e164',
     opt: true,
   );
   static String? _$profileImageUrl(UserModel v) => v.profileImageUrl;
   static const Field<UserModel, String> _f$profileImageUrl = Field(
     'profileImageUrl',
     _$profileImageUrl,
+    key: r'avatar_storage_path',
     opt: true,
   );
   static String? _$countryCode(UserModel v) => v.countryCode;
   static const Field<UserModel, String> _f$countryCode = Field(
     'countryCode',
     _$countryCode,
+    key: r'country_code',
     opt: true,
   );
   static DateTime? _$dateOfBirth(UserModel v) => v.dateOfBirth;
   static const Field<UserModel, DateTime> _f$dateOfBirth = Field(
     'dateOfBirth',
     _$dateOfBirth,
+    key: r'date_of_birth',
     opt: true,
   );
   static String? _$address(UserModel v) => v.address;
@@ -95,6 +115,7 @@ class UserModelMapper extends ClassMapperBase<UserModel> {
   static const Field<UserModel, CurrencyCode> _f$businessCurrency = Field(
     'businessCurrency',
     _$businessCurrency,
+    key: r'business_currency',
     opt: true,
     def: CurrencyCode.bam,
   );

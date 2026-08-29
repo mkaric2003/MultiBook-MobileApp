@@ -4,7 +4,7 @@ import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/enums/booking_status.dart';
 import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/availability_calendar_cubit.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/availability_calendar_state.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
@@ -30,7 +30,7 @@ class AvailabilityCalendarView extends HookWidget {
     final selectedDate = useState(DateTime.now());
     final isMonthly = useState(true);
     final selectedBusinessId = useValueListenable(
-      getIt<UserRepository>().selectedBusinessId,
+      getIt<UserProfileUseCase>().selectedBusinessId,
     );
 
     useEffect(() {

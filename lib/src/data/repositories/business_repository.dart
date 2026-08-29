@@ -21,7 +21,7 @@ import 'package:multibook/src/data/models/service_provider_model.dart';
 import 'package:multibook/src/data/models/stay_details_model.dart';
 import 'package:multibook/src/data/models/stay_extra_model.dart';
 import 'package:multibook/src/data/models/stay_room_model.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/utils/image_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -821,7 +821,7 @@ class BusinessRepository {
   final FirestoreDataSource _firestoreDataSource;
   final FirebaseStorageDataSource _storageDataSource;
   final NominatimDataSource _nominatimDataSource;
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
 
   Future<bool> hasBusinesses() async {
     final ownerId = _authenticationDataSource.currentUser?.uid;

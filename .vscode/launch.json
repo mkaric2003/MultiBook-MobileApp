@@ -2,15 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "AquaBook",
+            "name": "MultiBook — Android emulator (local API)",
             "request": "launch",
             "type": "dart",
-            "args": [
-                "--debug"
+            "toolArgs": [
+                "--dart-define=MULTIBOOK_API_BASE_URL=http://10.0.2.2:8080"
             ]
         },
         {
-            "name": "AquaBook (release mode)",
+            "name": "MultiBook — iOS simulator (local API)",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--dart-define=MULTIBOOK_API_BASE_URL=http://localhost:8080"
+            ]
+        },
+        {
+            "name": "MultiBook — release mode",
             "request": "launch",
             "type": "dart",
             "args": [

@@ -1,16 +1,16 @@
 import 'package:multibook/src/data/enums/user_type.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/domain/use_cases/users/update_user_role_use_case.dart';
 import 'package:multibook/src/features/shared/user_type_checker/cubit/user_type_checker_state.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class UserTypeCheckerCubit extends Cubit<UserTypeCheckerState> {
-  UserTypeCheckerCubit(this._userRepository)
+  UserTypeCheckerCubit(this._updateUserRoleUseCase)
     : super(const UserTypeCheckerState());
 
-  final UserRepository _userRepository;
+  final UpdateUserRoleUseCase _updateUserRoleUseCase;
 
   void selectType(UserType type) =>
       emit(UserTypeCheckerState(selectedType: type));
@@ -22,16 +22,17 @@ class UserTypeCheckerCubit extends Cubit<UserTypeCheckerState> {
     }
 
     emit(UserTypeCheckerState(selectedType: type, isLoading: true));
-    try {
-      await _userRepository.setUserType(type: type);
-      emit(UserTypeCheckerState(selectedType: type, isCompleted: true));
-    } on FirebaseException {
-      emit(
-        UserTypeCheckerState(
-          selectedType: type,
-          errorMessage: 'We could not save your choice. Please try again.',
-        ),
-      );
+    final result = await _updateUserRoleUseCase.execute(type);
+    switch (result) {
+      case Success():
+        emit(UserTypeCheckerState(selectedType: type, isCompleted: true));
+      case FailureResult():
+        emit(
+          UserTypeCheckerState(
+            selectedType: type,
+            errorMessage: 'We could not save your choice. Please try again.',
+          ),
+        );
     }
   }
 }

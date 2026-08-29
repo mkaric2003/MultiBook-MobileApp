@@ -4,7 +4,7 @@ import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/service_provider_model.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_bookings_chart.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
@@ -31,7 +31,7 @@ class EarningsView extends HookWidget {
   Widget build(BuildContext context) {
     final cubit = useMemoized(() => getIt<EarningsCubit>());
     final selectedBusinessId = useValueListenable(
-      getIt<UserRepository>().selectedBusinessId,
+      getIt<UserProfileUseCase>().selectedBusinessId,
     );
     useEffect(() {
       cubit.load(businessId: selectedBusinessId);
