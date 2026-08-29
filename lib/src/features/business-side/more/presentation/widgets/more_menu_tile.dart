@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/business-side/more/domain/models/more_menu_item.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/business-side/more/domain/models/more_menu_item.dart';
 import 'package:flutter/material.dart';
 
 class MoreMenuTile extends StatelessWidget {

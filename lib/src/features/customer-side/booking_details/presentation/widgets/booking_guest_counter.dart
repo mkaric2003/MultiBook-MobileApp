@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/booking_details/presentation/widgets/booking_counter_action_button.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/booking_details/presentation/widgets/booking_counter_action_button.dart';
 import 'package:flutter/material.dart';
 
 class BookingGuestCounter extends StatelessWidget {

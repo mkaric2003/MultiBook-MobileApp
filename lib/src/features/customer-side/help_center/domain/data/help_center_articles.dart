@@ -1,6 +1,6 @@
-import 'package:aquabook/src/features/customer-side/help_center/domain/enums/help_article_id.dart';
-import 'package:aquabook/src/features/customer-side/help_center/domain/enums/help_center_topic.dart';
-import 'package:aquabook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/enums/help_article_id.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/enums/help_center_topic.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
 
 const helpCenterArticles = <HelpArticleModel>[
   HelpArticleModel(

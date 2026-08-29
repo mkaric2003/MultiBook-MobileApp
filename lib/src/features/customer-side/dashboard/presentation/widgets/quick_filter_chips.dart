@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/enums/stay_amenity.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/quick_filter_chip.dart';
+import 'package:multibook/src/data/enums/stay_amenity.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/quick_filter_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

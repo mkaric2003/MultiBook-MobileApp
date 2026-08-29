@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:async_button_builder/async_button_builder.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/repositories/authentication_repository.dart';
-import 'package:aquabook/src/features/business-side/change_password/cubit/change_password_state.dart';
+import 'package:multibook/src/data/repositories/authentication_repository.dart';
+import 'package:multibook/src/features/business-side/change_password/cubit/change_password_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

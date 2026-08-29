@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/repositories/promotion_repository.dart';
-import 'package:aquabook/src/features/business-side/promotions/bloc/create_promotion_state.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
+import 'package:multibook/src/data/repositories/promotion_repository.dart';
+import 'package:multibook/src/features/business-side/promotions/bloc/create_promotion_state.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

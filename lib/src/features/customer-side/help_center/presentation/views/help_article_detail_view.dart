@@ -1,8 +1,8 @@
-import 'package:aquabook/app.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
-import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:multibook/app.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/help_center/domain/models/help_article_model.dart';
+import 'package:multibook/src/global_widgets/custom_app_bar.dart';
+import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

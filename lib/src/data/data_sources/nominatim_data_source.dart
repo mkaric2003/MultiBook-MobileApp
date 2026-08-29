@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/models/business_location_model.dart';
+import 'package:multibook/src/data/models/business_location_model.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 

@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/models/stay_extra_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/stay_extra_model.dart';
 
 class ReviewStayState {
   const ReviewStayState({

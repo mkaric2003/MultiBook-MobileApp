@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/enums/service_weekday.dart';
+import 'package:multibook/src/data/enums/service_weekday.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'service_availability_slot_model.mapper.dart';

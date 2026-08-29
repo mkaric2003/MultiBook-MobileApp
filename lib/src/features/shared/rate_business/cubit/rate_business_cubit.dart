@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/repositories/review_repository.dart';
-import 'package:aquabook/src/features/shared/rate_business/cubit/rate_business_state.dart';
-import 'package:aquabook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
+import 'package:multibook/src/data/repositories/review_repository.dart';
+import 'package:multibook/src/features/shared/rate_business/cubit/rate_business_state.dart';
+import 'package:multibook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

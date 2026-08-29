@@ -1,8 +1,8 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/data/enums/business_type.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_cover_photo_upload.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_logo_upload.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/business_media/business_photos_upload.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/features/business-side/add_business/presentation/widgets/business_media/business_cover_photo_upload.dart';
+import 'package:multibook/src/features/business-side/add_business/presentation/widgets/business_media/business_logo_upload.dart';
+import 'package:multibook/src/features/business-side/add_business/presentation/widgets/business_media/business_photos_upload.dart';
 import 'package:flutter/material.dart';
 
 class BusinessMediaSection extends StatelessWidget {

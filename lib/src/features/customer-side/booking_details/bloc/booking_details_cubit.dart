@@ -1,10 +1,10 @@
-import 'package:aquabook/src/data/enums/booking_status.dart';
-import 'package:aquabook/src/data/models/booking_model.dart';
-import 'package:aquabook/src/data/repositories/booking_repository.dart';
-import 'package:aquabook/src/data/repositories/booking_draft_repository.dart';
-import 'package:aquabook/src/data/models/booking_draft_model.dart';
-import 'package:aquabook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
-import 'package:aquabook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/data/repositories/booking_repository.dart';
+import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
+import 'package:multibook/src/data/models/booking_draft_model.dart';
+import 'package:multibook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
+import 'package:multibook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

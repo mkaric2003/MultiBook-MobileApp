@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/data_sources/image_picker_data_source.dart';
-import 'package:aquabook/src/data/enums/currency_code.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
+import 'package:multibook/src/data/data_sources/image_picker_data_source.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';

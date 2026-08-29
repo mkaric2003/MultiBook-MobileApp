@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/enums/payment_method_type.dart';
+import 'package:multibook/src/data/enums/payment_method_type.dart';
 
 class AppointmentPaymentRequest {
   const AppointmentPaymentRequest({

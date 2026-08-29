@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:aquabook/src/data/repositories/payment_methods_repository.dart';
-import 'package:aquabook/src/features/customer-side/payment_methods/cubit/payment_methods_state.dart';
-import 'package:aquabook/src/features/customer-side/payment_methods/domain/models/saved_payment_method_model.dart';
+import 'package:multibook/src/data/repositories/payment_methods_repository.dart';
+import 'package:multibook/src/features/customer-side/payment_methods/cubit/payment_methods_state.dart';
+import 'package:multibook/src/features/customer-side/payment_methods/domain/models/saved_payment_method_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

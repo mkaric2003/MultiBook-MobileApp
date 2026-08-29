@@ -1,6 +1,6 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/data/models/stay_room_model.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/stay_unit_editor.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/data/models/stay_room_model.dart';
+import 'package:multibook/src/features/business-side/add_business/presentation/widgets/stay_unit_editor.dart';
 import 'package:flutter/material.dart';
 
 class StayUnitsEditor extends StatelessWidget {

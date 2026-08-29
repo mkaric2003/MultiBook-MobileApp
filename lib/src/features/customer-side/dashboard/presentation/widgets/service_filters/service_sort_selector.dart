@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/service_sort_option.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/enums/service_sort_option.dart';
 import 'package:flutter/material.dart';
 
 class ServiceSortSelector extends StatelessWidget {

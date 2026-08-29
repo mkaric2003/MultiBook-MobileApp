@@ -1,9 +1,9 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/models/service_provider_model.dart';
-import 'package:aquabook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
-import 'package:aquabook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
-import 'package:aquabook/src/features/business-side/earnings/domain/models/earnings_date_range.dart';
-import 'package:aquabook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
+import 'package:multibook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
+import 'package:multibook/src/features/business-side/earnings/domain/models/earnings_date_range.dart';
+import 'package:multibook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
 
 class EarningsState {
   const EarningsState({

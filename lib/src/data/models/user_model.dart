@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/currency_code.dart';
-import 'package:aquabook/src/data/enums/user_type.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'user_model.mapper.dart';

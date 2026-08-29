@@ -1,9 +1,9 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/global_widgets/custom_textfield.dart';
-import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_input_formatters.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/global_widgets/custom_textfield.dart';
+import 'package:multibook/src/features/customer-side/payment/domain/models/payment_input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:aquabook/l10n/l10n.dart';
+import 'package:multibook/l10n/l10n.dart';
 
 class PaymentCardForm extends StatelessWidget {
   const PaymentCardForm({

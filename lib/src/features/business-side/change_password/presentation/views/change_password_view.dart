@@ -1,9 +1,9 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/features/business-side/change_password/cubit/change_password_cubit.dart';
-import 'package:aquabook/src/features/business-side/change_password/cubit/change_password_state.dart';
-import 'package:aquabook/src/features/business-side/change_password/presentation/widgets/change_password_form.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/features/business-side/change_password/cubit/change_password_cubit.dart';
+import 'package:multibook/src/features/business-side/change_password/cubit/change_password_state.dart';
+import 'package:multibook/src/features/business-side/change_password/presentation/widgets/change_password_form.dart';
+import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

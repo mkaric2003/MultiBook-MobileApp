@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/models/firestore_document_write.dart';
-import 'package:aquabook/src/data/models/service_availability_block_model.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/models/firestore_document_write.dart';
+import 'package:multibook/src/data/models/service_availability_block_model.dart';
 import 'package:injectable/injectable.dart';
 
 class ServiceAvailabilityException implements Exception {

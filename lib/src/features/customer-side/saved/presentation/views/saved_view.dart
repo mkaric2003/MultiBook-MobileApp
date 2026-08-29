@@ -1,9 +1,9 @@
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/saved/cubit/saved_cubit.dart';
-import 'package:aquabook/src/features/customer-side/saved/cubit/saved_state.dart';
-import 'package:aquabook/src/features/customer-side/saved/presentation/widgets/saved_business_card.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/saved/cubit/saved_cubit.dart';
+import 'package:multibook/src/features/customer-side/saved/cubit/saved_state.dart';
+import 'package:multibook/src/features/customer-side/saved/presentation/widgets/saved_business_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toastification/toastification.dart';

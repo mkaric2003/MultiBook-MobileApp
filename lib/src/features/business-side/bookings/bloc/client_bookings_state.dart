@@ -1,8 +1,8 @@
-import 'package:aquabook/src/data/models/booking_model.dart';
-import 'package:aquabook/src/data/models/appointment_model.dart';
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/features/business-side/bookings/domain/enums/client_booking_filter.dart';
-import 'package:aquabook/src/features/business-side/bookings/domain/enums/client_bookings_tab.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/features/business-side/bookings/domain/enums/client_booking_filter.dart';
+import 'package:multibook/src/features/business-side/bookings/domain/enums/client_bookings_tab.dart';
 
 class ClientBookingsState {
   const ClientBookingsState({

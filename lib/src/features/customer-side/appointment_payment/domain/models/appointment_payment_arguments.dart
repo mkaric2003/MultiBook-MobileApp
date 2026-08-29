@@ -1,6 +1,6 @@
-import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
-import 'package:aquabook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:multibook/src/features/customer-side/review_appointment/domain/models/review_appointment_arguments.dart';
 
 class AppointmentPaymentArguments {
   const AppointmentPaymentArguments({required this.review});

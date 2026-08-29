@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_service_category.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_service_category.dart';
 import 'package:flutter/material.dart';
 
 abstract final class ExploreServiceCategoryCatalog {

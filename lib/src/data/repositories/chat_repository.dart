@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/chat_data_source.dart';
-import 'package:aquabook/src/data/models/chat_conversation_model.dart';
-import 'package:aquabook/src/data/models/chat_message_model.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/chat_data_source.dart';
+import 'package:multibook/src/data/models/chat_conversation_model.dart';
+import 'package:multibook/src/data/models/chat_message_model.dart';
 import 'package:injectable/injectable.dart';
 
 class ChatException implements Exception {

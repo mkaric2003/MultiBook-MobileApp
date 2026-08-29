@@ -1,9 +1,9 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/models/service_offering_model.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
-import 'package:aquabook/src/features/customer-side/review_appointment/presentation/widgets/appointment_summary_row.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/models/service_offering_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:multibook/src/features/customer-side/review_appointment/presentation/widgets/appointment_summary_row.dart';
 import 'package:flutter/material.dart';
 
 class AppointmentPriceSummary extends StatelessWidget {

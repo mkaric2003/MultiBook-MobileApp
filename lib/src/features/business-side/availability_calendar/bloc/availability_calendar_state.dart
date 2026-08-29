@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/models/booking_model.dart';
-import 'package:aquabook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
 
 class AvailabilityCalendarState {
   const AvailabilityCalendarState({

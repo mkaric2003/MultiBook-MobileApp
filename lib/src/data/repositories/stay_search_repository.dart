@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_sources/stay_search_data_source.dart';
-import 'package:aquabook/src/data/models/stay_search_page_model.dart';
-import 'package:aquabook/src/data/models/stay_search_result_model.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:multibook/src/data/data_sources/stay_search_data_source.dart';
+import 'package:multibook/src/data/models/stay_search_page_model.dart';
+import 'package:multibook/src/data/models/stay_search_result_model.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton

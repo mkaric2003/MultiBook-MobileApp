@@ -1,7 +1,7 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/shared/legal/domain/enums/legal_document_type.dart';
-import 'package:aquabook/src/features/shared/legal/domain/enums/legal_document_audience.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/shared/legal/domain/enums/legal_document_type.dart';
+import 'package:multibook/src/features/shared/legal/domain/enums/legal_document_audience.dart';
+import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class LegalDocumentView extends StatelessWidget {

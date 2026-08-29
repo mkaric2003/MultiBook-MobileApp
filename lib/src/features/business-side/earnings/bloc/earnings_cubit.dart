@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:aquabook/src/core/session/session_stream_registry.dart';
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/models/service_provider_model.dart';
-import 'package:aquabook/src/data/repositories/business_metrics_repository.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
-import 'package:aquabook/src/features/business-side/earnings/bloc/earnings_state.dart';
-import 'package:aquabook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
-import 'package:aquabook/src/features/business-side/earnings/domain/models/earnings_date_range.dart';
-import 'package:aquabook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
+import 'package:multibook/src/core/session/session_stream_registry.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/data/repositories/business_metrics_repository.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
+import 'package:multibook/src/features/business-side/earnings/bloc/earnings_state.dart';
+import 'package:multibook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
+import 'package:multibook/src/features/business-side/earnings/domain/models/earnings_date_range.dart';
+import 'package:multibook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

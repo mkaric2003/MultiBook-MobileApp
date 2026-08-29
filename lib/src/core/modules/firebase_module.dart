@@ -1,4 +1,4 @@
-import 'package:aquabook/firebase_options.dart';
+import 'package:multibook/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

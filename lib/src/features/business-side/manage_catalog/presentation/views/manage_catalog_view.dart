@@ -1,7 +1,7 @@
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
-import 'package:aquabook/src/features/business-side/manage_catalog/bloc/manage_catalog_cubit.dart';
-import 'package:aquabook/src/features/business-side/manage_catalog/bloc/manage_catalog_state.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
+import 'package:multibook/src/features/business-side/manage_catalog/bloc/manage_catalog_cubit.dart';
+import 'package:multibook/src/features/business-side/manage_catalog/bloc/manage_catalog_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

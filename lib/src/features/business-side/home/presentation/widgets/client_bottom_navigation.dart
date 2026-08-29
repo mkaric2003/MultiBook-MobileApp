@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/business-side/home/domain/models/client_navigation_item.dart';
+import 'package:multibook/src/features/business-side/home/domain/models/client_navigation_item.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_colors.dart';

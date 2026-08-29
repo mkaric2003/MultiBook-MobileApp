@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 
 class ExploreState {
   const ExploreState({

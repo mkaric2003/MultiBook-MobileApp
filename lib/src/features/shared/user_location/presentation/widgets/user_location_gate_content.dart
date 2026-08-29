@@ -1,8 +1,8 @@
-import 'package:aquabook/src/data/models/user_model.dart';
-import 'package:aquabook/src/features/shared/user_location/cubit/user_location_cubit.dart';
-import 'package:aquabook/src/features/shared/user_location/cubit/user_location_state.dart';
-import 'package:aquabook/src/features/shared/user_location/presentation/widgets/user_location_error_dialog.dart';
-import 'package:aquabook/src/features/shared/user_location/presentation/widgets/user_location_permission_dialog.dart';
+import 'package:multibook/src/data/models/user_model.dart';
+import 'package:multibook/src/features/shared/user_location/cubit/user_location_cubit.dart';
+import 'package:multibook/src/features/shared/user_location/cubit/user_location_state.dart';
+import 'package:multibook/src/features/shared/user_location/presentation/widgets/user_location_error_dialog.dart';
+import 'package:multibook/src/features/shared/user_location/presentation/widgets/user_location_permission_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

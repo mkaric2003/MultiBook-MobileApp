@@ -1,8 +1,8 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
-import 'package:aquabook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
-import 'package:aquabook/src/features/customer-side/bookings/presentation/widgets/customer_appointment_card.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
+import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_appointment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

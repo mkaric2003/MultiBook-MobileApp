@@ -1,11 +1,11 @@
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_cursor.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/data_sources/review_data_source.dart';
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/models/business_review_model.dart';
-import 'package:aquabook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
+import 'package:multibook/src/data/data_cursor.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/data_sources/review_data_source.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/models/business_review_model.dart';
+import 'package:multibook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
 import 'package:injectable/injectable.dart';
 
 class ReviewException implements Exception {

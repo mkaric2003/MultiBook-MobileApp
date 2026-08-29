@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/guest_stepper_circle_button.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/guest_stepper_circle_button.dart';
 import 'package:flutter/material.dart';
 
 class StayGuestStepper extends StatelessWidget {

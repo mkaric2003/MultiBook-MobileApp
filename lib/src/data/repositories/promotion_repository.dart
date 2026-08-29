@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

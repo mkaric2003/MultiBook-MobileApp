@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/business-side/shared/presentation/widgets/client_placeholder_view.dart';
+import 'package:multibook/src/features/business-side/shared/presentation/widgets/client_placeholder_view.dart';
 import 'package:flutter/material.dart';
 
 class ReviewsView extends StatelessWidget {

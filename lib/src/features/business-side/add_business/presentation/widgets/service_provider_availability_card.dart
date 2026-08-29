@@ -1,7 +1,7 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
-import 'package:aquabook/src/data/models/service_provider_model.dart';
-import 'package:aquabook/src/features/business-side/add_business/presentation/widgets/service_availability_slots_section.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/models/service_availability_slot_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/features/business-side/add_business/presentation/widgets/service_availability_slots_section.dart';
 import 'package:flutter/material.dart';
 
 class ServiceProviderAvailabilityCard extends StatelessWidget {

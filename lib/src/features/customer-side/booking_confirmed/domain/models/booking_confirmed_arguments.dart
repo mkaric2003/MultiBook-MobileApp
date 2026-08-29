@@ -1,5 +1,5 @@
-import 'package:aquabook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
-import 'package:aquabook/src/data/models/booking_model.dart';
+import 'package:multibook/src/features/customer-side/payment/domain/models/payment_arguments.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
 
 class BookingConfirmedArguments {
   const BookingConfirmedArguments({

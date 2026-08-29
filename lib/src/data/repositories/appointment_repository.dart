@@ -1,20 +1,20 @@
 import 'dart:developer';
 import 'dart:math' show Random;
 
-import 'package:aquabook/src/data/data_cursor.dart';
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/enums/payment_method_type.dart';
-import 'package:aquabook/src/data/enums/payment_status.dart';
-import 'package:aquabook/src/data/models/appointment_model.dart';
-import 'package:aquabook/src/data/models/firestore_document_path.dart';
-import 'package:aquabook/src/data/models/firestore_document_write.dart';
-import 'package:aquabook/src/data/repositories/business_repository.dart';
-import 'package:aquabook/src/data/repositories/service_availability_repository.dart';
-import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
-import 'package:aquabook/src/data/repositories/promotion_repository.dart';
-import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
+import 'package:multibook/src/data/data_cursor.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/enums/payment_method_type.dart';
+import 'package:multibook/src/data/enums/payment_status.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/firestore_document_path.dart';
+import 'package:multibook/src/data/models/firestore_document_write.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/service_availability_repository.dart';
+import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:multibook/src/data/repositories/promotion_repository.dart';
+import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

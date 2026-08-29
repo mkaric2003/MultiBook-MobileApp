@@ -1,8 +1,8 @@
-import 'package:aquabook/src/data/repositories/appointment_draft_repository.dart';
-import 'package:aquabook/src/data/repositories/appointment_repository.dart';
-import 'package:aquabook/src/features/customer-side/appointment_payment/cubit/appointment_payment_state.dart';
-import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
-import 'package:aquabook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
+import 'package:multibook/src/data/repositories/appointment_draft_repository.dart';
+import 'package:multibook/src/data/repositories/appointment_repository.dart';
+import 'package:multibook/src/features/customer-side/appointment_payment/cubit/appointment_payment_state.dart';
+import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
+import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

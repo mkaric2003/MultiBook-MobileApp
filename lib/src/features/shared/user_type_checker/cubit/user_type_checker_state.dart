@@ -1,4 +1,4 @@
-import 'package:aquabook/src/data/enums/user_type.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
 
 class UserTypeCheckerState {
   const UserTypeCheckerState({

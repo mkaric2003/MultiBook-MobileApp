@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/data/models/service_offering_model.dart';
-import 'package:aquabook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/service_offering_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
 
 class ReviewAppointmentArguments {
   const ReviewAppointmentArguments({

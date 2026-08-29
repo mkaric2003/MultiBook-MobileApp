@@ -1,8 +1,8 @@
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/models/booking_draft_model.dart';
-import 'package:aquabook/src/data/models/stay_extra_model.dart';
-import 'package:aquabook/src/data/enums/stay_extra_type.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/models/booking_draft_model.dart';
+import 'package:multibook/src/data/models/stay_extra_model.dart';
+import 'package:multibook/src/data/enums/stay_extra_type.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 

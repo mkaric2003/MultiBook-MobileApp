@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:aquabook/src/data/data_sources/authentication_data_source.dart';
-import 'package:aquabook/src/data/data_sources/firestore_data_source.dart';
-import 'package:aquabook/src/data/data_sources/in_app_notification_data_source.dart';
-import 'package:aquabook/src/data/data_sources/notification_data_source.dart';
-import 'package:aquabook/src/data/models/app_notification_model.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firestore_data_source.dart';
+import 'package:multibook/src/data/data_sources/in_app_notification_data_source.dart';
+import 'package:multibook/src/data/data_sources/notification_data_source.dart';
+import 'package:multibook/src/data/models/app_notification_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';

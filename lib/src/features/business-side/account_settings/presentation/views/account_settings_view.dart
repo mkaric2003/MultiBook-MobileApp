@@ -1,19 +1,19 @@
-import 'package:aquabook/src/core/injectable/injectable.dart';
-import 'package:aquabook/src/data/enums/currency_code.dart';
-import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_cubit.dart';
-import 'package:aquabook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
-import 'package:aquabook/src/features/business-side/account_settings/presentation/widgets/account_settings_avatar.dart';
-import 'package:aquabook/src/features/business-side/account_settings/presentation/widgets/account_settings_form.dart';
-import 'package:aquabook/src/features/business-side/account_settings/presentation/widgets/account_settings_security_tile.dart';
-import 'package:aquabook/src/features/business-side/account_settings/presentation/widgets/profile_image_source_picker_sheet.dart';
-import 'package:aquabook/src/global_widgets/custom_app_bar.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/features/business-side/account_settings/bloc/account_settings_cubit.dart';
+import 'package:multibook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
+import 'package:multibook/src/features/business-side/account_settings/presentation/widgets/account_settings_avatar.dart';
+import 'package:multibook/src/features/business-side/account_settings/presentation/widgets/account_settings_form.dart';
+import 'package:multibook/src/features/business-side/account_settings/presentation/widgets/account_settings_security_tile.dart';
+import 'package:multibook/src/features/business-side/account_settings/presentation/widgets/profile_image_source_picker_sheet.dart';
+import 'package:multibook/src/global_widgets/custom_app_bar.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:aquabook/app.dart';
+import 'package:multibook/app.dart';
 
 class AccountSettingsView extends HookWidget {
   const AccountSettingsView({super.key});

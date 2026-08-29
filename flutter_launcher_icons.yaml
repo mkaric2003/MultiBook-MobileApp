@@ -1,7 +1,7 @@
 flutter_launcher_icons:
-  image_path: "assets/images/aquabook_logo.png"
+  image_path: "assets/images/multibook_logo.png"
   android: true
   ios: true
   remove_alpha_ios: true
   adaptive_icon_background: "#000000"
-  adaptive_icon_foreground: "assets/images/aquabook_logo.png"
+  adaptive_icon_foreground: "assets/images/multibook_logo.png"

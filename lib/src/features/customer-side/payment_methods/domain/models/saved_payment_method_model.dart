@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/customer-side/payment_methods/domain/enums/saved_card_brand.dart';
+import 'package:multibook/src/features/customer-side/payment_methods/domain/enums/saved_card_brand.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'saved_payment_method_model.mapper.dart';

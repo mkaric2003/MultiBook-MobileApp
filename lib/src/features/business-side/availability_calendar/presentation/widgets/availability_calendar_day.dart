@@ -1,6 +1,6 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/data/enums/booking_status.dart';
-import 'package:aquabook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
 import 'package:flutter/material.dart';
 
 class AvailabilityCalendarDay extends StatelessWidget {

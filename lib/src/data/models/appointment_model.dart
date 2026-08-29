@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/currency_code.dart';
-import 'package:aquabook/src/data/enums/payment_status.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/enums/payment_status.dart';
 
 class AppointmentModel {
   const AppointmentModel({

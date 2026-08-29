@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/service_category_filter_option.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_category_filter_option.dart';
 
 abstract final class ServiceCategoryFilterOptions {
   static const all = <ServiceCategoryFilterOption>[

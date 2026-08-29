@@ -1,10 +1,10 @@
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/shared/rate_business/cubit/rate_business_cubit.dart';
-import 'package:aquabook/src/features/shared/rate_business/cubit/rate_business_state.dart';
-import 'package:aquabook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
-import 'package:aquabook/src/features/shared/rate_business/presentation/widgets/rating_star_selector.dart';
-import 'package:aquabook/src/global_widgets/custom_button.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/shared/rate_business/cubit/rate_business_cubit.dart';
+import 'package:multibook/src/features/shared/rate_business/cubit/rate_business_state.dart';
+import 'package:multibook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
+import 'package:multibook/src/features/shared/rate_business/presentation/widgets/rating_star_selector.dart';
+import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';

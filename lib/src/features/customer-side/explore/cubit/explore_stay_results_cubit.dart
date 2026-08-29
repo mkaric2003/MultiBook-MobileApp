@@ -1,8 +1,8 @@
-import 'package:aquabook/src/data/repositories/stay_search_repository.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:aquabook/src/features/customer-side/explore/cubit/explore_stay_results_state.dart';
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
+import 'package:multibook/src/data/repositories/stay_search_repository.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/features/customer-side/explore/cubit/explore_stay_results_state.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_stay_results_arguments.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

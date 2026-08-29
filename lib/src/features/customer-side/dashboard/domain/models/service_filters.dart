@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/customer-side/dashboard/domain/enums/service_sort_option.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/enums/service_sort_option.dart';
 
 class ServiceFilters {
   const ServiceFilters({

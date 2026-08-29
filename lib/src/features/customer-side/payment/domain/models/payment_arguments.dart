@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/models/stay_extra_model.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/models/promotion_model.dart';
-import 'package:aquabook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
-import 'package:aquabook/src/features/customer-side/review_stay/domain/models/review_stay_arguments.dart';
+import 'package:multibook/src/data/models/stay_extra_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/models/promotion_model.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
+import 'package:multibook/src/features/customer-side/review_stay/domain/models/review_stay_arguments.dart';
 
 class PaymentArguments {
   const PaymentArguments({required this.review, required this.selectedExtras});

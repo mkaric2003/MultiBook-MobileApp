@@ -1,6 +1,6 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:flutter/material.dart';
 
 class StayOverview extends StatelessWidget {

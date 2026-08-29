@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:aquabook/src/data/repositories/recently_viewed_repository.dart';
-import 'package:aquabook/src/features/shared/recently_viewed/cubit/recently_viewed_services_state.dart';
+import 'package:multibook/src/data/repositories/recently_viewed_repository.dart';
+import 'package:multibook/src/features/shared/recently_viewed/cubit/recently_viewed_services_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

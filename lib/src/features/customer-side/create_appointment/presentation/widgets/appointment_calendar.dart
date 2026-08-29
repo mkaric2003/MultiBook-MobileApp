@@ -1,5 +1,5 @@
-import 'package:aquabook/src/core/theme/app_colors.dart';
-import 'package:aquabook/src/features/customer-side/create_appointment/presentation/widgets/appointment_calendar_weekday_label.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/create_appointment/presentation/widgets/appointment_calendar_weekday_label.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

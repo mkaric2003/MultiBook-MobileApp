@@ -1,7 +1,7 @@
-import 'package:aquabook/src/data/enums/booking_status.dart';
-import 'package:aquabook/src/data/enums/currency_code.dart';
-import 'package:aquabook/src/data/enums/payment_status.dart';
-import 'package:aquabook/src/data/models/stay_extra_model.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/enums/payment_status.dart';
+import 'package:multibook/src/data/models/stay_extra_model.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'booking_model.mapper.dart';

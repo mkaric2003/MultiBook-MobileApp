@@ -1,5 +1,5 @@
-import 'package:aquabook/src/data/enums/booking_status.dart';
-import 'package:aquabook/src/data/models/booking_model.dart';
+import 'package:multibook/src/data/enums/booking_status.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:intl/intl.dart';
 
 class ClientBookingPreview {

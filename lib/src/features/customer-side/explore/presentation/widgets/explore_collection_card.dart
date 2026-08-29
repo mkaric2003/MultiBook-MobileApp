@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_collection.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_collection.dart';
 import 'package:flutter/material.dart';
 
 class ExploreCollectionCard extends StatelessWidget {

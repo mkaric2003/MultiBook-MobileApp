@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/features/business-side/dashboard/domain/models/business_metrics.dart';
-import 'package:aquabook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/features/business-side/dashboard/domain/models/business_metrics.dart';
+import 'package:multibook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
 
 class DashboardState {
   const DashboardState({

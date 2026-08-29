@@ -1,6 +1,6 @@
-import 'package:aquabook/src/data/repositories/authentication_repository.dart';
-import 'package:aquabook/src/data/repositories/user_repository.dart';
-import 'package:aquabook/src/features/shared/sign_in/cubit/signin_state.dart';
+import 'package:multibook/src/data/repositories/authentication_repository.dart';
+import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/features/shared/sign_in/cubit/signin_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

@@ -1,4 +1,4 @@
-import 'package:aquabook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
+import 'package:multibook/src/features/business-side/promotions/domain/enums/promotion_type.dart';
 import 'package:dart_mappable/dart_mappable.dart';
 
 part 'promotion_model.mapper.dart';

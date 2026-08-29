@@ -1,6 +1,6 @@
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_stay_promotion.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_promotion_dot.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_stay_promotion.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_promotion_dot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

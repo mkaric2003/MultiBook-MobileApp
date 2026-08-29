@@ -1,15 +1,15 @@
-import 'package:aquabook/src/data/enums/business_type.dart';
-import 'package:aquabook/src/data/enums/stay_amenity.dart';
-import 'package:aquabook/src/data/enums/stay_extra_type.dart';
-import 'package:aquabook/src/data/enums/stay_inventory_type.dart';
-import 'package:aquabook/src/data/enums/stay_collection.dart';
-import 'package:aquabook/src/data/models/stay_room_model.dart';
-import 'package:aquabook/src/data/models/stay_extra_model.dart';
-import 'package:aquabook/src/data/models/service_availability_slot_model.dart';
-import 'package:aquabook/src/data/models/service_offering_model.dart';
-import 'package:aquabook/src/data/models/service_provider_model.dart';
-import 'package:aquabook/src/data/models/business_model.dart';
-import 'package:aquabook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/enums/stay_amenity.dart';
+import 'package:multibook/src/data/enums/stay_extra_type.dart';
+import 'package:multibook/src/data/enums/stay_inventory_type.dart';
+import 'package:multibook/src/data/enums/stay_collection.dart';
+import 'package:multibook/src/data/models/stay_room_model.dart';
+import 'package:multibook/src/data/models/stay_extra_model.dart';
+import 'package:multibook/src/data/models/service_availability_slot_model.dart';
+import 'package:multibook/src/data/models/service_offering_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
 import 'package:image_picker/image_picker.dart';
 
 sealed class AddBusinessEvent {

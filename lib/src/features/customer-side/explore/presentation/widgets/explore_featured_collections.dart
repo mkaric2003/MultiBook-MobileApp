@@ -1,6 +1,6 @@
-import 'package:aquabook/src/features/customer-side/explore/domain/models/explore_collection.dart';
-import 'package:aquabook/l10n/l10n.dart';
-import 'package:aquabook/src/features/customer-side/explore/presentation/widgets/explore_collection_card.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_collection.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_collection_card.dart';
 import 'package:flutter/material.dart';
 
 class ExploreFeaturedCollections extends StatelessWidget {
