@@ -18,6 +18,7 @@ import 'package:multibook/src/domain/use_cases/businesses/create_business_use_ca
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/businesses/update_business_use_case.dart';
+import 'package:multibook/src/domain/use_cases/development_seed/development_seed_use_case.dart';
 import 'package:multibook/src/features/business-side/add_business/bloc/add_business_event.dart';
 import 'package:multibook/src/features/business-side/add_business/bloc/add_business_state.dart';
 import 'package:multibook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
@@ -39,6 +40,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     this._updateBusinessUseCase,
     this._authenticationDataSource,
     this._storageDataSource,
+    this._developmentSeedUseCase,
   ) : super(const AddBusinessState()) {
     on<BusinessTypeChanged>(_onBusinessTypeChanged);
     on<BusinessEditLoaded>(_onBusinessEditLoaded);
@@ -88,6 +90,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   final UpdateBusinessUseCase _updateBusinessUseCase;
   final AuthenticationDataSource _authenticationDataSource;
   final FirebaseStorageDataSource _storageDataSource;
+  final DevelopmentSeedUseCase _developmentSeedUseCase;
 
   void _onBusinessTypeChanged(
     BusinessTypeChanged event,
@@ -671,7 +674,11 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       state.copyWith(isLoading: true, errorMessage: null, successMessage: null),
     );
     try {
-      final seededCount = await _businessRepository.seedDemoStays();
+      final result = await _developmentSeedUseCase.seedStays();
+      if (result case FailureResult(failure: final failure)) {
+        throw BusinessException(_failureMessage(failure));
+      }
+      final seededCount = (result as Success<int>).value;
       emit(
         state.copyWith(
           isLoading: false,
@@ -696,7 +703,11 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       state.copyWith(isLoading: true, errorMessage: null, successMessage: null),
     );
     try {
-      final seededCount = await _businessRepository.seedDemoServices();
+      final result = await _developmentSeedUseCase.seedServices();
+      if (result case FailureResult(failure: final failure)) {
+        throw BusinessException(_failureMessage(failure));
+      }
+      final seededCount = (result as Success<int>).value;
       emit(
         state.copyWith(
           isLoading: false,

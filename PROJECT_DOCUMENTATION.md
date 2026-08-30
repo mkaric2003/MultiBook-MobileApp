@@ -131,6 +131,12 @@ AddBusinessBloc / provider Cubit
 - `POST /v1/businesses` i `PUT /v1/businesses/{id}` primaju `BusinessModel.toMap()` i vraćaju puni `BusinessModel`. `PUT` je potpuna zamjena editabilnog aggregata, ne parcijalni update.
 - Firebase ostaje samo za Auth i Storage. PostgreSQL čuva Firebase Storage path; `BusinessesApiDataSource` download URL koristi samo za prikaz i prije REST `PUT` ga normalizuje nazad u Storage path.
 
+### 4.1.3 Customer discovery i development seed
+
+Customer home **Popular Near You** više ne koristi Firestore cursore. `CustomerDashboardCubit` preko `GetPopularNearbyBusinessesUseCase` poziva `GET /v1/discovery/businesses` s parametrima `type` (`stays` ili `services`), `city`, `limit` i `offset`. Odgovor ostaje `BusinessModel`-kompatibilan, a postojeći UI zadržava paginaciju i *load more* ponašanje.
+
+Development-only seed akcije u Add Business ekranu koriste `DevelopmentSeedUseCase` i REST endpoint-e `POST /v1/development/seed/stays` i `POST /v1/development/seed/services`. Seed media koristi direktne HTTPS URL-ove za demo kartice; Firebase Storage se ne poziva za te slike.
+
 ### 4.2 Struktura direktorija
 
 ```text

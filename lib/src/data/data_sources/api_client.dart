@@ -71,8 +71,13 @@ class ApiClient {
   final FirebaseAuth _firebaseAuth;
   final Dio _dio;
 
-  Future<Response<Map<String, dynamic>>> get(String path) =>
-      _request(() => _dio.get<Map<String, dynamic>>(path));
+  Future<Response<Map<String, dynamic>>> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+  }) => _request(
+    () =>
+        _dio.get<Map<String, dynamic>>(path, queryParameters: queryParameters),
+  );
 
   Future<Response<Map<String, dynamic>>> patch(
     String path, {
