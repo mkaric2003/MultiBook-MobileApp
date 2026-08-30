@@ -26,6 +26,15 @@ class CustomerDiscoveryRepositoryImpl implements CustomerDiscoveryRepository {
   );
 
   @override
+  Future<Result<List<BusinessModel>>> searchBusinesses({
+    required BusinessType type,
+    required String query,
+    int limit = 20,
+  }) => _executor.execute(
+    () => _dataSource.searchBusinesses(type: type, query: query, limit: limit),
+  );
+
+  @override
   Future<Result<List<BusinessModel>>> popularNearCity({
     required BusinessType type,
     required String city,

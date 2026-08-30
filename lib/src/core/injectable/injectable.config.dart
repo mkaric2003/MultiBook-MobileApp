@@ -712,6 +712,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i675.BookingDraftRepository>(),
       ),
     );
+    gh.factory<_i378.CustomerSearchCubit>(
+      () => _i378.CustomerSearchCubit(
+        gh<_i88.GetPopularNearbyBusinessesUseCase>(),
+      ),
+    );
     gh.factory<_i739.MyBusinessesCubit>(
       () => _i739.MyBusinessesCubit(
         gh<_i590.BusinessRepository>(),
@@ -725,9 +730,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
         gh<_i1038.PromotionRepository>(),
       ),
-    );
-    gh.factory<_i378.CustomerSearchCubit>(
-      () => _i378.CustomerSearchCubit(gh<_i590.BusinessRepository>()),
     );
     gh.factory<_i535.AppointmentPaymentCubit>(
       () => _i535.AppointmentPaymentCubit(

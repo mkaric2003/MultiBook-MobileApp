@@ -30,6 +30,21 @@ class CustomerDiscoveryApiDataSource {
     int limit = 10,
   }) => _listBusinesses(type: type, offset: offset, limit: limit);
 
+  Future<List<BusinessModel>> searchBusinesses({
+    required BusinessType type,
+    required String query,
+    int limit = 20,
+  }) async {
+    final response = await _client.get(
+      '/v1/discovery/search',
+      queryParameters: {'type': type.name, 'query': query, 'limit': limit},
+    );
+    final items = (response.data!['items'] as List)
+        .cast<Map<String, dynamic>>()
+        .map(BusinessModel.fromMap);
+    return Future.wait(items.map(_resolve));
+  }
+
   Future<List<BusinessModel>> _listBusinesses({
     required BusinessType type,
     String? city,

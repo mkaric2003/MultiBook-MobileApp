@@ -9,6 +9,11 @@ abstract class CustomerDiscoveryRepository {
     required int offset,
     int limit = 10,
   });
+  Future<Result<List<BusinessModel>>> searchBusinesses({
+    required BusinessType type,
+    required String query,
+    int limit = 20,
+  });
   Future<Result<List<BusinessModel>>> popularNearCity({
     required BusinessType type,
     required String city,

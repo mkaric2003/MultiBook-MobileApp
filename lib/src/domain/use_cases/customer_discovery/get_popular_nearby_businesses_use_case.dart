@@ -29,4 +29,10 @@ class GetPopularNearbyBusinessesUseCase {
     required int offset,
     int limit = 10,
   }) => _repository.listBusinesses(type: type, offset: offset, limit: limit);
+
+  Future<Result<List<BusinessModel>>> searchBusinesses({
+    required BusinessType type,
+    required String query,
+    int limit = 20,
+  }) => _repository.searchBusinesses(type: type, query: query, limit: limit);
 }
