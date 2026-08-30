@@ -33,7 +33,7 @@ Ključna poslovna odluka je da razgovor i rezervacija pripadaju **businessu**, a
 1. Provider kreira ili uređuje stay/service business, unosi lokaciju, slike, ponudu i dostupnost.
 2. Nakon prvog businessa početni ekran postaje dashboard; selektovani business se čuva u user profilu.
 3. Provider mijenja business na dashboardu / business selectoru, pregleda njegove bookinge ili appointmente i upravlja njima.
-4. Iz **Manage Stays & Services** otvara puni, unaprijed popunjeni editor selektovanog businessa i sprema izmjene u postojeći dokument.
+4. Iz **Manage Stays & Services** otvara puni, unaprijed popunjeni editor selektovanog businessa i sprema izmjene preko REST API-ja.
 5. Za stays vidi zauzete dane; za services vidi zauzete i blokirane 30-minutne slotove po radniku.
 
 ---
@@ -111,6 +111,25 @@ Očekivane REST greške ne putuju do Cubit-a kao `DioException` ili `ApiExceptio
 - neočekivana lokalna greška → `UnknownFailure`
 
 Use case vraća `Success<T>` ili `FailureResult<T>`. Cubit grana po tom rezultatu i emituje odgovarajuće UI stanje; ne hvata exception za očekivani REST failure. Korisnički tekst ostaje u presentation/lokalizacijskom sloju, dok se tehnički detalji koriste samo za logovanje.
+
+### 4.1.2 Businesses REST migracija
+
+Provider business modul koristi postojeći `BusinessModel` i njegov `dart_mappable` `toMap`/`fromMap`; za REST se ne uvode posebni `CreateBusinessInput`, `CreatedBusiness` ili slični transport modeli.
+
+```text
+AddBusinessBloc / provider Cubit
+        → CreateBusinessUseCase | GetOwnedBusinessesUseCase |
+          GetOwnedBusinessUseCase | UpdateBusinessUseCase
+        → BusinessesRepository
+        → BusinessesRepositoryImpl
+        → BusinessesApiDataSource
+        → ApiClient
+```
+
+- `GET /v1/businesses` vraća samo lagane sažetke za *My Businesses*, tabove i business selector. `GetOwnedBusinessesUseCase` ih cacheira i sprečava paralelne identične zahtjeve.
+- `GET /v1/businesses/{id}` vraća puni owner-only aggregate i poziva se samo kad provider otvori **Manage Stays & Services** editor. Zato se pri saveu ne izgube `amenities`, `extras`, rooms, offerings ili staff koji nisu dio summary odgovora.
+- `POST /v1/businesses` i `PUT /v1/businesses/{id}` primaju `BusinessModel.toMap()` i vraćaju puni `BusinessModel`. `PUT` je potpuna zamjena editabilnog aggregata, ne parcijalni update.
+- Firebase ostaje samo za Auth i Storage. PostgreSQL čuva Firebase Storage path; `BusinessesApiDataSource` download URL koristi samo za prikaz i prije REST `PUT` ga normalizuje nazad u Storage path.
 
 ### 4.2 Struktura direktorija
 
@@ -272,20 +291,20 @@ Kolekcije su `wellness_spa`, `beauty_grooming`, `home_repairs`, `auto_services`,
 
 ### 8.3 Dodavanje businessa
 
-Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedinice, service ponude, osoblje i slotove. Slike se biraju iz galerije/kamere, kompresuju, uploaduju u Firebase Storage i tek onda se business trajno upisuje u Firestore.
+Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedinice, service ponude, osoblje i slotove. Slike se biraju iz galerije/kamere, kompresuju i uploaduju u Firebase Storage; nakon toga se kompletan postojeći `BusinessModel` šalje na Go REST API, koji ga trajno upisuje u PostgreSQL.
 
 Razvojni seed metod puni bazu realističnim stay i service podacima (različiti gradovi, kategorije, cijene, rating, slike, rooms, extras, staff i ponuda). Seed je samo za development/testiranje i ne treba biti dostupan u produkcijskom UI-ju.
 
 ### 8.4 Upravljanje i uređivanje businessa
 
-**Manage Stays & Services** nije zaseban, ograničen katalog editor. Nakon što učita trenutno selektovani provider business, otvara isti puni **Add Business** obrazac u edit modu. Time create i update dijele istu validaciju, strukturu forme i data model, pa ne može doći do razlike između polja koja se mogu unijeti pri kreiranju i onih koja se mogu izmijeniti kasnije.
+**Manage Stays & Services** nije zaseban, ograničen katalog editor. Lista/selector prvo koriste lagani `GET /v1/businesses` summary. Kada provider otvori editor, `AddBusinessBloc` poziva `GET /v1/businesses/{id}` i tek iz punog REST aggregata popunjava isti **Add Business** obrazac u edit modu. Time create i update dijele istu validaciju, strukturu forme i `BusinessModel`, a nepotrebni detaljni request se ne radi za svaki business u listi.
 
 - Formu unaprijed popunjavaju naziv, kategorija, grad/adresa, koordinate, opis, inventory tip, cijena, amenities, extras i njihove cijene, featured collections, ponude, zaposlenici, provizije i availability slotovi.
 - Za multiple-unit stay provider može uređivati, dodavati i uklanjati više bookable room/unit stavki. Svaka stavka nosi naziv, kapacitet, kvadraturu, cijenu po noći, količinu i aktivnost.
 - Service business zadržava uređivanje kompletne liste offeringsa i provider/staff članova zajedno s njihovim slotovima i commission rate-om.
 - Tip businessa je zaključan tokom izmjene kako postojeći stay/service dokument ne bi promijenio domenski tip i ostavio nekonzistentne rezervacije ili appointmente.
-- Postojeći logo, cover i `photoUrls` se prikažu kao mrežne slike i ne uploaduju se ponovo. Novoizabrane slike se kompresuju u WebP i uploaduju; uklonjene Firestore/Storage galerijske slike se nakon uspješnog updatea uklanjaju iz Storagea. Galerija ostaje ograničena na najviše sedam dodatnih slika.
-- Update zadržava identitet businessa, ownera, valutu, rating, broj recenzija, aktivno stanje i `isPromotionActive`; mijenja samo poslovne podatke koje provider smije uređivati. Za pretragu se u istom zapisu obnavljaju `nameLowercase`, `cityLowercase`, `stayPricePerNight` i `maxGuestCapacity`.
+- Postojeći logo, cover i `photoUrls` se prikažu kao mrežne slike i ne uploaduju se ponovo. Firebase download URL je UI-only vrijednost: prije `PUT` se normalizuje u trajni Storage path, koji Go API sprema u PostgreSQL. Galerija ostaje ograničena na najviše sedam dodatnih slika.
+- Update zadržava identitet businessa, ownera, valutu, rating, broj recenzija, aktivno stanje i `isPromotionActive`; REST `PUT` zamjenjuje editabilni business aggregate. Zbog toga editor uvijek prvo fetch-a puni detail, umjesto da šalje nepotpun list summary.
 
 ### 8.5 Promotions & Discounts
 
