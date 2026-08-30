@@ -1,7 +1,5 @@
-import 'dart:developer';
-
 import 'package:multibook/src/data/models/stay_search_page_model.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:multibook/src/data/data_sources/api_client.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class StaySearchDataSource {
@@ -25,9 +23,15 @@ abstract class StaySearchDataSource {
 
 @LazySingleton(as: StaySearchDataSource)
 class StaySearchDataSourceImpl implements StaySearchDataSource {
-  StaySearchDataSourceImpl(this._functions);
+  StaySearchDataSourceImpl(this._client);
 
-  final FirebaseFunctions _functions;
+  final ApiClient _client;
+
+  static const _defaultAdults = 1;
+  static const _defaultChildren = 0;
+  static const _defaultMinPrice = 50.0;
+  static const _defaultMaxPrice = 500.0;
+  static const _defaultMinimumRating = 0.0;
 
   @override
   Future<StaySearchPageModel> search({
@@ -46,44 +50,36 @@ class StaySearchDataSourceImpl implements StaySearchDataSource {
     String? cursor,
     int pageSize = 8,
   }) async {
-    try {
-      final response = await _functions.httpsCallable('searchStays').call({
-        'city': city,
-        'checkIn': checkIn == null
-            ? null
-            : _asUtcDate(checkIn).toIso8601String(),
-        'checkOut': checkOut == null
-            ? null
-            : _asUtcDate(checkOut).toIso8601String(),
-        'adults': adults,
-        'children': children,
-        'minPrice': minPrice,
-        'maxPrice': maxPrice,
-        'minimumRating': minimumRating,
-        'categoryIds': categoryIds,
-        'collectionIds': collectionIds,
-        'amenities': amenities,
-        'inventoryType': inventoryType,
-        'cursor': cursor,
-        'pageSize': pageSize,
-      });
-      final data = Map<String, dynamic>.from(response.data as Map);
-      return StaySearchPageModel(
-        items: (data['items'] as List? ?? const [])
-            .whereType<Map>()
-            .map((item) => _toStringDynamicMap(item))
-            .toList(),
-        nextCursor: data['nextCursor'] as String?,
-      );
-    } on FirebaseFunctionsException catch (error, stackTrace) {
-      log(
-        'Callable stay search failed: ${error.code}',
-        name: 'StaySearchDataSource',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      rethrow;
-    }
+    final response = await _client.get(
+      '/v1/stays/search',
+      queryParameters: {
+        if (city?.trim().isNotEmpty ?? false) 'city': city!.trim(),
+        if (checkIn != null) 'check_in': _asUtcDate(checkIn).toIso8601String(),
+        if (checkOut != null) 'check_out': _asUtcDate(checkOut).toIso8601String(),
+        if (adults != _defaultAdults) 'adults': adults,
+        if (children != _defaultChildren) 'children': children,
+        if (minPrice != _defaultMinPrice)
+          'min_price_minor': (minPrice * 100).round(),
+        if (maxPrice != _defaultMaxPrice)
+          'max_price_minor': (maxPrice * 100).round(),
+        if (minimumRating != _defaultMinimumRating)
+          'minimum_rating': minimumRating,
+        if (categoryIds.isNotEmpty) 'category_id': categoryIds,
+        if (collectionIds.isNotEmpty) 'collection_id': collectionIds,
+        if (amenities.isNotEmpty) 'amenity': amenities,
+        if (inventoryType != null) 'inventory_type': inventoryType,
+        if (cursor != null) 'offset': cursor,
+        'page_size': pageSize,
+      },
+    );
+    final data = response.data!;
+    return StaySearchPageModel(
+      items: (data['items'] as List? ?? const [])
+          .whereType<Map>()
+          .map(_toStringDynamicMap)
+          .toList(),
+      nextCursor: data['nextCursor'] as String?,
+    );
   }
 
   Map<String, dynamic> _toStringDynamicMap(Map source) {

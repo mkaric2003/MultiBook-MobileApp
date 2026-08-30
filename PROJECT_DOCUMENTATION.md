@@ -343,7 +343,7 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 - Pretraga podržava naziv businessa i grad.
 - Stay filteri: check-in/check-out, broj gostiju, grad, raspon cijene, rating i amenityji.
 - Service filteri: datum, vrijeme u 30-minutnim koracima, kategorija businessa, grad, raspon cijene i sortiranje.
-- Ako nema filtera, čitanje ide direktno iz Firestorea. Ako su filteri aktivni, koristi se callable Cloud Function; to izbjegava preuzimanje svih kandidata na uređaj i lokalno filtriranje nepotpunog paginiranog skupa.
+- Ako nema aktivnih filtera, home koristi discovery feed. Ako su stay filteri aktivni, `StaySearchDataSource` koristi autentificirani `GET /v1/stays/search` Go endpoint; Flutter šalje samo vrijednosti koje je korisnik stvarno odabrao, uz tehničke pagination parametre. Time se kombinovano filtriranje i availability izvršavaju server-side bez preuzimanja kandidata na uređaj.
 
 ### Stay detail i booking
 
@@ -529,9 +529,9 @@ Bez aktivnih kompleksnih filtera app koristi direktne, limitirane i cursor-pagin
 
 `DataCursor<T>` čuva zadnji `DocumentSnapshot`, koristi `startAfterDocument`, sprječava paralelno učitavanje (`isLoading`) i prekida kada je sve učitano. Time se ne učitava cijela kolekcija unaprijed.
 
-### Callable filter put
+### Server-side filter put
 
-Za kombinovane stay/service filtere app koristi callable Functions `searchStays` i `searchServices`. Funkcije su rastavljene na manje module:
+Stay filteri koriste Go endpoint `GET /v1/stays/search`, dok service filteri trenutno koriste callable Function `searchServices`. Stay endpoint obrađuje:
 
 - parsiranje/validacija filtera;
 - izgradnja Firestore candidate queryja;
@@ -542,7 +542,7 @@ Za kombinovane stay/service filtere app koristi callable Functions `searchStays`
 
 Service availability provjerava da li barem jedan provider ima cijeli uzastopni raspon slobodnih 30-minutnih slotova za traženo trajanje. To sprječava da se business vrati u rezultatima ako su svi radnici zauzeti u tom vremenu.
 
-Endpoint greške se na serveru loguju i pretvaraju u `HttpsError`; klijentski data source hvata `FirebaseFunctionsException`, ispisuje code, poruku i stack trace u konzolu, umjesto da grešku tiho pretvori u “no results”.
+Backend greške se na serveru loguju i vraćaju kao standardni API error response; `ApiClient` ih pretvara u `ApiException`, pa se greška ne miješa s praznim rezultatom.
 
 ### Normalizacija
 

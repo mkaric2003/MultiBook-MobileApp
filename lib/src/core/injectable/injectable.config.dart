@@ -300,7 +300,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i715.AuthenticationDataSourceImpl(gh<_i59.FirebaseAuth>()),
     );
     gh.lazySingleton<_i665.StaySearchDataSource>(
-      () => _i665.StaySearchDataSourceImpl(gh<_i809.FirebaseFunctions>()),
+      () => _i665.StaySearchDataSourceImpl(gh<_i189.ApiClient>()),
     );
     gh.lazySingleton<_i198.FirestoreDataSource>(
       () => _i198.FirestoreDataSourceImpl(gh<_i974.FirebaseFirestore>()),
