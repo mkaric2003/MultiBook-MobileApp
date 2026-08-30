@@ -30,8 +30,39 @@ class UserProfileUseCase {
   final FirebaseStorageDataSource _storageDataSource;
   final UsersRepository _usersRepository;
   final ValueNotifier<String?> selectedBusinessId = ValueNotifier(null);
+  UserModel? _cachedUser;
+  String? _cachedUserId;
+  Future<UserModel?>? _currentUserRequest;
+
+  static final RegExp _postgresUuid = RegExp(
+    r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$',
+  );
 
   Future<UserModel?> getCurrentUser() async {
+    final authenticatedUserId = _authenticationDataSource.currentUser?.uid;
+    if (authenticatedUserId == null) {
+      return null;
+    }
+    final cachedUser = _cachedUser;
+    if (cachedUser != null && _cachedUserId == authenticatedUserId) {
+      return cachedUser;
+    }
+    final pendingRequest = _currentUserRequest;
+    if (pendingRequest != null) {
+      return pendingRequest;
+    }
+    final request = _loadCurrentUser();
+    _currentUserRequest = request;
+    try {
+      return await request;
+    } finally {
+      if (identical(_currentUserRequest, request)) {
+        _currentUserRequest = null;
+      }
+    }
+  }
+
+  Future<UserModel?> _loadCurrentUser() async {
     final userId = _authenticationDataSource.currentUser?.uid;
     if (userId == null) {
       return null;
@@ -40,6 +71,8 @@ class UserProfileUseCase {
     final result = await _usersRepository.getCurrentUser();
     switch (result) {
       case Success(value: final user):
+        _cachedUser = user;
+        _cachedUserId = user.id;
         selectedBusinessId.value = user.selectedBusinessId;
         return user;
       case FailureResult(failure: final failure):
@@ -52,6 +85,13 @@ class UserProfileUseCase {
   }
 
   Future<void> setSelectedBusiness({required String businessId}) async {
+    // Legacy Firestore businesses still use non-UUID document IDs. Keep the
+    // selection local until that read-side flow is migrated; PostgreSQL only
+    // accepts IDs of businesses it owns.
+    if (!_postgresUuid.hasMatch(businessId)) {
+      selectedBusinessId.value = businessId;
+      return;
+    }
     final userId = _authenticationDataSource.currentUser?.uid;
     if (userId == null) {
       return;
@@ -61,11 +101,7 @@ class UserProfileUseCase {
     if (user == null) {
       throw const UserException('We could not find your profile.');
     }
-    _requireSuccess(
-      await _usersRepository.updateProfile(
-        user.copyWith(selectedBusinessId: businessId),
-      ),
-    );
+    _requireVoidSuccess(await _usersRepository.setSelectedBusiness(businessId));
     selectedBusinessId.value = businessId;
   }
 
@@ -184,6 +220,13 @@ class UserProfileUseCase {
 
   UserModel _requireSuccess(Result<UserModel> result) => switch (result) {
     Success(value: final user) => user,
+    FailureResult() => throw const UserException(
+      'We could not update your profile. Please try again.',
+    ),
+  };
+
+  void _requireVoidSuccess(Result<void> result) => switch (result) {
+    Success() => null,
     FailureResult() => throw const UserException(
       'We could not update your profile. Please try again.',
     ),

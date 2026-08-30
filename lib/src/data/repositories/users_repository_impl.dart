@@ -29,4 +29,8 @@ class UsersRepositoryImpl implements UsersRepository {
   @override
   Future<Result<UserModel>> updateRole(UserType role) =>
       _executor.execute(() => _usersApiDataSource.updateRole(role));
+
+  @override
+  Future<Result<void>> setSelectedBusiness(String businessId) => _executor
+      .execute(() => _usersApiDataSource.setSelectedBusiness(businessId));
 }

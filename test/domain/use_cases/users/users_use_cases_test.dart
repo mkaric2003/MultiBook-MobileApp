@@ -66,4 +66,8 @@ class _FakeUsersRepository implements UsersRepository {
     updatedRole = role;
     return Success(UserModel(id: 'user-id', type: role));
   }
+
+  @override
+  Future<Result<void>> setSelectedBusiness(String businessId) async =>
+      const Success(null);
 }

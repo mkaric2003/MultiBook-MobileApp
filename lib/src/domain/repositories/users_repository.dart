@@ -14,4 +14,6 @@ abstract class UsersRepository {
   });
 
   Future<Result<UserModel>> updateRole(UserType role);
+
+  Future<Result<void>> setSelectedBusiness(String businessId);
 }

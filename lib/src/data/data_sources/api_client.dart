@@ -84,6 +84,11 @@ class ApiClient {
     required Map<String, dynamic> data,
   }) => _request(() => _dio.put<Map<String, dynamic>>(path, data: data));
 
+  Future<Response<Map<String, dynamic>>> post(
+    String path, {
+    required Map<String, dynamic> data,
+  }) => _request(() => _dio.post<Map<String, dynamic>>(path, data: data));
+
   Future<Response<Map<String, dynamic>>> _request(
     Future<Response<Map<String, dynamic>>> Function() request,
   ) async {

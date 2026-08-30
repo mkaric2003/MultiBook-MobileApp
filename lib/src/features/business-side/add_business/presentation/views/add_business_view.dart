@@ -70,7 +70,9 @@ class AddBusinessView extends HookWidget {
       create: (_) {
         final bloc = getIt<AddBusinessBloc>();
         final business = editingBusiness;
-        if (business != null) bloc.add(BusinessEditLoaded(business));
+        if (business != null) {
+          bloc.add(BusinessEditFetchRequested(business.id));
+        }
         return bloc;
       },
       child: BlocConsumer<AddBusinessBloc, AddBusinessState>(
@@ -78,9 +80,21 @@ class AddBusinessView extends HookWidget {
             previous.errorMessage != current.errorMessage ||
             previous.successMessage != current.successMessage ||
             previous.isSuccess != current.isSuccess ||
+            previous.editingBusiness != current.editingBusiness ||
             previous.resolvedCity != current.resolvedCity ||
             previous.resolvedAddress != current.resolvedAddress,
         listener: (context, state) {
+          final business = state.editingBusiness;
+          if (business != null) {
+            nameController.text = business.name;
+            cityController.text = business.location.city;
+            addressController.text = business.location.address;
+            descriptionController.text = business.shortDescription ?? '';
+            final price = business.stayDetails?.pricePerNight;
+            if (price != null) {
+              priceController.text = (price / 100).toStringAsFixed(2);
+            }
+          }
           if (state.resolvedCity?.isNotEmpty ?? false) {
             cityController.text = state.resolvedCity!;
           }

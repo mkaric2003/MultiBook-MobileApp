@@ -4,7 +4,8 @@ import 'dart:developer';
 import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
 import 'package:multibook/src/data/repositories/business_metrics_repository.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_selected_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,13 +15,13 @@ import 'package:injectable/injectable.dart';
 class DashboardCubit extends Cubit<DashboardState> {
   DashboardCubit(
     this._userRepository,
-    this._businessRepository,
+    this._getSelectedBusiness,
     this._businessMetricsRepository,
     this._sessionStreamRegistry,
   ) : super(const DashboardState());
 
   final UserProfileUseCase _userRepository;
-  final BusinessRepository _businessRepository;
+  final GetSelectedBusinessUseCase _getSelectedBusiness;
   final BusinessMetricsRepository _businessMetricsRepository;
   final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription? _summarySubscription;
@@ -34,12 +35,13 @@ class DashboardCubit extends Cubit<DashboardState> {
       return;
     }
 
-    var business = user.selectedBusinessId == null
-        ? null
-        : await _businessRepository.getBusiness(
-            businessId: user.selectedBusinessId!,
-          );
-    business ??= await _businessRepository.getFirstOwnedBusiness();
+    final selection = await _getSelectedBusiness.execute(
+      user.selectedBusinessId,
+    );
+    final business = switch (selection) {
+      Success(value: final value) => value,
+      FailureResult() => null,
+    };
 
     if (business != null && business.id != user.selectedBusinessId) {
       await _userRepository.setSelectedBusiness(businessId: business.id);

@@ -26,6 +26,8 @@ import 'package:multibook/utils/image_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
 
 class BusinessException implements Exception {
   const BusinessException(this.message);
@@ -41,6 +43,7 @@ class BusinessRepository {
     this._storageDataSource,
     this._nominatimDataSource,
     this._userRepository,
+    this._getOwnedBusinessesUseCase,
   );
 
   static const _businessesCollection = 'businesses';
@@ -822,6 +825,7 @@ class BusinessRepository {
   final FirebaseStorageDataSource _storageDataSource;
   final NominatimDataSource _nominatimDataSource;
   final UserProfileUseCase _userRepository;
+  final GetOwnedBusinessesUseCase _getOwnedBusinessesUseCase;
 
   Future<bool> hasBusinesses() async {
     final ownerId = _authenticationDataSource.currentUser?.uid;
@@ -897,27 +901,11 @@ class BusinessRepository {
   }
 
   Future<List<BusinessModel>> getOwnedBusinesses() async {
-    final ownerId = _authenticationDataSource.currentUser?.uid;
-    if (ownerId == null) {
-      return const [];
-    }
-
-    try {
-      final businessesData = await _firestoreDataSource.getDocumentsWhere(
-        collection: _businessesCollection,
-        field: 'ownerId',
-        value: ownerId,
-      );
-      return businessesData.map(_businessFromData).toList();
-    } on FirebaseException catch (error, stackTrace) {
-      log(
-        'Could not load the owner businesses: ${error.code}',
-        name: 'BusinessRepository',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      return const [];
-    }
+    final result = await _getOwnedBusinessesUseCase.execute();
+    return switch (result) {
+      Success(value: final businesses) => businesses,
+      FailureResult() => const [],
+    };
   }
 
   Future<List<BusinessModel>> getRecommendedStays({int limit = 3}) async {

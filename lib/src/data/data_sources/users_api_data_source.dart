@@ -28,7 +28,6 @@ class UsersApiDataSource {
       'address',
       'city',
       'business_currency',
-      'selected_business_id',
     };
     final data = Map<String, dynamic>.from(user.toMap())
       ..removeWhere((key, _) => !editableFields.contains(key));
@@ -39,6 +38,13 @@ class UsersApiDataSource {
     }
     if (storagePath != null) data['avatar_storage_path'] = storagePath;
     return _decode((await _client.patch('/v1/users/me', data: data)).data!);
+  }
+
+  Future<void> setSelectedBusiness(String businessId) async {
+    await _client.put(
+      '/v1/users/me/selected-business',
+      data: {'business_id': businessId},
+    );
   }
 
   Future<UserModel> _decode(Map<String, dynamic> data) async {

@@ -10,6 +10,12 @@ part 'business_model.mapper.dart';
 
 @MappableClass()
 class BusinessModel with BusinessModelMappable {
+  static BusinessModel fromMap(Map<String, dynamic> map) =>
+      BusinessModelMapper.fromMap(map);
+
+  static BusinessModel fromJson(String json) =>
+      BusinessModelMapper.fromJson(json);
+
   final String id;
   final String ownerId;
 

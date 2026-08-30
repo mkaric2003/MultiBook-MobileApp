@@ -1,9 +1,23 @@
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:multibook/src/data/data_sources/image_picker_data_source.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/enums/currency_code.dart';
 import 'package:multibook/src/data/enums/stay_extra_type.dart';
 import 'package:multibook/src/data/enums/stay_amenity.dart';
 import 'package:multibook/src/data/enums/stay_inventory_type.dart';
 import 'package:multibook/src/data/models/stay_room_model.dart';
+import 'package:multibook/src/data/models/business_location_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/service_details_model.dart';
+import 'package:multibook/src/data/models/service_provider_model.dart';
+import 'package:multibook/src/data/models/stay_details_model.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/domain/use_cases/businesses/create_business_use_case.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_business_use_case.dart';
+import 'package:multibook/src/domain/use_cases/businesses/update_business_use_case.dart';
 import 'package:multibook/src/features/business-side/add_business/bloc/add_business_event.dart';
 import 'package:multibook/src/features/business-side/add_business/bloc/add_business_state.dart';
 import 'package:multibook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
@@ -11,6 +25,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:multibook/utils/image_utils.dart';
 
 @injectable
 class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
@@ -18,9 +33,16 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     this._imagePickerDataSource,
     this._sharedPreferences,
     this._businessRepository,
+    this._createBusinessUseCase,
+    this._getOwnedBusinessesUseCase,
+    this._getOwnedBusinessUseCase,
+    this._updateBusinessUseCase,
+    this._authenticationDataSource,
+    this._storageDataSource,
   ) : super(const AddBusinessState()) {
     on<BusinessTypeChanged>(_onBusinessTypeChanged);
     on<BusinessEditLoaded>(_onBusinessEditLoaded);
+    on<BusinessEditFetchRequested>(_onBusinessEditFetchRequested);
     on<StayRoomAdded>(_onStayRoomAdded);
     on<StayRoomRemoved>(_onStayRoomRemoved);
     on<StayRoomUpdated>(_onStayRoomUpdated);
@@ -60,6 +82,12 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   final ImagePickerDataSource _imagePickerDataSource;
   final SharedPreferences _sharedPreferences;
   final BusinessRepository _businessRepository;
+  final CreateBusinessUseCase _createBusinessUseCase;
+  final GetOwnedBusinessesUseCase _getOwnedBusinessesUseCase;
+  final GetOwnedBusinessUseCase _getOwnedBusinessUseCase;
+  final UpdateBusinessUseCase _updateBusinessUseCase;
+  final AuthenticationDataSource _authenticationDataSource;
+  final FirebaseStorageDataSource _storageDataSource;
 
   void _onBusinessTypeChanged(
     BusinessTypeChanged event,
@@ -107,6 +135,19 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         hasExistingBusiness: true,
       ),
     );
+  }
+
+  Future<void> _onBusinessEditFetchRequested(
+    BusinessEditFetchRequested event,
+    Emitter<AddBusinessState> emit,
+  ) async {
+    final result = await _getOwnedBusinessUseCase.execute(event.businessId);
+    switch (result) {
+      case Success(value: final business):
+        add(BusinessEditLoaded(business));
+      case FailureResult(failure: final failure):
+        emit(state.copyWith(errorMessage: _failureMessage(failure)));
+    }
   }
 
   void _onStayRoomAdded(StayRoomAdded event, Emitter<AddBusinessState> emit) =>
@@ -464,53 +505,43 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     try {
       final existingBusiness = state.editingBusiness;
       if (existingBusiness != null) {
-        await _businessRepository.updateBusiness(
-          business: existingBusiness,
-          name: event.name,
+        final updated = existingBusiness.copyWith(
+          name: event.name.trim(),
           categoryId: state.categoryId!,
-          city: event.city,
-          address: event.address,
-          shortDescription: event.shortDescription,
-          pricePerNight: event.pricePerNight,
-          stayInventoryType: state.stayInventoryType,
-          amenities: event.amenities,
-          rooms: event.rooms,
-          extras: event.extras,
+          shortDescription: event.shortDescription.trim().isEmpty
+              ? null
+              : event.shortDescription.trim(),
+          location: existingBusiness.location.copyWith(
+            city: event.city.trim(),
+            address: event.address.trim(),
+            latitude: state.latitude ?? existingBusiness.location.latitude,
+            longitude: state.longitude ?? existingBusiness.location.longitude,
+          ),
           featuredCollectionIds: state.selectedCollectionIds,
-          serviceOfferings: event.serviceOfferings,
-          availabilitySlots: event.availabilitySlots,
-          serviceProviderName: event.serviceProviderName,
-          serviceProviders: event.serviceProviders,
-          latitude: state.latitude,
-          longitude: state.longitude,
-          logoPath: state.logoPath,
-          coverPhotoPath: state.coverPhotoPath,
-          photoPaths: state.businessPhotoPaths,
+          stayDetails: existingBusiness.stayDetails?.copyWith(
+            pricePerNight: event.pricePerNight,
+            inventoryType: state.stayInventoryType,
+            amenities: event.amenities,
+            rooms: event.rooms,
+            extras: event.extras,
+          ),
+          serviceDetails: existingBusiness.serviceDetails?.copyWith(
+            offerings: event.serviceOfferings,
+            providers: event.serviceProviders,
+          ),
         );
+        final result = await _updateBusinessUseCase.execute(updated);
+        if (result case FailureResult(failure: final failure)) {
+          throw BusinessException(_failureMessage(failure));
+        }
+        _getOwnedBusinessesUseCase.invalidate();
       } else {
-        await _businessRepository.createBusiness(
-          type: state.businessType,
-          name: event.name,
-          categoryId: state.categoryId!,
-          city: event.city,
-          address: event.address,
-          shortDescription: event.shortDescription,
-          pricePerNight: event.pricePerNight,
-          stayInventoryType: state.stayInventoryType,
-          amenities: event.amenities,
-          rooms: event.rooms,
-          extras: event.extras,
-          featuredCollectionIds: state.selectedCollectionIds,
-          serviceOfferings: event.serviceOfferings,
-          availabilitySlots: event.availabilitySlots,
-          serviceProviderName: event.serviceProviderName,
-          serviceProviders: event.serviceProviders,
-          latitude: state.latitude,
-          longitude: state.longitude,
-          logoPath: state.logoPath,
-          coverPhotoPath: state.coverPhotoPath,
-          photoPaths: state.businessPhotoPaths,
-        );
+        final business = await _buildNewBusiness(event);
+        final result = await _createBusinessUseCase.execute(business);
+        if (result case FailureResult(failure: final failure)) {
+          throw BusinessException(_failureMessage(failure));
+        }
+        _getOwnedBusinessesUseCase.invalidate();
       }
       emit(
         state.copyWith(
@@ -523,6 +554,110 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
       emit(state.copyWith(isLoading: false, errorMessage: error.message));
     }
   }
+
+  Future<BusinessModel> _buildNewBusiness(
+    BusinessCreationRequested event,
+  ) async {
+    final ownerId = _authenticationDataSource.currentUser?.uid;
+    if (ownerId == null || state.latitude == null || state.longitude == null) {
+      throw const BusinessException(
+        'Please select your business location on the map.',
+      );
+    }
+    final uploadKey = DateTime.now().microsecondsSinceEpoch.toString();
+    final logoPath = await _uploadBusinessImage(
+      ownerId,
+      uploadKey,
+      state.logoPath,
+      'logo',
+    );
+    final coverPath = await _uploadBusinessImage(
+      ownerId,
+      uploadKey,
+      state.coverPhotoPath,
+      'cover',
+    );
+    final photos = <String>[];
+    for (final entry in state.businessPhotoPaths.indexed) {
+      final path = await _uploadBusinessImage(
+        ownerId,
+        uploadKey,
+        entry.$2,
+        'gallery_${entry.$1}',
+      );
+      if (path != null) photos.add(path);
+    }
+    final providers = event.serviceProviders.isNotEmpty
+        ? event.serviceProviders
+        : event.serviceProviderName == null
+        ? const <ServiceProviderModel>[]
+        : [
+            ServiceProviderModel(
+              id: 'provider-$uploadKey',
+              name: event.serviceProviderName!,
+            ),
+          ];
+    return BusinessModel(
+      id: 'draft-$uploadKey',
+      ownerId: ownerId,
+      type: state.businessType,
+      name: event.name.trim(),
+      categoryId: state.categoryId!,
+      location: BusinessLocationModel(
+        city: event.city.trim(),
+        address: event.address.trim(),
+        latitude: state.latitude!,
+        longitude: state.longitude!,
+      ),
+      currency: CurrencyCode.bam,
+      shortDescription: event.shortDescription.trim().isEmpty
+          ? null
+          : event.shortDescription.trim(),
+      logoUrl: logoPath,
+      coverPhotoUrl: coverPath,
+      photoUrls: photos,
+      featuredCollectionIds: state.selectedCollectionIds,
+      stayDetails: state.businessType == BusinessType.stays
+          ? StayDetailsModel(
+              pricePerNight: event.pricePerNight,
+              inventoryType: state.stayInventoryType,
+              amenities: event.amenities,
+              rooms: event.rooms,
+              extras: event.extras,
+            )
+          : null,
+      serviceDetails: state.businessType == BusinessType.services
+          ? ServiceDetailsModel(
+              offerings: event.serviceOfferings,
+              availabilitySlots: event.availabilitySlots,
+              providers: providers,
+            )
+          : null,
+    );
+  }
+
+  Future<String?> _uploadBusinessImage(
+    String ownerId,
+    String uploadKey,
+    String? imagePath,
+    String name,
+  ) async {
+    if (imagePath == null) return null;
+    if (Uri.tryParse(imagePath)?.hasScheme == true) return imagePath;
+    final storagePath = 'businesses/$ownerId/$uploadKey/$name.webp';
+    await _storageDataSource.uploadImage(
+      storagePath: storagePath,
+      imageBytes: await compressImage(XFile(imagePath)),
+      contentType: 'image/webp',
+    );
+    return storagePath;
+  }
+
+  String _failureMessage(AppFailure failure) => switch (failure) {
+    ValidationFailure(message: final message) =>
+      message ?? 'Please check the business details.',
+    _ => 'We could not create this business. Please try again.',
+  };
 
   Future<void> _onDemoStaysSeedRequested(
     DemoStaysSeedRequested event,
