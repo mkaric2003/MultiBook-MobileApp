@@ -31,6 +31,14 @@ class CustomerDiscoveryApiDataSource {
     return Future.wait(items.map(_resolve));
   }
 
+  Future<List<BusinessModel>> recommendedStays() async {
+    final response = await _client.get('/v1/discovery/recommended-stays');
+    final items = (response.data!['items'] as List)
+        .cast<Map<String, dynamic>>()
+        .map(BusinessModel.fromMap);
+    return Future.wait(items.map(_resolve));
+  }
+
   Future<BusinessModel> _resolve(BusinessModel business) async {
     Future<String?> url(String? value) async =>
         value == null || value.isEmpty || Uri.tryParse(value)?.hasScheme == true

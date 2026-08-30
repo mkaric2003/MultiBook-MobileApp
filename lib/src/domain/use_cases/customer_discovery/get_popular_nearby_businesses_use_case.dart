@@ -20,4 +20,7 @@ class GetPopularNearbyBusinessesUseCase {
     offset: offset,
     limit: limit,
   );
+
+  Future<Result<List<BusinessModel>>> recommendedStays() =>
+      _repository.recommendedStays();
 }

@@ -1,26 +1,26 @@
 import 'dart:async';
 
-import 'package:multibook/src/data/data_cursor.dart';
-import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
-import 'package:multibook/src/data/repositories/appointment_draft_repository.dart';
-import 'package:multibook/src/data/repositories/stay_search_repository.dart';
-import 'package:multibook/src/data/repositories/service_search_repository.dart';
-import 'package:multibook/src/data/repositories/user_location_repository.dart';
-import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
-import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart';
-import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/data/enums/business_type.dart';
-import 'package:multibook/src/data/models/appointment_draft_model.dart';
-import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
-import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
-import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
-import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
-import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/data_cursor.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/models/appointment_draft_model.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/repositories/appointment_draft_repository.dart';
+import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
+import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/repositories/service_search_repository.dart';
+import 'package:multibook/src/data/repositories/stay_search_repository.dart';
+import 'package:multibook/src/data/repositories/user_location_repository.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
+import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 
 @injectable
 class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
@@ -183,7 +183,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
 
   Future<void> loadRecommendedStays() async {
     if (!state.stayFilters.hasActiveFilters) {
-      await _loadDefaultStays();
+      await _loadRecommendedStays();
       return;
     }
 
@@ -262,10 +262,14 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     await loadRecommendedStays();
   }
 
-  Future<void> _loadDefaultStays() async {
+  Future<void> _loadRecommendedStays() async {
     try {
-      final recommendedBusinesses = await _businessRepository
-          .getRecommendedStays();
+      final result = await _getPopularNearbyBusinesses.recommendedStays();
+      if (result case FailureResult(failure: final failure)) {
+        throw failure;
+      }
+      final recommendedBusinesses =
+          (result as Success<List<BusinessModel>>).value;
       emit(
         state.copyWith(
           isRecommendedStaysLoading: false,
