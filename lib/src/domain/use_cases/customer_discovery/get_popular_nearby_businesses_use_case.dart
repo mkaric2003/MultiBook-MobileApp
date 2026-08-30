@@ -23,4 +23,10 @@ class GetPopularNearbyBusinessesUseCase {
 
   Future<Result<List<BusinessModel>>> recommendedStays() =>
       _repository.recommendedStays();
+
+  Future<Result<List<BusinessModel>>> listBusinesses({
+    required BusinessType type,
+    required int offset,
+    int limit = 10,
+  }) => _repository.listBusinesses(type: type, offset: offset, limit: limit);
 }

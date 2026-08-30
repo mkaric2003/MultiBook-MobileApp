@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/data/data_cursor.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/appointment_draft_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
@@ -49,10 +48,11 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   String _nearbyStaysCity = '';
   String _nearbyServicesCity = '';
   static const _nearbyPageSize = 10;
-  DataCursor<BusinessModel>? _staysCursor;
+  int _staysOffset = 0;
   String? _staysNextCursor;
-  DataCursor<BusinessModel>? _servicesCursor;
+  int _servicesOffset = 0;
   String? _servicesNextCursor;
+  static const _otherBusinessesPageSize = 6;
 
   Future<void> loadStayCities() async {
     final cities = await _businessRepository.getStayCities();
@@ -153,7 +153,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   }
 
   Future<void> applyServiceFilters(ServiceFilters filters) async {
-    _servicesCursor = null;
+    _servicesOffset = 0;
     _servicesNextCursor = null;
     emit(
       state.copyWith(
@@ -248,7 +248,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   }
 
   Future<void> applyStayFilters(StayFilters filters) async {
-    _staysCursor = null;
+    _staysOffset = 0;
     _staysNextCursor = null;
     emit(
       state.copyWith(
@@ -263,6 +263,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   }
 
   Future<void> _loadRecommendedStays() async {
+    _staysOffset = 0;
     try {
       final result = await _getPopularNearbyBusinesses.recommendedStays();
       if (result case FailureResult(failure: final failure)) {
@@ -291,11 +292,19 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   }
 
   Future<void> _loadMoreDefaultStays() async {
-    _staysCursor ??= _businessRepository.getStaysCursor();
+    if (state.isOtherStaysLoading || !state.hasMoreOtherStays) {
+      return;
+    }
     emit(state.copyWith(isOtherStaysLoading: true));
 
     try {
-      final nextPage = await _staysCursor!.fetchNextPage();
+      final result = await _getPopularNearbyBusinesses.listBusinesses(
+        type: BusinessType.stays,
+        offset: _staysOffset,
+        limit: _otherBusinessesPageSize,
+      );
+      if (result is FailureResult<List<BusinessModel>>) throw result.failure;
+      final nextPage = (result as Success<List<BusinessModel>>).value;
       final recommendedIds = state.recommendedStays
           .map((stay) => stay.id)
           .toSet();
@@ -310,9 +319,10 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         state.copyWith(
           isOtherStaysLoading: false,
           otherStays: [...state.otherStays, ...newStays],
-          hasMoreOtherStays: !_staysCursor!.isEverythingLoaded,
+          hasMoreOtherStays: nextPage.length == _otherBusinessesPageSize,
         ),
       );
+      _staysOffset += nextPage.length;
     } catch (_) {
       emit(
         state.copyWith(isOtherStaysLoading: false, hasMoreOtherStays: false),
@@ -341,6 +351,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     }
 
     _nearbyServicesOffset = 0;
+    _servicesOffset = 0;
     _nearbyServicesCity = customerCity;
     emit(
       state.copyWith(
@@ -348,6 +359,8 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         isLoadingMorePopularServices: false,
         popularServices: const [],
         hasMorePopularServices: true,
+        otherServices: const [],
+        hasMoreOtherServices: true,
       ),
     );
     await loadMoreServices();
@@ -412,11 +425,16 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
       return;
     }
 
-    _servicesCursor ??= _businessRepository.getServicesCursor();
     emit(state.copyWith(isOtherServicesLoading: true));
 
     try {
-      final nextPage = await _servicesCursor!.fetchNextPage();
+      final result = await _getPopularNearbyBusinesses.listBusinesses(
+        type: BusinessType.services,
+        offset: _servicesOffset,
+        limit: _otherBusinessesPageSize,
+      );
+      if (result is FailureResult<List<BusinessModel>>) throw result.failure;
+      final nextPage = (result as Success<List<BusinessModel>>).value;
       final popularIds = state.popularServices
           .map((service) => service.id)
           .toSet();
@@ -431,9 +449,10 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         state.copyWith(
           isOtherServicesLoading: false,
           otherServices: [...state.otherServices, ...newServices],
-          hasMoreOtherServices: !_servicesCursor!.isEverythingLoaded,
+          hasMoreOtherServices: nextPage.length == _otherBusinessesPageSize,
         ),
       );
+      _servicesOffset += nextPage.length;
     } catch (_) {
       emit(
         state.copyWith(

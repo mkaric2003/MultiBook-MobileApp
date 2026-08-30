@@ -17,6 +17,15 @@ class CustomerDiscoveryRepositoryImpl implements CustomerDiscoveryRepository {
       _executor.execute(_dataSource.recommendedStays);
 
   @override
+  Future<Result<List<BusinessModel>>> listBusinesses({
+    required BusinessType type,
+    required int offset,
+    int limit = 10,
+  }) => _executor.execute(
+    () => _dataSource.listBusinesses(type: type, offset: offset, limit: limit),
+  );
+
+  @override
   Future<Result<List<BusinessModel>>> popularNearCity({
     required BusinessType type,
     required String city,

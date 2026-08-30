@@ -16,11 +16,31 @@ class CustomerDiscoveryApiDataSource {
     required int offset,
     int limit = 10,
   }) async {
+    return _listBusinesses(
+      type: type,
+      city: city,
+      offset: offset,
+      limit: limit,
+    );
+  }
+
+  Future<List<BusinessModel>> listBusinesses({
+    required BusinessType type,
+    required int offset,
+    int limit = 10,
+  }) => _listBusinesses(type: type, offset: offset, limit: limit);
+
+  Future<List<BusinessModel>> _listBusinesses({
+    required BusinessType type,
+    String? city,
+    required int offset,
+    required int limit,
+  }) async {
     final response = await _client.get(
       '/v1/discovery/businesses',
       queryParameters: {
         'type': type.name,
-        'city': city,
+        if (city?.trim().isNotEmpty ?? false) 'city': city!.trim(),
         'limit': limit,
         'offset': offset,
       },
