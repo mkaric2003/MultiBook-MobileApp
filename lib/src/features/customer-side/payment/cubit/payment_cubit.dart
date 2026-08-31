@@ -1,6 +1,6 @@
 import 'package:multibook/src/data/enums/payment_method_type.dart';
-import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
-import 'package:multibook/src/domain/use_cases/checkout/customer_checkout_use_case.dart';
+import 'package:multibook/src/domain/use_cases/checkout/create_customer_booking_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/delete_booking_draft_use_case.dart';
 import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/booking_extra_request.dart';
 import 'package:multibook/src/data/models/create_booking_request.dart';
@@ -11,10 +11,12 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class PaymentCubit extends Cubit<PaymentState> {
-  PaymentCubit(this._customerCheckoutUseCase, this._customerDraftsUseCase)
-    : super(const PaymentState());
-  final CustomerCheckoutUseCase _customerCheckoutUseCase;
-  final CustomerDraftsUseCase _customerDraftsUseCase;
+  PaymentCubit(
+    this._createCustomerBookingUseCase,
+    this._deleteBookingDraftUseCase,
+  ) : super(const PaymentState());
+  final CreateCustomerBookingUseCase _createCustomerBookingUseCase;
+  final DeleteBookingDraftUseCase _deleteBookingDraftUseCase;
   Future<void> confirm(
     PaymentArguments arguments, {
     required PaymentMethodType paymentType,
@@ -27,7 +29,7 @@ class PaymentCubit extends Cubit<PaymentState> {
     emit(const PaymentState(isProcessing: true));
     try {
       final state = arguments.review.bookingState;
-      final bookingResult = await _customerCheckoutUseCase.createBooking(
+      final bookingResult = await _createCustomerBookingUseCase.execute(
         arguments.review.booking.stay.id,
         CreateBookingRequest(
           stayUnitTypeId: arguments.review.booking.room?.id,
@@ -54,7 +56,7 @@ class PaymentCubit extends Cubit<PaymentState> {
         return;
       }
       final booking = (bookingResult as Success).value;
-      await _customerDraftsUseCase.deleteBookingDraft();
+      await _deleteBookingDraftUseCase.execute();
       emit(PaymentState(booking: booking));
     } catch (_) {
       emit(

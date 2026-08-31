@@ -2,7 +2,7 @@ import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/stay_extra_model.dart';
 import 'package:multibook/src/data/models/booking_draft_model.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
-import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/save_booking_draft_use_case.dart';
 import 'package:multibook/src/features/customer-side/review_stay/domain/models/review_stay_arguments.dart';
 import 'package:multibook/src/features/customer-side/review_stay/cubit/review_stay_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +10,11 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class ReviewStayCubit extends Cubit<ReviewStayState> {
-  ReviewStayCubit(this._getBusinessDetail, this._customerDraftsUseCase)
+  ReviewStayCubit(this._getBusinessDetail, this._saveBookingDraftUseCase)
     : super(const ReviewStayState());
 
   final GetBusinessDetailUseCase _getBusinessDetail;
-  final CustomerDraftsUseCase _customerDraftsUseCase;
+  final SaveBookingDraftUseCase _saveBookingDraftUseCase;
 
   Future<void> loadStay(
     String id, {
@@ -45,7 +45,7 @@ class ReviewStayCubit extends Cubit<ReviewStayState> {
   }
 
   Future<void> saveDraft(ReviewStayArguments arguments) =>
-      _customerDraftsUseCase.saveBookingDraft(
+      _saveBookingDraftUseCase.execute(
         BookingDraftModel(
           id: '',
           businessId: arguments.booking.stay.id,

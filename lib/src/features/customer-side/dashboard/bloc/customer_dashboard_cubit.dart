@@ -12,7 +12,8 @@ import 'package:multibook/src/data/repositories/stay_search_repository.dart';
 import 'package:multibook/src/data/repositories/user_location_repository.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart';
-import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/get_appointment_draft_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/get_booking_draft_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
@@ -27,7 +28,8 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     this._businessRepository,
     this._staySearchRepository,
     this._serviceSearchRepository,
-    this._customerDraftsUseCase,
+    this._getBookingDraftUseCase,
+    this._getAppointmentDraftUseCase,
     this._userRepository,
     this._userLocationRepository,
     this._getBusinessDetail,
@@ -37,7 +39,8 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   final BusinessRepository _businessRepository;
   final StaySearchRepository _staySearchRepository;
   final ServiceSearchRepository _serviceSearchRepository;
-  final CustomerDraftsUseCase _customerDraftsUseCase;
+  final GetBookingDraftUseCase _getBookingDraftUseCase;
+  final GetAppointmentDraftUseCase _getAppointmentDraftUseCase;
   final UserProfileUseCase _userRepository;
   final UserLocationRepository _userLocationRepository;
   final GetBusinessDetailUseCase _getBusinessDetail;
@@ -168,14 +171,14 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   }
 
   Future<void> loadDraft() async {
-    final result = await _customerDraftsUseCase.getBookingDraft();
+    final result = await _getBookingDraftUseCase.execute();
     if (result case Success(value: final draft)) {
       emit(state.copyWith(bookingDraft: draft));
     }
   }
 
   Future<void> loadAppointmentDraft() async {
-    final result = await _customerDraftsUseCase.getAppointmentDraft();
+    final result = await _getAppointmentDraftUseCase.execute();
     if (result case Success(value: final draft)) {
       emit(state.copyWith(appointmentDraft: draft));
     }

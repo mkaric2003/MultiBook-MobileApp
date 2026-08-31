@@ -1,5 +1,5 @@
-import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
-import 'package:multibook/src/domain/use_cases/checkout/customer_checkout_use_case.dart';
+import 'package:multibook/src/domain/use_cases/checkout/create_customer_appointment_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/delete_appointment_draft_use_case.dart';
 import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/create_appointment_request.dart';
 import 'package:multibook/src/features/customer-side/appointment_payment/cubit/appointment_payment_state.dart';
@@ -11,12 +11,12 @@ import 'package:injectable/injectable.dart';
 @injectable
 class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
   AppointmentPaymentCubit(
-    this._customerCheckoutUseCase,
-    this._customerDraftsUseCase,
+    this._createCustomerAppointmentUseCase,
+    this._deleteAppointmentDraftUseCase,
   ) : super(const AppointmentPaymentState());
 
-  final CustomerCheckoutUseCase _customerCheckoutUseCase;
-  final CustomerDraftsUseCase _customerDraftsUseCase;
+  final CreateCustomerAppointmentUseCase _createCustomerAppointmentUseCase;
+  final DeleteAppointmentDraftUseCase _deleteAppointmentDraftUseCase;
 
   Future<void> confirm({
     required AppointmentPaymentArguments arguments,
@@ -27,22 +27,19 @@ class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
     emit(const AppointmentPaymentState(isProcessing: true));
     try {
       final review = arguments.review;
-      final appointmentResult = await _customerCheckoutUseCase
-          .createAppointment(
-            review.business.id,
-            CreateAppointmentRequest(
-              staffId: review.provider.id,
-              appointmentDate: _date(review.date),
-              startMinutes: review.startMinutes,
-              offeringIds: review.offerings
-                  .map((offering) => offering.id)
-                  .toList(),
-              customerName: request.customerName,
-              customerEmail: request.customerEmail,
-              customerPhone: request.customerPhone,
-              paymentMethod: request.paymentMethod,
-            ),
-          );
+      final appointmentResult = await _createCustomerAppointmentUseCase.execute(
+        review.business.id,
+        CreateAppointmentRequest(
+          staffId: review.provider.id,
+          appointmentDate: _date(review.date),
+          startMinutes: review.startMinutes,
+          offeringIds: review.offerings.map((offering) => offering.id).toList(),
+          customerName: request.customerName,
+          customerEmail: request.customerEmail,
+          customerPhone: request.customerPhone,
+          paymentMethod: request.paymentMethod,
+        ),
+      );
       if (appointmentResult is FailureResult) {
         emit(
           const AppointmentPaymentState(
@@ -53,7 +50,7 @@ class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
         return;
       }
       final appointment = (appointmentResult as Success).value;
-      await _customerDraftsUseCase.deleteAppointmentDraft();
+      await _deleteAppointmentDraftUseCase.execute();
       emit(AppointmentPaymentState(appointment: appointment));
     } catch (_) {
       emit(

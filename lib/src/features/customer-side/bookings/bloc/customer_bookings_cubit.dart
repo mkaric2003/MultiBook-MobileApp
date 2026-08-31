@@ -1,10 +1,10 @@
-import 'package:multibook/src/data/data_cursor.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/appointment_list_response.dart';
 import 'package:multibook/src/data/models/booking_list_response.dart';
 import 'package:multibook/src/data/models/booking_model.dart';
-import 'package:multibook/src/data/repositories/appointment_repository.dart';
 import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/domain/use_cases/bookings/customer_bookings_use_case.dart';
+import 'package:multibook/src/domain/use_cases/appointments/get_customer_appointments_use_case.dart';
+import 'package:multibook/src/domain/use_cases/bookings/get_customer_bookings_use_case.dart';
 import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
 import 'package:multibook/src/features/customer-side/bookings/domain/enums/customer_booking_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,19 +13,19 @@ import 'package:injectable/injectable.dart';
 @injectable
 class CustomerBookingsCubit extends Cubit<CustomerBookingsState> {
   CustomerBookingsCubit(
-    this._customerBookingsUseCase,
-    this._appointmentRepository,
+    this._getCustomerBookingsUseCase,
+    this._getCustomerAppointmentsUseCase,
   ) : super(const CustomerBookingsState());
 
-  final CustomerBookingsUseCase _customerBookingsUseCase;
-  final AppointmentRepository _appointmentRepository;
-  DataCursor<AppointmentModel>? _appointmentCursor;
+  final GetCustomerBookingsUseCase _getCustomerBookingsUseCase;
+  final GetCustomerAppointmentsUseCase _getCustomerAppointmentsUseCase;
   String? _nextBookingCursor;
+  String? _nextAppointmentCursor;
 
   Future<void> load() async {
     emit(const CustomerBookingsState());
     _nextBookingCursor = null;
-    final result = await _customerBookingsUseCase.getBookings();
+    final result = await _getCustomerBookingsUseCase.execute();
     if (result is Success<BookingListResponse>) {
       final page = result.value;
       _nextBookingCursor = page.nextCursor;
@@ -47,6 +47,10 @@ class CustomerBookingsCubit extends Cubit<CustomerBookingsState> {
   }
 
   Future<void> loadMore() async {
+    if (state.selectedType == CustomerBookingType.services) {
+      await _loadMoreAppointments();
+      return;
+    }
     final cursor = _nextBookingCursor;
     if (cursor == null || state.isLoadingMore) {
       return;
@@ -59,7 +63,7 @@ class CustomerBookingsCubit extends Cubit<CustomerBookingsState> {
         isLoadingMore: true,
       ),
     );
-    final result = await _customerBookingsUseCase.getBookings(cursor: cursor);
+    final result = await _getCustomerBookingsUseCase.execute(cursor: cursor);
     if (cursor != _nextBookingCursor) return;
     if (result is Success<BookingListResponse>) {
       final page = result.value;
@@ -104,6 +108,7 @@ class CustomerBookingsCubit extends Cubit<CustomerBookingsState> {
   }
 
   Future<void> _loadAppointments() async {
+    _nextAppointmentCursor = null;
     emit(
       CustomerBookingsState(
         selectedType: CustomerBookingType.services,
@@ -112,33 +117,73 @@ class CustomerBookingsCubit extends Cubit<CustomerBookingsState> {
         isLoading: true,
       ),
     );
-    try {
-      _appointmentCursor = _appointmentRepository
-          .getCustomerAppointmentsCursor();
-      final appointments = await _appointmentRepository
-          .enrichAppointmentsWithBusinessData(
-            await _appointmentCursor!.fetchNextPage(),
-          );
+    final result = await _getCustomerAppointmentsUseCase.execute();
+    if (result is Success<AppointmentListResponse>) {
+      _nextAppointmentCursor = result.value.nextCursor;
       emit(
         CustomerBookingsState(
           selectedType: CustomerBookingType.services,
           bookings: state.bookings,
-          appointments: appointments,
+          appointments: result.value.items,
           isLoading: false,
-          hasReachedEnd: _appointmentCursor!.isEverythingLoaded,
+          hasReachedEnd: result.value.nextCursor == null,
         ),
       );
-    } catch (_) {
-      emit(
-        CustomerBookingsState(
-          selectedType: CustomerBookingType.services,
-          bookings: state.bookings,
-          isLoading: false,
-          errorMessage:
-              'We could not load your service bookings. Please try again.',
-        ),
-      );
+      return;
     }
+    emit(
+      CustomerBookingsState(
+        selectedType: CustomerBookingType.services,
+        bookings: state.bookings,
+        isLoading: false,
+        errorMessage:
+            'We could not load your service bookings. Please try again.',
+      ),
+    );
+  }
+
+  Future<void> _loadMoreAppointments() async {
+    final cursor = _nextAppointmentCursor;
+    if (cursor == null || state.isLoadingMore) {
+      return;
+    }
+    emit(
+      CustomerBookingsState(
+        selectedType: CustomerBookingType.services,
+        bookings: state.bookings,
+        appointments: state.appointments,
+        isLoading: false,
+        isLoadingMore: true,
+      ),
+    );
+    final result = await _getCustomerAppointmentsUseCase.execute(
+      cursor: cursor,
+    );
+    if (cursor != _nextAppointmentCursor) return;
+    if (result is Success<AppointmentListResponse>) {
+      final page = result.value;
+      _nextAppointmentCursor = page.nextCursor;
+      emit(
+        CustomerBookingsState(
+          selectedType: CustomerBookingType.services,
+          bookings: state.bookings,
+          appointments: [...state.appointments, ...page.items],
+          isLoading: false,
+          hasReachedEnd: page.nextCursor == null,
+        ),
+      );
+      return;
+    }
+    emit(
+      CustomerBookingsState(
+        selectedType: CustomerBookingType.services,
+        bookings: state.bookings,
+        appointments: state.appointments,
+        isLoading: false,
+        errorMessage:
+            'We could not load more service bookings. Please try again.',
+      ),
+    );
   }
 
   void updateBooking(BookingModel booking) {

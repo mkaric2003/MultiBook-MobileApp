@@ -2,8 +2,8 @@ import 'package:multibook/src/data/models/booking_draft_model.dart';
 import 'package:multibook/src/data/models/stay_availability_response.dart';
 import 'package:multibook/src/data/models/stay_unavailable_range.dart';
 import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/domain/use_cases/bookings/customer_bookings_use_case.dart';
-import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
+import 'package:multibook/src/domain/use_cases/bookings/get_stay_availability_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/save_booking_draft_use_case.dart';
 import 'package:multibook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
 import 'package:multibook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,12 +12,12 @@ import 'package:injectable/injectable.dart';
 @injectable
 class BookingDetailsCubit extends Cubit<BookingDetailsState> {
   BookingDetailsCubit(
-    this._customerBookingsUseCase,
-    this._customerDraftsUseCase,
+    this._getStayAvailabilityUseCase,
+    this._saveBookingDraftUseCase,
   ) : super(BookingDetailsState.initial());
 
-  final CustomerBookingsUseCase _customerBookingsUseCase;
-  final CustomerDraftsUseCase _customerDraftsUseCase;
+  final GetStayAvailabilityUseCase _getStayAvailabilityUseCase;
+  final SaveBookingDraftUseCase _saveBookingDraftUseCase;
 
   void restoreDraft(BookingDraftModel draft) => emit(
     state.copyWith(
@@ -31,7 +31,7 @@ class BookingDetailsCubit extends Cubit<BookingDetailsState> {
   );
 
   Future<void> saveDraft(BookingDetailsArguments arguments) =>
-      _customerDraftsUseCase.saveBookingDraft(
+      _saveBookingDraftUseCase.execute(
         BookingDraftModel(
           id: '',
           businessId: arguments.stay.id,
@@ -54,7 +54,7 @@ class BookingDetailsCubit extends Cubit<BookingDetailsState> {
     String? roomTypeId,
   }) async {
     emit(state.copyWith(isLoadingAvailability: true));
-    final result = await _customerBookingsUseCase.getAvailability(
+    final result = await _getStayAvailabilityUseCase.execute(
       businessId: businessId,
       roomTypeId: roomTypeId,
     );

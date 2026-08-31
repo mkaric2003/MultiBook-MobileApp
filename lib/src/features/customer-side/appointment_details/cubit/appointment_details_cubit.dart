@@ -1,7 +1,8 @@
 import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/appointment_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
 import 'package:multibook/src/data/repositories/review_repository.dart';
+import 'package:multibook/src/domain/use_cases/appointments/cancel_customer_appointment_use_case.dart';
 import 'package:multibook/src/features/customer-side/appointment_details/cubit/appointment_details_state.dart';
 import 'package:multibook/src/features/shared/rate_business/domain/models/rate_business_target.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,12 +12,12 @@ import 'package:injectable/injectable.dart';
 class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
   AppointmentDetailsCubit(
     this._businessRepository,
-    this._appointmentRepository,
+    this._cancelCustomerAppointmentUseCase,
     this._reviewRepository,
   ) : super(const AppointmentDetailsState());
 
   final BusinessRepository _businessRepository;
-  final AppointmentRepository _appointmentRepository;
+  final CancelCustomerAppointmentUseCase _cancelCustomerAppointmentUseCase;
   final ReviewRepository _reviewRepository;
 
   Future<void> load(String businessId) async {
@@ -75,25 +76,25 @@ class AppointmentDetailsCubit extends Cubit<AppointmentDetailsState> {
         business: state.business,
       ),
     );
-    try {
-      final updated = await _appointmentRepository.cancelAppointment(
-        appointment,
-      );
+    final result = await _cancelCustomerAppointmentUseCase.execute(
+      appointment.id,
+    );
+    if (result is Success<AppointmentModel>) {
       emit(
         AppointmentDetailsState(
           isLoading: false,
           business: state.business,
-          appointment: updated,
+          appointment: result.value,
         ),
       );
-    } on AppointmentException catch (error) {
-      emit(
-        AppointmentDetailsState(
-          isLoading: false,
-          business: state.business,
-          errorMessage: error.message,
-        ),
-      );
+      return;
     }
+    emit(
+      AppointmentDetailsState(
+        isLoading: false,
+        business: state.business,
+        errorMessage: 'We could not cancel this appointment. Please try again.',
+      ),
+    );
   }
 }
