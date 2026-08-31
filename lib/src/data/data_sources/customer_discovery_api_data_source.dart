@@ -74,6 +74,12 @@ class CustomerDiscoveryApiDataSource {
     return Future.wait(items.map(_resolve));
   }
 
+  /// Loads the complete active aggregate used by both customer detail pages.
+  Future<BusinessModel> getBusinessDetail(String businessId) async {
+    final response = await _client.get('/v1/discovery/businesses/$businessId');
+    return _resolve(BusinessModel.fromMap(response.data!));
+  }
+
   Future<BusinessModel> _resolve(BusinessModel business) async {
     Future<String?> url(String? value) => value == null || value.isEmpty
         ? Future.value(value)

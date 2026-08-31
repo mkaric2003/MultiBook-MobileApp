@@ -1,4 +1,6 @@
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
 import 'package:multibook/src/data/models/business_review_model.dart';
 import 'package:multibook/src/data/repositories/saved_business_repository.dart';
 import 'package:multibook/src/data/repositories/recently_viewed_repository.dart';
@@ -11,13 +13,13 @@ import 'package:injectable/injectable.dart';
 @injectable
 class StayDetailCubit extends Cubit<StayDetailState> {
   StayDetailCubit(
-    this._businessRepository,
+    this._getBusinessDetail,
     this._savedRepository,
     this._recentlyViewedRepository,
     this._reviewRepository,
   ) : super(const StayDetailState());
 
-  final BusinessRepository _businessRepository;
+  final GetBusinessDetailUseCase _getBusinessDetail;
   final SavedBusinessRepository _savedRepository;
   final RecentlyViewedRepository _recentlyViewedRepository;
   final ReviewRepository _reviewRepository;
@@ -25,13 +27,12 @@ class StayDetailCubit extends Cubit<StayDetailState> {
   Future<void> loadStay(String businessId) async {
     emit(const StayDetailState(isLoading: true));
     try {
-      final business = await _businessRepository.getBusiness(
-        businessId: businessId,
-      );
-      if (business == null) {
+      final result = await _getBusinessDetail.execute(businessId);
+      if (result is! Success<BusinessModel>) {
         emit(const StayDetailState(errorMessage: 'This stay is unavailable.'));
         return;
       }
+      final business = result.value;
       await _recentlyViewedRepository.recordBusinessView(business);
       final results = await Future.wait([
         _savedRepository.isSaved(business.id),
@@ -44,8 +45,8 @@ class StayDetailCubit extends Cubit<StayDetailState> {
           reviews: results[1] as List<BusinessReviewModel>,
         ),
       );
-    } on BusinessException catch (error) {
-      emit(StayDetailState(errorMessage: error.message));
+    } catch (_) {
+      emit(const StayDetailState(errorMessage: 'This stay is unavailable.'));
     }
   }
 

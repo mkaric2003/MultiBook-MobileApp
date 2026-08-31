@@ -13,6 +13,10 @@ class CustomerDiscoveryRepositoryImpl implements CustomerDiscoveryRepository {
   final RestRepositoryExecutor _executor;
 
   @override
+  Future<Result<BusinessModel>> getBusinessDetail(String businessId) =>
+      _executor.execute(() => _dataSource.getBusinessDetail(businessId));
+
+  @override
   Future<Result<List<BusinessModel>>> recommendedStays() =>
       _executor.execute(_dataSource.recommendedStays);
 

@@ -542,6 +542,8 @@ Service endpoint prihvata datum/vrijeme, kategoriju, featured kolekciju, grad, r
 
 Service availability provjerava da li barem jedan provider ima cijeli uzastopni raspon slobodnih 30-minutnih slotova za traženo trajanje. To sprječava da se business vrati u rezultatima ako su svi radnici zauzeti u tom vremenu.
 
+Customer stay i service detail ekrani učitavaju puni aktivni business agregat preko `GET /v1/discovery/businesses/{businessID}`. Endpoint vraća isti `BusinessModel` oblik, uključujući media, stay sobe/amenities ili service ponude/providere, pa detail ekran ne čita business dokument direktno iz Firestorea.
+
 Backend greške se na serveru loguju i vraćaju kao standardni API error response; `ApiClient` ih pretvara u `ApiException`, pa se greška ne miješa s praznim rezultatom.
 
 ### Normalizacija

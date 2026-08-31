@@ -1,4 +1,6 @@
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
 import 'package:multibook/src/data/models/business_review_model.dart';
 import 'package:multibook/src/data/repositories/saved_business_repository.dart';
 import 'package:multibook/src/data/repositories/recently_viewed_repository.dart';
@@ -11,13 +13,13 @@ import 'package:injectable/injectable.dart';
 @injectable
 class ServiceDetailCubit extends Cubit<ServiceDetailState> {
   ServiceDetailCubit(
-    this._businessRepository,
+    this._getBusinessDetail,
     this._savedRepository,
     this._recentlyViewedRepository,
     this._reviewRepository,
   ) : super(const ServiceDetailState());
 
-  final BusinessRepository _businessRepository;
+  final GetBusinessDetailUseCase _getBusinessDetail;
   final SavedBusinessRepository _savedRepository;
   final RecentlyViewedRepository _recentlyViewedRepository;
   final ReviewRepository _reviewRepository;
@@ -25,10 +27,8 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
   Future<void> loadService(String businessId) async {
     emit(const ServiceDetailState(isLoading: true));
     try {
-      final business = await _businessRepository.getBusiness(
-        businessId: businessId,
-      );
-      if (business == null) {
+      final result = await _getBusinessDetail.execute(businessId);
+      if (result is! Success<BusinessModel>) {
         emit(
           const ServiceDetailState(
             errorMessage: 'This service is unavailable.',
@@ -36,6 +36,7 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
         );
         return;
       }
+      final business = result.value;
       await _recentlyViewedRepository.recordBusinessView(business);
       final results = await Future.wait([
         _savedRepository.isSaved(business.id),
@@ -48,8 +49,8 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
           reviews: results[1] as List<BusinessReviewModel>,
         ),
       );
-    } on BusinessException catch (error) {
-      emit(ServiceDetailState(errorMessage: error.message));
+    } catch (_) {
+      emit(const ServiceDetailState(errorMessage: 'This service is unavailable.'));
     }
   }
 

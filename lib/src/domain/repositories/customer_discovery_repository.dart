@@ -3,6 +3,7 @@ import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 
 abstract class CustomerDiscoveryRepository {
+  Future<Result<BusinessModel>> getBusinessDetail(String businessId);
   Future<Result<List<BusinessModel>>> recommendedStays();
   Future<Result<List<BusinessModel>>> listBusinesses({
     required BusinessType type,
