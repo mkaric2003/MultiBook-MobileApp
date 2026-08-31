@@ -1,11 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/enums/booking_status.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/appointment_repository.dart';
 import 'package:multibook/src/data/repositories/service_availability_repository.dart';
+import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_appointments_use_case.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/service_availability_calendar_cubit.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/service_availability_calendar_state.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
@@ -16,9 +19,6 @@ import 'package:multibook/src/features/business-side/availability_calendar/prese
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/service_provider_selector.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/todays_appointment_card.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/todays_bookings_empty_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ServiceAvailabilityCalendarView extends HookWidget {
   const ServiceAvailabilityCalendarView({required this.business, super.key});
@@ -30,7 +30,7 @@ class ServiceAvailabilityCalendarView extends HookWidget {
     final providers = business.serviceDetails?.availableProviders ?? const [];
     final cubit = useMemoized(
       () => ServiceAvailabilityCalendarCubit(
-        getIt<AppointmentRepository>(),
+        getIt<GetProviderAppointmentsUseCase>(),
         getIt<ServiceAvailabilityRepository>(),
       ),
       [business.id],

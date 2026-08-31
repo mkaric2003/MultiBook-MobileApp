@@ -147,7 +147,7 @@ CustomerBookingsCubit / CustomerBookingDetailsCubit / BookingDetailsCubit
 - `PATCH /v1/bookings/{id}/cancel` vraća ažurirani `BookingModel`; detail Cubit njime zamjenjuje lokalnu stavku nakon uspješnog otkazivanja.
 - `GET /v1/businesses/{id}/stay/availability` vraća samo `unavailableRanges`, bez tuđih booking detalja. Za multiple-unit stay šalje se `room_type_id`, a backend označava datum nedostupnim tek kada je kapacitet tog room typea popunjen.
 - `BookingListResponse`, `StayAvailabilityResponse` i `StayUnavailableRange` su tipizirani REST response modeli; svaki model je u vlastitom fajlu. `BookingModel` ostaje zajednički persisted model.
-- Firestore `BookingRepository` ostaje samo za još-ne-migrirane provider booking flowove. Customer stay lista, customer cancel i customer calendar availability nemaju Firestore fallback.
+- Customer stay lista, customer cancel i customer calendar availability nemaju Firestore fallback. Stari Firestore `BookingRepository` je uklonjen; provider booking i provider stay calendar koriste REST.
 
 ### 4.1.5 Customer service appointments REST migracija
 
@@ -461,7 +461,7 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 
 ### Provider bookings i appointments
 
-- Bookings ekran učitava stavke za selektovani business, koristi filter chipove i cursor paginaciju.
+- Bookings ekran i provider stay calendar koriste `ProviderBookingsRepository` REST sloj za selektovani business, status filtere i cursor paginaciju; nemaju Firestore booking fallback.
 - Manage Booking prikazuje customera, room, datume, goste, cijenu, završavanje i odbijanje. Kod past cash stavki nudi i No-show akciju sa hintom o uklanjanju iz earnings metrika.
 - Service appointment kartice imaju Manage akciju za customer detalje, završavanje, cancel, reschedule, kontakt i No-show za past cash termine.
 - Provider cancel rezultira statusom `declined`; customer cancel rezultira `cancelled`.

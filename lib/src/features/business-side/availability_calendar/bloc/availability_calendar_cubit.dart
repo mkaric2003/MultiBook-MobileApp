@@ -1,7 +1,10 @@
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/booking_repository.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/models/booking_list_response.dart';
+import 'package:multibook/src/data/models/booking_model.dart';
+import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_bookings_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/availability_calendar_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +13,12 @@ import 'package:injectable/injectable.dart';
 @injectable
 class AvailabilityCalendarCubit extends Cubit<AvailabilityCalendarState> {
   AvailabilityCalendarCubit(
-    this._bookingRepository,
+    this._getProviderBookingsUseCase,
     this._businessRepository,
     this._userRepository,
   ) : super(const AvailabilityCalendarState());
 
-  final BookingRepository _bookingRepository;
+  final GetProviderBookingsUseCase _getProviderBookingsUseCase;
   final BusinessRepository _businessRepository;
   final UserProfileUseCase _userRepository;
 
@@ -41,21 +44,12 @@ class AvailabilityCalendarCubit extends Cubit<AvailabilityCalendarState> {
         return;
       }
 
-      final bookings = await _bookingRepository.getOwnedBusinessBookings(
-        businessId: business.id,
-      );
+      final bookings = await _loadBookings(business.id);
       emit(
         AvailabilityCalendarState(
           isLoading: false,
           business: business,
           bookings: bookings,
-        ),
-      );
-    } on BookingException catch (error) {
-      emit(
-        AvailabilityCalendarState(
-          isLoading: false,
-          errorMessage: error.message,
         ),
       );
     } catch (_) {
@@ -66,6 +60,21 @@ class AvailabilityCalendarCubit extends Cubit<AvailabilityCalendarState> {
         ),
       );
     }
+  }
+
+  Future<List<BookingModel>> _loadBookings(String businessId) async {
+    final bookings = <BookingModel>[];
+    String? cursor;
+    do {
+      final result = await _getProviderBookingsUseCase.execute(
+        businessId: businessId,
+        cursor: cursor,
+      );
+      if (result is! Success<BookingListResponse>) throw Exception();
+      bookings.addAll(result.value.items);
+      cursor = result.value.nextCursor;
+    } while (cursor != null);
+    return bookings;
   }
 
   BusinessModel? _findBusiness(

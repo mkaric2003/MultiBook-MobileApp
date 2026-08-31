@@ -1,12 +1,15 @@
-import 'package:multibook/src/data/data_cursor.dart';
-import 'package:multibook/src/data/enums/booking_status.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/models/appointment_list_response.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
-import 'package:multibook/src/data/repositories/appointment_repository.dart';
+import 'package:multibook/src/data/models/booking_list_response.dart';
 import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/booking_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_appointments_use_case.dart';
+import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_bookings_use_case.dart';
+import 'package:multibook/src/domain/use_cases/provider_bookings/update_provider_appointment_status_use_case.dart';
+import 'package:multibook/src/domain/use_cases/provider_bookings/update_provider_booking_status_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
 import 'package:multibook/src/features/business-side/bookings/domain/enums/client_booking_filter.dart';
@@ -17,17 +20,23 @@ import 'package:injectable/injectable.dart';
 @injectable
 class ClientBookingsCubit extends Cubit<ClientBookingsState> {
   ClientBookingsCubit(
-    this._bookingRepository,
-    this._appointmentRepository,
+    this._getProviderBookingsUseCase,
+    this._getProviderAppointmentsUseCase,
+    this._updateProviderBookingStatusUseCase,
+    this._updateProviderAppointmentStatusUseCase,
     this._businessRepository,
     this._userRepository,
   ) : super(const ClientBookingsState());
 
-  final BookingRepository _bookingRepository;
-  final AppointmentRepository _appointmentRepository;
+  final GetProviderBookingsUseCase _getProviderBookingsUseCase;
+  final GetProviderAppointmentsUseCase _getProviderAppointmentsUseCase;
+  final UpdateProviderBookingStatusUseCase _updateProviderBookingStatusUseCase;
+  final UpdateProviderAppointmentStatusUseCase
+  _updateProviderAppointmentStatusUseCase;
   final BusinessRepository _businessRepository;
   final UserProfileUseCase _userRepository;
-  DataCursor<BookingModel>? _cursor;
+  String? _nextBookingCursor;
+  String? _nextAppointmentCursor;
   int _loadRequestId = 0;
 
   Future<void> load({
@@ -63,56 +72,46 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
       }
 
       if (selectedBusiness.type == BusinessType.stays) {
-        _cursor = _bookingRepository.getOwnedBookingsCursor(
+        final result = await _getProviderBookingsUseCase.execute(
           businessId: selectedBusiness.id,
-          status: filter.bookingStatus,
+          status: filter.bookingStatus?.name,
         );
-        final bookings = await _cursor!.fetchNextPage();
         if (requestId != _loadRequestId) return;
+        if (result is! Success<BookingListResponse>) throw Exception();
+        final page = result.value;
+        _nextBookingCursor = page.nextCursor;
         emit(
           ClientBookingsState(
             filter: filter,
-            bookings: bookings,
+            bookings: page.items,
             businesses: businesses,
             selectedBusiness: selectedBusiness,
             tab: ClientBookingsTab.stays,
             isLoading: false,
-            hasReachedEnd: _cursor!.isEverythingLoaded,
+            hasReachedEnd: page.nextCursor == null,
           ),
         );
         return;
       }
-      _cursor = null;
-      final appointments = await _getOwnedAppointments(
+      final result = await _getProviderAppointmentsUseCase.execute(
         businessId: selectedBusiness.id,
-        filter: filter,
+        status: filter == ClientBookingFilter.all ? null : filter.name,
       );
       if (requestId != _loadRequestId) {
         return;
       }
+      if (result is! Success<AppointmentListResponse>) throw Exception();
+      final page = result.value;
+      _nextAppointmentCursor = page.nextCursor;
       emit(
         ClientBookingsState(
           filter: filter,
-          appointments: appointments,
+          appointments: page.items,
           businesses: businesses,
           selectedBusiness: selectedBusiness,
           tab: ClientBookingsTab.services,
           isLoading: false,
-          hasReachedEnd: true,
-        ),
-      );
-    } on BookingException catch (error) {
-      if (requestId != _loadRequestId) {
-        return;
-      }
-      emit(
-        ClientBookingsState(
-          filter: filter,
-          businesses: state.businesses,
-          selectedBusiness: state.selectedBusiness,
-          tab: state.tab,
-          isLoading: false,
-          errorMessage: error.message,
+          hasReachedEnd: page.nextCursor == null,
         ),
       );
     } catch (_) {
@@ -132,24 +131,11 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     }
   }
 
-  Future<List<AppointmentModel>> _getOwnedAppointments({
-    required String businessId,
-    required ClientBookingFilter filter,
-  }) async {
-    final cursor = _appointmentRepository.getOwnedAppointmentsCursor(
-      businessId: businessId,
-      status: filter == ClientBookingFilter.all ? null : filter.name,
-    );
-    final appointments = <AppointmentModel>[];
-    while (!cursor.isEverythingLoaded) {
-      appointments.addAll(await cursor.fetchNextPage());
-    }
-    return appointments;
-  }
-
   Future<void> loadMore() async {
-    final cursor = _cursor;
-    if (cursor == null || state.isLoadingMore || cursor.isEverythingLoaded) {
+    final cursor = state.tab == ClientBookingsTab.stays
+        ? _nextBookingCursor
+        : _nextAppointmentCursor;
+    if (cursor == null || state.isLoadingMore) {
       return;
     }
 
@@ -157,6 +143,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
       ClientBookingsState(
         filter: state.filter,
         bookings: state.bookings,
+        appointments: state.appointments,
         businesses: state.businesses,
         selectedBusiness: state.selectedBusiness,
         tab: state.tab,
@@ -166,25 +153,52 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     );
 
     try {
-      final nextPage = await cursor.fetchNextPage();
-      if (cursor != _cursor) {
+      if (state.tab == ClientBookingsTab.stays) {
+        final result = await _getProviderBookingsUseCase.execute(
+          businessId: state.selectedBusiness!.id,
+          status: state.filter.bookingStatus?.name,
+          cursor: cursor,
+        );
+        if (cursor != _nextBookingCursor) return;
+        if (result is! Success<BookingListResponse>) throw Exception();
+        final page = result.value;
+        _nextBookingCursor = page.nextCursor;
+        emit(
+          ClientBookingsState(
+            filter: state.filter,
+            bookings: [...state.bookings, ...page.items],
+            businesses: state.businesses,
+            selectedBusiness: state.selectedBusiness,
+            tab: state.tab,
+            isLoading: false,
+            hasReachedEnd: page.nextCursor == null,
+          ),
+        );
         return;
       }
+      final result = await _getProviderAppointmentsUseCase.execute(
+        businessId: state.selectedBusiness!.id,
+        status: state.filter == ClientBookingFilter.all
+            ? null
+            : state.filter.name,
+        cursor: cursor,
+      );
+      if (cursor != _nextAppointmentCursor) return;
+      if (result is! Success<AppointmentListResponse>) throw Exception();
+      final page = result.value;
+      _nextAppointmentCursor = page.nextCursor;
       emit(
         ClientBookingsState(
           filter: state.filter,
-          bookings: [...state.bookings, ...nextPage],
+          appointments: [...state.appointments, ...page.items],
           businesses: state.businesses,
           selectedBusiness: state.selectedBusiness,
           tab: state.tab,
           isLoading: false,
-          hasReachedEnd: cursor.isEverythingLoaded,
+          hasReachedEnd: page.nextCursor == null,
         ),
       );
     } catch (_) {
-      if (cursor != _cursor) {
-        return;
-      }
       emit(
         ClientBookingsState(
           filter: state.filter,
@@ -210,90 +224,84 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
 
   Future<bool> declineBooking(BookingModel booking) async {
     try {
-      await _bookingRepository.declineBooking(bookingId: booking.id);
-      final declinedBooking = booking.copyWith(status: BookingStatus.declined);
-      final updatedBookings =
-          state.filter == ClientBookingFilter.all ||
-              state.filter == ClientBookingFilter.declined
-          ? state.bookings
-                .map(
-                  (currentBooking) => currentBooking.id == booking.id
-                      ? declinedBooking
-                      : currentBooking,
-                )
-                .toList()
-          : state.bookings
-                .where((currentBooking) => currentBooking.id != booking.id)
-                .toList();
-      emit(
-        ClientBookingsState(
-          filter: state.filter,
-          bookings: updatedBookings,
-          businesses: state.businesses,
-          selectedBusiness: state.selectedBusiness,
-          tab: state.tab,
-          isLoading: false,
-          hasReachedEnd: state.hasReachedEnd,
-        ),
+      final result = await _updateProviderBookingStatusUseCase.execute(
+        bookingId: booking.id,
+        status: 'declined',
       );
+      if (result is! Success<BookingModel>) return false;
+      _replaceBooking(result.value);
       return true;
-    } on BookingException {
+    } catch (_) {
       return false;
     }
   }
 
   Future<bool> completeBooking(BookingModel booking) async {
     try {
-      final completed = await _bookingRepository.completeBooking(booking);
-      _replaceBooking(completed);
+      final result = await _updateProviderBookingStatusUseCase.execute(
+        bookingId: booking.id,
+        status: 'completed',
+      );
+      if (result is! Success<BookingModel>) return false;
+      _replaceBooking(result.value);
       return true;
-    } on BookingException {
+    } catch (_) {
       return false;
     }
   }
 
   Future<bool> markBookingNoShow(BookingModel booking) async {
     try {
-      final noShow = await _bookingRepository.markBookingNoShow(booking);
-      _replaceBooking(noShow);
+      final result = await _updateProviderBookingStatusUseCase.execute(
+        bookingId: booking.id,
+        status: 'no_show',
+      );
+      if (result is! Success<BookingModel>) return false;
+      _replaceBooking(result.value);
       return true;
-    } on BookingException {
+    } catch (_) {
       return false;
     }
   }
 
   Future<bool> declineAppointment(AppointmentModel appointment) async {
     try {
-      final declined = await _appointmentRepository.cancelAppointment(
-        appointment,
+      final result = await _updateProviderAppointmentStatusUseCase.execute(
+        appointmentId: appointment.id,
+        status: 'declined',
       );
-      _replaceAppointment(declined);
+      if (result is! Success<AppointmentModel>) return false;
+      _replaceAppointment(result.value);
       return true;
-    } on AppointmentException {
+    } catch (_) {
       return false;
     }
   }
 
   Future<bool> completeAppointment(AppointmentModel appointment) async {
     try {
-      final completed = await _appointmentRepository.completeAppointment(
-        appointment,
+      final result = await _updateProviderAppointmentStatusUseCase.execute(
+        appointmentId: appointment.id,
+        status: 'completed',
       );
-      _replaceAppointment(completed);
+      if (result is! Success<AppointmentModel>) return false;
+      _replaceAppointment(result.value);
       return true;
-    } on AppointmentException {
+    } catch (_) {
       return false;
     }
   }
 
   Future<bool> markAppointmentNoShow(AppointmentModel appointment) async {
     try {
-      final noShow = await _appointmentRepository.markAppointmentNoShow(
-        appointment,
+      final result = await _updateProviderAppointmentStatusUseCase.execute(
+        appointmentId: appointment.id,
+        status: 'no_show',
       );
-      _replaceAppointment(noShow);
+      if (result is! Success<AppointmentModel>) return false;
+      _replaceAppointment(result.value);
       return true;
-    } on AppointmentException {
+    } catch (_) {
       return false;
     }
   }
