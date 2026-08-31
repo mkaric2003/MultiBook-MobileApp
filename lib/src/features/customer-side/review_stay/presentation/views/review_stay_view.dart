@@ -32,15 +32,24 @@ class ReviewStayView extends StatelessWidget {
       ),
       BlocProvider(
         create: (_) =>
-            getIt<BookingPromotionCubit>()
-              ..load(arguments.booking.stay.id),
+            getIt<BookingPromotionCubit>()..load(arguments.booking.stay.id),
       ),
     ],
     child: BlocBuilder<ReviewStayCubit, ReviewStayState>(
       builder: (context, state) {
-        if (state.isLoading || state.business == null) {
+        if (state.isLoading) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (state.business == null) {
+          return Scaffold(
+            body: Center(
+              child: Text(
+                state.errorMessage ?? context.l10n.stayUnavailable,
+                textAlign: TextAlign.center,
+              ),
+            ),
           );
         }
         final business = state.business!;
@@ -180,7 +189,10 @@ class ReviewStayView extends StatelessWidget {
                           const SizedBox(height: 14),
                         ],
                         const SizedBox(height: 18),
-                        BlocBuilder<BookingPromotionCubit, BookingPromotionState>(
+                        BlocBuilder<
+                          BookingPromotionCubit,
+                          BookingPromotionState
+                        >(
                           builder: (context, promotionState) =>
                               ReviewPriceBreakdown(
                                 state: booking,

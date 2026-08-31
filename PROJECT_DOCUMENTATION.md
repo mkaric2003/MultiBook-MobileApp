@@ -100,6 +100,22 @@ Cubit → Use case → Repository contract → RepositoryImpl → Data source �
 
 `users` je prvi migrirani REST modul. Njegov contract je `UsersRepository`, implementacija `UsersRepositoryImpl`, a HTTP endpointi su u `UsersApiDataSource`.
 
+### 4.1.3 Customer drafts REST migracija
+
+Customer booking i appointment draftovi koriste jedan `CustomerDraftsRepository` jer pripadaju istoj customer-drafts odgovornosti. Tok je striktno:
+
+```text
+CustomerDashboardCubit / draft Cubit → CustomerDraftsUseCase → CustomerDraftsRepository → CustomerDraftsRepositoryImpl → CustomerDraftsApiDataSource → ApiClient
+```
+
+`CustomerDraftsApiDataSource` koristi `GET`, `PUT` i `DELETE` endpoint-e pod `/v1/drafts/booking` i `/v1/drafts/appointment`. `ApiClient.delete` normalizuje Dio grešku u isti `ApiException` oblik kao `get`, `post`, `put` i `patch`.
+
+- Svaki customer ima najviše jedan booking i jedan appointment draft.
+- `GET` koji dobije `404` vraća `Success(null)`; dashboard zato ne prikazuje grešku kada draft ne postoji.
+- Odgovori su camelCase-kompatibilni s postojećim `BookingDraftModel` i `AppointmentDraftModel`.
+- `businessImageUrl` može biti Firebase Storage path ili direktni HTTPS URL. `FirebaseStorageDataSource.getDownloadUrl` prosljeđuje HTTPS URL bez dodatnog Firebase lookup-a.
+- Nastavak appointmenta i bookinga učitava puni business agregat preko postojećeg REST `GetBusinessDetailUseCase`, a ne preko Firestore business dokumenta. Ako business više nije dostupan, UI prikazuje stanje greške umjesto beskonačnog loadera.
+
 Očekivane REST greške ne putuju do Cubit-a kao `DioException` ili `ApiException`. `ApiClient` normalizuje Dio grešku u `ApiException`, a `RestRepositoryExecutor` iz `src/core/errors/` je centralno mjesto koje je mapira u `Result<T>` i `AppFailure`:
 
 - `401` → `UnauthorizedFailure`
@@ -369,8 +385,9 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 
 ### Draftovi
 
-- `booking_drafts/{userId}` čuva prekinuti stay flow.
-- `appointment_drafts/{userId}` čuva odabrane usluge, provider, datum, slotove, add-ons i ostale potrebne podatke service flowa.
+- REST `GET /v1/drafts/booking` i `PUT /v1/drafts/booking` čuvaju i vraćaju prekinuti stay flow za trenutno prijavljenog customera.
+- REST `GET /v1/drafts/appointment` i `PUT /v1/drafts/appointment` čuvaju i vraćaju odabrane usluge, providera, datum, slotove i add-ons service flowa.
+- REST `DELETE` endpointi brišu odgovarajući draft nakon uspješne potvrde plaćanja.
 - Pri napuštanju flowa prikazuje se odluka da se draft sačuva ili odbaci.
 - Draft vraća označene datume, slotove i extras/add-ons pri nastavku.
 
@@ -486,8 +503,6 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `business_metrics/{businessId}/months/{YYYY-MM}` | mjesečna revenue/cash/online zarada, booking count i dnevni ukupni/online/cash chart podaci |
 | `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
 | `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
-| `booking_drafts/{uid}` | prekinut stay booking tok |
-| `appointment_drafts/{uid}` | prekinut appointment tok |
 | `saved_businesses/{uid}/items/{businessId}` | customer favorit/saved snapshot |
 | `conversations/{id}` | business-customer chat metadata |
 | `conversations/{id}/messages/{id}` | poruke |

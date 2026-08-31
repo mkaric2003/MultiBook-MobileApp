@@ -94,6 +94,9 @@ class ApiClient {
     required Map<String, dynamic> data,
   }) => _request(() => _dio.post<Map<String, dynamic>>(path, data: data));
 
+  Future<Response<Map<String, dynamic>>> delete(String path) =>
+      _request(() => _dio.delete<Map<String, dynamic>>(path));
+
   Future<Response<Map<String, dynamic>>> _request(
     Future<Response<Map<String, dynamic>>> Function() request,
   ) async {

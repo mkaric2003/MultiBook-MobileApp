@@ -6,13 +6,13 @@ import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/appointment_draft_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/appointment_draft_repository.dart';
-import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/data/repositories/service_search_repository.dart';
 import 'package:multibook/src/data/repositories/stay_search_repository.dart';
 import 'package:multibook/src/data/repositories/user_location_repository.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
@@ -27,20 +27,20 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     this._businessRepository,
     this._staySearchRepository,
     this._serviceSearchRepository,
-    this._draftRepository,
-    this._appointmentDraftRepository,
+    this._customerDraftsUseCase,
     this._userRepository,
     this._userLocationRepository,
+    this._getBusinessDetail,
     this._getPopularNearbyBusinesses,
   ) : super(const CustomerDashboardState());
 
   final BusinessRepository _businessRepository;
   final StaySearchRepository _staySearchRepository;
   final ServiceSearchRepository _serviceSearchRepository;
-  final BookingDraftRepository _draftRepository;
-  final AppointmentDraftRepository _appointmentDraftRepository;
+  final CustomerDraftsUseCase _customerDraftsUseCase;
   final UserProfileUseCase _userRepository;
   final UserLocationRepository _userLocationRepository;
+  final GetBusinessDetailUseCase _getBusinessDetail;
   final GetPopularNearbyBusinessesUseCase _getPopularNearbyBusinesses;
   StreamSubscription<String>? _locationCitySubscription;
   int _nearbyStaysOffset = 0;
@@ -168,18 +168,28 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   }
 
   Future<void> loadDraft() async {
-    final draft = await _draftRepository.getDraft();
-    emit(state.copyWith(bookingDraft: draft));
+    final result = await _customerDraftsUseCase.getBookingDraft();
+    if (result case Success(value: final draft)) {
+      emit(state.copyWith(bookingDraft: draft));
+    }
   }
 
   Future<void> loadAppointmentDraft() async {
-    final draft = await _appointmentDraftRepository.getDraft();
-    emit(state.copyWith(appointmentDraft: draft));
+    final result = await _customerDraftsUseCase.getAppointmentDraft();
+    if (result case Success(value: final draft)) {
+      emit(state.copyWith(appointmentDraft: draft));
+    }
   }
 
   Future<BusinessModel?> getAppointmentDraftBusiness(
     AppointmentDraftModel draft,
-  ) => _businessRepository.getBusiness(businessId: draft.businessId);
+  ) async {
+    final result = await _getBusinessDetail.execute(draft.businessId);
+    return switch (result) {
+      Success(value: final business) => business,
+      FailureResult() => null,
+    };
+  }
 
   Future<void> loadRecommendedStays() async {
     if (!state.stayFilters.hasActiveFilters) {

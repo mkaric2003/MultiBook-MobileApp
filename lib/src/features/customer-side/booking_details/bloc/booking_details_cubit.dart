@@ -1,8 +1,8 @@
 import 'package:multibook/src/data/enums/booking_status.dart';
 import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:multibook/src/data/repositories/booking_repository.dart';
-import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
 import 'package:multibook/src/data/models/booking_draft_model.dart';
+import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
 import 'package:multibook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
 import 'package:multibook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +10,11 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class BookingDetailsCubit extends Cubit<BookingDetailsState> {
-  BookingDetailsCubit(this._bookingRepository, this._draftRepository)
+  BookingDetailsCubit(this._bookingRepository, this._customerDraftsUseCase)
     : super(BookingDetailsState.initial());
 
   final BookingRepository _bookingRepository;
-  final BookingDraftRepository _draftRepository;
+  final CustomerDraftsUseCase _customerDraftsUseCase;
 
   void restoreDraft(BookingDraftModel draft) => emit(
     state.copyWith(
@@ -28,7 +28,7 @@ class BookingDetailsCubit extends Cubit<BookingDetailsState> {
   );
 
   Future<void> saveDraft(BookingDetailsArguments arguments) =>
-      _draftRepository.saveDraft(
+      _customerDraftsUseCase.saveBookingDraft(
         BookingDraftModel(
           id: '',
           businessId: arguments.stay.id,
