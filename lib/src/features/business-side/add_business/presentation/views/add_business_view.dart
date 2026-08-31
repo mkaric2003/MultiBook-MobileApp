@@ -174,6 +174,8 @@ class AddBusinessView extends HookWidget {
                   CustomAppBar(
                     title: state.isEditing
                         ? context.l10n.saveChanges
+                        : state.isCheckingExistingBusiness
+                        ? context.l10n.addBusiness
                         : state.hasExistingBusiness
                         ? context.l10n.addBusiness
                         : context.l10n.addYourFirstBusiness,

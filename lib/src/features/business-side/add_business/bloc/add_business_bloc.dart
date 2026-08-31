@@ -1,32 +1,33 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
 import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:multibook/src/data/data_sources/image_picker_data_source.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/enums/currency_code.dart';
-import 'package:multibook/src/data/enums/stay_extra_type.dart';
 import 'package:multibook/src/data/enums/stay_amenity.dart';
+import 'package:multibook/src/data/enums/stay_extra_type.dart';
 import 'package:multibook/src/data/enums/stay_inventory_type.dart';
-import 'package:multibook/src/data/models/stay_room_model.dart';
 import 'package:multibook/src/data/models/business_location_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/data/models/service_details_model.dart';
 import 'package:multibook/src/data/models/service_provider_model.dart';
 import 'package:multibook/src/data/models/stay_details_model.dart';
+import 'package:multibook/src/data/models/stay_room_model.dart';
 import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/domain/use_cases/businesses/create_business_use_case.dart';
-import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_business_use_case.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/businesses/update_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/development_seed/development_seed_use_case.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/add_business/bloc/add_business_event.dart';
 import 'package:multibook/src/features/business-side/add_business/bloc/add_business_state.dart';
 import 'package:multibook/src/features/business-side/add_business/domain/enums/business_image_type.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:multibook/utils/image_utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @injectable
 class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
@@ -41,6 +42,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     this._authenticationDataSource,
     this._storageDataSource,
     this._developmentSeedUseCase,
+    this._userProfileUseCase,
   ) : super(const AddBusinessState()) {
     on<BusinessTypeChanged>(_onBusinessTypeChanged);
     on<BusinessEditLoaded>(_onBusinessEditLoaded);
@@ -91,6 +93,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   final AuthenticationDataSource _authenticationDataSource;
   final FirebaseStorageDataSource _storageDataSource;
   final DevelopmentSeedUseCase _developmentSeedUseCase;
+  final UserProfileUseCase _userProfileUseCase;
 
   void _onBusinessTypeChanged(
     BusinessTypeChanged event,
@@ -485,8 +488,19 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     ExistingBusinessesLoadRequested event,
     Emitter<AddBusinessState> emit,
   ) async {
-    final hasBusinesses = await _businessRepository.hasBusinesses();
-    emit(state.copyWith(hasExistingBusiness: hasBusinesses));
+    emit(state.copyWith(isCheckingExistingBusiness: true));
+    final user = await _userProfileUseCase.getCurrentUser(forceRefresh: true);
+    final selectedBusinessID = user?.selectedBusinessId;
+    final hasBusinesses =
+        selectedBusinessID != null &&
+        (await _getOwnedBusinessUseCase.execute(selectedBusinessID))
+            is Success<BusinessModel>;
+    emit(
+      state.copyWith(
+        hasExistingBusiness: hasBusinesses,
+        isCheckingExistingBusiness: false,
+      ),
+    );
   }
 
   Future<void> _onBusinessCreationRequested(
@@ -679,6 +693,8 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         throw BusinessException(_failureMessage(failure));
       }
       final seededCount = (result as Success<int>).value;
+      _getOwnedBusinessesUseCase.invalidate();
+      await _userProfileUseCase.getCurrentUser(forceRefresh: true);
       emit(
         state.copyWith(
           isLoading: false,
@@ -708,6 +724,8 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         throw BusinessException(_failureMessage(failure));
       }
       final seededCount = (result as Success<int>).value;
+      _getOwnedBusinessesUseCase.invalidate();
+      await _userProfileUseCase.getCurrentUser(forceRefresh: true);
       emit(
         state.copyWith(
           isLoading: false,

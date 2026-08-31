@@ -39,6 +39,7 @@ class AddBusinessState with AddBusinessStateMappable {
     this.errorMessage,
     this.successMessage,
     this.hasExistingBusiness = false,
+    this.isCheckingExistingBusiness = true,
   });
 
   final BusinessType businessType;
@@ -66,6 +67,7 @@ class AddBusinessState with AddBusinessStateMappable {
   final String? errorMessage;
   final String? successMessage;
   final bool hasExistingBusiness;
+  final bool isCheckingExistingBusiness;
 
   bool get isEditing => editingBusiness != null;
 }

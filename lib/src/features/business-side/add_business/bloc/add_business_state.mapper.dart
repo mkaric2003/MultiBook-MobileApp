@@ -198,6 +198,15 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     opt: true,
     def: false,
   );
+  static bool _$isCheckingExistingBusiness(AddBusinessState v) =>
+      v.isCheckingExistingBusiness;
+  static const Field<AddBusinessState, bool> _f$isCheckingExistingBusiness =
+      Field(
+        'isCheckingExistingBusiness',
+        _$isCheckingExistingBusiness,
+        opt: true,
+        def: true,
+      );
 
   @override
   final MappableFields<AddBusinessState> fields = const {
@@ -226,6 +235,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
     #errorMessage: _f$errorMessage,
     #successMessage: _f$successMessage,
     #hasExistingBusiness: _f$hasExistingBusiness,
+    #isCheckingExistingBusiness: _f$isCheckingExistingBusiness,
   };
 
   static AddBusinessState _instantiate(DecodingData data) {
@@ -255,6 +265,7 @@ class AddBusinessStateMapper extends ClassMapperBase<AddBusinessState> {
       errorMessage: data.dec(_f$errorMessage),
       successMessage: data.dec(_f$successMessage),
       hasExistingBusiness: data.dec(_f$hasExistingBusiness),
+      isCheckingExistingBusiness: data.dec(_f$isCheckingExistingBusiness),
     );
   }
 
@@ -388,6 +399,7 @@ abstract class AddBusinessStateCopyWith<$R, $In extends AddBusinessState, $Out>
     String? errorMessage,
     String? successMessage,
     bool? hasExistingBusiness,
+    bool? isCheckingExistingBusiness,
   });
   AddBusinessStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -520,6 +532,7 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     Object? errorMessage = $none,
     Object? successMessage = $none,
     bool? hasExistingBusiness,
+    bool? isCheckingExistingBusiness,
   }) => $apply(
     FieldCopyWithData({
       if (businessType != null) #businessType: businessType,
@@ -550,6 +563,8 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
       if (successMessage != $none) #successMessage: successMessage,
       if (hasExistingBusiness != null)
         #hasExistingBusiness: hasExistingBusiness,
+      if (isCheckingExistingBusiness != null)
+        #isCheckingExistingBusiness: isCheckingExistingBusiness,
     }),
   );
   @override
@@ -599,6 +614,10 @@ class _AddBusinessStateCopyWithImpl<$R, $Out>
     hasExistingBusiness: data.get(
       #hasExistingBusiness,
       or: $value.hasExistingBusiness,
+    ),
+    isCheckingExistingBusiness: data.get(
+      #isCheckingExistingBusiness,
+      or: $value.isCheckingExistingBusiness,
     ),
   );
 

@@ -38,18 +38,20 @@ class UserProfileUseCase {
     r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$',
   );
 
-  Future<UserModel?> getCurrentUser() async {
+  Future<UserModel?> getCurrentUser({bool forceRefresh = false}) async {
     final authenticatedUserId = _authenticationDataSource.currentUser?.uid;
     if (authenticatedUserId == null) {
       return null;
     }
-    final cachedUser = _cachedUser;
-    if (cachedUser != null && _cachedUserId == authenticatedUserId) {
-      return cachedUser;
-    }
-    final pendingRequest = _currentUserRequest;
-    if (pendingRequest != null) {
-      return pendingRequest;
+    if (!forceRefresh) {
+      final cachedUser = _cachedUser;
+      if (cachedUser != null && _cachedUserId == authenticatedUserId) {
+        return cachedUser;
+      }
+      final pendingRequest = _currentUserRequest;
+      if (pendingRequest != null) {
+        return pendingRequest;
+      }
     }
     final request = _loadCurrentUser();
     _currentUserRequest = request;
@@ -89,6 +91,7 @@ class UserProfileUseCase {
     // selection local until that read-side flow is migrated; PostgreSQL only
     // accepts IDs of businesses it owns.
     if (!_postgresUuid.hasMatch(businessId)) {
+      _cacheSelectedBusiness(businessId);
       selectedBusinessId.value = businessId;
       return;
     }
@@ -102,7 +105,16 @@ class UserProfileUseCase {
       throw const UserException('We could not find your profile.');
     }
     _requireVoidSuccess(await _usersRepository.setSelectedBusiness(businessId));
+    _cacheSelectedBusiness(businessId);
     selectedBusinessId.value = businessId;
+  }
+
+  void _cacheSelectedBusiness(String businessId) {
+    final cachedUser = _cachedUser;
+    if (cachedUser == null) {
+      return;
+    }
+    _cachedUser = cachedUser.copyWith(selectedBusinessId: businessId);
   }
 
   Future<void> setUserType({required UserType type}) async {

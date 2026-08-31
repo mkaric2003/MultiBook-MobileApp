@@ -486,11 +486,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
-    gh.factory<_i1063.GetSelectedBusinessUseCase>(
-      () => _i1063.GetSelectedBusinessUseCase(
-        gh<_i41.GetOwnedBusinessesUseCase>(),
-      ),
-    );
     gh.factory<_i928.UpdateUserProfileUseCase>(
       () => _i928.UpdateUserProfileUseCase(gh<_i946.UsersRepository>()),
     );
@@ -527,6 +522,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1025.SessionStreamRegistry>(),
       ),
       dispose: (i) => i.dispose(),
+    );
+    gh.factory<_i1063.GetSelectedBusinessUseCase>(
+      () => _i1063.GetSelectedBusinessUseCase(
+        gh<_i829.GetOwnedBusinessUseCase>(),
+      ),
     );
     gh.lazySingleton<_i682.UserLocationRepository>(
       () => _i682.UserLocationRepository(
@@ -645,6 +645,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i460.SharedPreferences>(),
       ),
     );
+    gh.factory<_i247.ClientEntryCubit>(
+      () => _i247.ClientEntryCubit(
+        gh<_i1063.GetSelectedBusinessUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+      ),
+    );
     gh.lazySingleton<_i1068.BookingRepository>(
       () => _i1068.BookingRepository(
         gh<_i715.AuthenticationDataSource>(),
@@ -664,12 +670,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i297.PaymentCubit(
         gh<_i1068.BookingRepository>(),
         gh<_i675.BookingDraftRepository>(),
-      ),
-    );
-    gh.factory<_i247.ClientEntryCubit>(
-      () => _i247.ClientEntryCubit(
-        gh<_i590.BusinessRepository>(),
-        gh<_i981.UserProfileUseCase>(),
       ),
     );
     gh.factory<_i496.AppointmentAvailabilityCubit>(
@@ -744,6 +744,21 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i899.AppointmentDraftRepository>(),
       ),
     );
+    gh.factory<_i633.AddBusinessBloc>(
+      () => _i633.AddBusinessBloc(
+        gh<_i157.ImagePickerDataSource>(),
+        gh<_i460.SharedPreferences>(),
+        gh<_i590.BusinessRepository>(),
+        gh<_i673.CreateBusinessUseCase>(),
+        gh<_i41.GetOwnedBusinessesUseCase>(),
+        gh<_i829.GetOwnedBusinessUseCase>(),
+        gh<_i835.UpdateBusinessUseCase>(),
+        gh<_i715.AuthenticationDataSource>(),
+        gh<_i594.FirebaseStorageDataSource>(),
+        gh<_i168.DevelopmentSeedUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+      ),
+    );
     gh.factory<_i212.CustomerBookingsCubit>(
       () => _i212.CustomerBookingsCubit(
         gh<_i1068.BookingRepository>(),
@@ -768,20 +783,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i823.BookingDetailsCubit(
         gh<_i1068.BookingRepository>(),
         gh<_i675.BookingDraftRepository>(),
-      ),
-    );
-    gh.factory<_i633.AddBusinessBloc>(
-      () => _i633.AddBusinessBloc(
-        gh<_i157.ImagePickerDataSource>(),
-        gh<_i460.SharedPreferences>(),
-        gh<_i590.BusinessRepository>(),
-        gh<_i673.CreateBusinessUseCase>(),
-        gh<_i41.GetOwnedBusinessesUseCase>(),
-        gh<_i829.GetOwnedBusinessUseCase>(),
-        gh<_i835.UpdateBusinessUseCase>(),
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i594.FirebaseStorageDataSource>(),
-        gh<_i168.DevelopmentSeedUseCase>(),
       ),
     );
     gh.factory<_i154.ClientBookingsCubit>(
