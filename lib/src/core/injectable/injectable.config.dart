@@ -420,7 +420,7 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.lazySingleton<_i139.ServiceSearchDataSource>(
-      () => _i139.ServiceSearchDataSourceImpl(gh<_i809.FirebaseFunctions>()),
+      () => _i139.ServiceSearchDataSourceImpl(gh<_i189.ApiClient>()),
     );
     gh.lazySingleton<_i82.DevelopmentSeedApiDataSource>(
       () => _i82.DevelopmentSeedApiDataSource(gh<_i189.ApiClient>()),

@@ -75,9 +75,8 @@ class CustomerDiscoveryApiDataSource {
   }
 
   Future<BusinessModel> _resolve(BusinessModel business) async {
-    Future<String?> url(String? value) async =>
-        value == null || value.isEmpty || Uri.tryParse(value)?.hasScheme == true
-        ? value
+    Future<String?> url(String? value) => value == null || value.isEmpty
+        ? Future.value(value)
         : _storage.getDownloadUrl(storagePath: value);
     return business.copyWith(
       logoUrl: await url(business.logoUrl),

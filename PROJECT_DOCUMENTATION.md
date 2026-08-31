@@ -531,14 +531,14 @@ Bez aktivnih kompleksnih filtera app koristi direktne, limitirane i cursor-pagin
 
 ### Server-side filter put
 
-Stay filteri koriste Go endpoint `GET /v1/stays/search`, dok service filteri trenutno koriste callable Function `searchServices`. Stay endpoint obrađuje:
+Stay filteri koriste Go endpoint `GET /v1/stays/search`, a service filteri `GET /v1/services/search`. Oba endpointa obrađuju:
 
 - parsiranje/validacija filtera;
-- izgradnja Firestore candidate queryja;
-- normalizacija i mapiranje dokumenata;
-- availability provjera;
-- in-memory provjera samo nad ograničenim kandidatnim batchom;
-- sortiranje i opaque cursor response.
+- validaciju, normalizaciju i mapiranje rezultata;
+- availability provjeru;
+- sortiranje i cursor response.
+
+Service endpoint prihvata datum/vrijeme, kategoriju, featured kolekciju, grad, raspon cijene, sortiranje i cursor. Vraća isti `BusinessModel` oblik koji je Flutter ranije primao od callable funkcije, uključujući ponude, providere, media URL-ove i `nextCursor`.
 
 Service availability provjerava da li barem jedan provider ima cijeli uzastopni raspon slobodnih 30-minutnih slotova za traženo trajanje. To sprječava da se business vrati u rezultatima ako su svi radnici zauzeti u tom vremenu.
 

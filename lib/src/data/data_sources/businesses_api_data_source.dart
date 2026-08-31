@@ -60,7 +60,6 @@ class BusinessesApiDataSource {
 
   Future<String?> _downloadUrl(String? storagePath) async {
     if (storagePath == null || storagePath.isEmpty) return null;
-    if (Uri.tryParse(storagePath)?.hasScheme == true) return storagePath;
     return _storageDataSource.getDownloadUrl(storagePath: storagePath);
   }
 

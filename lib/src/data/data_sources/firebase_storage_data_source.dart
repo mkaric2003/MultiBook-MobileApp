@@ -48,6 +48,11 @@ class FirebaseStorageDataSourceImpl implements FirebaseStorageDataSource {
       _storage.refFromURL(downloadUrl).delete();
 
   @override
-  Future<String> getDownloadUrl({required String storagePath}) =>
-      _storage.ref(storagePath).getDownloadURL();
+  Future<String> getDownloadUrl({required String storagePath}) {
+    final uri = Uri.tryParse(storagePath);
+    if (uri != null && (uri.isScheme('http') || uri.isScheme('https'))) {
+      return Future.value(storagePath);
+    }
+    return _storage.ref(storagePath).getDownloadURL();
+  }
 }
