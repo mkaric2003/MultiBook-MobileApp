@@ -32,6 +32,8 @@ import 'package:multibook/src/data/data_sources/business_metrics_data_source.dar
 import 'package:multibook/src/data/data_sources/businesses_api_data_source.dart'
     as _i768;
 import 'package:multibook/src/data/data_sources/chat_data_source.dart' as _i3;
+import 'package:multibook/src/data/data_sources/customer_checkout_api_data_source.dart'
+    as _i563;
 import 'package:multibook/src/data/data_sources/customer_discovery_api_data_source.dart'
     as _i677;
 import 'package:multibook/src/data/data_sources/customer_drafts_api_data_source.dart'
@@ -74,6 +76,8 @@ import 'package:multibook/src/data/repositories/business_repository.dart'
 import 'package:multibook/src/data/repositories/businesses_repository_impl.dart'
     as _i48;
 import 'package:multibook/src/data/repositories/chat_repository.dart' as _i905;
+import 'package:multibook/src/data/repositories/customer_checkout_repository_impl.dart'
+    as _i865;
 import 'package:multibook/src/data/repositories/customer_discovery_repository_impl.dart'
     as _i614;
 import 'package:multibook/src/data/repositories/customer_drafts_repository_impl.dart'
@@ -110,6 +114,8 @@ import 'package:multibook/src/data/repositories/users_repository_impl.dart'
     as _i595;
 import 'package:multibook/src/domain/repositories/businesses_repository.dart'
     as _i197;
+import 'package:multibook/src/domain/repositories/customer_checkout_repository.dart'
+    as _i465;
 import 'package:multibook/src/domain/repositories/customer_discovery_repository.dart'
     as _i206;
 import 'package:multibook/src/domain/repositories/customer_drafts_repository.dart'
@@ -128,6 +134,8 @@ import 'package:multibook/src/domain/use_cases/businesses/get_selected_business_
     as _i1063;
 import 'package:multibook/src/domain/use_cases/businesses/update_business_use_case.dart'
     as _i835;
+import 'package:multibook/src/domain/use_cases/checkout/customer_checkout_use_case.dart'
+    as _i903;
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart'
     as _i742;
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart'
@@ -425,6 +433,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i82.DevelopmentSeedApiDataSource>(
       () => _i82.DevelopmentSeedApiDataSource(gh<_i189.ApiClient>()),
     );
+    gh.lazySingleton<_i563.CustomerCheckoutApiDataSource>(
+      () => _i563.CustomerCheckoutApiDataSource(gh<_i189.ApiClient>()),
+    );
     gh.factory<_i948.SavedCubit>(
       () => _i948.SavedCubit(gh<_i702.SavedBusinessRepository>()),
     );
@@ -478,6 +489,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i946.UsersRepository>(
       () => _i595.UsersRepositoryImpl(
         gh<_i364.UsersApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
+    );
+    gh.lazySingleton<_i465.CustomerCheckoutRepository>(
+      () => _i865.CustomerCheckoutRepositoryImpl(
+        gh<_i563.CustomerCheckoutApiDataSource>(),
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
@@ -652,6 +669,22 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i460.SharedPreferences>(),
       ),
     );
+    gh.factory<_i903.CustomerCheckoutUseCase>(
+      () =>
+          _i903.CustomerCheckoutUseCase(gh<_i465.CustomerCheckoutRepository>()),
+    );
+    gh.factory<_i297.PaymentCubit>(
+      () => _i297.PaymentCubit(
+        gh<_i903.CustomerCheckoutUseCase>(),
+        gh<_i999.CustomerDraftsUseCase>(),
+      ),
+    );
+    gh.factory<_i535.AppointmentPaymentCubit>(
+      () => _i535.AppointmentPaymentCubit(
+        gh<_i903.CustomerCheckoutUseCase>(),
+        gh<_i999.CustomerDraftsUseCase>(),
+      ),
+    );
     gh.factory<_i247.ClientEntryCubit>(
       () => _i247.ClientEntryCubit(
         gh<_i1063.GetSelectedBusinessUseCase>(),
@@ -698,22 +731,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i999.CustomerDraftsUseCase>(),
       ),
     );
-    gh.factory<_i535.AppointmentPaymentCubit>(
-      () => _i535.AppointmentPaymentCubit(
-        gh<_i331.AppointmentRepository>(),
-        gh<_i999.CustomerDraftsUseCase>(),
-      ),
-    );
     gh.factory<_i227.ExploreCubit>(
       () => _i227.ExploreCubit(
         gh<_i981.UserProfileUseCase>(),
         gh<_i590.BusinessRepository>(),
-      ),
-    );
-    gh.factory<_i297.PaymentCubit>(
-      () => _i297.PaymentCubit(
-        gh<_i1068.BookingRepository>(),
-        gh<_i999.CustomerDraftsUseCase>(),
       ),
     );
     gh.factory<_i378.CustomerSearchCubit>(

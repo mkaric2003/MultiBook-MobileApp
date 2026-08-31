@@ -8,6 +8,12 @@ part 'booking_model.mapper.dart';
 
 @MappableClass()
 class BookingModel with BookingModelMappable {
+  static BookingModel fromMap(Map<String, dynamic> map) =>
+      BookingModelMapper.fromMap(map);
+
+  static BookingModel fromJson(String json) =>
+      BookingModelMapper.fromJson(json);
+
   const BookingModel({
     required this.id,
     required this.businessId,

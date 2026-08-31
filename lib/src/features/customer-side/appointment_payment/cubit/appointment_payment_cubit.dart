@@ -1,5 +1,7 @@
-import 'package:multibook/src/data/repositories/appointment_repository.dart';
 import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
+import 'package:multibook/src/domain/use_cases/checkout/customer_checkout_use_case.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/models/create_appointment_request.dart';
 import 'package:multibook/src/features/customer-side/appointment_payment/cubit/appointment_payment_state.dart';
 import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
 import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
@@ -8,10 +10,12 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
-  AppointmentPaymentCubit(this._repository, this._customerDraftsUseCase)
-    : super(const AppointmentPaymentState());
+  AppointmentPaymentCubit(
+    this._customerCheckoutUseCase,
+    this._customerDraftsUseCase,
+  ) : super(const AppointmentPaymentState());
 
-  final AppointmentRepository _repository;
+  final CustomerCheckoutUseCase _customerCheckoutUseCase;
   final CustomerDraftsUseCase _customerDraftsUseCase;
 
   Future<void> confirm({
@@ -22,15 +26,45 @@ class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
     if (state.isProcessing) return;
     emit(const AppointmentPaymentState(isProcessing: true));
     try {
-      final appointment = await _repository.createAppointment(
-        arguments: arguments,
-        request: request,
-        promoCode: promoCode,
-      );
+      final review = arguments.review;
+      final appointmentResult = await _customerCheckoutUseCase
+          .createAppointment(
+            review.business.id,
+            CreateAppointmentRequest(
+              staffId: review.provider.id,
+              appointmentDate: _date(review.date),
+              startMinutes: review.startMinutes,
+              offeringIds: review.offerings
+                  .map((offering) => offering.id)
+                  .toList(),
+              customerName: request.customerName,
+              customerEmail: request.customerEmail,
+              customerPhone: request.customerPhone,
+              paymentMethod: request.paymentMethod,
+            ),
+          );
+      if (appointmentResult is FailureResult) {
+        emit(
+          const AppointmentPaymentState(
+            errorMessage:
+                'We could not confirm your appointment. Please try again.',
+          ),
+        );
+        return;
+      }
+      final appointment = (appointmentResult as Success).value;
       await _customerDraftsUseCase.deleteAppointmentDraft();
       emit(AppointmentPaymentState(appointment: appointment));
-    } on AppointmentException catch (error) {
-      emit(AppointmentPaymentState(errorMessage: error.message));
+    } catch (_) {
+      emit(
+        const AppointmentPaymentState(
+          errorMessage:
+              'We could not confirm your appointment. Please try again.',
+        ),
+      );
     }
   }
+
+  String _date(DateTime value) =>
+      '${value.year.toString().padLeft(4, '0')}-${value.month.toString().padLeft(2, '0')}-${value.day.toString().padLeft(2, '0')}';
 }
