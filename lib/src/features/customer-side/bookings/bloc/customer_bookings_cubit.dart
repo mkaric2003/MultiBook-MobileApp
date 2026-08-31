@@ -1,8 +1,10 @@
 import 'package:multibook/src/data/data_cursor.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/booking_list_response.dart';
 import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:multibook/src/data/repositories/appointment_repository.dart';
-import 'package:multibook/src/data/repositories/booking_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/domain/use_cases/bookings/customer_bookings_use_case.dart';
 import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
 import 'package:multibook/src/features/customer-side/bookings/domain/enums/customer_booking_type.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,39 +12,43 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class CustomerBookingsCubit extends Cubit<CustomerBookingsState> {
-  CustomerBookingsCubit(this._bookingRepository, this._appointmentRepository)
-    : super(const CustomerBookingsState());
+  CustomerBookingsCubit(
+    this._customerBookingsUseCase,
+    this._appointmentRepository,
+  ) : super(const CustomerBookingsState());
 
-  final BookingRepository _bookingRepository;
+  final CustomerBookingsUseCase _customerBookingsUseCase;
   final AppointmentRepository _appointmentRepository;
-  DataCursor<BookingModel>? _cursor;
   DataCursor<AppointmentModel>? _appointmentCursor;
+  String? _nextBookingCursor;
 
   Future<void> load() async {
     emit(const CustomerBookingsState());
-    try {
-      _cursor = _bookingRepository.getCustomerBookingsCursor();
-      final bookings = await _cursor!.fetchNextPage();
+    _nextBookingCursor = null;
+    final result = await _customerBookingsUseCase.getBookings();
+    if (result is Success<BookingListResponse>) {
+      final page = result.value;
+      _nextBookingCursor = page.nextCursor;
       emit(
         CustomerBookingsState(
-          bookings: bookings,
+          bookings: page.items,
           isLoading: false,
-          hasReachedEnd: _cursor!.isEverythingLoaded,
+          hasReachedEnd: page.nextCursor == null,
         ),
       );
-    } catch (_) {
-      emit(
-        const CustomerBookingsState(
-          isLoading: false,
-          errorMessage: 'We could not load your bookings. Please try again.',
-        ),
-      );
+      return;
     }
+    emit(
+      const CustomerBookingsState(
+        isLoading: false,
+        errorMessage: 'We could not load your bookings. Please try again.',
+      ),
+    );
   }
 
   Future<void> loadMore() async {
-    final cursor = _cursor;
-    if (cursor == null || state.isLoadingMore || cursor.isEverythingLoaded) {
+    final cursor = _nextBookingCursor;
+    if (cursor == null || state.isLoadingMore) {
       return;
     }
     emit(
@@ -53,30 +59,31 @@ class CustomerBookingsCubit extends Cubit<CustomerBookingsState> {
         isLoadingMore: true,
       ),
     );
-    try {
-      final nextPage = await cursor.fetchNextPage();
-      if (cursor != _cursor) return;
+    final result = await _customerBookingsUseCase.getBookings(cursor: cursor);
+    if (cursor != _nextBookingCursor) return;
+    if (result is Success<BookingListResponse>) {
+      final page = result.value;
+      _nextBookingCursor = page.nextCursor;
       emit(
         CustomerBookingsState(
           selectedType: state.selectedType,
-          bookings: [...state.bookings, ...nextPage],
+          bookings: [...state.bookings, ...page.items],
           appointments: state.appointments,
           isLoading: false,
-          hasReachedEnd: cursor.isEverythingLoaded,
+          hasReachedEnd: page.nextCursor == null,
         ),
       );
-    } catch (_) {
-      if (cursor != _cursor) return;
-      emit(
-        CustomerBookingsState(
-          selectedType: state.selectedType,
-          bookings: state.bookings,
-          appointments: state.appointments,
-          isLoading: false,
-          errorMessage: 'We could not load more bookings. Please try again.',
-        ),
-      );
+      return;
     }
+    emit(
+      CustomerBookingsState(
+        selectedType: state.selectedType,
+        bookings: state.bookings,
+        appointments: state.appointments,
+        isLoading: false,
+        errorMessage: 'We could not load more bookings. Please try again.',
+      ),
+    );
   }
 
   void selectType(CustomerBookingType type) {

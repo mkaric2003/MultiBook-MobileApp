@@ -1,7 +1,8 @@
-import 'package:multibook/src/data/enums/booking_status.dart';
-import 'package:multibook/src/data/models/booking_model.dart';
-import 'package:multibook/src/data/repositories/booking_repository.dart';
 import 'package:multibook/src/data/models/booking_draft_model.dart';
+import 'package:multibook/src/data/models/stay_availability_response.dart';
+import 'package:multibook/src/data/models/stay_unavailable_range.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/domain/use_cases/bookings/customer_bookings_use_case.dart';
 import 'package:multibook/src/domain/use_cases/drafts/customer_drafts_use_case.dart';
 import 'package:multibook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
 import 'package:multibook/src/features/customer-side/booking_details/bloc/booking_details_state.dart';
@@ -10,10 +11,12 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class BookingDetailsCubit extends Cubit<BookingDetailsState> {
-  BookingDetailsCubit(this._bookingRepository, this._customerDraftsUseCase)
-    : super(BookingDetailsState.initial());
+  BookingDetailsCubit(
+    this._customerBookingsUseCase,
+    this._customerDraftsUseCase,
+  ) : super(BookingDetailsState.initial());
 
-  final BookingRepository _bookingRepository;
+  final CustomerBookingsUseCase _customerBookingsUseCase;
   final CustomerDraftsUseCase _customerDraftsUseCase;
 
   void restoreDraft(BookingDraftModel draft) => emit(
@@ -46,13 +49,19 @@ class BookingDetailsCubit extends Cubit<BookingDetailsState> {
         ),
       );
 
-  Future<void> loadAvailability(String businessId) async {
+  Future<void> loadAvailability({
+    required String businessId,
+    String? roomTypeId,
+  }) async {
     emit(state.copyWith(isLoadingAvailability: true));
-    try {
-      final bookings = await _bookingRepository.getCustomerBusinessBookings(
-        businessId: businessId,
+    final result = await _customerBookingsUseCase.getAvailability(
+      businessId: businessId,
+      roomTypeId: roomTypeId,
+    );
+    if (result is Success<StayAvailabilityResponse>) {
+      final unavailableDates = _unavailableDates(
+        result.value.unavailableRanges,
       );
-      final unavailableDates = _unavailableDates(bookings);
       final checkIn = _nextAvailableDate(state.checkIn, unavailableDates);
       final canRestoreRange =
           _sameDay(checkIn, state.checkIn) &&
@@ -73,9 +82,9 @@ class BookingDetailsCubit extends Cubit<BookingDetailsState> {
           isLoadingAvailability: false,
         ),
       );
-    } catch (_) {
-      emit(state.copyWith(isLoadingAvailability: false));
+      return;
     }
+    emit(state.copyWith(isLoadingAvailability: false));
   }
 
   void selectDate(DateTime date) {
@@ -132,15 +141,11 @@ class BookingDetailsCubit extends Cubit<BookingDetailsState> {
     emit(state.copyWith(infants: (state.infants + delta).clamp(0, 20)));
   }
 
-  Set<DateTime> _unavailableDates(List<BookingModel> bookings) {
+  Set<DateTime> _unavailableDates(List<StayUnavailableRange> ranges) {
     final dates = <DateTime>{};
-    for (final booking in bookings) {
-      if (booking.status != BookingStatus.confirmed &&
-          booking.status != BookingStatus.completed) {
-        continue;
-      }
-      var date = _dateOnly(booking.checkIn);
-      final checkOut = _dateOnly(booking.checkOut);
+    for (final range in ranges) {
+      var date = _dateOnly(range.checkIn);
+      final checkOut = _dateOnly(range.checkOut);
       while (date.isBefore(checkOut)) {
         dates.add(date);
         date = date.add(const Duration(days: 1));

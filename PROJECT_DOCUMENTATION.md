@@ -128,6 +128,25 @@ Očekivane REST greške ne putuju do Cubit-a kao `DioException` ili `ApiExceptio
 
 Use case vraća `Success<T>` ili `FailureResult<T>`. Cubit grana po tom rezultatu i emituje odgovarajuće UI stanje; ne hvata exception za očekivani REST failure. Korisnički tekst ostaje u presentation/lokalizacijskom sloju, dok se tehnički detalji koriste samo za logovanje.
 
+### 4.1.4 Customer stay bookings REST migracija
+
+Customer stay booking read flow koristi poseban `CustomerBookingsRepository`, jer je odgovornost drugačija od checkout kreiranja i od customer draftova:
+
+```text
+CustomerBookingsCubit / CustomerBookingDetailsCubit / BookingDetailsCubit
+        → CustomerBookingsUseCase
+        → CustomerBookingsRepository
+        → CustomerBookingsRepositoryImpl
+        → CustomerBookingsApiDataSource
+        → ApiClient
+```
+
+- `GET /v1/bookings` vraća samo booking-e prijavljenog customera i REST offset cursor (`nextCursor`); `CustomerBookingsCubit` više ne koristi Firestore `DataCursor` za stay tab.
+- `PATCH /v1/bookings/{id}/cancel` vraća ažurirani `BookingModel`; detail Cubit njime zamjenjuje lokalnu stavku nakon uspješnog otkazivanja.
+- `GET /v1/businesses/{id}/stay/availability` vraća samo `unavailableRanges`, bez tuđih booking detalja. Za multiple-unit stay šalje se `room_type_id`, a backend označava datum nedostupnim tek kada je kapacitet tog room typea popunjen.
+- `BookingListResponse`, `StayAvailabilityResponse` i `StayUnavailableRange` su tipizirani REST response modeli; svaki model je u vlastitom fajlu. `BookingModel` ostaje zajednički persisted model.
+- Firestore `BookingRepository` ostaje samo za još-ne-migrirane provider booking flowove. Customer stay lista, customer cancel i customer calendar availability nemaju Firestore fallback.
+
 ### 4.1.2 Businesses REST migracija
 
 Provider business modul koristi postojeći `BusinessModel` i njegov `dart_mappable` `toMap`/`fromMap`; za REST se ne uvode posebni `CreateBusinessInput`, `CreatedBusiness` ili slični transport modeli.
@@ -393,7 +412,7 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 
 ### My Bookings, Saved, Profile i Explore
 
-- **My bookings** razdvaja stays i services na upcoming/past, uz live osvježavanje nakon cancel akcije.
+- **My bookings** razdvaja stays i services na upcoming/past. Stay tab učitava REST stranice i lokalno se osvježava nakon REST cancel akcije; service appointment tab je zaseban migration korak.
 - **Saved** je vezan za usera; animirano uklanjanje iz liste, toast feedback i trenutno stanje srca na detailu.
 - **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
 - **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).

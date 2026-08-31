@@ -32,6 +32,8 @@ import 'package:multibook/src/data/data_sources/business_metrics_data_source.dar
 import 'package:multibook/src/data/data_sources/businesses_api_data_source.dart'
     as _i768;
 import 'package:multibook/src/data/data_sources/chat_data_source.dart' as _i3;
+import 'package:multibook/src/data/data_sources/customer_bookings_api_data_source.dart'
+    as _i488;
 import 'package:multibook/src/data/data_sources/customer_checkout_api_data_source.dart'
     as _i563;
 import 'package:multibook/src/data/data_sources/customer_discovery_api_data_source.dart'
@@ -76,6 +78,8 @@ import 'package:multibook/src/data/repositories/business_repository.dart'
 import 'package:multibook/src/data/repositories/businesses_repository_impl.dart'
     as _i48;
 import 'package:multibook/src/data/repositories/chat_repository.dart' as _i905;
+import 'package:multibook/src/data/repositories/customer_bookings_repository_impl.dart'
+    as _i609;
 import 'package:multibook/src/data/repositories/customer_checkout_repository_impl.dart'
     as _i865;
 import 'package:multibook/src/data/repositories/customer_discovery_repository_impl.dart'
@@ -114,6 +118,8 @@ import 'package:multibook/src/data/repositories/users_repository_impl.dart'
     as _i595;
 import 'package:multibook/src/domain/repositories/businesses_repository.dart'
     as _i197;
+import 'package:multibook/src/domain/repositories/customer_bookings_repository.dart'
+    as _i580;
 import 'package:multibook/src/domain/repositories/customer_checkout_repository.dart'
     as _i465;
 import 'package:multibook/src/domain/repositories/customer_discovery_repository.dart'
@@ -124,6 +130,8 @@ import 'package:multibook/src/domain/repositories/development_seed_repository.da
     as _i333;
 import 'package:multibook/src/domain/repositories/users_repository.dart'
     as _i946;
+import 'package:multibook/src/domain/use_cases/bookings/customer_bookings_use_case.dart'
+    as _i366;
 import 'package:multibook/src/domain/use_cases/businesses/create_business_use_case.dart'
     as _i673;
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_business_use_case.dart'
@@ -436,6 +444,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i563.CustomerCheckoutApiDataSource>(
       () => _i563.CustomerCheckoutApiDataSource(gh<_i189.ApiClient>()),
     );
+    gh.lazySingleton<_i488.CustomerBookingsApiDataSource>(
+      () => _i488.CustomerBookingsApiDataSource(gh<_i189.ApiClient>()),
+    );
+    gh.lazySingleton<_i580.CustomerBookingsRepository>(
+      () => _i609.CustomerBookingsRepositoryImpl(
+        gh<_i488.CustomerBookingsApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
+    );
     gh.factory<_i948.SavedCubit>(
       () => _i948.SavedCubit(gh<_i702.SavedBusinessRepository>()),
     );
@@ -456,6 +473,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i305.AppointmentPromotionCubit>(
       () => _i305.AppointmentPromotionCubit(gh<_i1038.PromotionRepository>()),
+    );
+    gh.factory<_i366.CustomerBookingsUseCase>(
+      () =>
+          _i366.CustomerBookingsUseCase(gh<_i580.CustomerBookingsRepository>()),
     );
     gh.factory<_i272.NotificationsCubit>(
       () => _i272.NotificationsCubit(gh<_i26.NotificationRepository>()),
@@ -490,6 +511,17 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i595.UsersRepositoryImpl(
         gh<_i364.UsersApiDataSource>(),
         gh<_i411.RestRepositoryExecutor>(),
+      ),
+    );
+    gh.factoryParam<
+      _i387.CustomerBookingDetailsCubit,
+      _i259.BookingModel,
+      dynamic
+    >(
+      (booking, _) => _i387.CustomerBookingDetailsCubit(
+        gh<_i366.CustomerBookingsUseCase>(),
+        gh<_i682.ReviewRepository>(),
+        booking,
       ),
     );
     gh.lazySingleton<_i465.CustomerCheckoutRepository>(
@@ -691,6 +723,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
       ),
     );
+    gh.factory<_i823.BookingDetailsCubit>(
+      () => _i823.BookingDetailsCubit(
+        gh<_i366.CustomerBookingsUseCase>(),
+        gh<_i999.CustomerDraftsUseCase>(),
+      ),
+    );
     gh.lazySingleton<_i1068.BookingRepository>(
       () => _i1068.BookingRepository(
         gh<_i715.AuthenticationDataSource>(),
@@ -756,12 +794,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1038.PromotionRepository>(),
       ),
     );
-    gh.factory<_i823.BookingDetailsCubit>(
-      () => _i823.BookingDetailsCubit(
-        gh<_i1068.BookingRepository>(),
-        gh<_i999.CustomerDraftsUseCase>(),
-      ),
-    );
     gh.factory<_i702.ServiceDetailCubit>(
       () => _i702.ServiceDetailCubit(
         gh<_i742.GetBusinessDetailUseCase>(),
@@ -778,6 +810,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i682.ReviewRepository>(),
       ),
     );
+    gh.factory<_i212.CustomerBookingsCubit>(
+      () => _i212.CustomerBookingsCubit(
+        gh<_i366.CustomerBookingsUseCase>(),
+        gh<_i331.AppointmentRepository>(),
+      ),
+    );
     gh.factory<_i633.AddBusinessBloc>(
       () => _i633.AddBusinessBloc(
         gh<_i157.ImagePickerDataSource>(),
@@ -791,12 +829,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i594.FirebaseStorageDataSource>(),
         gh<_i168.DevelopmentSeedUseCase>(),
         gh<_i981.UserProfileUseCase>(),
-      ),
-    );
-    gh.factory<_i212.CustomerBookingsCubit>(
-      () => _i212.CustomerBookingsCubit(
-        gh<_i1068.BookingRepository>(),
-        gh<_i331.AppointmentRepository>(),
       ),
     );
     gh.factory<_i223.MoreCubit>(
@@ -819,17 +851,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i331.AppointmentRepository>(),
         gh<_i590.BusinessRepository>(),
         gh<_i981.UserProfileUseCase>(),
-      ),
-    );
-    gh.factoryParam<
-      _i387.CustomerBookingDetailsCubit,
-      _i259.BookingModel,
-      dynamic
-    >(
-      (booking, _) => _i387.CustomerBookingDetailsCubit(
-        gh<_i1068.BookingRepository>(),
-        gh<_i682.ReviewRepository>(),
-        booking,
       ),
     );
     gh.factory<_i41.CustomerDashboardCubit>(

@@ -27,7 +27,10 @@ class BookingDetailsView extends StatelessWidget {
       create: (_) {
         final cubit = getIt<BookingDetailsCubit>();
         if (arguments.draft != null) cubit.restoreDraft(arguments.draft!);
-        return cubit..loadAvailability(arguments.stay.id);
+        return cubit..loadAvailability(
+          businessId: arguments.stay.id,
+          roomTypeId: arguments.room?.id,
+        );
       },
       child: BlocBuilder<BookingDetailsCubit, BookingDetailsState>(
         builder: (context, state) => Scaffold(
