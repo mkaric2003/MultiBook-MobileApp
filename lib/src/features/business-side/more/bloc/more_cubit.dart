@@ -25,11 +25,11 @@ class MoreCubit extends Cubit<MoreState> {
   final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription? _conversationsSubscription;
 
-  Future<void> load() async {
+  Future<void> load({String? businessId}) async {
     final user = await _userRepository.getCurrentUser();
     final businesses = await _businessRepository.getOwnedBusinesses();
     final selectedBusiness =
-        _findBusiness(businesses, user?.selectedBusinessId) ??
+        _findBusiness(businesses, businessId ?? user?.selectedBusinessId) ??
         (businesses.isEmpty ? null : businesses.first);
 
     if (selectedBusiness != null &&
