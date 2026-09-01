@@ -22,6 +22,8 @@ import 'package:multibook/src/core/errors/rest_repository_executor.dart'
 import 'package:multibook/src/core/modules/firebase_module.dart' as _i548;
 import 'package:multibook/src/core/modules/shared_preferences_module.dart'
     as _i92;
+import 'package:multibook/src/core/services/notification_device_service.dart'
+    as _i26;
 import 'package:multibook/src/core/session/session_stream_registry.dart'
     as _i1025;
 import 'package:multibook/src/data/data_sources/api_client.dart' as _i189;
@@ -52,8 +54,8 @@ import 'package:multibook/src/data/data_sources/firestore_data_source.dart'
     as _i198;
 import 'package:multibook/src/data/data_sources/image_picker_data_source.dart'
     as _i157;
-import 'package:multibook/src/data/data_sources/in_app_notification_data_source.dart'
-    as _i467;
+import 'package:multibook/src/data/data_sources/in_app_notifications_api_data_source.dart'
+    as _i217;
 import 'package:multibook/src/data/data_sources/nominatim_data_source.dart'
     as _i117;
 import 'package:multibook/src/data/data_sources/notification_data_source.dart'
@@ -92,10 +94,10 @@ import 'package:multibook/src/data/repositories/customer_drafts_repository_impl.
     as _i675;
 import 'package:multibook/src/data/repositories/development_seed_repository_impl.dart'
     as _i795;
+import 'package:multibook/src/data/repositories/in_app_notifications_repository_impl.dart'
+    as _i367;
 import 'package:multibook/src/data/repositories/locale_repository.dart'
     as _i724;
-import 'package:multibook/src/data/repositories/notification_repository.dart'
-    as _i26;
 import 'package:multibook/src/data/repositories/onboarding_repository.dart'
     as _i38;
 import 'package:multibook/src/data/repositories/payment_methods_repository.dart'
@@ -136,6 +138,8 @@ import 'package:multibook/src/domain/repositories/customer_drafts_repository.dar
     as _i238;
 import 'package:multibook/src/domain/repositories/development_seed_repository.dart'
     as _i333;
+import 'package:multibook/src/domain/repositories/in_app_notifications_repository.dart'
+    as _i587;
 import 'package:multibook/src/domain/repositories/provider_bookings_repository.dart'
     as _i696;
 import 'package:multibook/src/domain/repositories/users_repository.dart'
@@ -184,6 +188,16 @@ import 'package:multibook/src/domain/use_cases/drafts/save_appointment_draft_use
     as _i811;
 import 'package:multibook/src/domain/use_cases/drafts/save_booking_draft_use_case.dart'
     as _i305;
+import 'package:multibook/src/domain/use_cases/notifications/get_in_app_notifications_use_case.dart'
+    as _i569;
+import 'package:multibook/src/domain/use_cases/notifications/get_unread_notifications_count_use_case.dart'
+    as _i884;
+import 'package:multibook/src/domain/use_cases/notifications/mark_in_app_notification_as_read_use_case.dart'
+    as _i859;
+import 'package:multibook/src/domain/use_cases/notifications/register_notification_device_use_case.dart'
+    as _i801;
+import 'package:multibook/src/domain/use_cases/notifications/unregister_notification_device_use_case.dart'
+    as _i154;
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_appointments_use_case.dart'
     as _i308;
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_bookings_use_case.dart'
@@ -284,6 +298,8 @@ import 'package:multibook/src/features/shared/localization/cubit/locale_cubit.da
     as _i889;
 import 'package:multibook/src/features/shared/notifications/cubit/notifications_cubit.dart'
     as _i272;
+import 'package:multibook/src/features/shared/notifications/cubit/notification_bell_cubit.dart'
+    as _i348;
 import 'package:multibook/src/features/shared/onboarding/cubit/onboarding_cubit.dart'
     as _i400;
 import 'package:multibook/src/features/shared/rate_business/cubit/rate_business_cubit.dart'
@@ -372,10 +388,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i889.LocaleCubit>(
       () => _i889.LocaleCubit(gh<_i724.LocaleRepository>()),
-    );
-    gh.lazySingleton<_i467.InAppNotificationDataSource>(
-      () =>
-          _i467.InAppNotificationDataSourceImpl(gh<_i974.FirebaseFirestore>()),
     );
     gh.lazySingleton<_i911.ReviewDataSource>(
       () => _i911.ReviewDataSourceImpl(gh<_i809.FirebaseFunctions>()),
@@ -493,6 +505,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i651.ProviderBookingsApiDataSource>(
       () => _i651.ProviderBookingsApiDataSource(gh<_i189.ApiClient>()),
     );
+    gh.lazySingleton<_i217.InAppNotificationsApiDataSource>(
+      () => _i217.InAppNotificationsApiDataSource(gh<_i189.ApiClient>()),
+    );
     gh.lazySingleton<_i580.CustomerBookingsRepository>(
       () => _i609.CustomerBookingsRepositoryImpl(
         gh<_i488.CustomerBookingsApiDataSource>(),
@@ -511,14 +526,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i108.PaymentMethodsCubit>(
       () => _i108.PaymentMethodsCubit(gh<_i447.PaymentMethodsRepository>()),
     );
-    gh.lazySingleton<_i26.NotificationRepository>(
-      () => _i26.NotificationRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
-        gh<_i190.NotificationDataSource>(),
-        gh<_i467.InAppNotificationDataSource>(),
+    gh.lazySingleton<_i587.InAppNotificationsRepository>(
+      () => _i367.InAppNotificationsRepositoryImpl(
+        gh<_i217.InAppNotificationsApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
       ),
-      dispose: (i) => i.dispose(),
     );
     gh.factory<_i455.BookingPromotionCubit>(
       () => _i455.BookingPromotionCubit(gh<_i1038.PromotionRepository>()),
@@ -540,9 +552,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i528.CancelCustomerBookingUseCase(
         gh<_i580.CustomerBookingsRepository>(),
       ),
-    );
-    gh.factory<_i272.NotificationsCubit>(
-      () => _i272.NotificationsCubit(gh<_i26.NotificationRepository>()),
     );
     gh.lazySingleton<_i197.BusinessesRepository>(
       () => _i48.BusinessesRepositoryImpl(
@@ -668,14 +677,30 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i946.UsersRepository>(),
       ),
     );
-    gh.lazySingleton<_i869.AuthenticationRepository>(
-      () => _i869.AuthenticationRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i928.UpdateUserProfileUseCase>(),
-        gh<_i26.NotificationRepository>(),
-        gh<_i1025.SessionStreamRegistry>(),
+    gh.factory<_i859.MarkInAppNotificationAsReadUseCase>(
+      () => _i859.MarkInAppNotificationAsReadUseCase(
+        gh<_i587.InAppNotificationsRepository>(),
       ),
-      dispose: (i) => i.dispose(),
+    );
+    gh.factory<_i569.GetInAppNotificationsUseCase>(
+      () => _i569.GetInAppNotificationsUseCase(
+        gh<_i587.InAppNotificationsRepository>(),
+      ),
+    );
+    gh.factory<_i801.RegisterNotificationDeviceUseCase>(
+      () => _i801.RegisterNotificationDeviceUseCase(
+        gh<_i587.InAppNotificationsRepository>(),
+      ),
+    );
+    gh.factory<_i154.UnregisterNotificationDeviceUseCase>(
+      () => _i154.UnregisterNotificationDeviceUseCase(
+        gh<_i587.InAppNotificationsRepository>(),
+      ),
+    );
+    gh.factory<_i884.GetUnreadNotificationsCountUseCase>(
+      () => _i884.GetUnreadNotificationsCountUseCase(
+        gh<_i587.InAppNotificationsRepository>(),
+      ),
     );
     gh.factory<_i1063.GetSelectedBusinessUseCase>(
       () => _i1063.GetSelectedBusinessUseCase(
@@ -697,6 +722,18 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1025.SessionStreamRegistry>(),
       ),
     );
+    gh.factory<_i272.NotificationsCubit>(
+      () => _i272.NotificationsCubit(
+        gh<_i569.GetInAppNotificationsUseCase>(),
+        gh<_i859.MarkInAppNotificationAsReadUseCase>(),
+      ),
+    );
+    gh.factory<_i348.NotificationBellCubit>(
+      () => _i348.NotificationBellCubit(
+        gh<_i884.GetUnreadNotificationsCountUseCase>(),
+        gh<_i26.NotificationDeviceService>(),
+      ),
+    );
     gh.factory<_i212.CustomerBookingsCubit>(
       () => _i212.CustomerBookingsCubit(
         gh<_i498.GetCustomerBookingsUseCase>(),
@@ -710,15 +747,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i190.UserTypeCheckerCubit>(
       () => _i190.UserTypeCheckerCubit(gh<_i919.UpdateUserRoleUseCase>()),
-    );
-    gh.factory<_i379.SignupCubit>(
-      () => _i379.SignupCubit(gh<_i869.AuthenticationRepository>()),
-    );
-    gh.factory<_i738.HomeBloc>(
-      () => _i738.HomeBloc(gh<_i869.AuthenticationRepository>()),
-    );
-    gh.factory<_i975.ChangePasswordCubit>(
-      () => _i975.ChangePasswordCubit(gh<_i869.AuthenticationRepository>()),
     );
     gh.factory<_i134.UserLocationCubit>(
       () => _i134.UserLocationCubit(gh<_i682.UserLocationRepository>()),
@@ -751,20 +779,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
         gh<_i590.BusinessRepository>(),
         gh<_i694.BusinessMetricsRepository>(),
-        gh<_i1025.SessionStreamRegistry>(),
-      ),
-    );
-    gh.factory<_i488.SigninCubit>(
-      () => _i488.SigninCubit(
-        gh<_i869.AuthenticationRepository>(),
-        gh<_i981.UserProfileUseCase>(),
-      ),
-    );
-    gh.factory<_i103.CustomerProfileCubit>(
-      () => _i103.CustomerProfileCubit(
-        gh<_i869.AuthenticationRepository>(),
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i905.ChatRepository>(),
         gh<_i1025.SessionStreamRegistry>(),
       ),
     );
@@ -827,6 +841,15 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i157.ImagePickerDataSource>(),
         gh<_i460.SharedPreferences>(),
       ),
+    );
+    gh.lazySingleton<_i26.NotificationDeviceService>(
+      () => _i26.NotificationDeviceService(
+        gh<_i715.AuthenticationDataSource>(),
+        gh<_i190.NotificationDataSource>(),
+        gh<_i801.RegisterNotificationDeviceUseCase>(),
+        gh<_i154.UnregisterNotificationDeviceUseCase>(),
+      ),
+      dispose: (i) => i.dispose(),
     );
     gh.factory<_i776.CreateCustomerAppointmentUseCase>(
       () => _i776.CreateCustomerAppointmentUseCase(
@@ -940,6 +963,15 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i682.ReviewRepository>(),
       ),
     );
+    gh.lazySingleton<_i869.AuthenticationRepository>(
+      () => _i869.AuthenticationRepository(
+        gh<_i715.AuthenticationDataSource>(),
+        gh<_i928.UpdateUserProfileUseCase>(),
+        gh<_i26.NotificationDeviceService>(),
+        gh<_i1025.SessionStreamRegistry>(),
+      ),
+      dispose: (i) => i.dispose(),
+    );
     gh.factory<_i633.AddBusinessBloc>(
       () => _i633.AddBusinessBloc(
         gh<_i157.ImagePickerDataSource>(),
@@ -979,6 +1011,29 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i297.PaymentCubit(
         gh<_i652.CreateCustomerBookingUseCase>(),
         gh<_i300.DeleteBookingDraftUseCase>(),
+      ),
+    );
+    gh.factory<_i379.SignupCubit>(
+      () => _i379.SignupCubit(gh<_i869.AuthenticationRepository>()),
+    );
+    gh.factory<_i738.HomeBloc>(
+      () => _i738.HomeBloc(gh<_i869.AuthenticationRepository>()),
+    );
+    gh.factory<_i975.ChangePasswordCubit>(
+      () => _i975.ChangePasswordCubit(gh<_i869.AuthenticationRepository>()),
+    );
+    gh.factory<_i488.SigninCubit>(
+      () => _i488.SigninCubit(
+        gh<_i869.AuthenticationRepository>(),
+        gh<_i981.UserProfileUseCase>(),
+      ),
+    );
+    gh.factory<_i103.CustomerProfileCubit>(
+      () => _i103.CustomerProfileCubit(
+        gh<_i869.AuthenticationRepository>(),
+        gh<_i981.UserProfileUseCase>(),
+        gh<_i905.ChatRepository>(),
+        gh<_i1025.SessionStreamRegistry>(),
       ),
     );
     gh.factory<_i806.SupportTicketsCubit>(

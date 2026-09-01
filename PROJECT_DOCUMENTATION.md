@@ -502,36 +502,38 @@ Chat se otvara iz booking/appointment detalja kroz *Message provider/customer* i
 
 ### In-app i push podjela
 
-- Booking i appointment događaji stvaraju **in-app notification** dokument i, kada uređaj ima token, šalju push notifikaciju.
+- Booking i appointment događaji se zapisuju kao **in-app notification** u Supabase PostgreSQL bazu preko Go API-ja. Nakon uspješnog zapisa API šalje FCM push na registrirane uređaje.
 - Chat koristi **samo push** (ako chat nije otvoren) i unread message counter; ne proizvodi dupliciranu in-app notifikaciju.
 - Potvrda kreiranja booking/appointmenta ne šalje customeru suvišnu “confirmed” notifikaciju, jer confirmation ekran već potvrđuje uspjeh.
 
-### Cloud Function triggeri
+Flutter FCM lifecycle vodi `NotificationDeviceService`: nakon prijave registruje token putem `PUT /v1/notification-devices/{deviceId}`, a pri odjavi ga uklanja putem `DELETE` rute. `NotificationBellCubit` poziva `GetUnreadNotificationsCountUseCase`, ne poziva use case iz widgeta. Kada aplikacija u foregroundu primi FCM poruku, Cubit odmah osvježi `GET /v1/notifications/unread-count`; periodični refresh svakih 30 sekundi ostaje samo kao fallback. Nema WebSocket konekcije.
 
-| Trigger | Efekat |
+### Dispatch događaja
+
+| Izvor | Efekat |
 |---|---|
-| `notifyOnBookingCreated` | Provider dobija notifikaciju o novom bookingu |
-| `notifyOnBookingStatusChanged` | Customer dobija promjenu statusa bookinga |
-| `notifyOnAppointmentCreated` | Provider dobija notifikaciju o novom appointmentu |
-| `notifyOnAppointmentStatusChanged` | Customer dobija promjenu statusa appointmenta |
+| Go API: booking created | Provider dobija in-app i FCM notifikaciju o novom bookingu |
+| Go API: booking status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa bookinga |
+| Go API: appointment created | Provider dobija in-app i FCM notifikaciju o novom appointmentu |
+| Go API: appointment status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa appointmenta |
 | `notifyOnChatMessageCreated` | Push samo ako recipient nije aktivan u istom chatu |
 | `initializeBusinessMetrics` | Callable inicijalizacija ili verzionirana obnova KPI i earnings agregata za owner business |
 
-Promjene booking/appointment dokumenata istovremeno ažuriraju `business_metrics`: novi confirmed zapis dodaje prihod, a `declined`, `cancelled` ili no-show (`noShow` za booking, `no_show` za appointment) ga uklanja. Gotovina se računa pri potvrdi, ne tek pri ručnom označavanju kao completed.
+Migracija `000019_notifications` kreira Supabase tabele `notification_devices` i `in_app_notifications`. API je jedini klijent Supabasea; Flutter ne pristupa Supabaseu direktno. Push failure ne poništava već uspješno spremljenu booking/appointment promjenu ili in-app zapis.
 
-`notification_dispatcher` koristi transaction claim pattern (`processing`, timeout, attempts) kako se ista notifikacija ne bi više puta brojala ili slala pri retryju. Nevalidni FCM tokeni se uklanjaju iz `users/{uid}/devices`.
+FCM tokeni se čuvaju po `user_id` i `device_id`; ponovna registracija istog uređaja osvježava token. API koristi idempotentne ID-jeve notifikacija, pa se isti business događaj ne upisuje duplo.
 
 Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FCM push ne može biti pouzdano testiran na iOS-u. In-app podaci i dalje rade nezavisno od APNs-a.
 
 ---
 
-## 13. Firebase model podataka
+## 13. Firebase i backend model podataka
 
-| Putanja | Svrha |
+| Spremište / putanja | Svrha |
 |---|---|
-| `users/{uid}` | korisnički profil, tip, selected business, grad/adresa i unread counteri |
-| `users/{uid}/devices/{deviceId}` | FCM tokeni uređaja |
-| `users/{uid}/notifications/{id}` | in-app notifikacije |
+| `users/{uid}` | korisnički profil, tip, selected business, grad/adresa i chat unread counteri |
+| Supabase `notification_devices` | FCM tokeni uređaja, dostupni samo kroz Go API |
+| Supabase `in_app_notifications` | in-app notifikacije, read status i payload, dostupni samo kroz Go API |
 | `users/{uid}/recently_viewed/{businessId}` | nedavno otvoreni businessi |
 | `businesses/{businessId}` | stay ili service business, detalji, mediji, lokacija i discovery polja |
 | `promotions/{id}` | ownerov promotion konfigurisan za jedan business; business čuva samo `isPromotionActive` signal |

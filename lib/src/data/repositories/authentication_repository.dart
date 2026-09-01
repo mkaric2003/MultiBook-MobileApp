@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
+import 'package:multibook/src/core/services/notification_device_service.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
 import 'package:multibook/src/data/models/user_model.dart';
-import 'package:multibook/src/data/repositories/notification_repository.dart';
 import 'package:multibook/src/domain/use_cases/users/update_user_profile_use_case.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -26,7 +26,7 @@ class AuthenticationRepository {
   AuthenticationRepository(
     this._authenticationDataSource,
     this._updateUserProfileUseCase,
-    this._notificationRepository,
+    this._notificationDeviceService,
     this._sessionStreamRegistry,
   ) {
     _authStateNotifier = ValueNotifier<User?>(
@@ -52,7 +52,7 @@ class AuthenticationRepository {
 
   final AuthenticationDataSource _authenticationDataSource;
   final UpdateUserProfileUseCase _updateUserProfileUseCase;
-  final NotificationRepository _notificationRepository;
+  final NotificationDeviceService _notificationDeviceService;
   final SessionStreamRegistry _sessionStreamRegistry;
   late final ValueNotifier<User?> _authStateNotifier;
   late final StreamSubscription<User?> _authStateSubscription;
@@ -370,7 +370,7 @@ class AuthenticationRepository {
 
   Future<void> _registerNotificationDevice() async {
     try {
-      await _notificationRepository.registerCurrentDevice();
+      await _notificationDeviceService.registerCurrentDevice();
     } catch (error, stackTrace) {
       log(
         'Notification device registration failed.',
@@ -383,7 +383,7 @@ class AuthenticationRepository {
 
   Future<void> _unregisterNotificationDevice() async {
     try {
-      await _notificationRepository.unregisterCurrentDevice();
+      await _notificationDeviceService.unregisterCurrentDevice();
     } catch (error, stackTrace) {
       log(
         'Notification device removal failed.',
