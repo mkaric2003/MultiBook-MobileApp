@@ -3,7 +3,8 @@ import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
 import 'package:multibook/src/data/models/business_review_model.dart';
 import 'package:multibook/src/data/repositories/saved_business_repository.dart';
-import 'package:multibook/src/data/repositories/recently_viewed_repository.dart';
+import 'package:multibook/src/domain/use_cases/recently_viewed/record_recently_viewed_use_case.dart';
+import 'package:multibook/src/core/services/recently_viewed_updates_service.dart';
 import 'package:multibook/src/data/repositories/review_repository.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:multibook/src/features/customer-side/stay_detail/cubit/stay_detail_state.dart';
@@ -15,13 +16,15 @@ class StayDetailCubit extends Cubit<StayDetailState> {
   StayDetailCubit(
     this._getBusinessDetail,
     this._savedRepository,
-    this._recentlyViewedRepository,
+    this._recordRecentlyViewed,
+    this._recentlyViewedUpdates,
     this._reviewRepository,
   ) : super(const StayDetailState());
 
   final GetBusinessDetailUseCase _getBusinessDetail;
   final SavedBusinessRepository _savedRepository;
-  final RecentlyViewedRepository _recentlyViewedRepository;
+  final RecordRecentlyViewedUseCase _recordRecentlyViewed;
+  final RecentlyViewedUpdatesService _recentlyViewedUpdates;
   final ReviewRepository _reviewRepository;
 
   Future<void> loadStay(String businessId) async {
@@ -33,7 +36,8 @@ class StayDetailCubit extends Cubit<StayDetailState> {
         return;
       }
       final business = result.value;
-      await _recentlyViewedRepository.recordBusinessView(business);
+      final recordResult = await _recordRecentlyViewed.execute(business.id);
+      if (recordResult is Success<void>) _recentlyViewedUpdates.notifyChanged();
       final results = await Future.wait([
         _savedRepository.isSaved(business.id),
         _reviewRepository.getPreviewReviews(business.id),

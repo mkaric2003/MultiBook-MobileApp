@@ -440,8 +440,8 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 - **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
 - **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).
 - Ticketi se čuvaju u `support_tickets`; Firestore pravila dozvoljavaju customeru kreiranje i čitanje samo vlastitih zahtjeva, dok status kasnije mijenja interni support/admin alat.
-- **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed. Dinamički discovery/search podaci dolaze s Go endpointa, bez Firestore fallbacka; recently viewed ostaje zaseban shared user-history feature.
-- Recently viewed se sprema po useru i po businessu; naslov se ne prikazuje kada nema podataka.
+- **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed. Dinamički discovery/search podaci dolaze s Go endpointa, bez Firestore fallbacka.
+- Recently viewed se sprema po useru i businessu preko `PUT /v1/recently-viewed/{businessID}`, a stay/service liste čitaju `GET /v1/recently-viewed`. Backend zadržava najviše 30 referenci po useru i pri čitanju vraća aktuelne business podatke, bez Firestore fallbacka ili dupliciranja kartica. Nakon uspješnog REST upisa, `RecentlyViewedUpdatesService` šalje lokalni broadcast signal aktivnim Recently Viewed cubitima da osvježe listu; nema socket konekcije ni periodičnog pollinga.
 - Rezultati kategorije/kolekcije koriste cursor paginaciju.
 
 ---
