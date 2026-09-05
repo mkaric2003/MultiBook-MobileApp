@@ -1,12 +1,14 @@
-import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/data/models/business_model.dart';
 
 class SavedState {
   const SavedState({
-    this.stays = const [],
+    this.businesses = const [],
     this.isLoading = false,
     this.removingId,
+    this.hasError = false,
   });
-  final List<StayListing> stays;
+  final List<BusinessModel> businesses;
   final bool isLoading;
   final String? removingId;
+  final bool hasError;
 }

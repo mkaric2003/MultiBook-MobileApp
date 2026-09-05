@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
 import 'package:multibook/src/data/models/business_review_model.dart';
-import 'package:multibook/src/data/repositories/saved_business_repository.dart';
+import 'package:multibook/src/core/services/saved_business_updates_service.dart';
+import 'package:multibook/src/domain/use_cases/saved/is_business_saved_use_case.dart';
+import 'package:multibook/src/domain/use_cases/saved/save_business_use_case.dart';
+import 'package:multibook/src/domain/use_cases/saved/remove_saved_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/recently_viewed/record_recently_viewed_use_case.dart';
 import 'package:multibook/src/core/services/recently_viewed_updates_service.dart';
 import 'package:multibook/src/data/repositories/review_repository.dart';
@@ -15,14 +20,26 @@ import 'package:injectable/injectable.dart';
 class ServiceDetailCubit extends Cubit<ServiceDetailState> {
   ServiceDetailCubit(
     this._getBusinessDetail,
-    this._savedRepository,
+    this._isBusinessSaved,
+    this._saveBusiness,
+    this._removeSavedBusiness,
+    this._savedUpdates,
     this._recordRecentlyViewed,
     this._recentlyViewedUpdates,
     this._reviewRepository,
-  ) : super(const ServiceDetailState());
+  ) : super(const ServiceDetailState()) {
+    _savedSubscription = _savedUpdates.changes.listen((_) => _refreshSaved());
+  }
 
   final GetBusinessDetailUseCase _getBusinessDetail;
-  final SavedBusinessRepository _savedRepository;
+  final IsBusinessSavedUseCase _isBusinessSaved;
+  final SaveBusinessUseCase _saveBusiness;
+  final RemoveSavedBusinessUseCase _removeSavedBusiness;
+  final SavedBusinessUpdatesService _savedUpdates;
+  late final StreamSubscription<void> _savedSubscription;
+  bool _saving = false;
+  bool _savedKnown = false;
+  int _savedRevision = 0;
   final RecordRecentlyViewedUseCase _recordRecentlyViewed;
   final RecentlyViewedUpdatesService _recentlyViewedUpdates;
   final ReviewRepository _reviewRepository;
@@ -31,6 +48,7 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
     emit(const ServiceDetailState(isLoading: true));
     try {
       final result = await _getBusinessDetail.execute(businessId);
+      if (isClosed) return;
       if (result is! Success<BusinessModel>) {
         emit(
           const ServiceDetailState(
@@ -43,32 +61,83 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
       final recordResult = await _recordRecentlyViewed.execute(business.id);
       if (recordResult is Success<void>) _recentlyViewedUpdates.notifyChanged();
       final results = await Future.wait([
-        _savedRepository.isSaved(business.id),
+        _isBusinessSaved.execute(business.id),
         _reviewRepository.getPreviewReviews(business.id),
       ]);
+      if (isClosed) return;
+      _savedKnown = results[0] is Success<bool>;
       emit(
         ServiceDetailState(
           business: business,
-          isSaved: results[0] as bool,
+          isSaved: switch (results[0]) {
+            Success<bool>(value: final saved) => saved,
+            _ => false,
+          },
           reviews: results[1] as List<BusinessReviewModel>,
         ),
       );
     } catch (_) {
+      if (isClosed) return;
       emit(
         const ServiceDetailState(errorMessage: 'This service is unavailable.'),
       );
     }
   }
 
-  Future<void> toggleSaved(ServiceListing service) async {
-    final wasSaved = state.isSaved;
+  Future<void> _refreshSaved() async {
+    final id = state.business?.id;
+    if (id == null || _saving || isClosed) return;
+    final revision = ++_savedRevision;
+    final result = await _isBusinessSaved.execute(id);
+    if (isClosed ||
+        _saving ||
+        revision != _savedRevision ||
+        state.business?.id != id) {
+      return;
+    }
+    if (result case Success<bool>(value: final saved)) {
+      _savedKnown = true;
+      emit(
+        ServiceDetailState(
+          business: state.business,
+          isSaved: saved,
+          reviews: state.reviews,
+        ),
+      );
+    }
+  }
+
+  Future<bool> toggleSaved(ServiceListing service) async {
+    if (_saving || isClosed) return false;
+    if (!_savedKnown) {
+      await _refreshSaved();
+      if (!_savedKnown || _saving || isClosed) return false;
+    }
+    _saving = true;
+    ++_savedRevision;
+    final previous = state;
     emit(
       ServiceDetailState(
         business: state.business,
-        isSaved: !wasSaved,
+        isSaved: !state.isSaved,
         reviews: state.reviews,
       ),
     );
-    await _savedRepository.toggleService(service, wasSaved);
+    final result = previous.isSaved
+        ? await _removeSavedBusiness.execute(service.id)
+        : await _saveBusiness.execute(service.id);
+    _saving = false;
+    if (result is Success<void>) {
+      _savedUpdates.notifyChanged();
+    } else if (!isClosed) {
+      emit(previous);
+    }
+    return result is Success<void>;
+  }
+
+  @override
+  Future<void> close() async {
+    await _savedSubscription.cancel();
+    return super.close();
   }
 }

@@ -436,7 +436,7 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 ### My Bookings, Saved, Profile i Explore
 
 - **My bookings** razdvaja stays i services na upcoming/past. Oba taba učitavaju REST stranice sa zasebnim cursorima i lokalno se osvježavaju nakon REST cancel/reschedule akcija; customer tabovi nemaju Firestore fallback.
-- **Saved** je vezan za usera; animirano uklanjanje iz liste, toast feedback i trenutno stanje srca na detailu.
+- **Saved** koristi Go REST za spremanje, uklanjanje, provjeru i listanje korisnikovih businessa. Lista prikazuje aktuelne podatke za smještaje i servise, a lokalni broadcast odmah osvježava listu i stanje srca nakon uspješne promjene. Animirano uklanjanje, toast feedback i optimistic UX ostaju sačuvani.
 - **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
 - **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).
 - Ticketi se čuvaju u `support_tickets`; Firestore pravila dozvoljavaju customeru kreiranje i čitanje samo vlastitih zahtjeva, dok status kasnije mijenja interni support/admin alat.
@@ -549,7 +549,6 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `business_metrics/{businessId}/months/{YYYY-MM}` | mjesečna revenue/cash/online zarada, booking count i dnevni ukupni/online/cash chart podaci |
 | `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
 | `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
-| `saved_businesses/{uid}/items/{businessId}` | customer favorit/saved snapshot |
 | `conversations/{id}` | business-customer chat metadata |
 | `conversations/{id}/messages/{id}` | poruke |
 | `notification_deliveries/{id}` | idempotency/delivery evidencija chat push notifikacija |
