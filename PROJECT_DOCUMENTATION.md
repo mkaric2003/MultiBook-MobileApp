@@ -514,12 +514,14 @@ Flutter FCM lifecycle vodi `NotificationDeviceService`: nakon prijave registruje
 |---|---|
 | Go API: booking created | Provider dobija in-app i FCM notifikaciju o novom bookingu |
 | Go API: booking status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa bookinga |
+| Go API: booking cancelled by customer | Provider dobija in-app i FCM notifikaciju o customer otkazivanju |
 | Go API: appointment created | Provider dobija in-app i FCM notifikaciju o novom appointmentu |
 | Go API: appointment status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa appointmenta |
+| Go API: appointment cancelled by customer | Provider dobija in-app i FCM notifikaciju o customer otkazivanju |
 | `notifyOnChatMessageCreated` | Push samo ako recipient nije aktivan u istom chatu |
 | `initializeBusinessMetrics` | Callable inicijalizacija ili verzionirana obnova KPI i earnings agregata za owner business |
 
-Migracija `000019_notifications` kreira Supabase tabele `notification_devices` i `in_app_notifications`. API je jedini klijent Supabasea; Flutter ne pristupa Supabaseu direktno. Push failure ne poništava već uspješno spremljenu booking/appointment promjenu ili in-app zapis.
+Migracija `000019_notifications` kreira Supabase tabele `notification_devices` i `in_app_notifications`. API je jedini klijent Supabasea; Flutter ne pristupa Supabaseu direktno. Customer ne dobija notifikaciju kada sam otkaže booking ili appointment; tada se notifikacija šalje samo provideru. Push failure ne poništava već uspješno spremljenu booking/appointment promjenu ili in-app zapis.
 
 FCM tokeni se čuvaju po `user_id` i `device_id`; ponovna registracija istog uređaja osvježava token. API koristi idempotentne ID-jeve notifikacija, pa se isti business događaj ne upisuje duplo.
 
