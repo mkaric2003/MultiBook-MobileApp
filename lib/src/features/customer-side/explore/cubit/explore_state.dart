@@ -1,4 +1,5 @@
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/data/models/featured_collection_model.dart';
 
 class ExploreState {
   const ExploreState({
@@ -9,6 +10,8 @@ class ExploreState {
     this.isTrendingServicesLoading = false,
     this.isLoadingMoreTrendingServices = false,
     this.hasMoreTrendingServices = false,
+    this.stayCollections = const [],
+    this.serviceCollections = const [],
   });
 
   final bool isLoading;
@@ -18,6 +21,8 @@ class ExploreState {
   final bool isTrendingServicesLoading;
   final bool isLoadingMoreTrendingServices;
   final bool hasMoreTrendingServices;
+  final List<FeaturedCollectionModel> stayCollections;
+  final List<FeaturedCollectionModel> serviceCollections;
 
   ExploreState copyWith({
     bool? isLoading,
@@ -28,6 +33,8 @@ class ExploreState {
     bool? isTrendingServicesLoading,
     bool? isLoadingMoreTrendingServices,
     bool? hasMoreTrendingServices,
+    List<FeaturedCollectionModel>? stayCollections,
+    List<FeaturedCollectionModel>? serviceCollections,
   }) => ExploreState(
     isLoading: isLoading ?? this.isLoading,
     selectedCity: clearSelectedCity ? null : selectedCity ?? this.selectedCity,
@@ -39,5 +46,7 @@ class ExploreState {
         isLoadingMoreTrendingServices ?? this.isLoadingMoreTrendingServices,
     hasMoreTrendingServices:
         hasMoreTrendingServices ?? this.hasMoreTrendingServices,
+    stayCollections: stayCollections ?? this.stayCollections,
+    serviceCollections: serviceCollections ?? this.serviceCollections,
   );
 }

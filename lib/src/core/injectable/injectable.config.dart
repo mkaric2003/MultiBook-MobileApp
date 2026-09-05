@@ -23,7 +23,7 @@ import 'package:multibook/src/core/modules/firebase_module.dart' as _i548;
 import 'package:multibook/src/core/modules/shared_preferences_module.dart'
     as _i92;
 import 'package:multibook/src/core/services/notification_device_service.dart'
-    as _i26;
+    as _i730;
 import 'package:multibook/src/core/session/session_stream_registry.dart'
     as _i1025;
 import 'package:multibook/src/data/data_sources/api_client.dart' as _i189;
@@ -172,8 +172,18 @@ import 'package:multibook/src/domain/use_cases/checkout/create_customer_booking_
     as _i652;
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart'
     as _i742;
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_discovery_cities_use_case.dart'
+    as _i343;
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_featured_collections_use_case.dart'
+    as _i120;
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart'
     as _i88;
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_recommended_stays_use_case.dart'
+    as _i554;
+import 'package:multibook/src/domain/use_cases/customer_discovery/list_discovery_businesses_use_case.dart'
+    as _i436;
+import 'package:multibook/src/domain/use_cases/customer_discovery/search_discovery_businesses_use_case.dart'
+    as _i540;
 import 'package:multibook/src/domain/use_cases/development_seed/development_seed_use_case.dart'
     as _i168;
 import 'package:multibook/src/domain/use_cases/drafts/delete_appointment_draft_use_case.dart'
@@ -296,10 +306,10 @@ import 'package:multibook/src/features/shared/chat/cubit/chat_list_cubit.dart'
     as _i1005;
 import 'package:multibook/src/features/shared/localization/cubit/locale_cubit.dart'
     as _i889;
+import 'package:multibook/src/features/shared/notifications/cubit/notification_bell_cubit.dart'
+    as _i617;
 import 'package:multibook/src/features/shared/notifications/cubit/notifications_cubit.dart'
     as _i272;
-import 'package:multibook/src/features/shared/notifications/cubit/notification_bell_cubit.dart'
-    as _i348;
 import 'package:multibook/src/features/shared/onboarding/cubit/onboarding_cubit.dart'
     as _i400;
 import 'package:multibook/src/features/shared/rate_business/cubit/rate_business_cubit.dart'
@@ -728,12 +738,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i859.MarkInAppNotificationAsReadUseCase>(),
       ),
     );
-    gh.factory<_i348.NotificationBellCubit>(
-      () => _i348.NotificationBellCubit(
-        gh<_i884.GetUnreadNotificationsCountUseCase>(),
-        gh<_i26.NotificationDeviceService>(),
-      ),
-    );
     gh.factory<_i212.CustomerBookingsCubit>(
       () => _i212.CustomerBookingsCubit(
         gh<_i498.GetCustomerBookingsUseCase>(),
@@ -766,6 +770,31 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i88.GetPopularNearbyBusinessesUseCase>(
       () => _i88.GetPopularNearbyBusinessesUseCase(
+        gh<_i206.CustomerDiscoveryRepository>(),
+      ),
+    );
+    gh.factory<_i554.GetRecommendedStaysUseCase>(
+      () => _i554.GetRecommendedStaysUseCase(
+        gh<_i206.CustomerDiscoveryRepository>(),
+      ),
+    );
+    gh.factory<_i120.GetFeaturedCollectionsUseCase>(
+      () => _i120.GetFeaturedCollectionsUseCase(
+        gh<_i206.CustomerDiscoveryRepository>(),
+      ),
+    );
+    gh.factory<_i540.SearchDiscoveryBusinessesUseCase>(
+      () => _i540.SearchDiscoveryBusinessesUseCase(
+        gh<_i206.CustomerDiscoveryRepository>(),
+      ),
+    );
+    gh.factory<_i343.GetDiscoveryCitiesUseCase>(
+      () => _i343.GetDiscoveryCitiesUseCase(
+        gh<_i206.CustomerDiscoveryRepository>(),
+      ),
+    );
+    gh.factory<_i436.ListDiscoveryBusinessesUseCase>(
+      () => _i436.ListDiscoveryBusinessesUseCase(
         gh<_i206.CustomerDiscoveryRepository>(),
       ),
     );
@@ -842,8 +871,8 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i460.SharedPreferences>(),
       ),
     );
-    gh.lazySingleton<_i26.NotificationDeviceService>(
-      () => _i26.NotificationDeviceService(
+    gh.lazySingleton<_i730.NotificationDeviceService>(
+      () => _i730.NotificationDeviceService(
         gh<_i715.AuthenticationDataSource>(),
         gh<_i190.NotificationDataSource>(),
         gh<_i801.RegisterNotificationDeviceUseCase>(),
@@ -861,10 +890,24 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i465.CustomerCheckoutRepository>(),
       ),
     );
+    gh.factory<_i617.NotificationBellCubit>(
+      () => _i617.NotificationBellCubit(
+        gh<_i884.GetUnreadNotificationsCountUseCase>(),
+        gh<_i730.NotificationDeviceService>(),
+      ),
+    );
     gh.factory<_i247.ClientEntryCubit>(
       () => _i247.ClientEntryCubit(
         gh<_i1063.GetSelectedBusinessUseCase>(),
         gh<_i981.UserProfileUseCase>(),
+      ),
+    );
+    gh.factory<_i227.ExploreCubit>(
+      () => _i227.ExploreCubit(
+        gh<_i981.UserProfileUseCase>(),
+        gh<_i343.GetDiscoveryCitiesUseCase>(),
+        gh<_i120.GetFeaturedCollectionsUseCase>(),
+        gh<_i88.GetPopularNearbyBusinessesUseCase>(),
       ),
     );
     gh.factory<_i823.BookingDetailsCubit>(
@@ -908,15 +951,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
       ),
     );
-    gh.factory<_i227.ExploreCubit>(
-      () => _i227.ExploreCubit(
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i590.BusinessRepository>(),
-      ),
-    );
     gh.factory<_i378.CustomerSearchCubit>(
       () => _i378.CustomerSearchCubit(
-        gh<_i88.GetPopularNearbyBusinessesUseCase>(),
+        gh<_i540.SearchDiscoveryBusinessesUseCase>(),
       ),
     );
     gh.factory<_i582.AvailabilityCalendarCubit>(
@@ -967,7 +1004,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i869.AuthenticationRepository(
         gh<_i715.AuthenticationDataSource>(),
         gh<_i928.UpdateUserProfileUseCase>(),
-        gh<_i26.NotificationDeviceService>(),
+        gh<_i730.NotificationDeviceService>(),
         gh<_i1025.SessionStreamRegistry>(),
       ),
       dispose: (i) => i.dispose(),
@@ -1042,10 +1079,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i974.CreateSupportTicketCubit>(
       () => _i974.CreateSupportTicketCubit(gh<_i142.SupportTicketRepository>()),
     );
-    gh.factory<_i442.ExploreServiceResultsCubit>(
-      () =>
-          _i442.ExploreServiceResultsCubit(gh<_i459.ServiceSearchRepository>()),
-    );
     gh.factory<_i41.CustomerDashboardCubit>(
       () => _i41.CustomerDashboardCubit(
         gh<_i590.BusinessRepository>(),
@@ -1057,7 +1090,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i682.UserLocationRepository>(),
         gh<_i742.GetBusinessDetailUseCase>(),
         gh<_i88.GetPopularNearbyBusinessesUseCase>(),
+        gh<_i554.GetRecommendedStaysUseCase>(),
+        gh<_i436.ListDiscoveryBusinessesUseCase>(),
       ),
+    );
+    gh.factory<_i442.ExploreServiceResultsCubit>(
+      () =>
+          _i442.ExploreServiceResultsCubit(gh<_i459.ServiceSearchRepository>()),
     );
     return this;
   }

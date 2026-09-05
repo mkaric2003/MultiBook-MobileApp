@@ -189,6 +189,10 @@ AddBusinessBloc / provider Cubit
 
 Customer home **Popular Near You** više ne koristi Firestore cursore. `CustomerDashboardCubit` preko `GetPopularNearbyBusinessesUseCase` poziva `GET /v1/discovery/businesses` s parametrima `type` (`stays` ili `services`), `city`, `limit` i `offset`. Odgovor ostaje `BusinessModel`-kompatibilan, a postojeći UI zadržava paginaciju i *load more* ponašanje.
 
+Customer **Explore** također ne čita Firestore business kolekciju: izbor grada koristi `GET /v1/discovery/cities`, koji čita trajni deduplicirani katalog gradova popunjen pri svakom upisu business lokacije, a *Trending near you* koristi isti paginirani `GET /v1/discovery/businesses` za `type=services`. Kategorijski i collection rezultati ostaju na server-side `GET /v1/stays/search` i `GET /v1/services/search` rutama.
+
+Featured stay i service collections koriste `GET /v1/discovery/featured-collections`. PostgreSQL čuva redoslijed, ID i image URL, dok backend vraća postojeće l10n ključeve pa Flutter zadržava prijevode za sve podržane jezike.
+
 **Recommended for you** koristi `GET /v1/discovery/recommended-stays`, a ne Firestore. Backend vraća do tri staya, prioritizira korisnikov spremljeni grad i preostala mjesta popunjava globalnim rankingom po ratingu i broju recenzija.
 
 Development-only seed akcije u Add Business ekranu koriste `DevelopmentSeedUseCase` i REST endpoint-e `POST /v1/development/seed/stays` i `POST /v1/development/seed/services`. Seed media koristi direktne HTTPS URL-ove za demo kartice; Firebase Storage se ne poziva za te slike.
@@ -436,7 +440,7 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 - **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
 - **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).
 - Ticketi se čuvaju u `support_tickets`; Firestore pravila dozvoljavaju customeru kreiranje i čitanje samo vlastitih zahtjeva, dok status kasnije mijenja interni support/admin alat.
-- **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed.
+- **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed. Dinamički discovery/search podaci dolaze s Go endpointa, bez Firestore fallbacka; recently viewed ostaje zaseban shared user-history feature.
 - Recently viewed se sprema po useru i po businessu; naslov se ne prikazuje kada nema podataka.
 - Rezultati kategorije/kolekcije koriste cursor paginaciju.
 

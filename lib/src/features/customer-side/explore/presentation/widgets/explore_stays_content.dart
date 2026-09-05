@@ -7,6 +7,7 @@ import 'package:multibook/src/features/customer-side/explore/presentation/widget
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_promotion_carousel.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_recently_viewed.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_stay_category_grid.dart';
+import 'package:multibook/src/data/models/featured_collection_model.dart';
 import 'package:flutter/material.dart';
 
 class ExploreStaysContent extends StatelessWidget {
@@ -16,12 +17,14 @@ class ExploreStaysContent extends StatelessWidget {
     required this.onTabChanged,
     required this.onCategorySelected,
     required this.onCollectionSelected,
+    required this.collections,
   });
 
   final CustomerHomeTab selectedTab;
   final ValueChanged<CustomerHomeTab> onTabChanged;
   final ValueChanged<ExploreCategory> onCategorySelected;
   final ValueChanged<ExploreCollection> onCollectionSelected;
+  final List<FeaturedCollectionModel> collections;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -53,7 +56,10 @@ class ExploreStaysContent extends StatelessWidget {
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
       ),
       const SizedBox(height: 18),
-      ExploreFeaturedCollections(onSelected: onCollectionSelected),
+      ExploreFeaturedCollections(
+        collections: collections,
+        onSelected: onCollectionSelected,
+      ),
       const ExploreRecentlyViewed(),
     ],
   );

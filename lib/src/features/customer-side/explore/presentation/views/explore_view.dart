@@ -72,6 +72,7 @@ class ExploreView extends HookWidget {
                             ),
                           );
                         },
+                        collections: state.stayCollections,
                       )
                     : ExploreServicesContent(
                         selectedTab: selectedTab.value,
@@ -99,6 +100,7 @@ class ExploreView extends HookWidget {
                                 ),
                               );
                             },
+                        collections: state.serviceCollections,
                         trendingServices: state.trendingServices,
                         isTrendingServicesLoading:
                             state.isTrendingServicesLoading,

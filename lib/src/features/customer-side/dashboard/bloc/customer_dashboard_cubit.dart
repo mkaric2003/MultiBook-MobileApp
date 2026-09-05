@@ -12,6 +12,8 @@ import 'package:multibook/src/data/repositories/stay_search_repository.dart';
 import 'package:multibook/src/data/repositories/user_location_repository.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_recommended_stays_use_case.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/list_discovery_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/drafts/get_appointment_draft_use_case.dart';
 import 'package:multibook/src/domain/use_cases/drafts/get_booking_draft_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
@@ -34,6 +36,8 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     this._userLocationRepository,
     this._getBusinessDetail,
     this._getPopularNearbyBusinesses,
+    this._getRecommendedStays,
+    this._listDiscoveryBusinesses,
   ) : super(const CustomerDashboardState());
 
   final BusinessRepository _businessRepository;
@@ -45,6 +49,8 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   final UserLocationRepository _userLocationRepository;
   final GetBusinessDetailUseCase _getBusinessDetail;
   final GetPopularNearbyBusinessesUseCase _getPopularNearbyBusinesses;
+  final GetRecommendedStaysUseCase _getRecommendedStays;
+  final ListDiscoveryBusinessesUseCase _listDiscoveryBusinesses;
   StreamSubscription<String>? _locationCitySubscription;
   int _nearbyStaysOffset = 0;
   int _nearbyServicesOffset = 0;
@@ -278,7 +284,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   Future<void> _loadRecommendedStays() async {
     _staysOffset = 0;
     try {
-      final result = await _getPopularNearbyBusinesses.recommendedStays();
+      final result = await _getRecommendedStays.execute();
       if (result case FailureResult(failure: final failure)) {
         throw failure;
       }
@@ -311,7 +317,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     emit(state.copyWith(isOtherStaysLoading: true));
 
     try {
-      final result = await _getPopularNearbyBusinesses.listBusinesses(
+      final result = await _listDiscoveryBusinesses.execute(
         type: BusinessType.stays,
         offset: _staysOffset,
         limit: _otherBusinessesPageSize,
@@ -441,7 +447,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     emit(state.copyWith(isOtherServicesLoading: true));
 
     try {
-      final result = await _getPopularNearbyBusinesses.listBusinesses(
+      final result = await _listDiscoveryBusinesses.execute(
         type: BusinessType.services,
         offset: _servicesOffset,
         limit: _otherBusinessesPageSize,

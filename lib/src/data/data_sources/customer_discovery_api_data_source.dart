@@ -3,6 +3,7 @@ import 'package:multibook/src/data/data_sources/api_client.dart';
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/featured_collection_model.dart';
 
 @lazySingleton
 class CustomerDiscoveryApiDataSource {
@@ -22,6 +23,28 @@ class CustomerDiscoveryApiDataSource {
       offset: offset,
       limit: limit,
     );
+  }
+
+  Future<List<String>> listCities() async {
+    final response = await _client.get('/v1/discovery/cities');
+    return (response.data!['items'] as List)
+        .whereType<String>()
+        .map((city) => city.trim())
+        .where((city) => city.isNotEmpty)
+        .toList();
+  }
+
+  Future<List<FeaturedCollectionModel>> listFeaturedCollections(
+    BusinessType type,
+  ) async {
+    final response = await _client.get(
+      '/v1/discovery/featured-collections',
+      queryParameters: {'type': type.name},
+    );
+    return (response.data!['items'] as List)
+        .cast<Map<String, dynamic>>()
+        .map(FeaturedCollectionModel.fromMap)
+        .toList();
   }
 
   Future<List<BusinessModel>> listBusinesses({

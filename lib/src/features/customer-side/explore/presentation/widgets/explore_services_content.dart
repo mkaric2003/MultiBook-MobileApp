@@ -11,6 +11,7 @@ import 'package:multibook/src/features/customer-side/explore/presentation/widget
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_service_promotion_carousel.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_trending_services_list.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_view_all_categories_button.dart';
+import 'package:multibook/src/data/models/featured_collection_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -20,6 +21,7 @@ class ExploreServicesContent extends HookWidget {
     required this.onTabChanged,
     required this.onCategorySelected,
     required this.onCollectionSelected,
+    required this.collections,
     required this.trendingServices,
     required this.isTrendingServicesLoading,
     required this.isLoadingMoreTrendingServices,
@@ -32,6 +34,7 @@ class ExploreServicesContent extends HookWidget {
   final ValueChanged<CustomerHomeTab> onTabChanged;
   final ValueChanged<ExploreServiceCategory> onCategorySelected;
   final ValueChanged<ExploreServiceCollection> onCollectionSelected;
+  final List<FeaturedCollectionModel> collections;
   final List<ServiceListing> trendingServices;
   final bool isTrendingServicesLoading;
   final bool isLoadingMoreTrendingServices;
@@ -88,7 +91,10 @@ class ExploreServicesContent extends HookWidget {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 18),
-        ExploreServiceCollections(onSelected: onCollectionSelected),
+        ExploreServiceCollections(
+          collections: collections,
+          onSelected: onCollectionSelected,
+        ),
         const ExploreRecentServices(),
       ],
     );

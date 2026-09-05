@@ -5,19 +5,13 @@ import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/domain/repositories/customer_discovery_repository.dart';
 
 @injectable
-class GetPopularNearbyBusinessesUseCase {
-  GetPopularNearbyBusinessesUseCase(this._repository);
+class ListDiscoveryBusinessesUseCase {
+  ListDiscoveryBusinessesUseCase(this._repository);
   final CustomerDiscoveryRepository _repository;
 
   Future<Result<List<BusinessModel>>> execute({
     required BusinessType type,
-    required String city,
     required int offset,
     int limit = 10,
-  }) => _repository.popularNearCity(
-    type: type,
-    city: city,
-    offset: offset,
-    limit: limit,
-  );
+  }) => _repository.listBusinesses(type: type, offset: offset, limit: limit);
 }
