@@ -2,7 +2,6 @@ import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
-import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_bookings_chart.dart';
@@ -21,14 +20,10 @@ class DashboardView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = useMemoized(() => getIt<DashboardCubit>());
-    final selectedBusinessId = useValueListenable(
-      getIt<UserProfileUseCase>().selectedBusinessId,
-    );
     useEffect(() {
-      cubit.load();
-      return null;
-    }, [cubit, selectedBusinessId]);
-    useEffect(() => cubit.close, [cubit]);
+      cubit.initialize();
+      return cubit.close;
+    }, [cubit]);
 
     return BlocProvider.value(
       value: cubit,
@@ -55,23 +50,16 @@ class DashboardView extends HookWidget {
                     business: business,
                     onNotificationsPressed: () =>
                         context.push(AppRoutes.NOTIFICATIONS),
-                    onSwitchBusiness: () async {
-                      await context.push(AppRoutes.MY_BUSINESSES);
-                      if (context.mounted) {
-                        await context.read<DashboardCubit>().load();
-                      }
-                    },
+                    onSwitchBusiness: () =>
+                        context.push(AppRoutes.MY_BUSINESSES),
                   ),
                   const SizedBox(height: 20),
                   DashboardMetricCard(
                     title: business.type == BusinessType.stays
                         ? context.l10n.activeBookings
                         : context.l10n.activeAppointments,
-                    value:
-                        (business.type == BusinessType.stays
-                                ? state.metrics.activeBookings
-                                : state.metrics.activeAppointments)
-                            .toString(),
+                    value: (state.metrics?.activeReservationCount ?? 0)
+                        .toString(),
                     icon: Icons.event_available,
                     iconBackgroundColor: Color(0xFF3F315E),
                   ),
@@ -79,7 +67,7 @@ class DashboardView extends HookWidget {
                   DashboardMetricCard(
                     title: context.l10n.earningsThisMonth,
                     value: context.l10n.formatCurrency(
-                      state.monthlyMetrics.revenue,
+                      state.metrics?.currentMonth.revenue ?? 0,
                     ),
                     valueColor: Color(0xFF24E5C5),
                     icon: Icons.attach_money,
@@ -100,11 +88,15 @@ class DashboardView extends HookWidget {
                   ),
                   const SizedBox(height: 20),
                   DashboardEarningsChart(
-                    values: _weeklyValues(state.monthlyMetrics.dailyRevenue),
+                    values: _weeklyValues(
+                      state.metrics?.currentMonth.dailyRevenue ?? const {},
+                    ),
                   ),
                   const SizedBox(height: 20),
                   DashboardBookingsChart(
-                    values: _weeklyValues(state.monthlyMetrics.dailyBookings),
+                    values: _weeklyValues(
+                      state.metrics?.currentMonth.dailyReservations ?? const {},
+                    ),
                     title: business.type == BusinessType.stays
                         ? context.l10n.bookingsTrend
                         : context.l10n.appointmentsTrend,

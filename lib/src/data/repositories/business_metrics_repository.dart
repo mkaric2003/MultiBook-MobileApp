@@ -1,5 +1,4 @@
 import 'package:multibook/src/data/data_sources/business_metrics_data_source.dart';
-import 'package:multibook/src/features/business-side/dashboard/domain/models/business_metrics.dart';
 import 'package:multibook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
 import 'package:multibook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
 import 'package:injectable/injectable.dart';
@@ -12,17 +11,6 @@ class BusinessMetricsRepository {
 
   Future<void> initialize(String businessId) =>
       _dataSource.initialize(businessId);
-
-  Stream<BusinessMetrics> watchSummary(String businessId) =>
-      _dataSource.watchSummary(businessId).map(BusinessMetrics.fromJson);
-
-  Stream<BusinessMonthlyMetrics> watchCurrentMonth(String businessId) =>
-      _dataSource
-          .watchMonth(
-            businessId: businessId,
-            monthKey: _monthKey(DateTime.now()),
-          )
-          .map(BusinessMonthlyMetrics.fromJson);
 
   Stream<BusinessMonthlyMetrics> watchDateRange({
     required String businessId,

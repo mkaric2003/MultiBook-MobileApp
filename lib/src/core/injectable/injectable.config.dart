@@ -48,6 +48,8 @@ import 'package:multibook/src/data/data_sources/customer_discovery_api_data_sour
     as _i677;
 import 'package:multibook/src/data/data_sources/customer_drafts_api_data_source.dart'
     as _i127;
+import 'package:multibook/src/data/data_sources/dashboard_metrics_api_data_source.dart'
+    as _i965;
 import 'package:multibook/src/data/data_sources/development_seed_api_data_source.dart'
     as _i82;
 import 'package:multibook/src/data/data_sources/device_location_data_source.dart'
@@ -100,6 +102,8 @@ import 'package:multibook/src/data/repositories/customer_discovery_repository_im
     as _i614;
 import 'package:multibook/src/data/repositories/customer_drafts_repository_impl.dart'
     as _i675;
+import 'package:multibook/src/data/repositories/dashboard_metrics_repository_impl.dart'
+    as _i489;
 import 'package:multibook/src/data/repositories/development_seed_repository_impl.dart'
     as _i795;
 import 'package:multibook/src/data/repositories/in_app_notifications_repository_impl.dart'
@@ -144,6 +148,8 @@ import 'package:multibook/src/domain/repositories/customer_discovery_repository.
     as _i206;
 import 'package:multibook/src/domain/repositories/customer_drafts_repository.dart'
     as _i238;
+import 'package:multibook/src/domain/repositories/dashboard_metrics_repository.dart'
+    as _i420;
 import 'package:multibook/src/domain/repositories/development_seed_repository.dart'
     as _i333;
 import 'package:multibook/src/domain/repositories/in_app_notifications_repository.dart'
@@ -198,6 +204,8 @@ import 'package:multibook/src/domain/use_cases/customer_discovery/list_discovery
     as _i436;
 import 'package:multibook/src/domain/use_cases/customer_discovery/search_discovery_businesses_use_case.dart'
     as _i540;
+import 'package:multibook/src/domain/use_cases/dashboard_metrics/watch_dashboard_metrics_use_case.dart'
+    as _i1066;
 import 'package:multibook/src/domain/use_cases/development_seed/development_seed_use_case.dart'
     as _i168;
 import 'package:multibook/src/domain/use_cases/drafts/delete_appointment_draft_use_case.dart'
@@ -545,6 +553,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i217.InAppNotificationsApiDataSource>(
       () => _i217.InAppNotificationsApiDataSource(gh<_i189.ApiClient>()),
     );
+    gh.lazySingleton<_i965.DashboardMetricsApiDataSource>(
+      () => _i965.DashboardMetricsApiDataSource(gh<_i189.ApiClient>()),
+    );
     gh.lazySingleton<_i580.CustomerBookingsRepository>(
       () => _i609.CustomerBookingsRepositoryImpl(
         gh<_i488.CustomerBookingsApiDataSource>(),
@@ -614,6 +625,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i694.BusinessMetricsRepository>(
       () => _i694.BusinessMetricsRepository(
         gh<_i468.BusinessMetricsDataSource>(),
+      ),
+    );
+    gh.lazySingleton<_i420.DashboardMetricsRepository>(
+      () => _i489.DashboardMetricsRepositoryImpl(
+        gh<_i965.DashboardMetricsApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
       ),
     );
     gh.lazySingleton<_i946.UsersRepository>(
@@ -711,6 +728,11 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i167.SavedBusinessUpdatesService>(),
       ),
     );
+    gh.factory<_i1066.WatchDashboardMetricsUseCase>(
+      () => _i1066.WatchDashboardMetricsUseCase(
+        gh<_i420.DashboardMetricsRepository>(),
+      ),
+    );
     gh.lazySingleton<_i333.DevelopmentSeedRepository>(
       () => _i795.DevelopmentSeedRepositoryImpl(
         gh<_i82.DevelopmentSeedApiDataSource>(),
@@ -790,14 +812,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i397.DeviceLocationDataSource>(),
         gh<_i117.NominatimDataSource>(),
         gh<_i981.UserProfileUseCase>(),
-      ),
-    );
-    gh.factory<_i972.DashboardCubit>(
-      () => _i972.DashboardCubit(
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i1063.GetSelectedBusinessUseCase>(),
-        gh<_i694.BusinessMetricsRepository>(),
-        gh<_i1025.SessionStreamRegistry>(),
       ),
     );
     gh.factory<_i272.NotificationsCubit>(
@@ -956,6 +970,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i652.CreateCustomerBookingUseCase>(
       () => _i652.CreateCustomerBookingUseCase(
         gh<_i465.CustomerCheckoutRepository>(),
+      ),
+    );
+    gh.factory<_i972.DashboardCubit>(
+      () => _i972.DashboardCubit(
+        gh<_i981.UserProfileUseCase>(),
+        gh<_i1063.GetSelectedBusinessUseCase>(),
+        gh<_i1066.WatchDashboardMetricsUseCase>(),
+        gh<_i1025.SessionStreamRegistry>(),
       ),
     );
     gh.factory<_i115.RateBusinessCubit>(

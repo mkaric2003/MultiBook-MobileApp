@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -97,21 +98,47 @@ class ApiClient {
   Future<Response<Map<String, dynamic>>> delete(String path) =>
       _request(() => _dio.delete<Map<String, dynamic>>(path));
 
+  Stream<String> openSseStream(String path) async* {
+    try {
+      final response = await _dio.get<ResponseBody>(
+        path,
+        options: Options(
+          responseType: ResponseType.stream,
+          receiveTimeout: Duration.zero,
+          headers: const {'Accept': 'text/event-stream'},
+        ),
+      );
+      final body = response.data;
+      if (body == null) {
+        throw const ApiException('The live response did not contain a body.');
+      }
+      yield* body.stream
+          .map<List<int>>((bytes) => bytes)
+          .transform(utf8.decoder);
+    } on DioException catch (error) {
+      throw _apiException(error);
+    }
+  }
+
   Future<Response<Map<String, dynamic>>> _request(
     Future<Response<Map<String, dynamic>>> Function() request,
   ) async {
     try {
       return await request();
     } on DioException catch (error) {
-      final payload = error.response?.data;
-      final apiMessage = payload is Map<String, dynamic>
-          ? ((payload['error'] as Map<String, dynamic>?)?['message'] as String?)
-          : null;
-      throw ApiException(
-        apiMessage ?? 'Unable to reach the MultiBook service.',
-        statusCode: error.response?.statusCode,
-      );
+      throw _apiException(error);
     }
+  }
+
+  ApiException _apiException(DioException error) {
+    final payload = error.response?.data;
+    final apiMessage = payload is Map<String, dynamic>
+        ? ((payload['error'] as Map<String, dynamic>?)?['message'] as String?)
+        : null;
+    return ApiException(
+      apiMessage ?? 'Unable to reach the MultiBook service.',
+      statusCode: error.response?.statusCode,
+    );
   }
 
   static String _requiredBaseUrl() {

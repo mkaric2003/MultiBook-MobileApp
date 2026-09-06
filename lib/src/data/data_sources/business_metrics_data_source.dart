@@ -3,14 +3,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class BusinessMetricsDataSource {
-  Stream<Map<String, dynamic>?> watchSummary(String businessId);
-
   Future<void> initialize(String businessId);
-
-  Stream<Map<String, dynamic>?> watchMonth({
-    required String businessId,
-    required String monthKey,
-  });
 
   Stream<List<Map<String, dynamic>>> watchMonths({
     required String businessId,
@@ -58,25 +51,6 @@ class BusinessMetricsDataSourceImpl implements BusinessMetricsDataSource {
       'businessId': businessId,
     });
   }
-
-  @override
-  Stream<Map<String, dynamic>?> watchSummary(String businessId) => _firestore
-      .collection('business_metrics')
-      .doc(businessId)
-      .snapshots()
-      .map((snapshot) => snapshot.data());
-
-  @override
-  Stream<Map<String, dynamic>?> watchMonth({
-    required String businessId,
-    required String monthKey,
-  }) => _firestore
-      .collection('business_metrics')
-      .doc(businessId)
-      .collection('months')
-      .doc(monthKey)
-      .snapshots()
-      .map((snapshot) => snapshot.data());
 
   @override
   Stream<List<Map<String, dynamic>>> watchMonths({
