@@ -166,6 +166,27 @@ CustomerBookingsCubit / AppointmentDetailsCubit / RescheduleAppointmentCubit
 - `PATCH /v1/appointments/{id}/status` koristi se za customer cancellation, a `PATCH /v1/appointments/{id}/reschedule` vraća novi kompletni `AppointmentModel` nakon uspješne promjene.
 - `AppointmentListResponse` je tipizirani paginirani response. Lista/status/reschedule REST odgovori već sadrže presentation podatke i offerings, pa nema Firestore business enrichment/fallbacka u customer service flowu.
 
+### 4.1.6 Reviews REST migracija
+
+Kreiranje, provjera i prikaz recenzija koriste zaseban Reviews modul:
+
+```text
+RateBusinessCubit / detail Cubit / BusinessReviewsSheet
+        → CreateReviewUseCase | HasBusinessReviewUseCase |
+          GetBusinessReviewsUseCase
+        → ReviewsRepository
+        → ReviewsRepositoryImpl
+        → ReviewsApiDataSource
+        → ApiClient
+```
+
+- `POST /v1/businesses/{businessId}/reviews` prihvata source ID/tip, rating i opcionalni komentar. Backend iz rezervacije ili termina određuje customera, business ownera i snapshot prikazne podatke.
+- `GET /v1/businesses/{businessId}/review-status` provjerava da li je prijavljeni customer već ocijenio business.
+- `GET /v1/businesses/{businessId}/reviews` vraća newest-first offset stranice; detail preview traži 4 stavke, a *All reviews* učitava stranice po 20.
+- I dalje vrijedi pravilo jedne recenzije po customeru i businessu, ne po pojedinačnoj rezervaciji. Izvor mora pripadati calleru i businessu te biti završen.
+- PostgreSQL čuva Storage path avatara; `ReviewsApiDataSource` ga razrješava u download URL samo za prikaz.
+- Flutter nema Firestore ni callable fallback za recenzije. Postojeći `createReview` Cloud Function i Firestore pravila ostaju u projektu, ali ih migrirani Flutter flow više ne koristi.
+
 ### 4.1.2 Businesses REST migracija
 
 Provider business modul koristi postojeći `BusinessModel` i njegov `dart_mappable` `toMap`/`fromMap`; za REST se ne uvode posebni `CreateBusinessInput`, `CreatedBusiness` ili slični transport modeli.
@@ -540,6 +561,7 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `users/{uid}` | korisnički profil, tip, selected business, grad/adresa i chat unread counteri |
 | Supabase `notification_devices` | FCM tokeni uređaja, dostupni samo kroz Go API |
 | Supabase `in_app_notifications` | in-app notifikacije, read status i payload, dostupni samo kroz Go API |
+| Supabase `business_reviews` | recenzije i source/customer snapshoti; dostupno samo kroz Go API |
 | `users/{uid}/recently_viewed/{businessId}` | nedavno otvoreni businessi |
 | `businesses/{businessId}` | stay ili service business, detalji, mediji, lokacija i discovery polja |
 | `promotions/{id}` | ownerov promotion konfigurisan za jedan business; business čuva samo `isPromotionActive` signal |
@@ -576,6 +598,7 @@ Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules)
 - Service availability blocks može kreirati/brisati samo business owner.
 - Conversation i messages su dostupni samo učesnicima; create provjerava da business stvarno pripada navedenom owneru.
 - Saved, draftovi, uređaji, notifikacije i recently viewed su scoped na vlastitog usera.
+- Recenziju kreira samo customer iz vlastite završene rezervacije ili termina; baza garantuje najviše jednu recenziju po customeru i businessu, a prosjek se ažurira atomski.
 - Storage dozvoljava samo vlasniku upload/update/delete slike, do 10 MB i isključivo `image/*` sadržaj.
 - `google-services.json` i `GoogleService-Info.plist` su u `.gitignore`; API ključevi i konfiguracija ne idu u Git.
 

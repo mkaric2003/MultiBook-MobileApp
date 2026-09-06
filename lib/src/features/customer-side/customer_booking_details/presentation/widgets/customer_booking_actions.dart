@@ -29,6 +29,8 @@ class CustomerBookingActions extends StatelessWidget {
 
   bool get _canCancel => !_isPast && booking.status == BookingStatus.confirmed;
 
+  bool get _canReview => booking.status == BookingStatus.completed || _isPast;
+
   @override
   Widget build(BuildContext context) => Column(
     children: [
@@ -41,14 +43,14 @@ class CustomerBookingActions extends StatelessWidget {
         ),
         const SizedBox(height: 14),
       ],
+      if (_canReview && !hasSubmittedReview) ...[
+        CustomButton(
+          buttonName: context.l10n.leaveReview,
+          onPressed: onLeaveReview,
+        ),
+        const SizedBox(height: 14),
+      ],
       if (_isPast) ...[
-        if (!hasSubmittedReview) ...[
-          CustomButton(
-            buttonName: context.l10n.leaveReview,
-            onPressed: onLeaveReview,
-          ),
-          const SizedBox(height: 14),
-        ],
         CustomButton(
           buttonName: context.l10n.bookAgain,
           color: AppColors.surfaceHighlight,

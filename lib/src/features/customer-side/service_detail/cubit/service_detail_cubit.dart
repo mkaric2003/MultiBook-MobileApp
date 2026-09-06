@@ -10,7 +10,7 @@ import 'package:multibook/src/domain/use_cases/saved/save_business_use_case.dart
 import 'package:multibook/src/domain/use_cases/saved/remove_saved_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/recently_viewed/record_recently_viewed_use_case.dart';
 import 'package:multibook/src/core/services/recently_viewed_updates_service.dart';
-import 'package:multibook/src/data/repositories/review_repository.dart';
+import 'package:multibook/src/domain/use_cases/reviews/get_business_reviews_use_case.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:multibook/src/features/customer-side/service_detail/cubit/service_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +26,7 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
     this._savedUpdates,
     this._recordRecentlyViewed,
     this._recentlyViewedUpdates,
-    this._reviewRepository,
+    this._getBusinessReviews,
   ) : super(const ServiceDetailState()) {
     _savedSubscription = _savedUpdates.changes.listen((_) => _refreshSaved());
   }
@@ -42,7 +42,7 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
   int _savedRevision = 0;
   final RecordRecentlyViewedUseCase _recordRecentlyViewed;
   final RecentlyViewedUpdatesService _recentlyViewedUpdates;
-  final ReviewRepository _reviewRepository;
+  final GetBusinessReviewsUseCase _getBusinessReviews;
 
   Future<void> loadService(String businessId) async {
     emit(const ServiceDetailState(isLoading: true));
@@ -62,7 +62,7 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
       if (recordResult is Success<void>) _recentlyViewedUpdates.notifyChanged();
       final results = await Future.wait([
         _isBusinessSaved.execute(business.id),
-        _reviewRepository.getPreviewReviews(business.id),
+        _getBusinessReviews.execute(business.id, limit: 4),
       ]);
       if (isClosed) return;
       _savedKnown = results[0] is Success<bool>;
@@ -73,7 +73,10 @@ class ServiceDetailCubit extends Cubit<ServiceDetailState> {
             Success<bool>(value: final saved) => saved,
             _ => false,
           },
-          reviews: results[1] as List<BusinessReviewModel>,
+          reviews: switch (results[1]) {
+            Success<List<BusinessReviewModel>>(value: final reviews) => reviews,
+            _ => const [],
+          },
         ),
       );
     } catch (_) {
