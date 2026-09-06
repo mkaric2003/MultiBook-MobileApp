@@ -20,19 +20,16 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google.svg
   String get google => 'assets/icons/google.svg';
 
-  /// File path: assets/icons/logo.ico
-  String get logo => 'assets/icons/logo.ico';
+  /// File path: assets/icons/multibook_logo.png
+  AssetGenImage get multibookLogo =>
+      const AssetGenImage('assets/icons/multibook_logo.png');
 
   /// List of all assets
-  List<String> get values => [apple, google, logo];
+  List<dynamic> get values => [apple, google, multibookLogo];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
-
-  /// File path: assets/images/multibook_logo.png
-  AssetGenImage get multibookLogo =>
-      const AssetGenImage('assets/images/multibook_logo.png');
 
   /// File path: assets/images/first-intro-images.svg
   String get firstIntroImages => 'assets/images/first-intro-images.svg';
@@ -40,6 +37,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/first-intro.png
   AssetGenImage get firstIntro =>
       const AssetGenImage('assets/images/first-intro.png');
+
+  /// File path: assets/images/multibook.png
+  AssetGenImage get multibook =>
+      const AssetGenImage('assets/images/multibook.png');
 
   /// File path: assets/images/second-intro.png
   AssetGenImage get secondIntroPng =>
@@ -53,9 +54,9 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<dynamic> get values => [
-    multibookLogo,
     firstIntroImages,
     firstIntro,
+    multibook,
     secondIntroPng,
     secondIntroSvg,
     thirdIntroImage,
