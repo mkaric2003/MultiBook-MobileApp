@@ -53,7 +53,7 @@ class CreateAppointmentView extends HookWidget {
           (provider) => provider.id == arguments.draft?.selectedProviderId,
         )
         ? arguments.draft?.selectedProviderId
-        : providers.firstOrNull?.id;
+        : null;
     final selectedProviderId = useState<String?>(initialProviderId);
     final selectedProvider = providers
         .where((provider) => provider.id == selectedProviderId.value)

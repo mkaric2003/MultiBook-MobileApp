@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:multibook/src/data/data_sources/api_client.dart';
+import 'package:multibook/src/core/networking/api_client.dart';
 import 'package:multibook/src/data/models/app_notification_list_response.dart';
 
 @lazySingleton

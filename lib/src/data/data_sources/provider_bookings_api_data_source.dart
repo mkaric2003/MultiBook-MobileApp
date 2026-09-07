@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:multibook/src/data/data_sources/api_client.dart';
+import 'package:multibook/src/core/networking/api_client.dart';
 import 'package:multibook/src/data/models/appointment_list_response.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
 import 'package:multibook/src/data/models/booking_list_response.dart';

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:multibook/src/data/data_sources/api_client.dart';
+import 'package:multibook/src/core/networking/api_client.dart';
 import 'package:multibook/src/data/models/service_search_page_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -40,10 +40,11 @@ class ServiceSearchDataSourceImpl implements ServiceSearchDataSource {
         '/v1/services/search',
         queryParameters: {
           if (date != null)
-            'appointment_date':
-                DateTime.utc(date.year, date.month, date.day)
-                    .toIso8601String()
-                    .substring(0, 10),
+            'appointment_date': DateTime.utc(
+              date.year,
+              date.month,
+              date.day,
+            ).toIso8601String().substring(0, 10),
           if (timeMinutes != null) 'start_minutes': timeMinutes,
           if (categoryId?.trim().isNotEmpty ?? false)
             'category_id': categoryId!.trim(),

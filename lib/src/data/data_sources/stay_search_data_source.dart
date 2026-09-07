@@ -1,5 +1,5 @@
 import 'package:multibook/src/data/models/stay_search_page_model.dart';
-import 'package:multibook/src/data/data_sources/api_client.dart';
+import 'package:multibook/src/core/networking/api_client.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class StaySearchDataSource {
@@ -55,7 +55,8 @@ class StaySearchDataSourceImpl implements StaySearchDataSource {
       queryParameters: {
         if (city?.trim().isNotEmpty ?? false) 'city': city!.trim(),
         if (checkIn != null) 'check_in': _asUtcDate(checkIn).toIso8601String(),
-        if (checkOut != null) 'check_out': _asUtcDate(checkOut).toIso8601String(),
+        if (checkOut != null)
+          'check_out': _asUtcDate(checkOut).toIso8601String(),
         if (adults != _defaultAdults) 'adults': adults,
         if (children != _defaultChildren) 'children': children,
         if (minPrice != _defaultMinPrice)

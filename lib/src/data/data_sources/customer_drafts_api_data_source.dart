@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:multibook/src/core/errors/api_exception.dart';
-import 'package:multibook/src/data/data_sources/api_client.dart';
+import 'package:multibook/src/core/networking/api_client.dart';
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:multibook/src/data/enums/stay_extra_type.dart';
 import 'package:multibook/src/data/models/appointment_draft_model.dart';

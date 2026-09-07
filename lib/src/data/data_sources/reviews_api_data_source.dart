@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:multibook/src/data/data_sources/api_client.dart';
+import 'package:multibook/src/core/networking/api_client.dart';
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
 import 'package:multibook/src/data/models/business_review_model.dart';
 import 'package:multibook/src/data/models/review_list_response.dart';

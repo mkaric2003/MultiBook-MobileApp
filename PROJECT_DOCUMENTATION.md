@@ -87,7 +87,8 @@ Presentation (View / Widget / Cubit-BLoC)
 - **Presentation** prikazuje stanje i šalje korisničke akcije Cubit/BLoC-u. Nema direktnih Firebase poziva.
 - **Use case** je obavezan ulaz u REST module. Svaki use case izlaže jednu tipiziranu operaciju kroz `execute()` i zavisi samo od repository ugovora; nalazi se u `src/domain/use_cases/<module>/`.
 - **Repository contract** je u `src/domain/repositories/`, a njegova `Impl` klasa u `src/data/repositories/`. Implementacija koordinira data sourcee, dok use case ne poznaje HTTP detalje.
-- **Data source** je jedino mjesto koje direktno razgovara sa Firebaseom, HTTP API-jem ili pluginom uređaja.
+- **Data source** implementira adapter prema konkretnom backend resursu ili pluginu uređaja. HTTP adapter koristi zajedničku networking infrastrukturu umjesto da sam upravlja transportom.
+- **Core networking** (`src/core/networking/`) sadrži transportne primitive koje nisu vezane ni za jedan feature: `ApiClient`, `SseClient` i `SseConnection`.
 - **Models/enums** su eksplicitni i tipizirani. Feature-specifični modeli idu u `feature/domain/models`, a zajednički persisted modeli u `src/data/models`.
 
 ### 4.1.1 REST moduli i greške
@@ -200,8 +201,25 @@ DashboardCubit → WatchDashboardMetricsUseCase → DashboardMetricsRepository
 - `GET /v1/businesses/{businessId}/dashboard-metrics/stream` odmah šalje kompletan snapshot i zatim novi snapshot nakon svake commitane promjene rezervacije.
 - Flutter koristi jedan SSE subscription umjesto odvojenih Firestore summary i current-month subscriptiona. Stream se registruje u `SessionStreamRegistry` i automatski reconnecta s ograničenim exponential backoffom.
 - `DashboardMetrics` i zasebni `DashboardMetricsMonth` model koriste `dart_mappable`; iznosi s API-ja ostaju u minor units sve do zajedničkog currency formattera koji ih pretvara u decimalni prikaz.
-- Dashboard više ne čita `business_metrics` Firestore dokumente niti poziva metrics callable initializer. Earnings flow još koristi postojeće Firestore month/provider subcollectione dok ne bude zasebno migriran.
-- Firebase metrics Functions i pravila ostaju u projektu; uklonjen je samo Flutter Firestore dashboard flow.
+- Dashboard više ne čita `business_metrics` Firestore dokumente niti poziva metrics callable initializer.
+- Firebase metrics Functions i pravila ostaju u projektu kao legacy infrastruktura; Flutter dashboard ih više ne koristi.
+
+### 4.1.8 Earnings REST migracija
+
+Provider Earnings koristi isti generički SSE transport kao dashboard, ali zaseban domenski tok:
+
+```text
+EarningsView → EarningsCubit → WatchEarningsMetricsUseCase
+        → EarningsMetricsRepository → EarningsMetricsRepositoryImpl
+        → EarningsMetricsApiDataSource → SseClient → ApiClient
+```
+
+- `GET /v1/businesses/{businessId}/earnings/stream` prima inkluzivni `startDate`/`endDate` raspon, lokalni `utcOffsetMinutes` i opcionalni `staffId`, odmah šalje rezultat i osvježava ga nakon commitane promjene rezervacije. Offset uređaja određuje granice kalendarskog dana/sedmice/mjeseca, tako da lokalni period ne zavisi od UTC datuma.
+- Datum se primjenjuje na `created_at`: prihod pripada momentu kreiranja rezervacije, bez obzira kada će se termin ili boravak desiti.
+- Potvrđeni i završeni cash booking ulazi odmah; no-show/status promjena ga izuzima. Online booking ulazi tek kada je `payment_status=paid`.
+- `EarningsCubit` upravlja aktivnim businessom, periodom, provider filterom i SSE subscriptionom. Widget ne poziva use case direktno.
+- API i Flutter koriste minor units za ukupni, online, cash i historijski provider iznos. Konverzija u decimalni prikaz dešava se samo u zajedničkom currency formatteru.
+- Flutter Earnings više nema Firestore repository/data source niti čita `business_metrics` kolekciju. Postojeće Firebase aggregate funkcije i pravila ostaju samo kao legacy infrastruktura dok se zasebno ne uklone.
 
 ### 4.1.2 Businesses REST migracija
 
@@ -492,10 +510,10 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 - Earnings period filter podržava: current week, past week, this month, past month, this year, last year i custom raspon. Custom početni/završni datum se bira u Cupertino date pickeru.
 - Kod service businessa Earnings omogućava i izbor zaposlenika. Prikazuju se **gross earnings** (ukupna vrijednost njegovih appointmenta) i **provider earnings** (njegova ugovorena provizija), uz trend prihoda i broj appointmenta za odabrani period.
 - Svaki zaposlenik ima `commissionRate` (podrazumijevano 100%). Pri kreiranju appointmenta spremaju se historijski snapshoti `providerCommissionRate` i `providerEarnings`, pa kasnija promjena provizije ne mijenja ranije obračune.
-- Cloud Functions održavaju owner-only agregate po zaposleniku u `business_metrics/{businessId}/providers/{providerId}/months/{YYYY-MM}`. Dnevni gross/provider iznosi omogućavaju week i custom filtere bez čitanja svih appointment dokumenata.
-- Za djelimične mjesece (sedmica i custom period) agregat koristi samo dnevne vrijednosti unutar odabranog raspona, uključujući zasebne daily online i cash earnings, pa podjela ostaje tačna.
+- Go backend računa owner-only earnings projekciju direktno iz indeksiranih PostgreSQL rezervacija. Dnevni gross/provider iznosi omogućavaju week i custom filtere bez čitanja pojedinačnih appointmenta na mobilnoj strani.
+- Za djelimične mjesece (sedmica i custom period) API vraća samo dnevne vrijednosti unutar inkluzivnog odabranog raspona, uključujući zasebne daily online i cash earnings, pa podjela ostaje tačna.
 - Cash rezervacija/appointment ulazi u earnings odmah pri potvrdi kao očekivani prihod. No-show je dostupan samo provideru, samo za završeni cash termin/rezervaciju sa statusom `confirmed` ili `completed`; uz akciju se prikazuje objašnjenje o uticaju na metrike.
-- Firestore `business_metrics/{businessId}` i mjesečni dokumenti trenutno služe samo nemigriranom Earnings flowu. Dashboard snapshot backend računa iz indeksiranih PostgreSQL reservation redova, bez kopirane aggregate tabele i inicijalizacijskog poziva.
+- Dashboard i Earnings metrike backend računa iz indeksiranih PostgreSQL reservation redova, bez kopirane aggregate tabele i inicijalizacijskog poziva. Firestore `business_metrics` dokumente migrirani Flutter flow više ne čita.
 - `selectedBusinessId` u user dokumentu je jedini izvor aktivnog businessa i promjene se reaktivno reflektuju na dashboard i booking ekran.
 - Ako provider nema businessa, dashboard prikazuje empty state i *Add new business* akciju.
 - *My Businesses* lista podržava dodavanje, biranje aktivnog businessa i swipe-to-delete sa animacijom kartice bez reloadanja cijelog ekrana.
@@ -584,8 +602,8 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `bookings/{id}` | stay rezervacije i payment/guest snapshot |
 | `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
 | Supabase `stay_bookings` / `service_appointments` | source of truth za dashboard metrike; Go API iz njih računa indeksirani current-month snapshot i šalje live invalidacije kroz SSE |
-| `business_metrics/{businessId}` | legacy summary koji ostaje dok se Earnings ne migrira; Flutter dashboard ga više ne čita |
-| `business_metrics/{businessId}/months/{YYYY-MM}` | Firestore revenue/cash/online i dnevni podaci koje trenutno koristi samo Earnings |
+| `business_metrics/{businessId}` | legacy Firebase aggregate; migrirani Flutter dashboard i Earnings ga više ne čitaju |
+| `business_metrics/{businessId}/months/{YYYY-MM}` | legacy Firestore revenue/cash/online i dnevni podaci; nisu dio aktivnog Flutter toka |
 | `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
 | `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
 | `conversations/{id}` | business-customer chat metadata |
