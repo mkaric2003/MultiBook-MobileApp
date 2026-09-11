@@ -43,16 +43,14 @@ class ChatMessageBubble extends StatelessWidget {
                 message.text,
                 style: const TextStyle(fontSize: 15, height: 1.3),
               ),
-              if (message.createdAt != null) ...[
-                const SizedBox(height: 4),
-                Text(
-                  DateFormat('h:mm a').format(message.createdAt!),
-                  style: TextStyle(
-                    color: isMine ? Colors.white70 : AppColors.muted,
-                    fontSize: 10,
-                  ),
+              const SizedBox(height: 4),
+              Text(
+                DateFormat('h:mm a').format(message.createdAt),
+                style: TextStyle(
+                  color: isMine ? Colors.white70 : AppColors.muted,
+                  fontSize: 10,
                 ),
-              ],
+              ),
             ],
           ),
         ),

@@ -9,19 +9,19 @@ class SseConnection<T> {
   SseConnection({
     required ApiClient client,
     required String path,
-    required String eventName,
-    required T Function(String) decode,
+    required Set<String> eventNames,
+    required T Function(String eventName, String data) decode,
   }) : _client = client,
        _path = path,
-       _eventName = eventName,
+       _eventNames = eventNames,
        _decode = decode {
     _controller = StreamController<T>(onListen: _connect, onCancel: _stop);
   }
 
   final ApiClient _client;
   final String _path;
-  final String _eventName;
-  final T Function(String) _decode;
+  final Set<String> _eventNames;
+  final T Function(String eventName, String data) _decode;
   late final StreamController<T> _controller;
   StreamSubscription<T>? _subscription;
   Timer? _reconnectTimer;
@@ -33,8 +33,8 @@ class SseConnection<T> {
 
   void _connect() {
     if (_stopped || _controller.isClosed) return;
-    _subscription = _eventPayloads()
-        .map(_decode)
+    _subscription = _events()
+        .map((event) => _decode(event.name, event.data))
         .listen(
           _onData,
           onError: _onError,
@@ -86,14 +86,16 @@ class SseConnection<T> {
     await _subscription?.cancel();
   }
 
-  Stream<String> _eventPayloads() async* {
+  Stream<({String name, String data})> _events() async* {
     final lines = _client.openSseStream(_path).transform(const LineSplitter());
     String? eventName;
     final data = StringBuffer();
     await for (final line in lines) {
       if (line.isEmpty) {
-        if (eventName == _eventName && data.isNotEmpty) {
-          yield data.toString();
+        if (eventName != null &&
+            _eventNames.contains(eventName) &&
+            data.isNotEmpty) {
+          yield (name: eventName, data: data.toString());
         }
         eventName = null;
         data.clear();

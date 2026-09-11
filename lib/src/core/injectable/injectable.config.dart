@@ -35,7 +35,8 @@ import 'package:multibook/src/data/data_sources/authentication_data_source.dart'
     as _i715;
 import 'package:multibook/src/data/data_sources/businesses_api_data_source.dart'
     as _i768;
-import 'package:multibook/src/data/data_sources/chat_data_source.dart' as _i3;
+import 'package:multibook/src/data/data_sources/chat_api_data_source.dart'
+    as _i69;
 import 'package:multibook/src/data/data_sources/customer_appointments_api_data_source.dart'
     as _i264;
 import 'package:multibook/src/data/data_sources/customer_bookings_api_data_source.dart'
@@ -89,7 +90,8 @@ import 'package:multibook/src/data/repositories/business_repository.dart'
     as _i590;
 import 'package:multibook/src/data/repositories/businesses_repository_impl.dart'
     as _i48;
-import 'package:multibook/src/data/repositories/chat_repository.dart' as _i905;
+import 'package:multibook/src/data/repositories/chat_repository_impl.dart'
+    as _i574;
 import 'package:multibook/src/data/repositories/customer_appointments_repository_impl.dart'
     as _i122;
 import 'package:multibook/src/data/repositories/customer_bookings_repository_impl.dart'
@@ -138,6 +140,8 @@ import 'package:multibook/src/data/repositories/users_repository_impl.dart'
     as _i595;
 import 'package:multibook/src/domain/repositories/businesses_repository.dart'
     as _i197;
+import 'package:multibook/src/domain/repositories/chat_repository.dart'
+    as _i692;
 import 'package:multibook/src/domain/repositories/customer_appointments_repository.dart'
     as _i884;
 import 'package:multibook/src/domain/repositories/customer_bookings_repository.dart'
@@ -188,6 +192,24 @@ import 'package:multibook/src/domain/use_cases/businesses/get_selected_business_
     as _i1063;
 import 'package:multibook/src/domain/use_cases/businesses/update_business_use_case.dart'
     as _i835;
+import 'package:multibook/src/domain/use_cases/chat/get_or_create_chat_conversation_use_case.dart'
+    as _i469;
+import 'package:multibook/src/domain/use_cases/chat/get_unread_messages_count_use_case.dart'
+    as _i316;
+import 'package:multibook/src/domain/use_cases/chat/mark_chat_as_read_use_case.dart'
+    as _i481;
+import 'package:multibook/src/domain/use_cases/chat/send_chat_message_use_case.dart'
+    as _i575;
+import 'package:multibook/src/domain/use_cases/chat/set_chat_presence_use_case.dart'
+    as _i919;
+import 'package:multibook/src/domain/use_cases/chat/set_chat_typing_use_case.dart'
+    as _i203;
+import 'package:multibook/src/domain/use_cases/chat/watch_chat_conversation_use_case.dart'
+    as _i244;
+import 'package:multibook/src/domain/use_cases/chat/watch_chat_conversations_use_case.dart'
+    as _i16;
+import 'package:multibook/src/domain/use_cases/chat/watch_unread_messages_count_use_case.dart'
+    as _i747;
 import 'package:multibook/src/domain/use_cases/checkout/create_customer_appointment_use_case.dart'
     as _i776;
 import 'package:multibook/src/domain/use_cases/checkout/create_customer_booking_use_case.dart'
@@ -467,15 +489,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i82.DevelopmentSeedApiDataSource>(
       () => _i82.DevelopmentSeedApiDataSource(gh<_i234.ApiClient>()),
     );
-    gh.lazySingleton<_i3.ChatDataSource>(
-      () => _i3.ChatDataSourceImpl(gh<_i974.FirebaseFirestore>()),
-    );
-    gh.lazySingleton<_i905.ChatRepository>(
-      () => _i905.ChatRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i3.ChatDataSource>(),
-      ),
-    );
     gh.lazySingleton<_i190.NotificationDataSource>(
       () => _i190.NotificationDataSourceImpl(gh<_i892.FirebaseMessaging>()),
     );
@@ -493,9 +506,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i651.ProviderBookingsApiDataSource>(),
         gh<_i411.RestRepositoryExecutor>(),
       ),
-    );
-    gh.factory<_i1005.ChatListCubit>(
-      () => _i1005.ChatListCubit(gh<_i905.ChatRepository>()),
     );
     gh.factory<_i84.UpdateProviderBookingStatusUseCase>(
       () => _i84.UpdateProviderBookingStatusUseCase(
@@ -649,6 +659,10 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.lazySingleton<_i69.ChatApiDataSource>(
+      () =>
+          _i69.ChatApiDataSource(gh<_i234.ApiClient>(), gh<_i486.SseClient>()),
+    );
     gh.factory<_i455.BookingPromotionCubit>(
       () => _i455.BookingPromotionCubit(gh<_i1038.PromotionRepository>()),
     );
@@ -754,6 +768,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.lazySingleton<_i692.ChatRepository>(
+      () => _i574.ChatRepositoryImpl(
+        gh<_i69.ChatApiDataSource>(),
+        gh<_i594.FirebaseStorageDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
+    );
     gh.lazySingleton<_i155.ReviewsRepository>(
       () => _i824.ReviewsRepositoryImpl(
         gh<_i411.ReviewsApiDataSource>(),
@@ -842,6 +863,34 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i950.RecentlyViewedUpdatesService>(),
       ),
     );
+    gh.factory<_i203.SetChatTypingUseCase>(
+      () => _i203.SetChatTypingUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i16.WatchChatConversationsUseCase>(
+      () => _i16.WatchChatConversationsUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i469.GetOrCreateChatConversationUseCase>(
+      () =>
+          _i469.GetOrCreateChatConversationUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i244.WatchChatConversationUseCase>(
+      () => _i244.WatchChatConversationUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i747.WatchUnreadMessagesCountUseCase>(
+      () => _i747.WatchUnreadMessagesCountUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i919.SetChatPresenceUseCase>(
+      () => _i919.SetChatPresenceUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i481.MarkChatAsReadUseCase>(
+      () => _i481.MarkChatAsReadUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i575.SendChatMessageUseCase>(
+      () => _i575.SendChatMessageUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i316.GetUnreadMessagesCountUseCase>(
+      () => _i316.GetUnreadMessagesCountUseCase(gh<_i692.ChatRepository>()),
+    );
     gh.lazySingleton<_i981.UserProfileUseCase>(
       () => _i981.UserProfileUseCase(
         gh<_i715.AuthenticationDataSource>(),
@@ -907,6 +956,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1025.SessionStreamRegistry>(),
       ),
     );
+    gh.factory<_i1005.ChatListCubit>(
+      () => _i1005.ChatListCubit(gh<_i16.WatchChatConversationsUseCase>()),
+    );
     gh.factory<_i1063.GetSelectedBusinessUseCase>(
       () => _i1063.GetSelectedBusinessUseCase(
         gh<_i829.GetOwnedBusinessUseCase>(),
@@ -952,6 +1004,17 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i41.GetOwnedBusinessesUseCase>(),
       ),
     );
+    gh.factory<_i152.ChatConversationCubit>(
+      () => _i152.ChatConversationCubit(
+        gh<_i469.GetOrCreateChatConversationUseCase>(),
+        gh<_i244.WatchChatConversationUseCase>(),
+        gh<_i575.SendChatMessageUseCase>(),
+        gh<_i481.MarkChatAsReadUseCase>(),
+        gh<_i203.SetChatTypingUseCase>(),
+        gh<_i919.SetChatPresenceUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+      ),
+    );
     gh.lazySingleton<_i1001.StaySearchRepository>(
       () => _i1001.StaySearchRepository(
         gh<_i665.StaySearchDataSource>(),
@@ -988,12 +1051,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
         gh<_i1063.GetSelectedBusinessUseCase>(),
         gh<_i835.UpdateBusinessUseCase>(),
-      ),
-    );
-    gh.factory<_i152.ChatConversationCubit>(
-      () => _i152.ChatConversationCubit(
-        gh<_i905.ChatRepository>(),
-        gh<_i981.UserProfileUseCase>(),
       ),
     );
     gh.lazySingleton<_i331.AppointmentRepository>(
@@ -1097,6 +1154,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i113.ExploreStayResultsCubit>(
       () => _i113.ExploreStayResultsCubit(gh<_i1001.StaySearchRepository>()),
     );
+    gh.factory<_i223.MoreCubit>(
+      () => _i223.MoreCubit(
+        gh<_i590.BusinessRepository>(),
+        gh<_i981.UserProfileUseCase>(),
+        gh<_i747.WatchUnreadMessagesCountUseCase>(),
+        gh<_i316.GetUnreadMessagesCountUseCase>(),
+        gh<_i730.NotificationDeviceService>(),
+        gh<_i1025.SessionStreamRegistry>(),
+      ),
+    );
     gh.lazySingleton<_i142.SupportTicketRepository>(
       () => _i142.SupportTicketRepository(
         gh<_i715.AuthenticationDataSource>(),
@@ -1156,14 +1223,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
       ),
     );
-    gh.factory<_i223.MoreCubit>(
-      () => _i223.MoreCubit(
-        gh<_i590.BusinessRepository>(),
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i905.ChatRepository>(),
-        gh<_i1025.SessionStreamRegistry>(),
-      ),
-    );
     gh.factory<_i243.ReviewStayCubit>(
       () => _i243.ReviewStayCubit(
         gh<_i742.GetBusinessDetailUseCase>(),
@@ -1197,19 +1256,21 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
       ),
     );
-    gh.factory<_i103.CustomerProfileCubit>(
-      () => _i103.CustomerProfileCubit(
-        gh<_i869.AuthenticationRepository>(),
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i905.ChatRepository>(),
-        gh<_i1025.SessionStreamRegistry>(),
-      ),
-    );
     gh.factory<_i806.SupportTicketsCubit>(
       () => _i806.SupportTicketsCubit(gh<_i142.SupportTicketRepository>()),
     );
     gh.factory<_i974.CreateSupportTicketCubit>(
       () => _i974.CreateSupportTicketCubit(gh<_i142.SupportTicketRepository>()),
+    );
+    gh.factory<_i103.CustomerProfileCubit>(
+      () => _i103.CustomerProfileCubit(
+        gh<_i869.AuthenticationRepository>(),
+        gh<_i981.UserProfileUseCase>(),
+        gh<_i747.WatchUnreadMessagesCountUseCase>(),
+        gh<_i316.GetUnreadMessagesCountUseCase>(),
+        gh<_i730.NotificationDeviceService>(),
+        gh<_i1025.SessionStreamRegistry>(),
+      ),
     );
     gh.factory<_i41.CustomerDashboardCubit>(
       () => _i41.CustomerDashboardCubit(

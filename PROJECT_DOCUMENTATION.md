@@ -286,6 +286,7 @@ functions/src/
 - Ne koristiti `setState`; za lokalne interakcije koristiti `HookWidget`, `useState`, `useEffect` ili Cubit stanje.
 - Ne stavljati privatne pomoćne UI klase u veliki view fajl. Svaki custom widget ima svoj fajl u `presentation/widgets`.
 - Feature modeli/enumi nisu u presentation fajlovima; idu u `domain/models` ili `domain/enums`.
+- Svaki model ima vlastiti fajl i koristi `dart_mappable`; ručni `fromMap`, `toMap` i više model-klasa u jednom fajlu nisu dozvoljeni.
 - Novi REST repository koristi `RestRepositoryExecutor`; ne kopirati HTTP-to-failure mapping u pojedinačne `RepositoryImpl` klase.
 - Novi REST Cubit prima use case, a ne `RepositoryImpl`, `DataSource` ili `ApiClient`.
 - Globalno ponovljive komponente su u `src/global_widgets`: `CustomAppBar`, `CustomButton`, `CustomTextfield`, `SearchableCityPickerSheet` i `LabeledDivider`.
@@ -329,11 +330,11 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 
 ### Session stream lifecycle
 
-Firestore stream nakon Firebase Auth odjave više nema pravo čitanja dokumenata. Zato aplikacija ne prepušta zatvaranje streamova slučajnom redoslijedu rebuilda i navigacije:
+Autentificirani Firestore i SSE streamovi nakon Firebase Auth odjave više nemaju važeći pristup. Zato aplikacija ne prepušta zatvaranje streamova slučajnom redoslijedu rebuilda i navigacije:
 
 1. Root view odmah zamijeni trenutnu rutu sa sign-in ekranom.
 2. `AuthenticationRepository.signOut()` poziva `SessionStreamRegistry.cancelAll()` **prije** `FirebaseAuth.signOut()`.
-3. Registry otkazuje aktivne, autentikacijom vezane pretplate (dashboard SSE, Firestore Earnings metrike i unread-message indikatore).
+3. Registry otkazuje aktivne, autentikacijom vezane pretplate, uključujući dashboard/Earnings SSE i chat unread indikatore.
 4. Dok je session u završavanju, registry odmah otkazuje svaku pretplatu koju neki sporiji async `load()` pokuša otvoriti.
 5. Tek nakon toga briše se notification device registracija i poziva Firebase sign-out.
 
@@ -546,12 +547,15 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 Chat je shared feature između customera i konkretnog businessa:
 
 - Jedinstven conversation je deterministički vezan za business i customera.
-- `conversations/{conversationId}` čuva `businessId`, ownera, customera, participant IDs, preview zadnje poruke, read/typing/activity metadata.
-- Poruke su u `conversations/{conversationId}/messages/{messageId}`.
-- Otvoren chat postavlja aktivnog učesnika s expiry vremenom; ako je recipient trenutno u tom chatu, cloud trigger ne šalje ni in-app ni push notifikaciju za poruku.
+- PostgreSQL tabele `chat_conversations`, `chat_participant_state` i `chat_messages` su jedini aktivni source of truth; Flutter nema Firestore fallback i ne pristupa Supabaseu direktno.
+- Tok je `Cubit → action-specific use case → ChatRepository → ChatRepositoryImpl → ChatApiDataSource → ApiClient/SseClient`.
+- REST rute pod `/v1/conversations` otvaraju conversation, listaju conversatione i poruke, šalju idempotentnu poruku s client-generated UUID-em te ažuriraju read, typing i presence stanje.
+- `/v1/chat/stream` šalje samo `chat_sync` i participant-scoped `chat_changed` invalidacije bez sadržaja poruke. Repository nakon invalidacije ponovo učitava autorizovani REST snapshot; reconnect dobija novi `chat_sync`.
+- Otvoren chat obnavlja presence s expiry vremenom; ako je recipient trenutno u istom chatu, backend ne povećava unread count i ne kreira push outbox zapis.
 - Typing indikator je transient state s kratkim expirationom.
 - Seen se prikazuje samo ispod stvarne posljednje outgoing poruke koja je pročitana, ne u bubbleu i ne na starijim porukama.
-- Unread counters se računaju u backendu, a streamovi za indikatore se aktiviraju samo dok je relevantan view u widget stacku, ne globalno kroz cijeli lifecycle aplikacije.
+- Unread counters se računaju u backendu, a streamovi za indikatore se aktiviraju samo dok je relevantan view u widget stacku, ne globalno kroz cijeli lifecycle aplikacije. SSE je primarni invalidator, foreground chat FCM odmah pokreće REST refresh, a jednokratni REST refresh se radi i kada se aplikacija vrati u foreground. Chat nema periodični polling.
+- API vraća trajne Firebase Storage pathove; `ChatRepositoryImpl` ih pretvara u download URL-ove samo za prikaz.
 
 Chat se otvara iz booking/appointment detalja kroz *Message provider/customer* i iz Messages stavke na More/Profile ekranima.
 
@@ -577,7 +581,7 @@ Flutter FCM lifecycle vodi `NotificationDeviceService`: nakon prijave registruje
 | Go API: appointment created | Provider dobija in-app i FCM notifikaciju o novom appointmentu |
 | Go API: appointment status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa appointmenta |
 | Go API: appointment cancelled by customer | Provider dobija in-app i FCM notifikaciju o customer otkazivanju |
-| `notifyOnChatMessageCreated` | Push samo ako recipient nije aktivan u istom chatu |
+| Go API: chat message committed | `chat_push_outbox` worker šalje push samo ako recipient nije aktivan u istom chatu |
 | `initializeBusinessMetrics` | Callable inicijalizacija ili verzionirana obnova KPI i earnings agregata za owner business |
 
 Migracija `000019_notifications` kreira Supabase tabele `notification_devices` i `in_app_notifications`. API je jedini klijent Supabasea; Flutter ne pristupa Supabaseu direktno. Customer ne dobija notifikaciju kada sam otkaže booking ili appointment; tada se notifikacija šalje samo provideru. Push failure ne poništava već uspješno spremljenu booking/appointment promjenu ili in-app zapis.
@@ -592,7 +596,7 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 
 | Spremište / putanja | Svrha |
 |---|---|
-| `users/{uid}` | korisnički profil, tip, selected business, grad/adresa i chat unread counteri |
+| `users/{uid}` | korisnički profil, tip, selected business i grad/adresa |
 | Supabase `notification_devices` | FCM tokeni uređaja, dostupni samo kroz Go API |
 | Supabase `in_app_notifications` | in-app notifikacije, read status i payload, dostupni samo kroz Go API |
 | Supabase `business_reviews` | recenzije i source/customer snapshoti; dostupno samo kroz Go API |
@@ -602,13 +606,12 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | `bookings/{id}` | stay rezervacije i payment/guest snapshot |
 | `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
 | Supabase `stay_bookings` / `service_appointments` | source of truth za dashboard metrike; Go API iz njih računa indeksirani current-month snapshot i šalje live invalidacije kroz SSE |
+| Supabase `chat_conversations` / `chat_participant_state` / `chat_messages` | chat metadata, participant read/typing/presence stanje i poruke; dostupno samo kroz Go API |
+| Supabase `chat_push_outbox` | trajni chat push red sa retry i delivery statusom; obrađuje ga Go API worker |
 | `business_metrics/{businessId}` | legacy Firebase aggregate; migrirani Flutter dashboard i Earnings ga više ne čitaju |
 | `business_metrics/{businessId}/months/{YYYY-MM}` | legacy Firestore revenue/cash/online i dnevni podaci; nisu dio aktivnog Flutter toka |
 | `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
 | `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
-| `conversations/{id}` | business-customer chat metadata |
-| `conversations/{id}/messages/{id}` | poruke |
-| `notification_deliveries/{id}` | idempotency/delivery evidencija chat push notifikacija |
 
 Storage putanje:
 

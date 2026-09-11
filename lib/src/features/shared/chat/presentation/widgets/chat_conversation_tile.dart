@@ -22,7 +22,7 @@ class ChatConversationTile extends StatelessWidget {
         ? conversation.businessName
         : conversation.customerName;
     final imageUrl = isCustomer
-        ? conversation.businessImageUrl
+        ? conversation.businessImageUrl ?? ''
         : conversation.customerImageUrl ?? '';
     final unreadCount = isCustomer
         ? conversation.unreadCustomerCount

@@ -26,14 +26,15 @@ class NotificationDeviceService {
   final NotificationDataSource _notificationDataSource;
   final RegisterNotificationDeviceUseCase _registerDevice;
   final UnregisterNotificationDeviceUseCase _unregisterDevice;
-  final _foregroundMessages = StreamController<void>.broadcast();
+  final _foregroundMessages = StreamController<Map<String, String>>.broadcast();
   StreamSubscription<RemoteMessage>? _foregroundMessageSubscription;
   StreamSubscription<RemoteMessage>? _messageOpenedSubscription;
   StreamSubscription<String>? _tokenRefreshSubscription;
   ValueChanged<Map<String, String>>? _onNotificationOpened;
   bool _isInitialized = false;
 
-  Stream<void> get onForegroundMessage => _foregroundMessages.stream;
+  Stream<Map<String, String>> get onForegroundMessage =>
+      _foregroundMessages.stream;
 
   Future<void> initialize({
     required ValueChanged<Map<String, String>> onNotificationOpened,
@@ -42,7 +43,8 @@ class NotificationDeviceService {
     _isInitialized = true;
     _onNotificationOpened = onNotificationOpened;
     _foregroundMessageSubscription = _notificationDataSource.onMessage.listen(
-      (_) => _foregroundMessages.add(null),
+      (message) =>
+          _foregroundMessages.add(Map<String, String>.from(message.data)),
     );
     _messageOpenedSubscription = _notificationDataSource.onMessageOpenedApp
         .listen(_handleOpenedMessage);

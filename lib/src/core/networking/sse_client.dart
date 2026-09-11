@@ -15,7 +15,18 @@ class SseClient {
   }) => SseConnection<T>(
     client: _client,
     path: path,
-    eventName: eventName,
+    eventNames: {eventName},
+    decode: (_, data) => decode(data),
+  ).stream;
+
+  Stream<T> watchEvents<T>({
+    required String path,
+    required Set<String> eventNames,
+    required T Function(String eventName, String data) decode,
+  }) => SseConnection<T>(
+    client: _client,
+    path: path,
+    eventNames: eventNames,
     decode: decode,
   ).stream;
 }
