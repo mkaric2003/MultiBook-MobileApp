@@ -16,7 +16,7 @@ import 'package:multibook/src/data/models/service_details_model.dart';
 import 'package:multibook/src/data/models/service_provider_model.dart';
 import 'package:multibook/src/data/models/stay_details_model.dart';
 import 'package:multibook/src/data/models/stay_room_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/domain/use_cases/businesses/resolve_business_location_use_case.dart';
 import 'package:multibook/src/domain/use_cases/businesses/create_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
@@ -34,7 +34,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   AddBusinessBloc(
     this._imagePickerDataSource,
     this._sharedPreferences,
-    this._businessRepository,
+    this._resolveBusinessLocation,
     this._createBusinessUseCase,
     this._getOwnedBusinessesUseCase,
     this._getOwnedBusinessUseCase,
@@ -85,7 +85,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
 
   final ImagePickerDataSource _imagePickerDataSource;
   final SharedPreferences _sharedPreferences;
-  final BusinessRepository _businessRepository;
+  final ResolveBusinessLocationUseCase _resolveBusinessLocation;
   final CreateBusinessUseCase _createBusinessUseCase;
   final GetOwnedBusinessesUseCase _getOwnedBusinessesUseCase;
   final GetOwnedBusinessUseCase _getOwnedBusinessUseCase;
@@ -379,7 +379,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         isResolvingLocation: true,
       ),
     );
-    final location = await _businessRepository.resolveBusinessLocation(
+    final location = await _resolveBusinessLocation.execute(
       latitude: event.latitude,
       longitude: event.longitude,
     );
@@ -549,14 +549,37 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
         );
         final result = await _updateBusinessUseCase.execute(updated);
         if (result case FailureResult(failure: final failure)) {
-          throw BusinessException(_failureMessage(failure));
+          emit(
+            state.copyWith(
+              isLoading: false,
+              errorMessage: _failureMessage(failure),
+            ),
+          );
+          return;
         }
         _getOwnedBusinessesUseCase.invalidate();
       } else {
+        if (_authenticationDataSource.currentUser == null ||
+            state.latitude == null ||
+            state.longitude == null) {
+          emit(
+            state.copyWith(
+              isLoading: false,
+              errorMessage: 'Please select your business location on the map.',
+            ),
+          );
+          return;
+        }
         final business = await _buildNewBusiness(event);
         final result = await _createBusinessUseCase.execute(business);
         if (result case FailureResult(failure: final failure)) {
-          throw BusinessException(_failureMessage(failure));
+          emit(
+            state.copyWith(
+              isLoading: false,
+              errorMessage: _failureMessage(failure),
+            ),
+          );
+          return;
         }
         _getOwnedBusinessesUseCase.invalidate();
       }
@@ -567,8 +590,13 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
           hasExistingBusiness: true,
         ),
       );
-    } on BusinessException catch (error) {
-      emit(state.copyWith(isLoading: false, errorMessage: error.message));
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: 'We could not create this business. Please try again.',
+        ),
+      );
     }
   }
 
@@ -577,9 +605,7 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
   ) async {
     final ownerId = _authenticationDataSource.currentUser?.uid;
     if (ownerId == null || state.latitude == null || state.longitude == null) {
-      throw const BusinessException(
-        'Please select your business location on the map.',
-      );
+      throw StateError('Business location is required.');
     }
     final uploadKey = DateTime.now().microsecondsSinceEpoch.toString();
     final logoPath = await _uploadBusinessImage(
@@ -690,7 +716,13 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     try {
       final result = await _developmentSeedUseCase.seedStays();
       if (result case FailureResult(failure: final failure)) {
-        throw BusinessException(_failureMessage(failure));
+        emit(
+          state.copyWith(
+            isLoading: false,
+            errorMessage: _failureMessage(failure),
+          ),
+        );
+        return;
       }
       final seededCount = (result as Success<int>).value;
       _getOwnedBusinessesUseCase.invalidate();
@@ -702,8 +734,13 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
           successMessage: '$seededCount demo stays created.',
         ),
       );
-    } on BusinessException catch (error) {
-      emit(state.copyWith(isLoading: false, errorMessage: error.message));
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: 'We could not create this business. Please try again.',
+        ),
+      );
     }
   }
 
@@ -721,7 +758,13 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
     try {
       final result = await _developmentSeedUseCase.seedServices();
       if (result case FailureResult(failure: final failure)) {
-        throw BusinessException(_failureMessage(failure));
+        emit(
+          state.copyWith(
+            isLoading: false,
+            errorMessage: _failureMessage(failure),
+          ),
+        );
+        return;
       }
       final seededCount = (result as Success<int>).value;
       _getOwnedBusinessesUseCase.invalidate();
@@ -733,8 +776,13 @@ class AddBusinessBloc extends Bloc<AddBusinessEvent, AddBusinessState> {
           successMessage: '$seededCount demo service businesses created.',
         ),
       );
-    } on BusinessException catch (error) {
-      emit(state.copyWith(isLoading: false, errorMessage: error.message));
+    } catch (_) {
+      emit(
+        state.copyWith(
+          isLoading: false,
+          errorMessage: 'We could not create this business. Please try again.',
+        ),
+      );
     }
   }
 }

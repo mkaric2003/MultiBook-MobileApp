@@ -6,7 +6,7 @@ import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/core/services/notification_device_service.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/chat/get_unread_messages_count_use_case.dart';
 import 'package:multibook/src/domain/use_cases/chat/watch_unread_messages_count_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
@@ -17,7 +17,7 @@ import 'package:injectable/injectable.dart';
 @injectable
 class MoreCubit extends Cubit<MoreState> with WidgetsBindingObserver {
   MoreCubit(
-    this._businessRepository,
+    this._getOwnedBusinessesUseCase,
     this._userRepository,
     this._watchUnreadMessagesCount,
     this._getUnreadMessagesCount,
@@ -25,7 +25,7 @@ class MoreCubit extends Cubit<MoreState> with WidgetsBindingObserver {
     this._sessionStreamRegistry,
   ) : super(const MoreState());
 
-  final BusinessRepository _businessRepository;
+  final GetOwnedBusinessesUseCase _getOwnedBusinessesUseCase;
   final UserProfileUseCase _userRepository;
   final WatchUnreadMessagesCountUseCase _watchUnreadMessagesCount;
   final GetUnreadMessagesCountUseCase _getUnreadMessagesCount;
@@ -37,7 +37,11 @@ class MoreCubit extends Cubit<MoreState> with WidgetsBindingObserver {
 
   Future<void> load({String? businessId}) async {
     final user = await _userRepository.getCurrentUser();
-    final businesses = await _businessRepository.getOwnedBusinesses();
+    final businessesResult = await _getOwnedBusinessesUseCase.execute();
+    final businesses = switch (businessesResult) {
+      Success(value: final values) => values,
+      FailureResult() => const <BusinessModel>[],
+    };
     final selectedBusiness =
         _findBusiness(businesses, businessId ?? user?.selectedBusinessId) ??
         (businesses.isEmpty ? null : businesses.first);

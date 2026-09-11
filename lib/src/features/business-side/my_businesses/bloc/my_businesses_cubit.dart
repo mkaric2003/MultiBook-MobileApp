@@ -1,7 +1,7 @@
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
+import 'package:multibook/src/domain/use_cases/businesses/delete_business_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/my_businesses/bloc/my_businesses_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +10,12 @@ import 'package:injectable/injectable.dart';
 @injectable
 class MyBusinessesCubit extends Cubit<MyBusinessesState> {
   MyBusinessesCubit(
-    this._businessRepository,
+    this._deleteBusiness,
     this._userRepository,
     this._getOwnedBusinesses,
   ) : super(const MyBusinessesState());
 
-  final BusinessRepository _businessRepository;
+  final DeleteBusinessUseCase _deleteBusiness;
   final UserProfileUseCase _userRepository;
   final GetOwnedBusinessesUseCase _getOwnedBusinesses;
 
@@ -55,12 +55,8 @@ class MyBusinessesCubit extends Cubit<MyBusinessesState> {
   }
 
   Future<bool> deleteBusiness(BusinessModel business) async {
-    try {
-      await _businessRepository.deleteBusiness(business);
-      return true;
-    } on BusinessException {
-      return false;
-    }
+    final result = await _deleteBusiness.execute(business.id);
+    return result is Success<void>;
   }
 
   void removeBusiness(String businessId) {

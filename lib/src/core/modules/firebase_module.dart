@@ -1,5 +1,4 @@
 import 'package:multibook/firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,10 +21,6 @@ abstract class FirebaseModule {
 
   @singleton
   FirebaseStorage firebaseStorage(FirebaseApp app) => FirebaseStorage.instance;
-
-  @singleton
-  FirebaseFirestore firebaseFirestore(FirebaseApp app) =>
-      FirebaseFirestore.instance;
 
   @singleton
   FirebaseMessaging firebaseMessaging(FirebaseApp app) =>

@@ -1,22 +1,22 @@
 class AppointmentAvailabilityState {
   const AppointmentAvailabilityState({
     this.isLoading = false,
-    this.bookedStartMinutes = const {},
+    this.availableStartMinutes = const {},
     this.errorMessage,
   });
 
   final bool isLoading;
-  final Set<int> bookedStartMinutes;
+  final Set<int> availableStartMinutes;
   final String? errorMessage;
 
   AppointmentAvailabilityState copyWith({
     bool? isLoading,
-    Set<int>? bookedStartMinutes,
+    Set<int>? availableStartMinutes,
     String? errorMessage,
     bool clearError = false,
   }) => AppointmentAvailabilityState(
     isLoading: isLoading ?? this.isLoading,
-    bookedStartMinutes: bookedStartMinutes ?? this.bookedStartMinutes,
+    availableStartMinutes: availableStartMinutes ?? this.availableStartMinutes,
     errorMessage: clearError ? null : errorMessage ?? this.errorMessage,
   );
 }

@@ -9,7 +9,6 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:firebase_core/firebase_core.dart' as _i982;
 import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
@@ -57,8 +56,6 @@ import 'package:multibook/src/data/data_sources/earnings_metrics_api_data_source
     as _i449;
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart'
     as _i594;
-import 'package:multibook/src/data/data_sources/firestore_data_source.dart'
-    as _i198;
 import 'package:multibook/src/data/data_sources/image_picker_data_source.dart'
     as _i157;
 import 'package:multibook/src/data/data_sources/in_app_notifications_api_data_source.dart'
@@ -79,6 +76,8 @@ import 'package:multibook/src/data/data_sources/reviews_api_data_source.dart'
     as _i411;
 import 'package:multibook/src/data/data_sources/saved_business_api_data_source.dart'
     as _i920;
+import 'package:multibook/src/data/data_sources/service_availability_api_data_source.dart'
+    as _i433;
 import 'package:multibook/src/data/data_sources/service_search_data_source.dart'
     as _i139;
 import 'package:multibook/src/data/data_sources/stay_search_data_source.dart'
@@ -88,12 +87,12 @@ import 'package:multibook/src/data/data_sources/support_ticket_api_data_source.d
 import 'package:multibook/src/data/data_sources/users_api_data_source.dart'
     as _i364;
 import 'package:multibook/src/data/models/booking_model.dart' as _i259;
-import 'package:multibook/src/data/repositories/appointment_repository.dart'
-    as _i331;
 import 'package:multibook/src/data/repositories/authentication_repository.dart'
     as _i869;
-import 'package:multibook/src/data/repositories/business_repository.dart'
-    as _i590;
+import 'package:multibook/src/data/repositories/business_deletion_repository_impl.dart'
+    as _i366;
+import 'package:multibook/src/data/repositories/business_location_repository_impl.dart'
+    as _i909;
 import 'package:multibook/src/data/repositories/businesses_repository_impl.dart'
     as _i48;
 import 'package:multibook/src/data/repositories/chat_repository_impl.dart'
@@ -132,8 +131,8 @@ import 'package:multibook/src/data/repositories/reviews_repository_impl.dart'
     as _i824;
 import 'package:multibook/src/data/repositories/saved_business_repository_impl.dart'
     as _i475;
-import 'package:multibook/src/data/repositories/service_availability_repository.dart'
-    as _i175;
+import 'package:multibook/src/data/repositories/service_availability_repository_impl.dart'
+    as _i155;
 import 'package:multibook/src/data/repositories/service_search_repository.dart'
     as _i459;
 import 'package:multibook/src/data/repositories/stay_search_repository.dart'
@@ -144,6 +143,10 @@ import 'package:multibook/src/data/repositories/user_location_repository.dart'
     as _i682;
 import 'package:multibook/src/data/repositories/users_repository_impl.dart'
     as _i595;
+import 'package:multibook/src/domain/repositories/business_deletion_repository.dart'
+    as _i686;
+import 'package:multibook/src/domain/repositories/business_location_repository.dart'
+    as _i941;
 import 'package:multibook/src/domain/repositories/businesses_repository.dart'
     as _i197;
 import 'package:multibook/src/domain/repositories/chat_repository.dart'
@@ -178,12 +181,16 @@ import 'package:multibook/src/domain/repositories/reviews_repository.dart'
     as _i155;
 import 'package:multibook/src/domain/repositories/saved_business_repository.dart'
     as _i146;
+import 'package:multibook/src/domain/repositories/service_availability_repository.dart'
+    as _i277;
 import 'package:multibook/src/domain/repositories/support_ticket_repository.dart'
     as _i444;
 import 'package:multibook/src/domain/repositories/users_repository.dart'
     as _i946;
 import 'package:multibook/src/domain/use_cases/appointments/cancel_customer_appointment_use_case.dart'
     as _i682;
+import 'package:multibook/src/domain/use_cases/appointments/get_available_appointment_slots_use_case.dart'
+    as _i123;
 import 'package:multibook/src/domain/use_cases/appointments/get_customer_appointments_use_case.dart'
     as _i213;
 import 'package:multibook/src/domain/use_cases/appointments/reschedule_customer_appointment_use_case.dart'
@@ -196,12 +203,16 @@ import 'package:multibook/src/domain/use_cases/bookings/get_stay_availability_us
     as _i1014;
 import 'package:multibook/src/domain/use_cases/businesses/create_business_use_case.dart'
     as _i673;
+import 'package:multibook/src/domain/use_cases/businesses/delete_business_use_case.dart'
+    as _i517;
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_business_use_case.dart'
     as _i829;
 import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart'
     as _i41;
 import 'package:multibook/src/domain/use_cases/businesses/get_selected_business_use_case.dart'
     as _i1063;
+import 'package:multibook/src/domain/use_cases/businesses/resolve_business_location_use_case.dart'
+    as _i500;
 import 'package:multibook/src/domain/use_cases/businesses/update_business_use_case.dart'
     as _i835;
 import 'package:multibook/src/domain/use_cases/chat/get_or_create_chat_conversation_use_case.dart'
@@ -312,6 +323,12 @@ import 'package:multibook/src/domain/use_cases/saved/remove_saved_business_use_c
     as _i626;
 import 'package:multibook/src/domain/use_cases/saved/save_business_use_case.dart'
     as _i876;
+import 'package:multibook/src/domain/use_cases/service_availability/create_service_availability_block_use_case.dart'
+    as _i368;
+import 'package:multibook/src/domain/use_cases/service_availability/delete_service_availability_block_use_case.dart'
+    as _i934;
+import 'package:multibook/src/domain/use_cases/service_availability/get_service_availability_blocks_use_case.dart'
+    as _i202;
 import 'package:multibook/src/domain/use_cases/support_tickets/create_support_ticket_use_case.dart'
     as _i958;
 import 'package:multibook/src/domain/use_cases/support_tickets/get_support_tickets_use_case.dart'
@@ -478,9 +495,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i457.FirebaseStorage>(
       () => firebaseModule.firebaseStorage(gh<_i982.FirebaseApp>()),
     );
-    gh.singleton<_i974.FirebaseFirestore>(
-      () => firebaseModule.firebaseFirestore(gh<_i982.FirebaseApp>()),
-    );
     gh.singleton<_i892.FirebaseMessaging>(
       () => firebaseModule.firebaseMessaging(gh<_i982.FirebaseApp>()),
     );
@@ -493,9 +507,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i665.StaySearchDataSource>(
       () => _i665.StaySearchDataSourceImpl(gh<_i234.ApiClient>()),
     );
-    gh.lazySingleton<_i198.FirestoreDataSource>(
-      () => _i198.FirestoreDataSourceImpl(gh<_i974.FirebaseFirestore>()),
-    );
     gh.factory<_i400.OnboardingCubit>(
       () => _i400.OnboardingCubit(gh<_i38.OnboardingRepository>()),
     );
@@ -505,11 +516,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i486.SseClient>(
       () => _i486.SseClient(gh<_i234.ApiClient>()),
     );
+    gh.lazySingleton<_i145.SupportTicketApiDataSource>(
+      () => _i145.SupportTicketApiDataSource(gh<_i234.ApiClient>()),
+    );
+    gh.lazySingleton<_i176.PaymentMethodsApiDataSource>(
+      () => _i176.PaymentMethodsApiDataSource(gh<_i234.ApiClient>()),
+    );
+    gh.lazySingleton<_i433.ServiceAvailabilityApiDataSource>(
+      () => _i433.ServiceAvailabilityApiDataSource(gh<_i234.ApiClient>()),
+    );
     gh.lazySingleton<_i563.CustomerCheckoutApiDataSource>(
       () => _i563.CustomerCheckoutApiDataSource(gh<_i234.ApiClient>()),
     );
     gh.lazySingleton<_i217.InAppNotificationsApiDataSource>(
       () => _i217.InAppNotificationsApiDataSource(gh<_i234.ApiClient>()),
+    );
+    gh.lazySingleton<_i218.PromotionsApiDataSource>(
+      () => _i218.PromotionsApiDataSource(gh<_i234.ApiClient>()),
     );
     gh.lazySingleton<_i651.ProviderBookingsApiDataSource>(
       () => _i651.ProviderBookingsApiDataSource(gh<_i234.ApiClient>()),
@@ -523,14 +546,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i82.DevelopmentSeedApiDataSource>(
       () => _i82.DevelopmentSeedApiDataSource(gh<_i234.ApiClient>()),
     );
-    gh.lazySingleton<_i145.SupportTicketApiDataSource>(
-      () => _i145.SupportTicketApiDataSource(gh<_i234.ApiClient>()),
+    gh.lazySingleton<_i941.BusinessLocationRepository>(
+      () =>
+          _i909.BusinessLocationRepositoryImpl(gh<_i117.NominatimDataSource>()),
     );
-    gh.lazySingleton<_i218.PromotionsApiDataSource>(
-      () => _i218.PromotionsApiDataSource(gh<_i234.ApiClient>()),
-    );
-    gh.lazySingleton<_i176.PaymentMethodsApiDataSource>(
-      () => _i176.PaymentMethodsApiDataSource(gh<_i234.ApiClient>()),
+    gh.lazySingleton<_i1001.StaySearchRepository>(
+      () => _i1001.StaySearchRepository(gh<_i665.StaySearchDataSource>()),
     );
     gh.lazySingleton<_i622.PromotionsRepository>(
       () => _i122.PromotionsRepositoryImpl(
@@ -599,16 +620,18 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i784.PaymentMethodsRepository>(),
       ),
     );
+    gh.factory<_i113.ExploreStayResultsCubit>(
+      () => _i113.ExploreStayResultsCubit(gh<_i1001.StaySearchRepository>()),
+    );
     gh.lazySingleton<_i465.CustomerCheckoutRepository>(
       () => _i865.CustomerCheckoutRepositoryImpl(
         gh<_i563.CustomerCheckoutApiDataSource>(),
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
-    gh.lazySingleton<_i175.ServiceAvailabilityRepository>(
-      () => _i175.ServiceAvailabilityRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
+    gh.factory<_i500.ResolveBusinessLocationUseCase>(
+      () => _i500.ResolveBusinessLocationUseCase(
+        gh<_i941.BusinessLocationRepository>(),
       ),
     );
     gh.lazySingleton<_i333.DevelopmentSeedRepository>(
@@ -731,6 +754,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.lazySingleton<_i277.ServiceAvailabilityRepository>(
+      () => _i155.ServiceAvailabilityRepositoryImpl(
+        gh<_i433.ServiceAvailabilityApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
+    );
     gh.lazySingleton<_i884.CustomerAppointmentsRepository>(
       () => _i122.CustomerAppointmentsRepositoryImpl(
         gh<_i264.CustomerAppointmentsApiDataSource>(),
@@ -743,9 +772,18 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.lazySingleton<_i459.ServiceSearchRepository>(
+      () => _i459.ServiceSearchRepository(gh<_i139.ServiceSearchDataSource>()),
+    );
     gh.lazySingleton<_i69.ChatApiDataSource>(
       () =>
           _i69.ChatApiDataSource(gh<_i234.ApiClient>(), gh<_i486.SseClient>()),
+    );
+    gh.lazySingleton<_i686.BusinessDeletionRepository>(
+      () => _i366.BusinessDeletionRepositoryImpl(
+        gh<_i768.BusinessesApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
     );
     gh.lazySingleton<_i146.SavedBusinessRepository>(
       () => _i475.SavedBusinessRepositoryImpl(
@@ -853,6 +891,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.factory<_i517.DeleteBusinessUseCase>(
+      () => _i517.DeleteBusinessUseCase(gh<_i686.BusinessDeletionRepository>()),
+    );
     gh.lazySingleton<_i692.ChatRepository>(
       () => _i574.ChatRepositoryImpl(
         gh<_i69.ChatApiDataSource>(),
@@ -896,6 +937,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i213.GetCustomerAppointmentsUseCase>(
       () => _i213.GetCustomerAppointmentsUseCase(
+        gh<_i884.CustomerAppointmentsRepository>(),
+      ),
+    );
+    gh.factory<_i123.GetAvailableAppointmentSlotsUseCase>(
+      () => _i123.GetAvailableAppointmentSlotsUseCase(
         gh<_i884.CustomerAppointmentsRepository>(),
       ),
     );
@@ -984,11 +1030,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i481.MarkChatAsReadUseCase>(
       () => _i481.MarkChatAsReadUseCase(gh<_i692.ChatRepository>()),
     );
-    gh.factory<_i575.SendChatMessageUseCase>(
-      () => _i575.SendChatMessageUseCase(gh<_i692.ChatRepository>()),
-    );
     gh.factory<_i316.GetUnreadMessagesCountUseCase>(
       () => _i316.GetUnreadMessagesCountUseCase(gh<_i692.ChatRepository>()),
+    );
+    gh.factory<_i575.SendChatMessageUseCase>(
+      () => _i575.SendChatMessageUseCase(gh<_i692.ChatRepository>()),
     );
     gh.lazySingleton<_i981.UserProfileUseCase>(
       () => _i981.UserProfileUseCase(
@@ -1046,6 +1092,21 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i587.InAppNotificationsRepository>(),
       ),
     );
+    gh.factory<_i368.CreateServiceAvailabilityBlockUseCase>(
+      () => _i368.CreateServiceAvailabilityBlockUseCase(
+        gh<_i277.ServiceAvailabilityRepository>(),
+      ),
+    );
+    gh.factory<_i202.GetServiceAvailabilityBlocksUseCase>(
+      () => _i202.GetServiceAvailabilityBlocksUseCase(
+        gh<_i277.ServiceAvailabilityRepository>(),
+      ),
+    );
+    gh.factory<_i934.DeleteServiceAvailabilityBlockUseCase>(
+      () => _i934.DeleteServiceAvailabilityBlockUseCase(
+        gh<_i277.ServiceAvailabilityRepository>(),
+      ),
+    );
     gh.factory<_i428.EarningsCubit>(
       () => _i428.EarningsCubit(
         gh<_i981.UserProfileUseCase>(),
@@ -1063,11 +1124,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i829.GetOwnedBusinessUseCase>(),
       ),
     );
+    gh.factory<_i442.ExploreServiceResultsCubit>(
+      () =>
+          _i442.ExploreServiceResultsCubit(gh<_i459.ServiceSearchRepository>()),
+    );
     gh.lazySingleton<_i682.UserLocationRepository>(
       () => _i682.UserLocationRepository(
         gh<_i397.DeviceLocationDataSource>(),
         gh<_i117.NominatimDataSource>(),
         gh<_i981.UserProfileUseCase>(),
+      ),
+    );
+    gh.factory<_i496.AppointmentAvailabilityCubit>(
+      () => _i496.AppointmentAvailabilityCubit(
+        gh<_i123.GetAvailableAppointmentSlotsUseCase>(),
       ),
     );
     gh.factory<_i272.NotificationsCubit>(
@@ -1092,21 +1162,18 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i945.RescheduleCustomerAppointmentUseCase>(),
       ),
     );
+    gh.factory<_i874.AppointmentDetailsCubit>(
+      () => _i874.AppointmentDetailsCubit(
+        gh<_i742.GetBusinessDetailUseCase>(),
+        gh<_i682.CancelCustomerAppointmentUseCase>(),
+        gh<_i857.HasBusinessReviewUseCase>(),
+      ),
+    );
     gh.factory<_i190.UserTypeCheckerCubit>(
       () => _i190.UserTypeCheckerCubit(gh<_i919.UpdateUserRoleUseCase>()),
     );
     gh.factory<_i134.UserLocationCubit>(
       () => _i134.UserLocationCubit(gh<_i682.UserLocationRepository>()),
-    );
-    gh.lazySingleton<_i590.BusinessRepository>(
-      () => _i590.BusinessRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
-        gh<_i594.FirebaseStorageDataSource>(),
-        gh<_i117.NominatimDataSource>(),
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i41.GetOwnedBusinessesUseCase>(),
-      ),
     );
     gh.factory<_i152.ChatConversationCubit>(
       () => _i152.ChatConversationCubit(
@@ -1117,12 +1184,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i203.SetChatTypingUseCase>(),
         gh<_i919.SetChatPresenceUseCase>(),
         gh<_i981.UserProfileUseCase>(),
-      ),
-    );
-    gh.lazySingleton<_i1001.StaySearchRepository>(
-      () => _i1001.StaySearchRepository(
-        gh<_i665.StaySearchDataSource>(),
-        gh<_i590.BusinessRepository>(),
       ),
     );
     gh.factory<_i300.DeleteBookingDraftUseCase>(
@@ -1230,16 +1291,6 @@ extension GetItInjectableX on _i174.GetIt {
         booking,
       ),
     );
-    gh.factory<_i154.ClientBookingsCubit>(
-      () => _i154.ClientBookingsCubit(
-        gh<_i253.GetProviderBookingsUseCase>(),
-        gh<_i308.GetProviderAppointmentsUseCase>(),
-        gh<_i84.UpdateProviderBookingStatusUseCase>(),
-        gh<_i193.UpdateProviderAppointmentStatusUseCase>(),
-        gh<_i590.BusinessRepository>(),
-        gh<_i981.UserProfileUseCase>(),
-      ),
-    );
     gh.factory<_i535.AppointmentPaymentCubit>(
       () => _i535.AppointmentPaymentCubit(
         gh<_i776.CreateCustomerAppointmentUseCase>(),
@@ -1249,12 +1300,48 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i52.AppointmentDraftCubit>(
       () => _i52.AppointmentDraftCubit(gh<_i811.SaveAppointmentDraftUseCase>()),
     );
-    gh.factory<_i113.ExploreStayResultsCubit>(
-      () => _i113.ExploreStayResultsCubit(gh<_i1001.StaySearchRepository>()),
+    gh.factory<_i582.AvailabilityCalendarCubit>(
+      () => _i582.AvailabilityCalendarCubit(
+        gh<_i253.GetProviderBookingsUseCase>(),
+        gh<_i41.GetOwnedBusinessesUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+      ),
+    );
+    gh.factory<_i739.MyBusinessesCubit>(
+      () => _i739.MyBusinessesCubit(
+        gh<_i517.DeleteBusinessUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+        gh<_i41.GetOwnedBusinessesUseCase>(),
+      ),
+    );
+    gh.factory<_i633.AddBusinessBloc>(
+      () => _i633.AddBusinessBloc(
+        gh<_i157.ImagePickerDataSource>(),
+        gh<_i460.SharedPreferences>(),
+        gh<_i500.ResolveBusinessLocationUseCase>(),
+        gh<_i673.CreateBusinessUseCase>(),
+        gh<_i41.GetOwnedBusinessesUseCase>(),
+        gh<_i829.GetOwnedBusinessUseCase>(),
+        gh<_i835.UpdateBusinessUseCase>(),
+        gh<_i715.AuthenticationDataSource>(),
+        gh<_i594.FirebaseStorageDataSource>(),
+        gh<_i168.DevelopmentSeedUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+      ),
+    );
+    gh.factory<_i154.ClientBookingsCubit>(
+      () => _i154.ClientBookingsCubit(
+        gh<_i253.GetProviderBookingsUseCase>(),
+        gh<_i308.GetProviderAppointmentsUseCase>(),
+        gh<_i84.UpdateProviderBookingStatusUseCase>(),
+        gh<_i193.UpdateProviderAppointmentStatusUseCase>(),
+        gh<_i41.GetOwnedBusinessesUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+      ),
     );
     gh.factory<_i223.MoreCubit>(
       () => _i223.MoreCubit(
-        gh<_i590.BusinessRepository>(),
+        gh<_i41.GetOwnedBusinessesUseCase>(),
         gh<_i981.UserProfileUseCase>(),
         gh<_i747.WatchUnreadMessagesCountUseCase>(),
         gh<_i316.GetUnreadMessagesCountUseCase>(),
@@ -1262,34 +1349,19 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1025.SessionStreamRegistry>(),
       ),
     );
-    gh.factory<_i582.AvailabilityCalendarCubit>(
-      () => _i582.AvailabilityCalendarCubit(
-        gh<_i253.GetProviderBookingsUseCase>(),
-        gh<_i590.BusinessRepository>(),
+    gh.factory<_i41.CustomerDashboardCubit>(
+      () => _i41.CustomerDashboardCubit(
+        gh<_i343.GetDiscoveryCitiesUseCase>(),
+        gh<_i1001.StaySearchRepository>(),
+        gh<_i459.ServiceSearchRepository>(),
+        gh<_i104.GetBookingDraftUseCase>(),
+        gh<_i997.GetAppointmentDraftUseCase>(),
         gh<_i981.UserProfileUseCase>(),
-      ),
-    );
-    gh.factory<_i874.AppointmentDetailsCubit>(
-      () => _i874.AppointmentDetailsCubit(
-        gh<_i590.BusinessRepository>(),
-        gh<_i682.CancelCustomerAppointmentUseCase>(),
-        gh<_i857.HasBusinessReviewUseCase>(),
-      ),
-    );
-    gh.lazySingleton<_i331.AppointmentRepository>(
-      () => _i331.AppointmentRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
-        gh<_i590.BusinessRepository>(),
-        gh<_i175.ServiceAvailabilityRepository>(),
-        gh<_i356.GetActivePromotionUseCase>(),
-      ),
-    );
-    gh.factory<_i739.MyBusinessesCubit>(
-      () => _i739.MyBusinessesCubit(
-        gh<_i590.BusinessRepository>(),
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i41.GetOwnedBusinessesUseCase>(),
+        gh<_i682.UserLocationRepository>(),
+        gh<_i742.GetBusinessDetailUseCase>(),
+        gh<_i88.GetPopularNearbyBusinessesUseCase>(),
+        gh<_i554.GetRecommendedStaysUseCase>(),
+        gh<_i436.ListDiscoveryBusinessesUseCase>(),
       ),
     );
     gh.lazySingleton<_i869.AuthenticationRepository>(
@@ -1301,31 +1373,10 @@ extension GetItInjectableX on _i174.GetIt {
       ),
       dispose: (i) => i.dispose(),
     );
-    gh.factory<_i633.AddBusinessBloc>(
-      () => _i633.AddBusinessBloc(
-        gh<_i157.ImagePickerDataSource>(),
-        gh<_i460.SharedPreferences>(),
-        gh<_i590.BusinessRepository>(),
-        gh<_i673.CreateBusinessUseCase>(),
-        gh<_i41.GetOwnedBusinessesUseCase>(),
-        gh<_i829.GetOwnedBusinessUseCase>(),
-        gh<_i835.UpdateBusinessUseCase>(),
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i594.FirebaseStorageDataSource>(),
-        gh<_i168.DevelopmentSeedUseCase>(),
-        gh<_i981.UserProfileUseCase>(),
-      ),
-    );
     gh.factory<_i243.ReviewStayCubit>(
       () => _i243.ReviewStayCubit(
         gh<_i742.GetBusinessDetailUseCase>(),
         gh<_i305.SaveBookingDraftUseCase>(),
-      ),
-    );
-    gh.lazySingleton<_i459.ServiceSearchRepository>(
-      () => _i459.ServiceSearchRepository(
-        gh<_i139.ServiceSearchDataSource>(),
-        gh<_i590.BusinessRepository>(),
       ),
     );
     gh.factory<_i297.PaymentCubit>(
@@ -1349,12 +1400,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i981.UserProfileUseCase>(),
       ),
     );
-    gh.factory<_i496.AppointmentAvailabilityCubit>(
-      () => _i496.AppointmentAvailabilityCubit(
-        gh<_i331.AppointmentRepository>(),
-        gh<_i175.ServiceAvailabilityRepository>(),
-      ),
-    );
     gh.factory<_i103.CustomerProfileCubit>(
       () => _i103.CustomerProfileCubit(
         gh<_i869.AuthenticationRepository>(),
@@ -1364,25 +1409,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i730.NotificationDeviceService>(),
         gh<_i1025.SessionStreamRegistry>(),
       ),
-    );
-    gh.factory<_i41.CustomerDashboardCubit>(
-      () => _i41.CustomerDashboardCubit(
-        gh<_i590.BusinessRepository>(),
-        gh<_i1001.StaySearchRepository>(),
-        gh<_i459.ServiceSearchRepository>(),
-        gh<_i104.GetBookingDraftUseCase>(),
-        gh<_i997.GetAppointmentDraftUseCase>(),
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i682.UserLocationRepository>(),
-        gh<_i742.GetBusinessDetailUseCase>(),
-        gh<_i88.GetPopularNearbyBusinessesUseCase>(),
-        gh<_i554.GetRecommendedStaysUseCase>(),
-        gh<_i436.ListDiscoveryBusinessesUseCase>(),
-      ),
-    );
-    gh.factory<_i442.ExploreServiceResultsCubit>(
-      () =>
-          _i442.ExploreServiceResultsCubit(gh<_i459.ServiceSearchRepository>()),
     );
     return this;
   }

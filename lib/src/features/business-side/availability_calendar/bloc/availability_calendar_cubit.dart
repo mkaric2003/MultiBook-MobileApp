@@ -1,10 +1,10 @@
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/booking_list_response.dart';
 import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_bookings_use_case.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/availability_calendar_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,18 +14,20 @@ import 'package:injectable/injectable.dart';
 class AvailabilityCalendarCubit extends Cubit<AvailabilityCalendarState> {
   AvailabilityCalendarCubit(
     this._getProviderBookingsUseCase,
-    this._businessRepository,
+    this._getOwnedBusinessesUseCase,
     this._userRepository,
   ) : super(const AvailabilityCalendarState());
 
   final GetProviderBookingsUseCase _getProviderBookingsUseCase;
-  final BusinessRepository _businessRepository;
+  final GetOwnedBusinessesUseCase _getOwnedBusinessesUseCase;
   final UserProfileUseCase _userRepository;
 
   Future<void> load() async {
     try {
       final user = await _userRepository.getCurrentUser();
-      final businesses = await _businessRepository.getOwnedBusinesses();
+      final businessesResult = await _getOwnedBusinessesUseCase.execute();
+      if (businessesResult is! Success<List<BusinessModel>>) throw Exception();
+      final businesses = businessesResult.value;
       final business =
           _findBusiness(businesses, user?.selectedBusinessId) ??
           (businesses.isEmpty ? null : businesses.first);

@@ -5,7 +5,7 @@ import 'package:multibook/src/data/models/booking_list_response.dart';
 import 'package:multibook/src/data/models/booking_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_appointments_use_case.dart';
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_bookings_use_case.dart';
 import 'package:multibook/src/domain/use_cases/provider_bookings/update_provider_appointment_status_use_case.dart';
@@ -24,7 +24,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
     this._getProviderAppointmentsUseCase,
     this._updateProviderBookingStatusUseCase,
     this._updateProviderAppointmentStatusUseCase,
-    this._businessRepository,
+    this._getOwnedBusinessesUseCase,
     this._userRepository,
   ) : super(const ClientBookingsState());
 
@@ -33,7 +33,7 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
   final UpdateProviderBookingStatusUseCase _updateProviderBookingStatusUseCase;
   final UpdateProviderAppointmentStatusUseCase
   _updateProviderAppointmentStatusUseCase;
-  final BusinessRepository _businessRepository;
+  final GetOwnedBusinessesUseCase _getOwnedBusinessesUseCase;
   final UserProfileUseCase _userRepository;
   String? _nextBookingCursor;
   String? _nextAppointmentCursor;
@@ -55,7 +55,9 @@ class ClientBookingsCubit extends Cubit<ClientBookingsState> {
 
     try {
       final user = await _userRepository.getCurrentUser();
-      final businesses = await _businessRepository.getOwnedBusinesses();
+      final businessesResult = await _getOwnedBusinessesUseCase.execute();
+      if (businessesResult is! Success<List<BusinessModel>>) throw Exception();
+      final businesses = businessesResult.value;
       final selectedBusiness =
           _findBusiness(businesses, businessId ?? user?.selectedBusinessId) ??
           (businesses.isEmpty ? null : businesses.first);

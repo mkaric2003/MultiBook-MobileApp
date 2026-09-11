@@ -44,6 +44,10 @@ class BusinessesApiDataSource {
     return _decode(response.data!);
   }
 
+  Future<void> deleteBusiness(String businessId) async {
+    await _client.delete('/v1/businesses/$businessId');
+  }
+
   Future<BusinessModel> _decode(Map<String, dynamic> data) =>
       _resolveMediaUrls(BusinessModel.fromMap(data));
 

@@ -7,8 +7,10 @@ import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/enums/booking_status.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/service_availability_repository.dart';
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_appointments_use_case.dart';
+import 'package:multibook/src/domain/use_cases/service_availability/create_service_availability_block_use_case.dart';
+import 'package:multibook/src/domain/use_cases/service_availability/delete_service_availability_block_use_case.dart';
+import 'package:multibook/src/domain/use_cases/service_availability/get_service_availability_blocks_use_case.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/service_availability_calendar_cubit.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/bloc/service_availability_calendar_state.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/domain/models/availability_day_summary.dart';
@@ -31,7 +33,9 @@ class ServiceAvailabilityCalendarView extends HookWidget {
     final cubit = useMemoized(
       () => ServiceAvailabilityCalendarCubit(
         getIt<GetProviderAppointmentsUseCase>(),
-        getIt<ServiceAvailabilityRepository>(),
+        getIt<GetServiceAvailabilityBlocksUseCase>(),
+        getIt<CreateServiceAvailabilityBlockUseCase>(),
+        getIt<DeleteServiceAvailabilityBlockUseCase>(),
       ),
       [business.id],
     );
@@ -53,7 +57,10 @@ class ServiceAvailabilityCalendarView extends HookWidget {
       return cubit.close;
     }, [cubit, business.id]);
     useEffect(() {
-      cubit.load(businessId: business.id);
+      cubit.load(
+        businessId: business.id,
+        staffIds: providers.map((provider) => provider.id).toList(),
+      );
       return null;
     }, [cubit, business.id]);
 
@@ -194,12 +201,19 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                                     providerId: selectedProvider.id,
                                     date: selectedDate.value,
                                     startMinutes: startMinutes,
+                                    staffIds: providers
+                                        .map((provider) => provider.id)
+                                        .toList(),
                                   ),
                               onUnblockSlot: (block) => context
                                   .read<ServiceAvailabilityCalendarCubit>()
                                   .unblockSlot(
                                     businessId: business.id,
+                                    providerId: selectedProvider.id,
                                     blockId: block.id,
+                                    staffIds: providers
+                                        .map((provider) => provider.id)
+                                        .toList(),
                                   ),
                             ),
                           const SizedBox(height: 38),

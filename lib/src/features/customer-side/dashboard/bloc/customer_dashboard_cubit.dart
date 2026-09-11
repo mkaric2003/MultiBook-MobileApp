@@ -6,11 +6,11 @@ import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/appointment_draft_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/data/repositories/service_search_repository.dart';
 import 'package:multibook/src/data/repositories/stay_search_repository.dart';
 import 'package:multibook/src/data/repositories/user_location_repository.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_discovery_cities_use_case.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_popular_nearby_businesses_use_case.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/get_recommended_stays_use_case.dart';
 import 'package:multibook/src/domain/use_cases/customer_discovery/list_discovery_businesses_use_case.dart';
@@ -27,7 +27,7 @@ import 'package:multibook/src/features/customer-side/dashboard/domain/models/sta
 @injectable
 class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   CustomerDashboardCubit(
-    this._businessRepository,
+    this._getDiscoveryCities,
     this._staySearchRepository,
     this._serviceSearchRepository,
     this._getBookingDraftUseCase,
@@ -40,7 +40,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
     this._listDiscoveryBusinesses,
   ) : super(const CustomerDashboardState());
 
-  final BusinessRepository _businessRepository;
+  final GetDiscoveryCitiesUseCase _getDiscoveryCities;
   final StaySearchRepository _staySearchRepository;
   final ServiceSearchRepository _serviceSearchRepository;
   final GetBookingDraftUseCase _getBookingDraftUseCase;
@@ -64,8 +64,10 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   static const _otherBusinessesPageSize = 6;
 
   Future<void> loadStayCities() async {
-    final cities = await _businessRepository.getStayCities();
-    emit(state.copyWith(stayCities: cities));
+    final result = await _getDiscoveryCities.execute();
+    if (result is Success<List<String>>) {
+      emit(state.copyWith(stayCities: result.value));
+    }
   }
 
   Future<void> observeUserLocation() async {

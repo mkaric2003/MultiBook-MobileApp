@@ -166,6 +166,8 @@ CustomerBookingsCubit / AppointmentDetailsCubit / RescheduleAppointmentCubit
 - `GET /v1/appointments` vraća samo appointment-e prijavljenog customera za customer poziv i koristi REST offset cursor (`nextCursor`), sa zasebnim cursorom od stay taba.
 - `PATCH /v1/appointments/{id}/status` koristi se za customer cancellation, a `PATCH /v1/appointments/{id}/reschedule` vraća novi kompletni `AppointmentModel` nakon uspješne promjene.
 - `AppointmentListResponse` je tipizirani paginirani response. Lista/status/reschedule REST odgovori već sadrže presentation podatke i offerings, pa nema Firestore business enrichment/fallbacka u customer service flowu.
+- Calendar availability koristi `GET /v1/businesses/{businessID}/service/staff/{staffID}/available-slots` sa odabranim offering ID-evima. Backend iz PostgreSQL weekly availabilityja, ručnih blokada i potvrđenih appointmenta vraća samo bookable start minute; kod reschedule-a `exclude_appointment_id` zadržava mogućnost izbora trenutnog termina.
+- Appointment details business učitava kroz `GetBusinessDetailUseCase`, a dashboard gradove kroz `GetDiscoveryCitiesUseCase`; oba toka koriste customer discovery REST API.
 
 ### 4.1.6 Reviews REST migracija
 
@@ -265,7 +267,6 @@ lib/
  │   │   ├─ data_sources/             # Firebase/HTTP/plugin adapteri
  │   │   ├─ repositories/             # repository implementacije
  │   │   ├─ models/ i enums/          # shared persisted modeli
- │   │   └─ data_cursor.dart          # Firestore cursor paginacija
  │   ├─ features/
  │   │   ├─ customer-side/            # customer featurei
  │   │   ├─ business-side/            # provider featurei
@@ -518,6 +519,7 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 - `selectedBusinessId` u user dokumentu je jedini izvor aktivnog businessa i promjene se reaktivno reflektuju na dashboard i booking ekran.
 - Ako provider nema businessa, dashboard prikazuje empty state i *Add new business* akciju.
 - *My Businesses* lista podržava dodavanje, biranje aktivnog businessa i swipe-to-delete sa animacijom kartice bez reloadanja cijelog ekrana.
+- Swipe-to-delete poziva `DELETE /v1/businesses/{businessID}` kroz zaseban `DeleteBusinessUseCase`; Flutter više ne briše business ni povezane podatke direktno iz Firestorea.
 
 ### Provider bookings i appointments
 
@@ -527,6 +529,10 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 - Provider cancel rezultira statusom `declined`; customer cancel rezultira `cancelled`.
 
 ### Availability & Calendar
+
+- Provider service calendar čita i mijenja ručne blokade kroz `/v1/businesses/{businessID}/service/staff/{staffID}/availability-blocks`.
+- Svaki REST poziv prolazi kroz action-specific use case, `ServiceAvailabilityRepository` ugovor, implementaciju, API data source i `ApiClient`.
+- Blokade su PostgreSQL vremenski rasponi; Flutter zadržava postojeći UX 30-minutnog block/unblock slota.
 
 - Prikaz zavisi od tipa selektovanog businessa.
 - **Stays:** zauzeti datumi se generišu iz potvrđenih bookinga; multiple-unit business može imati više bookinga istog dana.
@@ -601,18 +607,17 @@ Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FC
 | Supabase `in_app_notifications` | in-app notifikacije, read status i payload, dostupni samo kroz Go API |
 | Supabase `business_reviews` | recenzije i source/customer snapshoti; dostupno samo kroz Go API |
 | Supabase `support_tickets` | customer support zahtjevi i statusi; dostupno samo kroz Go API |
-| `users/{uid}/recently_viewed/{businessId}` | nedavno otvoreni businessi |
-| `businesses/{businessId}` | stay ili service business, detalji, mediji, lokacija i discovery polja |
-| `promotions/{id}` | ownerov promotion konfigurisan za jedan business; business čuva samo `isPromotionActive` signal |
-| `bookings/{id}` | stay rezervacije i payment/guest snapshot |
-| `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
+| Supabase `recently_viewed_businesses` | nedavno otvoreni businessi, dostupni samo kroz Go API |
+| Supabase business tabele | stay ili service business, detalji, mediji, lokacija i discovery polja |
+| Supabase `business_promotions` | ownerov promotion konfigurisan za jedan business |
+| Supabase `stay_bookings` | stay rezervacije i payment/guest snapshot |
+| Supabase `service_appointments` | service termini, provider, services, payment i reschedule stanje |
 | Supabase `stay_bookings` / `service_appointments` | source of truth za dashboard metrike; Go API iz njih računa indeksirani current-month snapshot i šalje live invalidacije kroz SSE |
 | Supabase `chat_conversations` / `chat_participant_state` / `chat_messages` | chat metadata, participant read/typing/presence stanje i poruke; dostupno samo kroz Go API |
 | Supabase `chat_push_outbox` | trajni chat push red sa retry i delivery statusom; obrađuje ga Go API worker |
 | `business_metrics/{businessId}` | legacy Firebase aggregate; migrirani Flutter dashboard i Earnings ga više ne čitaju |
 | `business_metrics/{businessId}/months/{YYYY-MM}` | legacy Firestore revenue/cash/online i dnevni podaci; nisu dio aktivnog Flutter toka |
-| `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
-| `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
+| Supabase `service_staff_availability_blocks` | providerove ručne blokade vremenskih raspona, dostupne samo kroz Go API |
 
 Storage putanje:
 
@@ -645,11 +650,9 @@ Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules)
 
 ## 15. Pretraga, filtriranje i paginacija
 
-### Direktni Firestore put
+### REST discovery put
 
-Bez aktivnih kompleksnih filtera app koristi direktne, limitirane i cursor-paginirane Firestore queryje. To je idealno za početni home feed, city feed, popular/trending sekcije, kategorije i kolekcije.
-
-`DataCursor<T>` čuva zadnji `DocumentSnapshot`, koristi `startAfterDocument`, sprječava paralelno učitavanje (`isLoading`) i prekida kada je sve učitano. Time se ne učitava cijela kolekcija unaprijed.
+Početni home feed, city feed, popular/trending sekcije, kategorije i kolekcije koriste paginirane Go REST endpoint-e. Flutter nema `DataCursor`, `FirestoreDataSource` ni `cloud_firestore` dependency; server kontroliše upite, autorizaciju i PostgreSQL paginaciju.
 
 ### Server-side filter put
 

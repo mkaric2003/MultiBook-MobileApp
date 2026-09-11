@@ -1,9 +1,18 @@
 import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/appointment_list_response.dart';
 import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/data/models/available_appointment_slots_model.dart';
 import 'package:multibook/src/data/models/reschedule_appointment_request.dart';
 
 abstract class CustomerAppointmentsRepository {
+  Future<Result<AvailableAppointmentSlotsModel>> getAvailableSlots({
+    required String businessId,
+    required String staffId,
+    required DateTime appointmentDate,
+    required List<String> offeringIds,
+    String? excludeAppointmentId,
+  });
+
   Future<Result<AppointmentListResponse>> getAppointments({
     String? cursor,
     int pageSize = 20,
