@@ -71,7 +71,7 @@ class StaysContent extends HookWidget {
 
     return SingleChildScrollView(
       controller: scrollController,
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 78),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

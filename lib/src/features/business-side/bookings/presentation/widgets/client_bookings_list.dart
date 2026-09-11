@@ -1,16 +1,16 @@
-import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
-import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart';
-import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_booking_card.dart';
-import 'package:multibook/src/features/business-side/bookings/presentation/widgets/manage_booking_sheet.dart';
-import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_appointment_card.dart';
-import 'package:multibook/src/features/business-side/bookings/presentation/widgets/manage_appointment_sheet.dart';
-import 'package:multibook/app.dart';
-import 'package:multibook/src/data/models/appointment_model.dart';
-import 'package:multibook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:multibook/app.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/data/models/appointment_model.dart';
+import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_cubit.dart';
+import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
+import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_appointment_card.dart';
+import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_booking_card.dart';
+import 'package:multibook/src/features/business-side/bookings/presentation/widgets/manage_appointment_sheet.dart';
+import 'package:multibook/src/features/business-side/bookings/presentation/widgets/manage_booking_sheet.dart';
+import 'package:multibook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
 
 class ClientBookingsList extends StatelessWidget {
   const ClientBookingsList({
@@ -56,7 +56,7 @@ class ClientBookingsList extends StatelessWidget {
 
     return ListView.separated(
       controller: controller,
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 120),
       itemCount: itemCount + (state.isLoadingMore ? 1 : 0),
       separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, index) {

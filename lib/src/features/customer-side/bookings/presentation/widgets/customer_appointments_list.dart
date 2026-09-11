@@ -31,7 +31,7 @@ class CustomerAppointmentsList extends StatelessWidget {
     }
     return ListView(
       controller: controller,
-      padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 78),
       children: [
         if (state.upcomingAppointments.isNotEmpty) ...[
           Text(

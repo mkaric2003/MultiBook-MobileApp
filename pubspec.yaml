@@ -43,6 +43,7 @@ dependencies:
   geolocator: ^14.0.2
   circle_flags: ^5.0.1
   u_credit_card: ^1.6.0
+  persistent_bottom_nav_bar_v2: ^6.4.0
 
 dev_dependencies:
   flutter_test:

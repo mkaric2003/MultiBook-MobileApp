@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/data/models/featured_collection_model.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
 import 'package:multibook/src/features/customer-side/explore/domain/models/explore_category.dart';
@@ -7,8 +9,6 @@ import 'package:multibook/src/features/customer-side/explore/presentation/widget
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_promotion_carousel.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_recently_viewed.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_stay_category_grid.dart';
-import 'package:multibook/src/data/models/featured_collection_model.dart';
-import 'package:flutter/material.dart';
 
 class ExploreStaysContent extends StatelessWidget {
   const ExploreStaysContent({
@@ -28,7 +28,7 @@ class ExploreStaysContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ListView(
-    padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+    padding: const EdgeInsets.fromLTRB(20, 18, 20, 100),
     children: [
       CustomerHomeTabSelector(
         selectedTab: selectedTab,
@@ -43,14 +43,8 @@ class ExploreStaysContent extends StatelessWidget {
       ),
       const SizedBox(height: 18),
       ExploreStayCategoryGrid(onSelected: onCategorySelected),
-      // const SizedBox(height: 42),
-      // const Text(
-      //   'Top destinations',
-      //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-      // ),
-      // const SizedBox(height: 18),
-      // const ExploreDestinationsList(),
-      const SizedBox(height: 34),
+
+      const SizedBox(height: 10),
       Text(
         context.l10n.featuredCollections,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),

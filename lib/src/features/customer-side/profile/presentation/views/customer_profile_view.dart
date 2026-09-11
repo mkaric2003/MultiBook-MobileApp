@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
@@ -8,9 +11,6 @@ import 'package:multibook/src/features/customer-side/profile/cubit/customer_prof
 import 'package:multibook/src/features/customer-side/profile/cubit/customer_profile_state.dart';
 import 'package:multibook/src/features/customer-side/profile/presentation/widgets/customer_profile_menu_item.dart';
 import 'package:multibook/src/global_widgets/custom_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class CustomerProfileView extends StatelessWidget {
   const CustomerProfileView({super.key});
@@ -26,8 +26,9 @@ class CustomerProfileView extends StatelessWidget {
       builder: (context, state) {
         final user = state.user;
         return SafeArea(
+          bottom: false,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 28),
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -77,8 +78,14 @@ class CustomerProfileView extends StatelessWidget {
                 const SizedBox(height: 20),
                 CustomButton(
                   buttonName: context.l10n.editProfile,
-                  onPressed: () =>
-                      context.push(AppRoutes.CUSTOMER_EDIT_PROFILE),
+                  onPressed: () async {
+                    await context.push(AppRoutes.CUSTOMER_EDIT_PROFILE);
+                    if (context.mounted) {
+                      await context
+                          .read<CustomerProfileCubit>()
+                          .refreshProfile();
+                    }
+                  },
                 ),
                 const SizedBox(height: 32),
                 Text(
@@ -168,6 +175,7 @@ class CustomerProfileView extends StatelessWidget {
                   buttonName: context.l10n.logOut,
                   color: const Color(0xFFDC2626),
                   textColor: AppColors.white,
+                  leadingIcon: const Icon(Icons.logout_rounded),
                   onPressed: state.isLoading
                       ? null
                       : () => context.read<CustomerProfileCubit>().signOut(),

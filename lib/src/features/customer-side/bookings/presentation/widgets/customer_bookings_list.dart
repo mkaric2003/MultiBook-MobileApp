@@ -31,7 +31,7 @@ class CustomerBookingsList extends StatelessWidget {
     }
     return ListView(
       controller: controller,
-      padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 78),
       children: [
         CustomerBookingsSection(
           title: context.l10n.upcoming,

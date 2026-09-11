@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
@@ -10,10 +14,6 @@ import 'package:multibook/src/features/business-side/dashboard/presentation/widg
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_metric_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 
 class DashboardView extends HookWidget {
   const DashboardView({super.key});
@@ -42,8 +42,9 @@ class DashboardView extends HookWidget {
           }
 
           return SafeArea(
+            bottom: false,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 120),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

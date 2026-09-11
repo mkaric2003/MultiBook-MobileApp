@@ -1,11 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
-import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/features/customer-side/saved/cubit/saved_cubit.dart';
 import 'package:multibook/src/features/customer-side/saved/cubit/saved_state.dart';
 import 'package:multibook/src/features/customer-side/saved/presentation/widgets/saved_business_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toastification/toastification.dart';
 
 class SavedView extends StatelessWidget {
@@ -15,6 +15,7 @@ class SavedView extends StatelessWidget {
     create: (_) => getIt<SavedCubit>()..load(),
     child: BlocBuilder<SavedCubit, SavedState>(
       builder: (context, state) => SafeArea(
+        bottom: false,
         child: Column(
           children: [
             Container(
@@ -54,7 +55,7 @@ class SavedView extends StatelessWidget {
                       ),
                     )
                   : ListView.separated(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 90),
                       itemCount: state.businesses.length,
                       separatorBuilder: (_, _) => const SizedBox(height: 18),
                       itemBuilder: (context, index) {

@@ -16,6 +16,7 @@ class ExploreServiceCategoryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView.builder(
     shrinkWrap: true,
+    padding: EdgeInsets.zero,
     physics: const NeverScrollableScrollPhysics(),
     itemCount: categories.length,
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

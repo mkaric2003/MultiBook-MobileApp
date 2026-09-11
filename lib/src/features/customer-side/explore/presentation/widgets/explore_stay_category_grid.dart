@@ -46,6 +46,7 @@ class ExploreStayCategoryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView.builder(
     shrinkWrap: true,
+    padding: EdgeInsets.zero,
     physics: const NeverScrollableScrollPhysics(),
     itemCount: _categories.length,
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

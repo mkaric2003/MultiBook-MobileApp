@@ -184,10 +184,12 @@ class UserProfileUseCase {
           minHeight: 512,
           quality: 38,
         );
-        profileImageUrl = await _storageDataSource.uploadImage(
-          storagePath: 'profiles/${currentUser.uid}/profile.webp',
-          imageBytes: compressedImageBytes,
-          contentType: 'image/webp',
+        profileImageUrl = _withCacheVersion(
+          await _storageDataSource.uploadImage(
+            storagePath: 'profiles/${currentUser.uid}/profile.webp',
+            imageBytes: compressedImageBytes,
+            contentType: 'image/webp',
+          ),
         );
       }
 
@@ -213,10 +215,13 @@ class UserProfileUseCase {
               : 'profiles/${currentUser.uid}/profile.webp',
         ),
       );
-      return response.copyWith(
+      final updatedUser = response.copyWith(
         fullName: fullName,
         profileImageUrl: profileImageUrl,
       );
+      _cachedUser = updatedUser;
+      _cachedUserId = updatedUser.id;
+      return updatedUser;
     } on UserException {
       rethrow;
     } catch (error, stackTrace) {
@@ -228,6 +233,18 @@ class UserProfileUseCase {
       );
       throw const UserException('We could not update your profile.');
     }
+  }
+
+  String _withCacheVersion(String url) {
+    final uri = Uri.parse(url);
+    return uri
+        .replace(
+          queryParameters: {
+            ...uri.queryParameters,
+            'v': DateTime.now().millisecondsSinceEpoch.toString(),
+          },
+        )
+        .toString();
   }
 
   UserModel _requireSuccess(Result<UserModel> result) => switch (result) {
