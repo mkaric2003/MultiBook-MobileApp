@@ -1,8 +1,9 @@
 import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/models/business_review_model.dart';
-import 'package:multibook/src/data/repositories/review_repository.dart';
+import 'package:multibook/src/domain/use_cases/reviews/get_business_reviews_use_case.dart';
 import 'package:multibook/src/features/shared/business_reviews/presentation/widgets/business_review_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,14 +16,14 @@ class BusinessReviewsSheet extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final future = useMemoized(
-      () => getIt<ReviewRepository>().getAllReviews(businessId),
+      () => getIt<GetBusinessReviewsUseCase>().execute(businessId),
       [businessId],
     );
     return SafeArea(
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(22, 18, 22, 24),
-        child: FutureBuilder<List<BusinessReviewModel>>(
+        child: FutureBuilder<Result<List<BusinessReviewModel>>>(
           future: future,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
@@ -31,7 +32,10 @@ class BusinessReviewsSheet extends HookWidget {
                 child: Center(child: CircularProgressIndicator()),
               );
             }
-            final reviews = snapshot.data ?? const <BusinessReviewModel>[];
+            final reviews = switch (snapshot.data) {
+              Success<List<BusinessReviewModel>>(value: final items) => items,
+              _ => const <BusinessReviewModel>[],
+            };
             return ConstrainedBox(
               constraints: BoxConstraints(
                 maxHeight: MediaQuery.sizeOf(context).height * .78,

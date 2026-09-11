@@ -50,6 +50,8 @@ class RescheduleAppointmentView extends HookWidget {
           businessId: arguments.appointment.businessId,
           providerId: provider.id,
           date: selectedDate.value,
+          offeringIds: arguments.appointment.serviceIds,
+          excludeAppointmentId: arguments.appointment.id,
         );
       }
       return null;
@@ -79,23 +81,12 @@ class RescheduleAppointmentView extends HookWidget {
               AppointmentAvailabilityState
             >(
               builder: (context, availabilityState) {
-                final bookedStartMinutes = {
-                  ...availabilityState.bookedStartMinutes,
-                };
-                if (DateUtils.isSameDay(selectedDate.value, appointmentDate)) {
-                  for (
-                    var time = arguments.appointment.startMinutes;
-                    time < arguments.appointment.endMinutes;
-                    time += 30
-                  ) {
-                    bookedStartMinutes.remove(time);
-                  }
-                }
                 final availability = _availableTimes(
                   date: selectedDate.value,
                   provider: provider,
                   durationMinutes: durationMinutes,
-                  bookedStartMinutes: bookedStartMinutes,
+                  availableStartMinutes:
+                      availabilityState.availableStartMinutes,
                 );
                 final canSubmit =
                     provider != null &&
@@ -241,7 +232,7 @@ class RescheduleAppointmentView extends HookWidget {
     required DateTime date,
     required ServiceProviderModel? provider,
     required int durationMinutes,
-    required Set<int> bookedStartMinutes,
+    required Set<int> availableStartMinutes,
   }) {
     if (provider == null || durationMinutes <= 0) {
       return const AppointmentTimeAvailability(
@@ -258,11 +249,7 @@ class RescheduleAppointmentView extends HookWidget {
       for (var time = slot.startMinutes; time < slot.endMinutes; time += 30) {
         times.add(time);
         final canFit = time + durationMinutes <= slot.endMinutes;
-        final isFree = List.generate(
-          durationMinutes ~/ 30,
-          (index) => time + (index * 30),
-        ).every((item) => !bookedStartMinutes.contains(item));
-        if (canFit && isFree) starts.add(time);
+        if (canFit && availableStartMinutes.contains(time)) starts.add(time);
       }
     }
     return AppointmentTimeAvailability(

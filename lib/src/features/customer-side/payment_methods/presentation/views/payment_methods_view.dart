@@ -74,8 +74,14 @@ class PaymentMethodsView extends StatelessWidget {
                       const SizedBox(height: 8),
                       CustomButton(
                         buttonName: context.l10n.addPaymentMethod,
-                        onPressed: () =>
-                            context.push(AppRoutes.ADD_PAYMENT_METHOD),
+                        onPressed: () async {
+                          final saved = await context.push<bool>(
+                            AppRoutes.ADD_PAYMENT_METHOD,
+                          );
+                          if (saved == true && context.mounted) {
+                            await context.read<PaymentMethodsCubit>().load();
+                          }
+                        },
                       ),
                     ],
                   );

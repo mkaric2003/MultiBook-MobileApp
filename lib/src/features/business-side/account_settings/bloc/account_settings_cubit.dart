@@ -1,6 +1,6 @@
 import 'package:multibook/src/data/data_sources/image_picker_data_source.dart';
 import 'package:multibook/src/data/enums/currency_code.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/account_settings/bloc/account_settings_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +15,7 @@ class AccountSettingsCubit extends Cubit<AccountSettingsState> {
     this._sharedPreferences,
   ) : super(const AccountSettingsState());
 
-  final UserRepository _userRepository;
+  final UserProfileUseCase _userRepository;
   final ImagePickerDataSource _imagePickerDataSource;
   final SharedPreferences _sharedPreferences;
   static const _pendingProfileImageKey =

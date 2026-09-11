@@ -1,6 +1,7 @@
 import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/more/bloc/more_cubit.dart';
 import 'package:multibook/src/features/business-side/more/bloc/more_state.dart';
 import 'package:multibook/src/features/business-side/more/domain/models/more_menu_item.dart';
@@ -9,17 +10,29 @@ import 'package:multibook/src/features/business-side/more/presentation/widgets/m
 import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 
-class MoreView extends StatelessWidget {
+class MoreView extends HookWidget {
   const MoreView({super.key, required this.onLogout});
 
   final VoidCallback onLogout;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<MoreCubit>()..load(),
+    final cubit = useMemoized(() => getIt<MoreCubit>());
+    final selectedBusinessId = useValueListenable(
+      getIt<UserProfileUseCase>().selectedBusinessId,
+    );
+
+    useEffect(() {
+      cubit.load(businessId: selectedBusinessId);
+      return null;
+    }, [cubit, selectedBusinessId]);
+    useEffect(() => cubit.close, [cubit]);
+
+    return BlocProvider.value(
+      value: cubit,
       child: BlocBuilder<MoreCubit, MoreState>(
         builder: (context, state) => SafeArea(
           bottom: false,

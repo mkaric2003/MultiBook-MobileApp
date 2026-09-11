@@ -4,7 +4,6 @@ import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/data/models/service_provider_model.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_bookings_chart.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
@@ -30,14 +29,10 @@ class EarningsView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = useMemoized(() => getIt<EarningsCubit>());
-    final selectedBusinessId = useValueListenable(
-      getIt<UserRepository>().selectedBusinessId,
-    );
     useEffect(() {
-      cubit.load(businessId: selectedBusinessId);
-      return null;
-    }, [cubit, selectedBusinessId]);
-    useEffect(() => cubit.close, [cubit]);
+      cubit.initialize();
+      return cubit.close;
+    }, [cubit]);
 
     return BlocProvider.value(
       value: cubit,
@@ -52,7 +47,7 @@ class EarningsView extends HookWidget {
             );
           }
 
-          final metrics = state.monthlyMetrics;
+          final metrics = state.metrics;
           final range = state.dateRange;
           final List<ServiceProviderModel> providers =
               state.selectedBusiness!.type == BusinessType.services
@@ -60,15 +55,9 @@ class EarningsView extends HookWidget {
                     const []
               : const [];
           final isProviderFilterActive = state.selectedProvider != null;
-          final grossEarnings = isProviderFilterActive
-              ? state.providerMetrics.grossRevenue
-              : metrics.revenue;
-          final chartRevenue = isProviderFilterActive
-              ? state.providerMetrics.dailyGrossRevenue
-              : metrics.dailyRevenue;
-          final chartBookings = isProviderFilterActive
-              ? state.providerMetrics.dailyAppointments
-              : metrics.dailyBookings;
+          final grossEarnings = metrics?.revenueMinor ?? 0;
+          final chartRevenue = metrics?.dailyRevenueMinor ?? const {};
+          final chartBookings = metrics?.dailyReservationCount ?? const {};
           return SafeArea(
             bottom: false,
             child: Column(
@@ -153,7 +142,7 @@ class EarningsView extends HookWidget {
                               value: context.l10n.formatCurrency(
                                 isProviderFilterActive
                                     ? grossEarnings
-                                    : metrics.onlineEarnings,
+                                    : metrics?.onlineRevenueMinor ?? 0,
                               ),
                               valueColor: const Color(0xFFF59E0B),
                             ),
@@ -166,8 +155,8 @@ class EarningsView extends HookWidget {
                                   : context.l10n.cashEarnings,
                               value: context.l10n.formatCurrency(
                                 isProviderFilterActive
-                                    ? state.providerMetrics.providerEarnings
-                                    : metrics.cashEarnings,
+                                    ? metrics?.staffEarningsMinor ?? 0
+                                    : metrics?.cashRevenueMinor ?? 0,
                               ),
                               valueColor: AppColors.success,
                             ),
@@ -179,10 +168,16 @@ class EarningsView extends HookWidget {
                         values: _periodValues(chartRevenue, range),
                         onlineValues: isProviderFilterActive
                             ? null
-                            : _periodValues(metrics.dailyOnlineEarnings, range),
+                            : _periodValues(
+                                metrics?.dailyOnlineRevenueMinor ?? const {},
+                                range,
+                              ),
                         cashValues: isProviderFilterActive
                             ? null
-                            : _periodValues(metrics.dailyCashEarnings, range),
+                            : _periodValues(
+                                metrics?.dailyCashRevenueMinor ?? const {},
+                                range,
+                              ),
                       ),
                       const SizedBox(height: 20),
                       DashboardBookingsChart(
@@ -203,7 +198,7 @@ class EarningsView extends HookWidget {
 }
 
 List<double> _periodValues(
-  Map<String, double> dailyValues,
+  Map<String, num> dailyValues,
   EarningsDateRange? range,
 ) {
   if (range == null) return List<double>.filled(4, 0);
@@ -224,7 +219,7 @@ List<double> _periodValues(
         ? date.day - 1
         : date.difference(range.start).inDays;
     final index = ((dayOffset * 4) / bucketDays).floor().clamp(0, 3);
-    result[index] += entry.value;
+    result[index] += entry.value.toDouble();
   }
   return result;
 }

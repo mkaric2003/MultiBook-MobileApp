@@ -1,77 +1,99 @@
 import 'dart:async';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/core/session/session_stream_registry.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/data/models/service_provider_model.dart';
-import 'package:multibook/src/data/repositories/business_metrics_repository.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
-import 'package:multibook/src/features/business-side/dashboard/domain/models/business_monthly_metrics.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_business_use_case.dart';
+import 'package:multibook/src/domain/use_cases/businesses/get_owned_businesses_use_case.dart';
+import 'package:multibook/src/domain/use_cases/earnings/watch_earnings_metrics_use_case.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
 import 'package:multibook/src/features/business-side/earnings/bloc/earnings_state.dart';
 import 'package:multibook/src/features/business-side/earnings/domain/enums/earnings_period.dart';
 import 'package:multibook/src/features/business-side/earnings/domain/models/earnings_date_range.dart';
-import 'package:multibook/src/features/business-side/earnings/domain/models/provider_earnings_metrics.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
 
 @injectable
 class EarningsCubit extends Cubit<EarningsState> {
   EarningsCubit(
-    this._userRepository,
-    this._businessRepository,
-    this._businessMetricsRepository,
+    this._userProfile,
+    this._getOwnedBusinesses,
+    this._getOwnedBusiness,
+    this._watchEarningsMetrics,
     this._sessionStreamRegistry,
   ) : super(const EarningsState());
 
-  final UserRepository _userRepository;
-  final BusinessRepository _businessRepository;
-  final BusinessMetricsRepository _businessMetricsRepository;
+  final UserProfileUseCase _userProfile;
+  final GetOwnedBusinessesUseCase _getOwnedBusinesses;
+  final GetOwnedBusinessUseCase _getOwnedBusiness;
+  final WatchEarningsMetricsUseCase _watchEarningsMetrics;
   final SessionStreamRegistry _sessionStreamRegistry;
   StreamSubscription? _metricsSubscription;
   int _loadRequestId = 0;
+  int _metricsRequestId = 0;
+  bool _initialized = false;
+
+  Future<void> initialize() async {
+    if (_initialized) return;
+    _initialized = true;
+    await load();
+    if (!isClosed) {
+      _userProfile.selectedBusinessId.addListener(_onBusinessChanged);
+    }
+  }
+
+  void _onBusinessChanged() {
+    unawaited(load(businessId: _userProfile.selectedBusinessId.value));
+  }
 
   Future<void> load({String? businessId}) async {
     final requestId = ++_loadRequestId;
-    await _cancelMetricsSubscription();
+    _cancelMetricsSubscription();
     emit(const EarningsState());
 
     try {
-      final user = await _userRepository.getCurrentUser();
-      final businesses = await _businessRepository.getOwnedBusinesses();
+      final user = await _userProfile.getCurrentUser();
+      final businessesResult = await _getOwnedBusinesses.execute();
       if (requestId != _loadRequestId) return;
-
-      final selectedBusiness =
+      final businesses = switch (businessesResult) {
+        Success(value: final businesses) => businesses,
+        FailureResult() => throw StateError('Could not load businesses.'),
+      };
+      final selectedBusinessSummary =
           _findBusiness(businesses, businessId ?? user?.selectedBusinessId) ??
           (businesses.isEmpty ? null : businesses.first);
-      if (selectedBusiness == null) {
+      if (selectedBusinessSummary == null) {
         emit(EarningsState(isLoading: false, businesses: businesses));
         return;
       }
 
-      if (selectedBusiness.id != user?.selectedBusinessId) {
-        await _userRepository.setSelectedBusiness(
-          businessId: selectedBusiness.id,
+      if (selectedBusinessSummary.id != user?.selectedBusinessId) {
+        await _userProfile.setSelectedBusiness(
+          businessId: selectedBusinessSummary.id,
         );
       }
       if (requestId != _loadRequestId) return;
 
+      final businessResult = await _getOwnedBusiness.execute(
+        selectedBusinessSummary.id,
+      );
+      if (requestId != _loadRequestId) return;
+      final selectedBusiness = switch (businessResult) {
+        Success(value: final business) => business,
+        FailureResult() => throw StateError('Could not load business details.'),
+      };
+
+      final range = _rangeFor(EarningsPeriod.currentMonth);
       emit(
         EarningsState(
           isLoading: false,
           businesses: businesses,
           selectedBusiness: selectedBusiness,
-          dateRange: _rangeFor(EarningsPeriod.currentMonth),
+          dateRange: range,
         ),
       );
-      try {
-        await _businessMetricsRepository.initialize(selectedBusiness.id);
-      } catch (_) {
-        // New reservations will create the metrics document automatically.
-      }
-      _watchMetrics(
-        selectedBusiness.id,
-        _rangeFor(EarningsPeriod.currentMonth),
-      );
+      await _replaceMetricsSubscription(selectedBusiness.id, range);
     } catch (_) {
       if (requestId != _loadRequestId) return;
       emit(const EarningsState(isLoading: false, hasError: true));
@@ -79,7 +101,7 @@ class EarningsCubit extends Cubit<EarningsState> {
   }
 
   Future<void> selectBusiness(BusinessModel business) =>
-      _userRepository.setSelectedBusiness(businessId: business.id);
+      _userProfile.setSelectedBusiness(businessId: business.id);
 
   Future<void> selectPeriod(
     EarningsPeriod period, {
@@ -91,77 +113,68 @@ class EarningsCubit extends Cubit<EarningsState> {
         ? customRange
         : _rangeFor(period);
     if (range == null) return;
-    await _cancelMetricsSubscription();
     emit(
-      state.copyWith(
+      EarningsState(
+        isLoading: false,
+        businesses: state.businesses,
+        selectedBusiness: business,
         period: period,
         dateRange: range,
-        monthlyMetrics: const BusinessMonthlyMetrics(),
-        providerMetrics: const ProviderEarningsMetrics(),
-        hasError: false,
+        selectedProvider: state.selectedProvider,
       ),
     );
-    _watchMetrics(business.id, range, provider: state.selectedProvider);
+    await _replaceMetricsSubscription(
+      business.id,
+      range,
+      staff: state.selectedProvider,
+    );
   }
 
   Future<void> selectProvider(ServiceProviderModel? provider) async {
     final business = state.selectedBusiness;
     final range = state.dateRange;
     if (business == null || range == null) return;
-    await _cancelMetricsSubscription();
     emit(
       EarningsState(
         isLoading: false,
         businesses: state.businesses,
         selectedBusiness: business,
-        monthlyMetrics: const BusinessMonthlyMetrics(),
-        providerMetrics: const ProviderEarningsMetrics(),
         period: state.period,
         dateRange: range,
         selectedProvider: provider,
       ),
     );
-    _watchMetrics(business.id, range, provider: provider);
+    await _replaceMetricsSubscription(business.id, range, staff: provider);
   }
 
-  void _watchMetrics(
+  Future<void> _replaceMetricsSubscription(
     String businessId,
     EarningsDateRange range, {
-    ServiceProviderModel? provider,
-  }) {
-    if (provider != null) {
-      _metricsSubscription = _businessMetricsRepository
-          .watchProviderDateRange(
-            businessId: businessId,
-            providerId: provider.id,
-            start: range.start,
-            end: range.end,
-          )
-          .listen(
-            (metrics) {
-              if (!isClosed) emit(state.copyWith(providerMetrics: metrics));
-            },
-            onError: (_, _) {
-              if (!isClosed) emit(state.copyWith(hasError: true));
-            },
-          );
-      _sessionStreamRegistry.register(_metricsSubscription!);
-      return;
+    ServiceProviderModel? staff,
+  }) async {
+    final requestId = ++_metricsRequestId;
+    final previousSubscription = _detachMetricsSubscription();
+    if (previousSubscription != null) {
+      unawaited(previousSubscription.cancel());
     }
-    _metricsSubscription = _businessMetricsRepository
-        .watchDateRange(
+    if (isClosed || requestId != _metricsRequestId) return;
+
+    _metricsSubscription = _watchEarningsMetrics
+        .execute(
           businessId: businessId,
-          start: range.start,
-          end: range.end,
+          startDate: range.start,
+          endDate: range.end,
+          staffId: staff?.id,
         )
-        .listen(
-          (metrics) {
-            if (!isClosed) emit(state.copyWith(monthlyMetrics: metrics));
-          },
-          onError: (_, _) {
-            if (!isClosed) emit(state.copyWith(hasError: true));
-          },
-        );
+        .listen((result) {
+          if (isClosed || requestId != _metricsRequestId) return;
+          switch (result) {
+            case Success(value: final metrics):
+              emit(state.copyWith(metrics: metrics, hasError: false));
+            case FailureResult():
+              emit(state.copyWith(hasError: true));
+          }
+        });
     _sessionStreamRegistry.register(_metricsSubscription!);
   }
 
@@ -219,16 +232,26 @@ class EarningsCubit extends Cubit<EarningsState> {
     return null;
   }
 
-  Future<void> _cancelMetricsSubscription() async {
+  void _cancelMetricsSubscription() {
+    _metricsRequestId++;
+    final metricsSubscription = _detachMetricsSubscription();
+    if (metricsSubscription != null) {
+      unawaited(metricsSubscription.cancel());
+    }
+  }
+
+  StreamSubscription? _detachMetricsSubscription() {
     final metricsSubscription = _metricsSubscription;
     _metricsSubscription = null;
     _sessionStreamRegistry.unregister(metricsSubscription);
-    await metricsSubscription?.cancel();
+    return metricsSubscription;
   }
 
   @override
   Future<void> close() async {
-    await _cancelMetricsSubscription();
+    _userProfile.selectedBusinessId.removeListener(_onBusinessChanged);
+    _metricsRequestId++;
+    await _detachMetricsSubscription()?.cancel();
     return super.close();
   }
 }

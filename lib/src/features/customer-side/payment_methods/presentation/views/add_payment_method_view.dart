@@ -68,12 +68,13 @@ class AddPaymentMethodView extends HookWidget {
                       enabled: enabled,
                       onPressed: enabled
                           ? () async {
-                              await getIt<PaymentMethodsCubit>().save(
-                                number: number.text,
-                                expiry: expiry.text,
-                                holder: holder.text,
-                              );
-                              if (context.mounted) context.pop();
+                              final saved = await getIt<PaymentMethodsCubit>()
+                                  .save(
+                                    number: number.text,
+                                    expiry: expiry.text,
+                                    holder: holder.text,
+                                  );
+                              if (saved && context.mounted) context.pop(true);
                             }
                           : null,
                     ),

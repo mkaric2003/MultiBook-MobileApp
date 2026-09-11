@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class NotificationDataSource {
+  Stream<RemoteMessage> get onMessage;
   Stream<RemoteMessage> get onMessageOpenedApp;
   Stream<String> get onTokenRefresh;
 
@@ -21,6 +22,9 @@ class NotificationDataSourceImpl implements NotificationDataSource {
   NotificationDataSourceImpl(this._messaging);
 
   final FirebaseMessaging _messaging;
+
+  @override
+  Stream<RemoteMessage> get onMessage => FirebaseMessaging.onMessage;
 
   @override
   Stream<RemoteMessage> get onMessageOpenedApp =>

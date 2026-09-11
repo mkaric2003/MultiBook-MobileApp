@@ -1,15 +1,14 @@
 import 'package:multibook/src/data/data_sources/service_search_data_source.dart';
 import 'package:multibook/src/data/models/service_search_result_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class ServiceSearchRepository {
-  ServiceSearchRepository(this._dataSource, this._businessRepository);
+  ServiceSearchRepository(this._dataSource);
 
   final ServiceSearchDataSource _dataSource;
-  final BusinessRepository _businessRepository;
 
   Future<ServiceSearchResultModel> search({
     required ServiceFilters filters,
@@ -27,9 +26,7 @@ class ServiceSearchRepository {
       cursor: cursor,
     );
     return ServiceSearchResultModel(
-      services: page.items
-          .map(_businessRepository.deserializeBusiness)
-          .toList(),
+      services: page.items.map(BusinessModel.fromMap).toList(),
       nextCursor: page.nextCursor,
     );
   }

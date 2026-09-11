@@ -17,9 +17,12 @@ class NotificationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final icon = switch (notification.kind) {
       'chat_message' => Icons.chat_bubble_rounded,
-      'booking_created' || 'booking_status_changed' => Icons.bed_rounded,
+      'booking_created' ||
+      'booking_status_changed' ||
+      'booking_cancelled_by_customer' => Icons.bed_rounded,
       'appointment_created' ||
-      'appointment_status_changed' => Icons.calendar_month_rounded,
+      'appointment_status_changed' ||
+      'appointment_cancelled_by_customer' => Icons.calendar_month_rounded,
       _ => Icons.notifications_rounded,
     };
     final now = DateTime.now();

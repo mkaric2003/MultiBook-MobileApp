@@ -1,25 +1,44 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:multibook/src/data/models/chat_conversation_model.dart';
-import 'package:multibook/src/data/repositories/chat_repository.dart';
-import 'package:multibook/src/data/repositories/user_repository.dart';
-import 'package:multibook/src/features/shared/chat/cubit/chat_conversation_state.dart';
-import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/models/chat_conversation_model.dart';
+import 'package:multibook/src/domain/use_cases/chat/get_or_create_chat_conversation_use_case.dart';
+import 'package:multibook/src/domain/use_cases/chat/mark_chat_as_read_use_case.dart';
+import 'package:multibook/src/domain/use_cases/chat/send_chat_message_use_case.dart';
+import 'package:multibook/src/domain/use_cases/chat/set_chat_presence_use_case.dart';
+import 'package:multibook/src/domain/use_cases/chat/set_chat_typing_use_case.dart';
+import 'package:multibook/src/domain/use_cases/chat/watch_chat_conversation_use_case.dart';
+import 'package:multibook/src/domain/use_cases/users/user_profile_use_case.dart';
+import 'package:multibook/src/features/shared/chat/cubit/chat_conversation_state.dart';
+import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
+import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_snapshot.dart';
 
 @injectable
 class ChatConversationCubit extends Cubit<ChatConversationState>
     with WidgetsBindingObserver {
-  ChatConversationCubit(this._chatRepository, this._userRepository)
-    : super(const ChatConversationState());
+  ChatConversationCubit(
+    this._getOrCreateConversation,
+    this._watchConversation,
+    this._sendMessage,
+    this._markAsRead,
+    this._setTyping,
+    this._setPresence,
+    this._userProfile,
+  ) : super(const ChatConversationState());
 
-  final ChatRepository _chatRepository;
-  final UserRepository _userRepository;
-  StreamSubscription? _messagesSubscription;
-  StreamSubscription? _conversationSubscription;
+  final GetOrCreateChatConversationUseCase _getOrCreateConversation;
+  final WatchChatConversationUseCase _watchConversation;
+  final SendChatMessageUseCase _sendMessage;
+  final MarkChatAsReadUseCase _markAsRead;
+  final SetChatTypingUseCase _setTyping;
+  final SetChatPresenceUseCase _setPresence;
+  final UserProfileUseCase _userProfile;
+  StreamSubscription<Result<ChatConversationSnapshot>>?
+  _conversationSubscription;
   Timer? _typingDebounce;
   Timer? _activeViewerHeartbeat;
   bool _isTyping = false;
@@ -27,9 +46,8 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
 
   Future<void> open(ChatConversationArguments arguments) async {
     try {
-      final currentUser = await _userRepository.getCurrentUser();
+      final currentUser = await _userProfile.getCurrentUser();
       if (currentUser == null) {
-        log('No current user found.', name: 'ChatConversationCubit');
         emit(
           const ChatConversationState(
             isLoading: false,
@@ -38,68 +56,43 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
         );
         return;
       }
-      final customerId = arguments.customerId ?? currentUser.id;
-      final customerName = arguments.customerName ?? currentUser.fullName;
-      final customerImageUrl =
-          arguments.customerImageUrl ?? currentUser.profileImageUrl;
-      final conversation = await _chatRepository.getOrCreateConversation(
+      final result = await _getOrCreateConversation.execute(
         businessId: arguments.businessId,
-        businessOwnerId: arguments.businessOwnerId,
-        businessName: arguments.businessName,
-        businessImageUrl: arguments.businessImageUrl,
-        customerId: customerId,
-        customerName: customerName,
-        customerImageUrl: customerImageUrl,
+        customerId: arguments.customerId,
       );
-      emit(
-        ChatConversationState(
-          isLoading: false,
-          currentUserId: currentUser.id,
-          conversation: conversation,
-        ),
-      );
-      WidgetsBinding.instance.addObserver(this);
-      await _updateActiveViewer(true);
-      _activeViewerHeartbeat = Timer.periodic(
-        const Duration(seconds: 20),
-        (_) => _updateActiveViewer(true),
-      );
-      await _messagesSubscription?.cancel();
-      await _conversationSubscription?.cancel();
-      _messagesSubscription = _chatRepository
-          .watchMessages(conversation.id)
-          .listen(
-            (messages) => emit(state.copyWith(messages: messages)),
-            onError: (_, __) => emit(
-              state.copyWith(
-                errorMessage: 'We could not load messages. Please try again.',
-              ),
+      switch (result) {
+        case FailureResult():
+          emit(
+            const ChatConversationState(
+              isLoading: false,
+              errorMessage:
+                  'We could not open this conversation. Please try again.',
             ),
           );
-      _conversationSubscription = _chatRepository
-          .watchConversation(conversation.id)
-          .listen((updatedConversation) {
-            if (updatedConversation == null) return;
-            emit(state.copyWith(conversation: updatedConversation));
-            _markAsReadIfNeeded(
-              conversation: updatedConversation,
+          return;
+        case Success(:final value):
+          emit(
+            ChatConversationState(
+              isLoading: false,
               currentUserId: currentUser.id,
-            );
-          });
-      await _markAsReadIfNeeded(
-        conversation: conversation,
-        currentUserId: currentUser.id,
-      );
-    } on ChatException catch (error, stackTrace) {
-      log(
-        'Chat open failed: ${error.message}',
-        name: 'ChatConversationCubit',
-        error: error,
-        stackTrace: stackTrace,
-      );
-      emit(
-        ChatConversationState(isLoading: false, errorMessage: error.message),
-      );
+              conversation: value,
+            ),
+          );
+          WidgetsBinding.instance.addObserver(this);
+          await _conversationSubscription?.cancel();
+          _conversationSubscription = _watchConversation
+              .execute(value.id)
+              .listen(_onConversationResult);
+          await _updateActiveViewer(true);
+          _activeViewerHeartbeat = Timer.periodic(
+            const Duration(seconds: 20),
+            (_) => unawaited(_updateActiveViewer(true)),
+          );
+          await _markAsReadIfNeeded(
+            conversation: value,
+            currentUserId: currentUser.id,
+          );
+      }
     } catch (error, stackTrace) {
       log(
         'Unexpected error while opening chat.',
@@ -117,101 +110,119 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
     }
   }
 
+  void _onConversationResult(Result<ChatConversationSnapshot> result) {
+    if (isClosed) return;
+    switch (result) {
+      case Success(:final value):
+        emit(
+          state.copyWith(
+            conversation: value.conversation,
+            messages: value.messages,
+            clearError: true,
+          ),
+        );
+        unawaited(
+          _markAsReadIfNeeded(
+            conversation: value.conversation,
+            currentUserId: state.currentUserId,
+          ),
+        );
+      case FailureResult():
+        emit(
+          state.copyWith(
+            errorMessage: 'We could not load messages. Please try again.',
+          ),
+        );
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        _updateActiveViewer(true);
+        unawaited(_updateActiveViewer(true));
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        _updateActiveViewer(false);
+        unawaited(_updateActiveViewer(false));
     }
   }
 
-  Future<void> _updateActiveViewer(bool isActive) async {
+  Future<void> _updateActiveViewer(bool active) async {
     final conversation = state.conversation;
     if (conversation == null) return;
-    try {
-      await _chatRepository.setActiveViewer(
-        conversationId: conversation.id,
-        isActive: isActive,
-      );
-    } catch (error, stackTrace) {
+    final result = await _setPresence.execute(
+      conversationId: conversation.id,
+      active: active,
+    );
+    if (result is FailureResult<void>) {
       log(
         'Could not update active chat state for ${conversation.id}.',
         name: 'ChatConversationCubit',
-        error: error,
-        stackTrace: stackTrace,
       );
     }
   }
 
   Future<void> send(String text) async {
     final conversation = state.conversation;
-    if (conversation == null || text.trim().isEmpty || state.isSending) return;
+    final trimmedText = text.trim();
+    if (conversation == null || trimmedText.isEmpty || state.isSending) return;
     _typingDebounce?.cancel();
     await _updateTyping(false);
     emit(state.copyWith(isSending: true, clearError: true));
-    try {
-      await _chatRepository.sendMessage(
-        conversationId: conversation.id,
-        text: text,
-      );
-      if (!isClosed) {
-        emit(state.copyWith(isSending: false));
-      }
-    } on ChatException catch (error) {
-      if (!isClosed) {
-        emit(state.copyWith(isSending: false, errorMessage: error.message));
-      }
-    } catch (_) {
-      if (!isClosed) {
+    final result = await _sendMessage.execute(
+      conversationId: conversation.id,
+      text: trimmedText,
+    );
+    if (isClosed) return;
+    switch (result) {
+      case Success(:final value):
+        final messages = state.messages.any((message) => message.id == value.id)
+            ? state.messages
+            : [value, ...state.messages];
+        emit(state.copyWith(isSending: false, messages: messages));
+      case FailureResult():
         emit(
           state.copyWith(
             isSending: false,
             errorMessage: 'We could not send your message. Please try again.',
           ),
         );
-      }
     }
   }
 
   void onComposerChanged(String value) {
     _typingDebounce?.cancel();
     if (value.trim().isEmpty) {
-      _updateTyping(false);
+      unawaited(_updateTyping(false));
       return;
     }
     final shouldRefreshTyping =
         _lastTypingUpdate == null ||
         DateTime.now().difference(_lastTypingUpdate!) >=
             const Duration(seconds: 2);
-    if (shouldRefreshTyping) _updateTyping(true, force: true);
+    if (shouldRefreshTyping) unawaited(_updateTyping(true, force: true));
     _typingDebounce = Timer(
       const Duration(seconds: 2),
-      () => _updateTyping(false),
+      () => unawaited(_updateTyping(false)),
     );
   }
 
-  Future<void> _updateTyping(bool isTyping, {bool force = false}) async {
+  Future<void> _updateTyping(bool active, {bool force = false}) async {
     final conversation = state.conversation;
-    if (conversation == null || (!force && _isTyping == isTyping)) return;
-    _isTyping = isTyping;
+    if (conversation == null || (!force && _isTyping == active)) return;
+    _isTyping = active;
     _lastTypingUpdate = DateTime.now();
-    try {
-      await _chatRepository.setTyping(
-        conversationId: conversation.id,
-        isTyping: isTyping,
-      );
-    } catch (error, stackTrace) {
+    final result = await _setTyping.execute(
+      conversationId: conversation.id,
+      active: active,
+    );
+    if (result is FailureResult<void>) {
       _isTyping = false;
       log(
         'Could not update typing status for ${conversation.id}.',
         name: 'ChatConversationCubit',
-        error: error,
-        stackTrace: stackTrace,
       );
     }
   }
@@ -224,7 +235,13 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
         ? conversation.unreadCustomerCount > 0
         : conversation.unreadBusinessCount > 0;
     if (!hasUnreadMessages) return;
-    await _chatRepository.markAsRead(conversation);
+    final result = await _markAsRead.execute(conversation.id);
+    if (result is FailureResult<void>) {
+      log(
+        'Could not mark chat ${conversation.id} as read.',
+        name: 'ChatConversationCubit',
+      );
+    }
   }
 
   @override
@@ -234,7 +251,6 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
     await _updateActiveViewer(false);
     _typingDebounce?.cancel();
     await _updateTyping(false);
-    await _messagesSubscription?.cancel();
     await _conversationSubscription?.cancel();
     return super.close();
   }

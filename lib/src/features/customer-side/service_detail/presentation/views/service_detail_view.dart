@@ -61,10 +61,10 @@ class ServiceDetailView extends StatelessWidget {
                       isSaved: state.isSaved,
                       onSaved: () async {
                         final wasSaved = state.isSaved;
-                        await context.read<ServiceDetailCubit>().toggleSaved(
-                          listing,
-                        );
-                        if (context.mounted) {
+                        final changed = await context
+                            .read<ServiceDetailCubit>()
+                            .toggleSaved(listing);
+                        if (context.mounted && changed) {
                           toastification.show(
                             context: context,
                             autoCloseDuration: const Duration(seconds: 2),

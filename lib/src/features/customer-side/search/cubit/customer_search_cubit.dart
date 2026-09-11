@@ -1,6 +1,9 @@
 import 'dart:async';
 
-import 'package:multibook/src/data/repositories/business_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/data/enums/business_type.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/search_discovery_businesses_use_case.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
@@ -10,10 +13,10 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class CustomerSearchCubit extends Cubit<CustomerSearchState> {
-  CustomerSearchCubit(this._businessRepository)
+  CustomerSearchCubit(this._searchDiscoveryBusinesses)
     : super(const CustomerSearchState());
 
-  final BusinessRepository _businessRepository;
+  final SearchDiscoveryBusinessesUseCase _searchDiscoveryBusinesses;
   Timer? _searchDebounce;
 
   void selectTab(CustomerHomeTab tab) {
@@ -53,12 +56,19 @@ class CustomerSearchCubit extends Cubit<CustomerSearchState> {
         isLoading: true,
       ),
     );
-    final businesses = selectedTab == CustomerHomeTab.stays
-        ? await _businessRepository.searchStays(trimmedQuery)
-        : await _businessRepository.searchServices(trimmedQuery);
+    final result = await _searchDiscoveryBusinesses.execute(
+      type: selectedTab == CustomerHomeTab.stays
+          ? BusinessType.stays
+          : BusinessType.services,
+      query: trimmedQuery,
+    );
     if (state.query != trimmedQuery || state.selectedTab != selectedTab) {
       return;
     }
+    final List<BusinessModel> businesses = switch (result) {
+      Success(value: final businesses) => businesses,
+      FailureResult() => const [],
+    };
     emit(
       CustomerSearchState(
         selectedTab: selectedTab,

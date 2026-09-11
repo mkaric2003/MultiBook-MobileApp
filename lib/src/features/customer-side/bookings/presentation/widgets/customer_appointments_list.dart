@@ -70,6 +70,11 @@ class CustomerAppointmentsList extends StatelessWidget {
             ),
           ),
         ],
+        if (state.isLoadingMore)
+          const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(child: CircularProgressIndicator()),
+          ),
       ],
     );
   }

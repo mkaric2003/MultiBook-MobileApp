@@ -33,7 +33,7 @@ Ključna poslovna odluka je da razgovor i rezervacija pripadaju **businessu**, a
 1. Provider kreira ili uređuje stay/service business, unosi lokaciju, slike, ponudu i dostupnost.
 2. Nakon prvog businessa početni ekran postaje dashboard; selektovani business se čuva u user profilu.
 3. Provider mijenja business na dashboardu / business selectoru, pregleda njegove bookinge ili appointmente i upravlja njima.
-4. Iz **Manage Stays & Services** otvara puni, unaprijed popunjeni editor selektovanog businessa i sprema izmjene u postojeći dokument.
+4. Iz **Manage Stays & Services** otvara puni, unaprijed popunjeni editor selektovanog businessa i sprema izmjene preko REST API-ja.
 5. Za stays vidi zauzete dane; za services vidi zauzete i blokirane 30-minutne slotove po radniku.
 
 ---
@@ -69,19 +69,190 @@ Projekt prati odvajanje odgovornosti:
 Presentation (View / Widget / Cubit-BLoC)
                   │
                   ▼
-             Repository
+              Use case
+                  │
+                  ▼
+        Repository contract
+                  │
+                  ▼
+        Repository implementation
                   │
                   ▼
           Data source adapteri
                   │
                   ▼
-Firebase / HTTP / lokalni cache
+         ApiClient / Firebase / lokalni cache
 ```
 
 - **Presentation** prikazuje stanje i šalje korisničke akcije Cubit/BLoC-u. Nema direktnih Firebase poziva.
-- **Repository** sadrži poslovnu logiku, mapiranje modela, kombinovanje izvora podataka, logging i obradu greške.
-- **Data source** je jedino mjesto koje direktno razgovara sa Firebaseom, HTTP API-jem ili pluginom uređaja.
+- **Use case** je obavezan ulaz u REST module. Svaki use case izlaže jednu tipiziranu operaciju kroz `execute()` i zavisi samo od repository ugovora; nalazi se u `src/domain/use_cases/<module>/`.
+- **Repository contract** je u `src/domain/repositories/`, a njegova `Impl` klasa u `src/data/repositories/`. Implementacija koordinira data sourcee, dok use case ne poznaje HTTP detalje.
+- **Data source** implementira adapter prema konkretnom backend resursu ili pluginu uređaja. HTTP adapter koristi zajedničku networking infrastrukturu umjesto da sam upravlja transportom.
+- **Core networking** (`src/core/networking/`) sadrži transportne primitive koje nisu vezane ni za jedan feature: `ApiClient`, `SseClient` i `SseConnection`.
 - **Models/enums** su eksplicitni i tipizirani. Feature-specifični modeli idu u `feature/domain/models`, a zajednički persisted modeli u `src/data/models`.
+
+### 4.1.1 REST moduli i greške
+
+REST migracija se uvodi modul po modul. Standardni tok za migrirani modul je:
+
+```text
+Cubit → Use case → Repository contract → RepositoryImpl → Data source → ApiClient
+```
+
+`users` je prvi migrirani REST modul. Njegov contract je `UsersRepository`, implementacija `UsersRepositoryImpl`, a HTTP endpointi su u `UsersApiDataSource`.
+
+### 4.1.3 Customer drafts REST migracija
+
+Customer booking i appointment draftovi koriste jedan `CustomerDraftsRepository` jer pripadaju istoj customer-drafts odgovornosti. Tok je striktno:
+
+```text
+CustomerDashboardCubit / draft Cubit → action-specific draft use case → CustomerDraftsRepository → CustomerDraftsRepositoryImpl → CustomerDraftsApiDataSource → ApiClient
+```
+
+`CustomerDraftsApiDataSource` koristi `GET`, `PUT` i `DELETE` endpoint-e pod `/v1/drafts/booking` i `/v1/drafts/appointment`. `ApiClient.delete` normalizuje Dio grešku u isti `ApiException` oblik kao `get`, `post`, `put` i `patch`.
+
+- Svaki customer ima najviše jedan booking i jedan appointment draft.
+- `GET` koji dobije `404` vraća `Success(null)`; dashboard zato ne prikazuje grešku kada draft ne postoji.
+- Odgovori su camelCase-kompatibilni s postojećim `BookingDraftModel` i `AppointmentDraftModel`.
+- `businessImageUrl` može biti Firebase Storage path ili direktni HTTPS URL. `FirebaseStorageDataSource.getDownloadUrl` prosljeđuje HTTPS URL bez dodatnog Firebase lookup-a.
+- Nastavak appointmenta i bookinga učitava puni business agregat preko postojećeg REST `GetBusinessDetailUseCase`, a ne preko Firestore business dokumenta. Ako business više nije dostupan, UI prikazuje stanje greške umjesto beskonačnog loadera.
+
+Očekivane REST greške ne putuju do Cubit-a kao `DioException` ili `ApiException`. `ApiClient` normalizuje Dio grešku u `ApiException`, a `RestRepositoryExecutor` iz `src/core/errors/` je centralno mjesto koje je mapira u `Result<T>` i `AppFailure`:
+
+- `401` → `UnauthorizedFailure`
+- `403` → `ForbiddenFailure`
+- `400` i `422` → `ValidationFailure`
+- `404` → `NotFoundFailure`
+- timeout/network i nepoznati HTTP status → `NetworkFailure`
+- `5xx` → `ServerFailure`
+- neočekivana lokalna greška → `UnknownFailure`
+
+Use case vraća `Success<T>` ili `FailureResult<T>`. Cubit grana po tom rezultatu i emituje odgovarajuće UI stanje; ne hvata exception za očekivani REST failure. Korisnički tekst ostaje u presentation/lokalizacijskom sloju, dok se tehnički detalji koriste samo za logovanje.
+
+Svaka poslovna radnja ima vlastiti use case i vlastiti fajl: `GetBookingDraftUseCase`, `SaveBookingDraftUseCase`, `DeleteBookingDraftUseCase`, te ekvivalenti za appointment draft. Isti princip važi za create, list, cancel, availability i reschedule radnje; use case nije generički facade nad više nepovezanih akcija.
+
+### 4.1.4 Customer stay bookings REST migracija
+
+Customer stay booking read flow koristi poseban `CustomerBookingsRepository`, jer je odgovornost drugačija od checkout kreiranja i od customer draftova:
+
+```text
+CustomerBookingsCubit / CustomerBookingDetailsCubit / BookingDetailsCubit
+        → GetCustomerBookingsUseCase / CancelCustomerBookingUseCase / GetStayAvailabilityUseCase
+        → CustomerBookingsRepository
+        → CustomerBookingsRepositoryImpl
+        → CustomerBookingsApiDataSource
+        → ApiClient
+```
+
+- `GET /v1/bookings` vraća samo booking-e prijavljenog customera i REST offset cursor (`nextCursor`); `CustomerBookingsCubit` više ne koristi Firestore `DataCursor` za stay tab.
+- `PATCH /v1/bookings/{id}/cancel` vraća ažurirani `BookingModel`; detail Cubit njime zamjenjuje lokalnu stavku nakon uspješnog otkazivanja.
+- `GET /v1/businesses/{id}/stay/availability` vraća samo `unavailableRanges`, bez tuđih booking detalja. Za multiple-unit stay šalje se `room_type_id`, a backend označava datum nedostupnim tek kada je kapacitet tog room typea popunjen.
+- `BookingListResponse`, `StayAvailabilityResponse` i `StayUnavailableRange` su tipizirani REST response modeli; svaki model je u vlastitom fajlu. `BookingModel` ostaje zajednički persisted model.
+- Customer stay lista, customer cancel i customer calendar availability nemaju Firestore fallback. Stari Firestore `BookingRepository` je uklonjen; provider booking i provider stay calendar koriste REST.
+
+### 4.1.5 Customer service appointments REST migracija
+
+Customer service tab, customer cancellation i reschedule koriste zaseban `CustomerAppointmentsRepository` i akcijski razdvojene use case-e:
+
+```text
+CustomerBookingsCubit / AppointmentDetailsCubit / RescheduleAppointmentCubit
+        → GetCustomerAppointmentsUseCase / CancelCustomerAppointmentUseCase / RescheduleCustomerAppointmentUseCase
+        → CustomerAppointmentsRepository
+        → CustomerAppointmentsRepositoryImpl
+        → CustomerAppointmentsApiDataSource
+        → ApiClient
+```
+
+- `GET /v1/appointments` vraća samo appointment-e prijavljenog customera za customer poziv i koristi REST offset cursor (`nextCursor`), sa zasebnim cursorom od stay taba.
+- `PATCH /v1/appointments/{id}/status` koristi se za customer cancellation, a `PATCH /v1/appointments/{id}/reschedule` vraća novi kompletni `AppointmentModel` nakon uspješne promjene.
+- `AppointmentListResponse` je tipizirani paginirani response. Lista/status/reschedule REST odgovori već sadrže presentation podatke i offerings, pa nema Firestore business enrichment/fallbacka u customer service flowu.
+- Calendar availability koristi `GET /v1/businesses/{businessID}/service/staff/{staffID}/available-slots` sa odabranim offering ID-evima. Backend iz PostgreSQL weekly availabilityja, ručnih blokada i potvrđenih appointmenta vraća samo bookable start minute; kod reschedule-a `exclude_appointment_id` zadržava mogućnost izbora trenutnog termina.
+- Appointment details business učitava kroz `GetBusinessDetailUseCase`, a dashboard gradove kroz `GetDiscoveryCitiesUseCase`; oba toka koriste customer discovery REST API.
+
+### 4.1.6 Reviews REST migracija
+
+Kreiranje, provjera i prikaz recenzija koriste zaseban Reviews modul:
+
+```text
+RateBusinessCubit / detail Cubit / BusinessReviewsSheet
+        → CreateReviewUseCase | HasBusinessReviewUseCase |
+          GetBusinessReviewsUseCase
+        → ReviewsRepository
+        → ReviewsRepositoryImpl
+        → ReviewsApiDataSource
+        → ApiClient
+```
+
+- `POST /v1/businesses/{businessId}/reviews` prihvata source ID/tip, rating i opcionalni komentar. Backend iz rezervacije ili termina određuje customera, business ownera i snapshot prikazne podatke.
+- `GET /v1/businesses/{businessId}/review-status` provjerava da li je prijavljeni customer već ocijenio business.
+- `GET /v1/businesses/{businessId}/reviews` vraća newest-first offset stranice; detail preview traži 4 stavke, a *All reviews* učitava stranice po 20.
+- I dalje vrijedi pravilo jedne recenzije po customeru i businessu, ne po pojedinačnoj rezervaciji. Izvor mora pripadati calleru i businessu te biti završen.
+- PostgreSQL čuva Storage path avatara; `ReviewsApiDataSource` ga razrješava u download URL samo za prikaz.
+- Flutter nema Firestore ni callable fallback za recenzije. Postojeći `createReview` Cloud Function i Firestore pravila ostaju u projektu, ali ih migrirani Flutter flow više ne koristi.
+
+### 4.1.7 Dashboard metrics REST migracija
+
+Provider dashboard koristi zaseban live Metrics tok:
+
+```text
+DashboardCubit → WatchDashboardMetricsUseCase → DashboardMetricsRepository
+        → DashboardMetricsRepositoryImpl → DashboardMetricsApiDataSource
+        → ApiClient SSE
+```
+
+- `GET /v1/businesses/{businessId}/dashboard-metrics/stream` odmah šalje kompletan snapshot i zatim novi snapshot nakon svake commitane promjene rezervacije.
+- Flutter koristi jedan SSE subscription umjesto odvojenih Firestore summary i current-month subscriptiona. Stream se registruje u `SessionStreamRegistry` i automatski reconnecta s ograničenim exponential backoffom.
+- `DashboardMetrics` i zasebni `DashboardMetricsMonth` model koriste `dart_mappable`; iznosi s API-ja ostaju u minor units sve do zajedničkog currency formattera koji ih pretvara u decimalni prikaz.
+- Dashboard više ne čita `business_metrics` Firestore dokumente niti poziva metrics callable initializer.
+- Firebase metrics Functions i pravila ostaju u projektu kao legacy infrastruktura; Flutter dashboard ih više ne koristi.
+
+### 4.1.8 Earnings REST migracija
+
+Provider Earnings koristi isti generički SSE transport kao dashboard, ali zaseban domenski tok:
+
+```text
+EarningsView → EarningsCubit → WatchEarningsMetricsUseCase
+        → EarningsMetricsRepository → EarningsMetricsRepositoryImpl
+        → EarningsMetricsApiDataSource → SseClient → ApiClient
+```
+
+- `GET /v1/businesses/{businessId}/earnings/stream` prima inkluzivni `startDate`/`endDate` raspon, lokalni `utcOffsetMinutes` i opcionalni `staffId`, odmah šalje rezultat i osvježava ga nakon commitane promjene rezervacije. Offset uređaja određuje granice kalendarskog dana/sedmice/mjeseca, tako da lokalni period ne zavisi od UTC datuma.
+- Datum se primjenjuje na `created_at`: prihod pripada momentu kreiranja rezervacije, bez obzira kada će se termin ili boravak desiti.
+- Potvrđeni i završeni cash booking ulazi odmah; no-show/status promjena ga izuzima. Online booking ulazi tek kada je `payment_status=paid`.
+- `EarningsCubit` upravlja aktivnim businessom, periodom, provider filterom i SSE subscriptionom. Widget ne poziva use case direktno.
+- API i Flutter koriste minor units za ukupni, online, cash i historijski provider iznos. Konverzija u decimalni prikaz dešava se samo u zajedničkom currency formatteru.
+- Flutter Earnings više nema Firestore repository/data source niti čita `business_metrics` kolekciju. Postojeće Firebase aggregate funkcije i pravila ostaju samo kao legacy infrastruktura dok se zasebno ne uklone.
+
+### 4.1.2 Businesses REST migracija
+
+Provider business modul koristi postojeći `BusinessModel` i njegov `dart_mappable` `toMap`/`fromMap`; za REST se ne uvode posebni `CreateBusinessInput`, `CreatedBusiness` ili slični transport modeli.
+
+```text
+AddBusinessBloc / provider Cubit
+        → CreateBusinessUseCase | GetOwnedBusinessesUseCase |
+          GetOwnedBusinessUseCase | UpdateBusinessUseCase
+        → BusinessesRepository
+        → BusinessesRepositoryImpl
+        → BusinessesApiDataSource
+        → ApiClient
+```
+
+- `GET /v1/businesses` vraća samo lagane sažetke za *My Businesses*, tabove i business selector. `GetOwnedBusinessesUseCase` ih cacheira i sprečava paralelne identične zahtjeve.
+- `GET /v1/businesses/{id}` vraća puni owner-only aggregate i poziva se samo kad provider otvori **Manage Stays & Services** editor. Zato se pri saveu ne izgube `amenities`, `extras`, rooms, offerings ili staff koji nisu dio summary odgovora.
+- `POST /v1/businesses` i `PUT /v1/businesses/{id}` primaju `BusinessModel.toMap()` i vraćaju puni `BusinessModel`. `PUT` je potpuna zamjena editabilnog aggregata, ne parcijalni update.
+- Firebase ostaje samo za Auth i Storage. PostgreSQL čuva Firebase Storage path; `BusinessesApiDataSource` download URL koristi samo za prikaz i prije REST `PUT` ga normalizuje nazad u Storage path.
+
+### 4.1.3 Customer discovery i development seed
+
+Customer home **Popular Near You** više ne koristi Firestore cursore. `CustomerDashboardCubit` preko `GetPopularNearbyBusinessesUseCase` poziva `GET /v1/discovery/businesses` s parametrima `type` (`stays` ili `services`), `city`, `limit` i `offset`. Odgovor ostaje `BusinessModel`-kompatibilan, a postojeći UI zadržava paginaciju i *load more* ponašanje.
+
+Customer **Explore** također ne čita Firestore business kolekciju: izbor grada koristi `GET /v1/discovery/cities`, koji čita trajni deduplicirani katalog gradova popunjen pri svakom upisu business lokacije, a *Trending near you* koristi isti paginirani `GET /v1/discovery/businesses` za `type=services`. Kategorijski i collection rezultati ostaju na server-side `GET /v1/stays/search` i `GET /v1/services/search` rutama.
+
+Featured stay i service collections koriste `GET /v1/discovery/featured-collections`. PostgreSQL čuva redoslijed, ID i image URL, dok backend vraća postojeće l10n ključeve pa Flutter zadržava prijevode za sve podržane jezike.
+
+**Recommended for you** koristi `GET /v1/discovery/recommended-stays`, a ne Firestore. Backend vraća do tri staya, prioritizira korisnikov spremljeni grad i preostala mjesta popunjava globalnim rankingom po ratingu i broju recenzija.
+
+Development-only seed akcije u Add Business ekranu koriste `DevelopmentSeedUseCase` i REST endpoint-e `POST /v1/development/seed/stays` i `POST /v1/development/seed/services`. Seed media koristi direktne HTTPS URL-ove za demo kartice; Firebase Storage se ne poziva za te slike.
 
 ### 4.2 Struktura direktorija
 
@@ -90,12 +261,12 @@ lib/
  ├─ main.dart                         # inicijalizacija DI-ja i aplikacije
  ├─ app.dart                          # MaterialApp, router i inicijalizacija notifikacija
  ├─ src/
- │   ├─ core/                         # konfiguracija, tema, Firebase modul, DI, session lifecycle
+ │   ├─ core/                         # konfiguracija, tema, DI, session lifecycle i shared errors
+ │   ├─ domain/                       # use caseovi i repository ugovori
  │   ├─ data/
  │   │   ├─ data_sources/             # Firebase/HTTP/plugin adapteri
- │   │   ├─ repositories/             # poslovna i pristupna logika
+ │   │   ├─ repositories/             # repository implementacije
  │   │   ├─ models/ i enums/          # shared persisted modeli
- │   │   └─ data_cursor.dart          # Firestore cursor paginacija
  │   ├─ features/
  │   │   ├─ customer-side/            # customer featurei
  │   │   ├─ business-side/            # provider featurei
@@ -116,6 +287,9 @@ functions/src/
 - Ne koristiti `setState`; za lokalne interakcije koristiti `HookWidget`, `useState`, `useEffect` ili Cubit stanje.
 - Ne stavljati privatne pomoćne UI klase u veliki view fajl. Svaki custom widget ima svoj fajl u `presentation/widgets`.
 - Feature modeli/enumi nisu u presentation fajlovima; idu u `domain/models` ili `domain/enums`.
+- Svaki model ima vlastiti fajl i koristi `dart_mappable`; ručni `fromMap`, `toMap` i više model-klasa u jednom fajlu nisu dozvoljeni.
+- Novi REST repository koristi `RestRepositoryExecutor`; ne kopirati HTTP-to-failure mapping u pojedinačne `RepositoryImpl` klase.
+- Novi REST Cubit prima use case, a ne `RepositoryImpl`, `DataSource` ili `ApiClient`.
 - Globalno ponovljive komponente su u `src/global_widgets`: `CustomAppBar`, `CustomButton`, `CustomTextfield`, `SearchableCityPickerSheet` i `LabeledDivider`.
 - Tamna tema i boje dolaze iz `AppTheme` i `AppColors`, ne iz nasumičnih hardkodiranih boja u viewu.
 
@@ -157,11 +331,11 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 
 ### Session stream lifecycle
 
-Firestore stream nakon Firebase Auth odjave više nema pravo čitanja dokumenata. Zato aplikacija ne prepušta zatvaranje streamova slučajnom redoslijedu rebuilda i navigacije:
+Autentificirani Firestore i SSE streamovi nakon Firebase Auth odjave više nemaju važeći pristup. Zato aplikacija ne prepušta zatvaranje streamova slučajnom redoslijedu rebuilda i navigacije:
 
 1. Root view odmah zamijeni trenutnu rutu sa sign-in ekranom.
 2. `AuthenticationRepository.signOut()` poziva `SessionStreamRegistry.cancelAll()` **prije** `FirebaseAuth.signOut()`.
-3. Registry otkazuje aktivne, autentikacijom vezane pretplate (dashboard summary/month metrics, earnings metrics i unread-message indikatore).
+3. Registry otkazuje aktivne, autentikacijom vezane pretplate, uključujući dashboard/Earnings SSE i chat unread indikatore.
 4. Dok je session u završavanju, registry odmah otkazuje svaku pretplatu koju neki sporiji async `load()` pokuša otvoriti.
 5. Tek nakon toga briše se notification device registracija i poziva Firebase sign-out.
 
@@ -240,20 +414,20 @@ Kolekcije su `wellness_spa`, `beauty_grooming`, `home_repairs`, `auto_services`,
 
 ### 8.3 Dodavanje businessa
 
-Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedinice, service ponude, osoblje i slotove. Slike se biraju iz galerije/kamere, kompresuju, uploaduju u Firebase Storage i tek onda se business trajno upisuje u Firestore.
+Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedinice, service ponude, osoblje i slotove. Slike se biraju iz galerije/kamere, kompresuju i uploaduju u Firebase Storage; nakon toga se kompletan postojeći `BusinessModel` šalje na Go REST API, koji ga trajno upisuje u PostgreSQL.
 
 Razvojni seed metod puni bazu realističnim stay i service podacima (različiti gradovi, kategorije, cijene, rating, slike, rooms, extras, staff i ponuda). Seed je samo za development/testiranje i ne treba biti dostupan u produkcijskom UI-ju.
 
 ### 8.4 Upravljanje i uređivanje businessa
 
-**Manage Stays & Services** nije zaseban, ograničen katalog editor. Nakon što učita trenutno selektovani provider business, otvara isti puni **Add Business** obrazac u edit modu. Time create i update dijele istu validaciju, strukturu forme i data model, pa ne može doći do razlike između polja koja se mogu unijeti pri kreiranju i onih koja se mogu izmijeniti kasnije.
+**Manage Stays & Services** nije zaseban, ograničen katalog editor. Lista/selector prvo koriste lagani `GET /v1/businesses` summary. Kada provider otvori editor, `AddBusinessBloc` poziva `GET /v1/businesses/{id}` i tek iz punog REST aggregata popunjava isti **Add Business** obrazac u edit modu. Time create i update dijele istu validaciju, strukturu forme i `BusinessModel`, a nepotrebni detaljni request se ne radi za svaki business u listi.
 
 - Formu unaprijed popunjavaju naziv, kategorija, grad/adresa, koordinate, opis, inventory tip, cijena, amenities, extras i njihove cijene, featured collections, ponude, zaposlenici, provizije i availability slotovi.
 - Za multiple-unit stay provider može uređivati, dodavati i uklanjati više bookable room/unit stavki. Svaka stavka nosi naziv, kapacitet, kvadraturu, cijenu po noći, količinu i aktivnost.
 - Service business zadržava uređivanje kompletne liste offeringsa i provider/staff članova zajedno s njihovim slotovima i commission rate-om.
 - Tip businessa je zaključan tokom izmjene kako postojeći stay/service dokument ne bi promijenio domenski tip i ostavio nekonzistentne rezervacije ili appointmente.
-- Postojeći logo, cover i `photoUrls` se prikažu kao mrežne slike i ne uploaduju se ponovo. Novoizabrane slike se kompresuju u WebP i uploaduju; uklonjene Firestore/Storage galerijske slike se nakon uspješnog updatea uklanjaju iz Storagea. Galerija ostaje ograničena na najviše sedam dodatnih slika.
-- Update zadržava identitet businessa, ownera, valutu, rating, broj recenzija, aktivno stanje i `isPromotionActive`; mijenja samo poslovne podatke koje provider smije uređivati. Za pretragu se u istom zapisu obnavljaju `nameLowercase`, `cityLowercase`, `stayPricePerNight` i `maxGuestCapacity`.
+- Postojeći logo, cover i `photoUrls` se prikažu kao mrežne slike i ne uploaduju se ponovo. Firebase download URL je UI-only vrijednost: prije `PUT` se normalizuje u trajni Storage path, koji Go API sprema u PostgreSQL. Galerija ostaje ograničena na najviše sedam dodatnih slika.
+- Update zadržava identitet businessa, ownera, valutu, rating, broj recenzija, aktivno stanje i `isPromotionActive`; REST `PUT` zamjenjuje editabilni business aggregate. Zbog toga editor uvijek prvo fetch-a puni detail, umjesto da šalje nepotpun list summary.
 
 ### 8.5 Promotions & Discounts
 
@@ -284,7 +458,7 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 - Pretraga podržava naziv businessa i grad.
 - Stay filteri: check-in/check-out, broj gostiju, grad, raspon cijene, rating i amenityji.
 - Service filteri: datum, vrijeme u 30-minutnim koracima, kategorija businessa, grad, raspon cijene i sortiranje.
-- Ako nema filtera, čitanje ide direktno iz Firestorea. Ako su filteri aktivni, koristi se callable Cloud Function; to izbjegava preuzimanje svih kandidata na uređaj i lokalno filtriranje nepotpunog paginiranog skupa.
+- Ako nema aktivnih filtera, home koristi discovery feed. Ako su stay filteri aktivni, `StaySearchDataSource` koristi autentificirani `GET /v1/stays/search` Go endpoint; Flutter šalje samo vrijednosti koje je korisnik stvarno odabrao, uz tehničke pagination parametre. Time se kombinovano filtriranje i availability izvršavaju server-side bez preuzimanja kandidata na uređaj.
 
 ### Stay detail i booking
 
@@ -310,20 +484,21 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 
 ### Draftovi
 
-- `booking_drafts/{userId}` čuva prekinuti stay flow.
-- `appointment_drafts/{userId}` čuva odabrane usluge, provider, datum, slotove, add-ons i ostale potrebne podatke service flowa.
+- REST `GET /v1/drafts/booking` i `PUT /v1/drafts/booking` čuvaju i vraćaju prekinuti stay flow za trenutno prijavljenog customera.
+- REST `GET /v1/drafts/appointment` i `PUT /v1/drafts/appointment` čuvaju i vraćaju odabrane usluge, providera, datum, slotove i add-ons service flowa.
+- REST `DELETE` endpointi brišu odgovarajući draft nakon uspješne potvrde plaćanja.
 - Pri napuštanju flowa prikazuje se odluka da se draft sačuva ili odbaci.
 - Draft vraća označene datume, slotove i extras/add-ons pri nastavku.
 
 ### My Bookings, Saved, Profile i Explore
 
-- **My bookings** razdvaja stays i services na upcoming/past, uz live osvježavanje nakon cancel akcije.
-- **Saved** je vezan za usera; animirano uklanjanje iz liste, toast feedback i trenutno stanje srca na detailu.
+- **My bookings** razdvaja stays i services na upcoming/past. Oba taba učitavaju REST stranice sa zasebnim cursorima i lokalno se osvježavaju nakon REST cancel/reschedule akcija; customer tabovi nemaju Firestore fallback.
+- **Saved** koristi Go REST za spremanje, uklanjanje, provjeru i listanje korisnikovih businessa. Lista prikazuje aktuelne podatke za smještaje i servise, a lokalni broadcast odmah osvježava listu i stanje srca nakon uspješne promjene. Animirano uklanjanje, toast feedback i optimistic UX ostaju sačuvani.
 - **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
 - **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).
-- Ticketi se čuvaju u `support_tickets`; Firestore pravila dozvoljavaju customeru kreiranje i čitanje samo vlastitih zahtjeva, dok status kasnije mijenja interni support/admin alat.
-- **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed.
-- Recently viewed se sprema po useru i po businessu; naslov se ne prikazuje kada nema podataka.
+- Ticketi se čuvaju u Supabase `support_tickets` tabeli i dostupni su samo kroz customer-only `GET/POST /v1/support-tickets`. Backend izvodi customer identitet, ime, email i početni `open` status iz autentificiranog profila; Flutter šalje samo kategoriju, naslov i poruku. Lista se osvježava pri otvaranju i nakon uspješnog kreiranja, bez Firestore fallbacka, streama ili pollinga. Status kasnije mijenja interni support/admin alat.
+- **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed. Dinamički discovery/search podaci dolaze s Go endpointa, bez Firestore fallbacka.
+- Recently viewed se sprema po useru i businessu preko `PUT /v1/recently-viewed/{businessID}`, a stay/service liste čitaju `GET /v1/recently-viewed`. Backend zadržava najviše 30 referenci po useru i pri čitanju vraća aktuelne business podatke, bez Firestore fallbacka ili dupliciranja kartica. Nakon uspješnog REST upisa, `RecentlyViewedUpdatesService` šalje lokalni broadcast signal aktivnim Recently Viewed cubitima da osvježe listu; nema socket konekcije ni periodičnog pollinga.
 - Rezultati kategorije/kolekcije koriste cursor paginaciju.
 
 ---
@@ -332,27 +507,32 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 
 ### Dashboard, earnings i business management
 
-- Dashboard prikazuje selektovani business, aktivne bookinge/appointmente, zaradu u tekućem mjesecu, prosječni rating i FL Chart trendove iz agregiranih metrika.
+- Dashboard prikazuje selektovani business, aktivne bookinge/appointmente, zaradu u tekućem mjesecu, prosječni rating i FL Chart trendove iz PostgreSQL snapshot metrika koje dobija kroz SSE.
 - Earnings prikazuje ukupnu mjesečnu zaradu, odvojeno **online** i **cash** earnings, te trend prihoda i volumena rezervacija.
 - Earnings period filter podržava: current week, past week, this month, past month, this year, last year i custom raspon. Custom početni/završni datum se bira u Cupertino date pickeru.
 - Kod service businessa Earnings omogućava i izbor zaposlenika. Prikazuju se **gross earnings** (ukupna vrijednost njegovih appointmenta) i **provider earnings** (njegova ugovorena provizija), uz trend prihoda i broj appointmenta za odabrani period.
 - Svaki zaposlenik ima `commissionRate` (podrazumijevano 100%). Pri kreiranju appointmenta spremaju se historijski snapshoti `providerCommissionRate` i `providerEarnings`, pa kasnija promjena provizije ne mijenja ranije obračune.
-- Cloud Functions održavaju owner-only agregate po zaposleniku u `business_metrics/{businessId}/providers/{providerId}/months/{YYYY-MM}`. Dnevni gross/provider iznosi omogućavaju week i custom filtere bez čitanja svih appointment dokumenata.
-- Za djelimične mjesece (sedmica i custom period) agregat koristi samo dnevne vrijednosti unutar odabranog raspona, uključujući zasebne daily online i cash earnings, pa podjela ostaje tačna.
+- Go backend računa owner-only earnings projekciju direktno iz indeksiranih PostgreSQL rezervacija. Dnevni gross/provider iznosi omogućavaju week i custom filtere bez čitanja pojedinačnih appointmenta na mobilnoj strani.
+- Za djelimične mjesece (sedmica i custom period) API vraća samo dnevne vrijednosti unutar inkluzivnog odabranog raspona, uključujući zasebne daily online i cash earnings, pa podjela ostaje tačna.
 - Cash rezervacija/appointment ulazi u earnings odmah pri potvrdi kao očekivani prihod. No-show je dostupan samo provideru, samo za završeni cash termin/rezervaciju sa statusom `confirmed` ili `completed`; uz akciju se prikazuje objašnjenje o uticaju na metrike.
-- `business_metrics/{businessId}` i mjesečni dokumenti su server-side agregati. Ne računaju se skeniranjem svih booking/appointment dokumenata pri svakom otvaranju dashboarda.
+- Dashboard i Earnings metrike backend računa iz indeksiranih PostgreSQL reservation redova, bez kopirane aggregate tabele i inicijalizacijskog poziva. Firestore `business_metrics` dokumente migrirani Flutter flow više ne čita.
 - `selectedBusinessId` u user dokumentu je jedini izvor aktivnog businessa i promjene se reaktivno reflektuju na dashboard i booking ekran.
 - Ako provider nema businessa, dashboard prikazuje empty state i *Add new business* akciju.
 - *My Businesses* lista podržava dodavanje, biranje aktivnog businessa i swipe-to-delete sa animacijom kartice bez reloadanja cijelog ekrana.
+- Swipe-to-delete poziva `DELETE /v1/businesses/{businessID}` kroz zaseban `DeleteBusinessUseCase`; Flutter više ne briše business ni povezane podatke direktno iz Firestorea.
 
 ### Provider bookings i appointments
 
-- Bookings ekran učitava stavke za selektovani business, koristi filter chipove i cursor paginaciju.
+- Bookings ekran i provider stay calendar koriste `ProviderBookingsRepository` REST sloj za selektovani business, status filtere i cursor paginaciju; nemaju Firestore booking fallback.
 - Manage Booking prikazuje customera, room, datume, goste, cijenu, završavanje i odbijanje. Kod past cash stavki nudi i No-show akciju sa hintom o uklanjanju iz earnings metrika.
 - Service appointment kartice imaju Manage akciju za customer detalje, završavanje, cancel, reschedule, kontakt i No-show za past cash termine.
 - Provider cancel rezultira statusom `declined`; customer cancel rezultira `cancelled`.
 
 ### Availability & Calendar
+
+- Provider service calendar čita i mijenja ručne blokade kroz `/v1/businesses/{businessID}/service/staff/{staffID}/availability-blocks`.
+- Svaki REST poziv prolazi kroz action-specific use case, `ServiceAvailabilityRepository` ugovor, implementaciju, API data source i `ApiClient`.
+- Blokade su PostgreSQL vremenski rasponi; Flutter zadržava postojeći UX 30-minutnog block/unblock slota.
 
 - Prikaz zavisi od tipa selektovanog businessa.
 - **Stays:** zauzeti datumi se generišu iz potvrđenih bookinga; multiple-unit business može imati više bookinga istog dana.
@@ -373,12 +553,15 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 Chat je shared feature između customera i konkretnog businessa:
 
 - Jedinstven conversation je deterministički vezan za business i customera.
-- `conversations/{conversationId}` čuva `businessId`, ownera, customera, participant IDs, preview zadnje poruke, read/typing/activity metadata.
-- Poruke su u `conversations/{conversationId}/messages/{messageId}`.
-- Otvoren chat postavlja aktivnog učesnika s expiry vremenom; ako je recipient trenutno u tom chatu, cloud trigger ne šalje ni in-app ni push notifikaciju za poruku.
+- PostgreSQL tabele `chat_conversations`, `chat_participant_state` i `chat_messages` su jedini aktivni source of truth; Flutter nema Firestore fallback i ne pristupa Supabaseu direktno.
+- Tok je `Cubit → action-specific use case → ChatRepository → ChatRepositoryImpl → ChatApiDataSource → ApiClient/SseClient`.
+- REST rute pod `/v1/conversations` otvaraju conversation, listaju conversatione i poruke, šalju idempotentnu poruku s client-generated UUID-em te ažuriraju read, typing i presence stanje.
+- `/v1/chat/stream` šalje samo `chat_sync` i participant-scoped `chat_changed` invalidacije bez sadržaja poruke. Repository nakon invalidacije ponovo učitava autorizovani REST snapshot; reconnect dobija novi `chat_sync`.
+- Otvoren chat obnavlja presence s expiry vremenom; ako je recipient trenutno u istom chatu, backend ne povećava unread count i ne kreira push outbox zapis.
 - Typing indikator je transient state s kratkim expirationom.
 - Seen se prikazuje samo ispod stvarne posljednje outgoing poruke koja je pročitana, ne u bubbleu i ne na starijim porukama.
-- Unread counters se računaju u backendu, a streamovi za indikatore se aktiviraju samo dok je relevantan view u widget stacku, ne globalno kroz cijeli lifecycle aplikacije.
+- Unread counters se računaju u backendu, a streamovi za indikatore se aktiviraju samo dok je relevantan view u widget stacku, ne globalno kroz cijeli lifecycle aplikacije. SSE je primarni invalidator, foreground chat FCM odmah pokreće REST refresh, a jednokratni REST refresh se radi i kada se aplikacija vrati u foreground. Chat nema periodični polling.
+- API vraća trajne Firebase Storage pathove; `ChatRepositoryImpl` ih pretvara u download URL-ove samo za prikaz.
 
 Chat se otvara iz booking/appointment detalja kroz *Message provider/customer* i iz Messages stavke na More/Profile ekranima.
 
@@ -388,51 +571,53 @@ Chat se otvara iz booking/appointment detalja kroz *Message provider/customer* i
 
 ### In-app i push podjela
 
-- Booking i appointment događaji stvaraju **in-app notification** dokument i, kada uređaj ima token, šalju push notifikaciju.
+- Booking i appointment događaji se zapisuju kao **in-app notification** u Supabase PostgreSQL bazu preko Go API-ja. Nakon uspješnog zapisa API šalje FCM push na registrirane uređaje.
 - Chat koristi **samo push** (ako chat nije otvoren) i unread message counter; ne proizvodi dupliciranu in-app notifikaciju.
 - Potvrda kreiranja booking/appointmenta ne šalje customeru suvišnu “confirmed” notifikaciju, jer confirmation ekran već potvrđuje uspjeh.
 
-### Cloud Function triggeri
+Flutter FCM lifecycle vodi `NotificationDeviceService`: nakon prijave registruje token putem `PUT /v1/notification-devices/{deviceId}`, a pri odjavi ga uklanja putem `DELETE` rute. `NotificationBellCubit` poziva `GetUnreadNotificationsCountUseCase`, ne poziva use case iz widgeta. Kada aplikacija u foregroundu primi FCM poruku, Cubit odmah osvježi `GET /v1/notifications/unread-count`; periodični refresh svakih 30 sekundi ostaje samo kao fallback. Nema WebSocket konekcije.
 
-| Trigger | Efekat |
+### Dispatch događaja
+
+| Izvor | Efekat |
 |---|---|
-| `notifyOnBookingCreated` | Provider dobija notifikaciju o novom bookingu |
-| `notifyOnBookingStatusChanged` | Customer dobija promjenu statusa bookinga |
-| `notifyOnAppointmentCreated` | Provider dobija notifikaciju o novom appointmentu |
-| `notifyOnAppointmentStatusChanged` | Customer dobija promjenu statusa appointmenta |
-| `notifyOnChatMessageCreated` | Push samo ako recipient nije aktivan u istom chatu |
+| Go API: booking created | Provider dobija in-app i FCM notifikaciju o novom bookingu |
+| Go API: booking status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa bookinga |
+| Go API: booking cancelled by customer | Provider dobija in-app i FCM notifikaciju o customer otkazivanju |
+| Go API: appointment created | Provider dobija in-app i FCM notifikaciju o novom appointmentu |
+| Go API: appointment status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa appointmenta |
+| Go API: appointment cancelled by customer | Provider dobija in-app i FCM notifikaciju o customer otkazivanju |
+| Go API: chat message committed | `chat_push_outbox` worker šalje push samo ako recipient nije aktivan u istom chatu |
 | `initializeBusinessMetrics` | Callable inicijalizacija ili verzionirana obnova KPI i earnings agregata za owner business |
 
-Promjene booking/appointment dokumenata istovremeno ažuriraju `business_metrics`: novi confirmed zapis dodaje prihod, a `declined`, `cancelled` ili no-show (`noShow` za booking, `no_show` za appointment) ga uklanja. Gotovina se računa pri potvrdi, ne tek pri ručnom označavanju kao completed.
+Migracija `000019_notifications` kreira Supabase tabele `notification_devices` i `in_app_notifications`. API je jedini klijent Supabasea; Flutter ne pristupa Supabaseu direktno. Customer ne dobija notifikaciju kada sam otkaže booking ili appointment; tada se notifikacija šalje samo provideru. Push failure ne poništava već uspješno spremljenu booking/appointment promjenu ili in-app zapis.
 
-`notification_dispatcher` koristi transaction claim pattern (`processing`, timeout, attempts) kako se ista notifikacija ne bi više puta brojala ili slala pri retryju. Nevalidni FCM tokeni se uklanjaju iz `users/{uid}/devices`.
+FCM tokeni se čuvaju po `user_id` i `device_id`; ponovna registracija istog uređaja osvježava token. API koristi idempotentne ID-jeve notifikacija, pa se isti business događaj ne upisuje duplo.
 
 Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FCM push ne može biti pouzdano testiran na iOS-u. In-app podaci i dalje rade nezavisno od APNs-a.
 
 ---
 
-## 13. Firebase model podataka
+## 13. Firebase i backend model podataka
 
-| Putanja | Svrha |
+| Spremište / putanja | Svrha |
 |---|---|
-| `users/{uid}` | korisnički profil, tip, selected business, grad/adresa i unread counteri |
-| `users/{uid}/devices/{deviceId}` | FCM tokeni uređaja |
-| `users/{uid}/notifications/{id}` | in-app notifikacije |
-| `users/{uid}/recently_viewed/{businessId}` | nedavno otvoreni businessi |
-| `businesses/{businessId}` | stay ili service business, detalji, mediji, lokacija i discovery polja |
-| `promotions/{id}` | ownerov promotion konfigurisan za jedan business; business čuva samo `isPromotionActive` signal |
-| `bookings/{id}` | stay rezervacije i payment/guest snapshot |
-| `appointments/{id}` | service termini, provider, services, payment i reschedule stanje |
-| `business_metrics/{businessId}` | agregat aktivnih booking/appointment KPI-jeva i verzija migracije metrika |
-| `business_metrics/{businessId}/months/{YYYY-MM}` | mjesečna revenue/cash/online zarada, booking count i dnevni ukupni/online/cash chart podaci |
-| `appointment_slots/{id}` | javna metadata zauzetog termina po provideru i 30-min slotu |
-| `service_availability_blocks/{id}` | providerova ručna blokada slobodnog slota |
-| `booking_drafts/{uid}` | prekinut stay booking tok |
-| `appointment_drafts/{uid}` | prekinut appointment tok |
-| `saved_businesses/{uid}/items/{businessId}` | customer favorit/saved snapshot |
-| `conversations/{id}` | business-customer chat metadata |
-| `conversations/{id}/messages/{id}` | poruke |
-| `notification_deliveries/{id}` | idempotency/delivery evidencija chat push notifikacija |
+| `users/{uid}` | korisnički profil, tip, selected business i grad/adresa |
+| Supabase `notification_devices` | FCM tokeni uređaja, dostupni samo kroz Go API |
+| Supabase `in_app_notifications` | in-app notifikacije, read status i payload, dostupni samo kroz Go API |
+| Supabase `business_reviews` | recenzije i source/customer snapshoti; dostupno samo kroz Go API |
+| Supabase `support_tickets` | customer support zahtjevi i statusi; dostupno samo kroz Go API |
+| Supabase `recently_viewed_businesses` | nedavno otvoreni businessi, dostupni samo kroz Go API |
+| Supabase business tabele | stay ili service business, detalji, mediji, lokacija i discovery polja |
+| Supabase `business_promotions` | ownerov promotion konfigurisan za jedan business |
+| Supabase `stay_bookings` | stay rezervacije i payment/guest snapshot |
+| Supabase `service_appointments` | service termini, provider, services, payment i reschedule stanje |
+| Supabase `stay_bookings` / `service_appointments` | source of truth za dashboard metrike; Go API iz njih računa indeksirani current-month snapshot i šalje live invalidacije kroz SSE |
+| Supabase `chat_conversations` / `chat_participant_state` / `chat_messages` | chat metadata, participant read/typing/presence stanje i poruke; dostupno samo kroz Go API |
+| Supabase `chat_push_outbox` | trajni chat push red sa retry i delivery statusom; obrađuje ga Go API worker |
+| `business_metrics/{businessId}` | legacy Firebase aggregate; migrirani Flutter dashboard i Earnings ga više ne čitaju |
+| `business_metrics/{businessId}/months/{YYYY-MM}` | legacy Firestore revenue/cash/online i dnevni podaci; nisu dio aktivnog Flutter toka |
+| Supabase `service_staff_availability_blocks` | providerove ručne blokade vremenskih raspona, dostupne samo kroz Go API |
 
 Storage putanje:
 
@@ -440,6 +625,8 @@ Storage putanje:
 businesses/{ownerId}/{businessId}/{fileName}
 profiles/{userId}/{fileName}
 ```
+
+Za Go/PostgreSQL backend Storage path je trajni podatak, dok Firebase download URL nije. PostgreSQL čuva samo path, npr. `profiles/{userId}/profile.webp`. Flutter preko Firebase Storage SDK-a iz tog patha dobija trenutni download URL samo za prikaz slike; URL se ne upisuje u PostgreSQL niti šalje nazad Go API-ju.
 
 ---
 
@@ -455,6 +642,7 @@ Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules)
 - Service availability blocks može kreirati/brisati samo business owner.
 - Conversation i messages su dostupni samo učesnicima; create provjerava da business stvarno pripada navedenom owneru.
 - Saved, draftovi, uređaji, notifikacije i recently viewed su scoped na vlastitog usera.
+- Recenziju kreira samo customer iz vlastite završene rezervacije ili termina; baza garantuje najviše jednu recenziju po customeru i businessu, a prosjek se ažurira atomski.
 - Storage dozvoljava samo vlasniku upload/update/delete slike, do 10 MB i isključivo `image/*` sadržaj.
 - `google-services.json` i `GoogleService-Info.plist` su u `.gitignore`; API ključevi i konfiguracija ne idu u Git.
 
@@ -462,26 +650,26 @@ Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules)
 
 ## 15. Pretraga, filtriranje i paginacija
 
-### Direktni Firestore put
+### REST discovery put
 
-Bez aktivnih kompleksnih filtera app koristi direktne, limitirane i cursor-paginirane Firestore queryje. To je idealno za početni home feed, city feed, popular/trending sekcije, kategorije i kolekcije.
+Početni home feed, city feed, popular/trending sekcije, kategorije i kolekcije koriste paginirane Go REST endpoint-e. Flutter nema `DataCursor`, `FirestoreDataSource` ni `cloud_firestore` dependency; server kontroliše upite, autorizaciju i PostgreSQL paginaciju.
 
-`DataCursor<T>` čuva zadnji `DocumentSnapshot`, koristi `startAfterDocument`, sprječava paralelno učitavanje (`isLoading`) i prekida kada je sve učitano. Time se ne učitava cijela kolekcija unaprijed.
+### Server-side filter put
 
-### Callable filter put
-
-Za kombinovane stay/service filtere app koristi callable Functions `searchStays` i `searchServices`. Funkcije su rastavljene na manje module:
+Stay filteri koriste Go endpoint `GET /v1/stays/search`, a service filteri `GET /v1/services/search`. Oba endpointa obrađuju:
 
 - parsiranje/validacija filtera;
-- izgradnja Firestore candidate queryja;
-- normalizacija i mapiranje dokumenata;
-- availability provjera;
-- in-memory provjera samo nad ograničenim kandidatnim batchom;
-- sortiranje i opaque cursor response.
+- validaciju, normalizaciju i mapiranje rezultata;
+- availability provjeru;
+- sortiranje i cursor response.
+
+Service endpoint prihvata datum/vrijeme, kategoriju, featured kolekciju, grad, raspon cijene, sortiranje i cursor. Vraća isti `BusinessModel` oblik koji je Flutter ranije primao od callable funkcije, uključujući ponude, providere, media URL-ove i `nextCursor`.
 
 Service availability provjerava da li barem jedan provider ima cijeli uzastopni raspon slobodnih 30-minutnih slotova za traženo trajanje. To sprječava da se business vrati u rezultatima ako su svi radnici zauzeti u tom vremenu.
 
-Endpoint greške se na serveru loguju i pretvaraju u `HttpsError`; klijentski data source hvata `FirebaseFunctionsException`, ispisuje code, poruku i stack trace u konzolu, umjesto da grešku tiho pretvori u “no results”.
+Customer stay i service detail ekrani učitavaju puni aktivni business agregat preko `GET /v1/discovery/businesses/{businessID}`. Endpoint vraća isti `BusinessModel` oblik, uključujući media, stay sobe/amenities ili service ponude/providere, pa detail ekran ne čita business dokument direktno iz Firestorea.
+
+Backend greške se na serveru loguju i vraćaju kao standardni API error response; `ApiClient` ih pretvara u `ApiException`, pa se greška ne miješa s praznim rezultatom.
 
 ### Normalizacija
 
@@ -502,7 +690,8 @@ Za pouzdan search/filter gradova koriste se normalizovana polja, posebno `locati
 | Lagani promotion signal | Feed kartice čitaju samo `isPromotionActive`, a detalji promocije se učitavaju tek u checkoutu |
 | Checkout revalidacija popusta | Čuva integritet cijene bez stalnog učitavanja promotion dokumenata kroz feedove |
 | `appointment_slots` metadata | Dostupnost se čita bez preuzimanja privatnih appointment dokumenata |
-| Precomputed business metrics | Dashboard i Earnings čitaju mali agregat umjesto svih historijskih rezervacija |
+| Indeksirani dashboard metrics query + SSE invalidacija | Dashboard čita samo relevantne PostgreSQL redove tekućeg mjeseca i dobija novi snapshot tek nakon commitane promjene |
+| Precomputed Earnings metrics | Nemigrirani Earnings čita male Firestore month/provider agregate umjesto svih historijskih rezervacija |
 | Debounced text search | Smanjuje broj requestova dok korisnik tipka |
 | Slika: WebP, quality 42, max 1080 | Znatno manje Storage bandwidtha i vremena uploada; original se zadrži samo ako kompresija nije bolja ili plugin zakaže |
 | Max 7 business fotografija | Kontrolisan Storage i payload obim |

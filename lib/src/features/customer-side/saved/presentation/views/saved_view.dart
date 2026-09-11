@@ -35,7 +35,16 @@ class SavedView extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: state.stays.isEmpty
+              child: state.isLoading && state.businesses.isEmpty
+                  ? const Center(child: CircularProgressIndicator())
+                  : state.hasError && state.businesses.isEmpty
+                  ? Center(
+                      child: IconButton(
+                        onPressed: () => context.read<SavedCubit>().load(),
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    )
+                  : state.businesses.isEmpty
                   ? Center(
                       child: Text(
                         context.l10n.noSavedStaysYet,
@@ -44,10 +53,10 @@ class SavedView extends StatelessWidget {
                     )
                   : ListView.separated(
                       padding: const EdgeInsets.all(20),
-                      itemCount: state.stays.length,
+                      itemCount: state.businesses.length,
                       separatorBuilder: (_, _) => const SizedBox(height: 18),
                       itemBuilder: (context, index) {
-                        final stay = state.stays[index];
+                        final stay = state.businesses[index];
                         return AnimatedSize(
                           key: ValueKey(stay.id),
                           duration: const Duration(milliseconds: 280),
@@ -56,38 +65,27 @@ class SavedView extends StatelessWidget {
                               : Dismissible(
                                   key: ValueKey(stay.id),
                                   direction: DismissDirection.endToStart,
-                                  onDismissed: (_) {
-                                    context.read<SavedCubit>().remove(stay);
-                                    toastification.show(
-                                      context: context,
-                                      autoCloseDuration: const Duration(
-                                        seconds: 2,
-                                      ),
-                                      type: ToastificationType.warning,
-                                      alignment: Alignment.bottomCenter,
-                                      title: Text(
-                                        context.l10n.removedFromSaved,
-                                      ),
-                                    );
+                                  confirmDismiss: (_) async {
+                                    final removed = await context
+                                        .read<SavedCubit>()
+                                        .remove(stay);
+                                    if (context.mounted && removed) {
+                                      _showRemoved(context);
+                                    }
+                                    return false;
                                   },
                                   background: const ColoredBox(
                                     color: Colors.red,
                                   ),
                                   child: SavedBusinessCard(
-                                    stay: stay,
-                                    onRemove: () {
-                                      context.read<SavedCubit>().remove(stay);
-                                      toastification.show(
-                                        context: context,
-                                        autoCloseDuration: const Duration(
-                                          seconds: 2,
-                                        ),
-                                        type: ToastificationType.warning,
-                                        alignment: Alignment.bottomCenter,
-                                        title: Text(
-                                          context.l10n.removedFromSaved,
-                                        ),
-                                      );
+                                    business: stay,
+                                    onRemove: () async {
+                                      final removed = await context
+                                          .read<SavedCubit>()
+                                          .remove(stay);
+                                      if (context.mounted && removed) {
+                                        _showRemoved(context);
+                                      }
                                     },
                                   ),
                                 ),
@@ -100,4 +98,13 @@ class SavedView extends StatelessWidget {
       ),
     ),
   );
+  void _showRemoved(BuildContext context) {
+    toastification.show(
+      context: context,
+      autoCloseDuration: const Duration(seconds: 2),
+      type: ToastificationType.warning,
+      alignment: Alignment.bottomCenter,
+      title: Text(context.l10n.removedFromSaved),
+    );
+  }
 }

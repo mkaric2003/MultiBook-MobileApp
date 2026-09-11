@@ -46,6 +46,8 @@ class PaymentView extends HookWidget {
     useListenable(cardNumber);
     useListenable(expiry);
     useListenable(cvv);
+    useListenable(name);
+    useListenable(email);
     useListenable(promoCode);
     final price =
         arguments.review.booking.pricePerNight ??
@@ -58,7 +60,12 @@ class PaymentView extends HookWidget {
             PaymentInputValidation.isCvvValid(cvv.text));
     final isCashPayment = paymentType.value == PaymentMethodType.cash;
     final requiresCardDetails = paymentType.value == PaymentMethodType.card;
-    final canConfirm = agreed.value && (!requiresCardDetails || isCardValid);
+    final hasCustomerInformation =
+        name.text.trim().isNotEmpty && email.text.trim().isNotEmpty;
+    final canConfirm =
+        agreed.value &&
+        hasCustomerInformation &&
+        (!requiresCardDetails || isCardValid);
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<PaymentCubit>()),
@@ -98,7 +105,10 @@ class PaymentView extends HookWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        BlocBuilder<BookingPromotionCubit, BookingPromotionState>(
+                        BlocBuilder<
+                          BookingPromotionCubit,
+                          BookingPromotionState
+                        >(
                           builder: (context, state) => PaymentPriceBreakdown(
                             arguments: arguments,
                             pricePerNight: price,
@@ -229,53 +239,57 @@ class PaymentView extends HookWidget {
                 ),
                 BlocBuilder<BookingPromotionCubit, BookingPromotionState>(
                   builder: (context, promotionState) => Container(
-                  padding: const EdgeInsets.fromLTRB(22, 12, 22, 22),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: AppColors.surfaceHighlight),
+                    padding: const EdgeInsets.fromLTRB(22, 12, 22, 22),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: AppColors.surfaceHighlight),
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      if (!canConfirm)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            !agreed.value
-                                ? context.l10n.acceptTermsToContinue
-                                : context.l10n.validCardDetailsRequired,
-                            style: const TextStyle(
-                              color: AppColors.muted,
-                              fontSize: 13,
+                    child: Column(
+                      children: [
+                        if (!canConfirm)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              !agreed.value
+                                  ? context.l10n.acceptTermsToContinue
+                                  : context.l10n.validCardDetailsRequired,
+                              style: const TextStyle(
+                                color: AppColors.muted,
+                                fontSize: 13,
+                              ),
                             ),
                           ),
-                        ),
-                      CustomButton(
-                        buttonName: isCashPayment
-                            ? context.l10n.confirmBooking
-                            : context.l10n.confirmAndPay(
-                                context.l10n.formatCurrency(
-                                  PaymentPriceBreakdown(
-                                    arguments: arguments,
-                                    pricePerNight: price,
-                                  ).total(promotion: promotionState.promotion),
+                        CustomButton(
+                          buttonName: isCashPayment
+                              ? context.l10n.confirmBooking
+                              : context.l10n.confirmAndPay(
+                                  context.l10n.formatCurrency(
+                                    PaymentPriceBreakdown(
+                                      arguments: arguments,
+                                      pricePerNight: price,
+                                    ).total(
+                                      promotion: promotionState.promotion,
+                                    ),
+                                  ),
                                 ),
+                          enabled: canConfirm,
+                          onPressed: () async =>
+                              context.read<PaymentCubit>().confirm(
+                                arguments,
+                                paymentType: paymentType.value,
+                                paymentMethod: _paymentMethod(
+                                  paymentType.value,
+                                  cardNumber.text,
+                                  selectedMethod.value,
+                                ),
+                                customerName: name.text,
+                                customerEmail: email.text,
+                                promoCode: promoCode.text,
                               ),
-                        enabled: canConfirm,
-                        onPressed: () async =>
-                            context.read<PaymentCubit>().confirm(
-                              arguments,
-                              paymentType: paymentType.value,
-                              paymentMethod: _paymentMethod(
-                                paymentType.value,
-                                cardNumber.text,
-                                selectedMethod.value,
-                              ),
-                              promoCode: promoCode.text,
-                            ),
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

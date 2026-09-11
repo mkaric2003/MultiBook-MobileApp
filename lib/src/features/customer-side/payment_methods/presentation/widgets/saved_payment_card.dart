@@ -52,7 +52,8 @@ class SavedPaymentCard extends StatelessWidget {
           TextButton(
             onPressed: method.isDefault
                 ? null
-                : () => context.read<PaymentMethodsCubit>().setDefault(method),
+                : () =>
+                      context.read<PaymentMethodsCubit>().setDefault(method.id),
             child: Text(context.l10n.setAsDefault),
           ),
           IconButton(

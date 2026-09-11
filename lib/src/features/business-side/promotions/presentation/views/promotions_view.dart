@@ -137,10 +137,15 @@ class PromotionsView extends StatelessWidget {
                         buttonName: context.l10n.createPromotion,
                         onPressed: state.business == null
                             ? null
-                            : () => context.push(
-                                AppRoutes.CREATE_PROMOTION,
-                                extra: state.business!,
-                              ),
+                            : () async {
+                                final created = await context.push<bool>(
+                                  AppRoutes.CREATE_PROMOTION,
+                                  extra: state.business!,
+                                );
+                                if (created == true && context.mounted) {
+                                  await context.read<PromotionsCubit>().load();
+                                }
+                              },
                       ),
                     ],
                   );

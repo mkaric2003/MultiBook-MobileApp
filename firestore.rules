@@ -30,36 +30,9 @@ service cloud.firestore {
           && request.auth.uid == userId;
       }
 
-      // Development-only saved payment-method metadata. Full card numbers and
-      // CVV values are never written to Firestore.
-      match /payment_methods/{paymentMethodId} {
-        // The parent document path already scopes this subcollection to the
-        // authenticated user, so reads do not need an additional document
-        // predicate (which Firestore would require the query to prove).
-        allow read, delete: if request.auth != null
-          && request.auth.uid == userId;
-        allow create: if request.auth != null
-          && request.auth.uid == userId
-          && request.resource.data.userId == userId;
-        allow update: if request.auth != null
-          && request.auth.uid == userId
-          && resource.data.userId == userId
-          && request.resource.data.userId == resource.data.userId;
-      }
     }
 
     match /businesses/{businessId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null
-        && request.resource.data.ownerId == request.auth.uid;
-      allow update: if request.auth != null
-        && resource.data.ownerId == request.auth.uid
-        && request.resource.data.ownerId == resource.data.ownerId;
-      allow delete: if request.auth != null
-        && resource.data.ownerId == request.auth.uid;
-    }
-
-    match /promotions/{promotionId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null
         && request.resource.data.ownerId == request.auth.uid;
@@ -168,37 +141,6 @@ service cloud.firestore {
       allow delete: if request.auth != null
         && resource.data.businessOwnerId == request.auth.uid;
     }
-    match /conversations/{conversationId} {
-      // A transaction must first get a conversation document before it can
-      // create it. A non-existent document contains no private data, while an
-      // existing conversation remains visible only to its two participants.
-      allow get: if request.auth != null
-        && (!exists(/databases/$(database)/documents/conversations/$(conversationId))
-          || request.auth.uid in resource.data.participantIds);
-      allow list: if request.auth != null
-        && request.auth.uid in resource.data.participantIds;
-      allow create: if request.auth != null
-        && (request.auth.uid == request.resource.data.customerId
-          || request.auth.uid == request.resource.data.businessOwnerId)
-        && get(/databases/$(database)/documents/businesses/$(request.resource.data.businessId)).data.ownerId
-          == request.resource.data.businessOwnerId
-        && request.resource.data.customerId in request.resource.data.participantIds
-        && request.resource.data.businessOwnerId in request.resource.data.participantIds
-        && request.resource.data.participantIds.size() == 2;
-      allow update: if request.auth != null
-        && request.auth.uid in resource.data.participantIds
-        && request.resource.data.participantIds == resource.data.participantIds
-        && request.resource.data.businessId == resource.data.businessId
-        && request.resource.data.customerId == resource.data.customerId
-        && request.resource.data.businessOwnerId == resource.data.businessOwnerId;
-      match /messages/{messageId} {
-        allow read: if request.auth != null
-          && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participantIds;
-        allow create: if request.auth != null
-          && request.auth.uid == request.resource.data.senderId
-          && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participantIds;
-      }
-    }
     match /saved_businesses/{userId}/items/{businessId} {
       allow read, create, update, delete: if request.auth != null
         && request.auth.uid == userId;
@@ -206,14 +148,6 @@ service cloud.firestore {
     match /reviews/{reviewId} {
       allow read: if request.auth != null;
       allow create, update, delete: if false;
-    }
-    match /support_tickets/{ticketId} {
-      allow read: if request.auth != null
-        && resource.data.customerId == request.auth.uid;
-      allow create: if request.auth != null
-        && request.resource.data.customerId == request.auth.uid
-        && request.resource.data.status == 'open';
-      allow update, delete: if false;
     }
   }
 }

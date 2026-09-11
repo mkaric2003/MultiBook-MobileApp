@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:injectable/injectable.dart';
 
-/// Owns Firestore subscriptions that are tied to the authenticated session.
+/// Owns live subscriptions that are tied to the authenticated session.
 ///
-/// A Firebase Auth sign-out revokes Firestore access immediately. Cancelling
-/// registered subscriptions first prevents those streams from receiving a
-/// permission-denied event during the sign-out transition.
+/// A Firebase Auth sign-out revokes Firestore and authenticated API access
+/// immediately. Cancelling registered subscriptions first prevents those
+/// streams from failing during the sign-out transition.
 @lazySingleton
 class SessionStreamRegistry {
   final Set<StreamSubscription> _subscriptions = {};

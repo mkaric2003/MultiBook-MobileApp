@@ -1,6 +1,7 @@
-import 'package:multibook/src/core/injectable/injectable.dart';
-import 'package:multibook/src/data/repositories/notification_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/features/shared/notifications/cubit/notification_bell_cubit.dart';
 
 class NotificationBell extends StatelessWidget {
   const NotificationBell({super.key, required this.onTap, this.size = 27});
@@ -9,12 +10,10 @@ class NotificationBell extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<int>(
-    stream: getIt<NotificationRepository>()
-        .watchUnreadInAppNotificationsCount(),
-    builder: (context, snapshot) {
-      final count = snapshot.data ?? 0;
-      return IconButton(
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) => getIt<NotificationBellCubit>()..start(),
+    child: BlocBuilder<NotificationBellCubit, int>(
+      builder: (context, count) => IconButton(
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(),
         onPressed: onTap,
@@ -46,7 +45,7 @@ class NotificationBell extends StatelessWidget {
               ),
           ],
         ),
-      );
-    },
+      ),
+    ),
   );
 }

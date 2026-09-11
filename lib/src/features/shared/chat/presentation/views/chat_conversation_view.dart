@@ -85,10 +85,9 @@ class ChatConversationView extends HookWidget {
                               final isSeen =
                                   messageIndex == 0 &&
                                   message.senderId == state.currentUserId &&
-                                  message.createdAt != null &&
                                   otherParticipantReadAt != null &&
                                   !otherParticipantReadAt.isBefore(
-                                    message.createdAt!,
+                                    message.createdAt,
                                   );
                               return ChatMessageBubble(
                                 message: message,

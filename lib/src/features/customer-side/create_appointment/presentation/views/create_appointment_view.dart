@@ -53,7 +53,7 @@ class CreateAppointmentView extends HookWidget {
           (provider) => provider.id == arguments.draft?.selectedProviderId,
         )
         ? arguments.draft?.selectedProviderId
-        : providers.firstOrNull?.id;
+        : null;
     final selectedProviderId = useState<String?>(initialProviderId);
     final selectedProvider = providers
         .where((provider) => provider.id == selectedProviderId.value)
@@ -76,18 +76,26 @@ class CreateAppointmentView extends HookWidget {
       () => getIt<AppointmentAvailabilityCubit>(),
     );
     useEffect(() => availabilityCubit.close, [availabilityCubit]);
-    useEffect(() {
-      if (selectedProvider == null) {
-        availabilityCubit.reset();
-      } else {
-        availabilityCubit.load(
-          businessId: arguments.business.id,
-          providerId: selectedProvider.id,
-          date: selectedDate.value,
-        );
-      }
-      return null;
-    }, [selectedProvider?.id, selectedDate.value]);
+    useEffect(
+      () {
+        if (selectedProvider == null || selectedOfferingIds.value.isEmpty) {
+          availabilityCubit.reset();
+        } else {
+          availabilityCubit.load(
+            businessId: arguments.business.id,
+            providerId: selectedProvider.id,
+            date: selectedDate.value,
+            offeringIds: selectedOfferingIds.value.toList()..sort(),
+          );
+        }
+        return null;
+      },
+      [
+        selectedProvider?.id,
+        selectedDate.value,
+        ...selectedOfferingIds.value.toList()..sort(),
+      ],
+    );
 
     return MultiBlocProvider(
       providers: [
@@ -105,7 +113,8 @@ class CreateAppointmentView extends HookWidget {
                   selectedDate: selectedDate.value,
                   totalDurationMinutes: totalDurationMinutes,
                   provider: selectedProvider,
-                  bookedStartMinutes: availabilityState.bookedStartMinutes,
+                  availableStartMinutes:
+                      availabilityState.availableStartMinutes,
                 );
                 final canContinue =
                     selectedOfferings.isNotEmpty &&
@@ -354,7 +363,7 @@ class CreateAppointmentView extends HookWidget {
     required DateTime selectedDate,
     required int totalDurationMinutes,
     required ServiceProviderModel? provider,
-    required Set<int> bookedStartMinutes,
+    required Set<int> availableStartMinutes,
   }) {
     if (totalDurationMinutes <= 0) {
       return const AppointmentTimeAvailability(
@@ -374,11 +383,7 @@ class CreateAppointmentView extends HookWidget {
       for (var time = slot.startMinutes; time < slot.endMinutes; time += 30) {
         times.add(time);
         if (time + totalDurationMinutes <= slot.endMinutes &&
-            _isTimeRangeFree(
-              start: time,
-              durationMinutes: totalDurationMinutes,
-              bookedStartMinutes: bookedStartMinutes,
-            )) {
+            availableStartMinutes.contains(time)) {
           bookableStartTimes.add(time);
         }
       }
@@ -387,16 +392,5 @@ class CreateAppointmentView extends HookWidget {
       availableTimes: times.toList()..sort(),
       bookableStartTimes: bookableStartTimes,
     );
-  }
-
-  bool _isTimeRangeFree({
-    required int start,
-    required int durationMinutes,
-    required Set<int> bookedStartMinutes,
-  }) {
-    for (var time = start; time < start + durationMinutes; time += 30) {
-      if (bookedStartMinutes.contains(time)) return false;
-    }
-    return true;
   }
 }

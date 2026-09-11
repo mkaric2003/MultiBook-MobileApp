@@ -28,6 +28,12 @@ class BusinessEditLoaded extends AddBusinessEvent {
   final BusinessModel business;
 }
 
+class BusinessEditFetchRequested extends AddBusinessEvent {
+  const BusinessEditFetchRequested(this.businessId);
+
+  final String businessId;
+}
+
 class StayRoomAdded extends AddBusinessEvent {
   const StayRoomAdded(this.room);
 

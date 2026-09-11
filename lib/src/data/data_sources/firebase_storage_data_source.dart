@@ -13,6 +13,8 @@ abstract class FirebaseStorageDataSource {
   Future<void> deleteFile({required String storagePath});
 
   Future<void> deleteFileByUrl({required String downloadUrl});
+
+  Future<String> getDownloadUrl({required String storagePath});
 }
 
 @LazySingleton(as: FirebaseStorageDataSource)
@@ -44,4 +46,13 @@ class FirebaseStorageDataSourceImpl implements FirebaseStorageDataSource {
   @override
   Future<void> deleteFileByUrl({required String downloadUrl}) =>
       _storage.refFromURL(downloadUrl).delete();
+
+  @override
+  Future<String> getDownloadUrl({required String storagePath}) {
+    final uri = Uri.tryParse(storagePath);
+    if (uri != null && (uri.isScheme('http') || uri.isScheme('https'))) {
+      return Future.value(storagePath);
+    }
+    return _storage.ref(storagePath).getDownloadURL();
+  }
 }

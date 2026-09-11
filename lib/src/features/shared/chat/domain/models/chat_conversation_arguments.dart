@@ -1,7 +1,11 @@
+import 'package:dart_mappable/dart_mappable.dart';
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/src/data/models/chat_conversation_model.dart';
 
-class ChatConversationArguments {
+part 'chat_conversation_arguments.mapper.dart';
+
+@MappableClass()
+class ChatConversationArguments with ChatConversationArgumentsMappable {
   const ChatConversationArguments({
     required this.businessId,
     required this.businessOwnerId,
@@ -23,10 +27,10 @@ class ChatConversationArguments {
   factory ChatConversationArguments.fromConversation(
     ChatConversationModel conversation,
   ) => ChatConversationArguments(
-    businessId: conversation.businessId,
+    businessId: conversation.businessReferenceId,
     businessOwnerId: conversation.businessOwnerId,
     businessName: conversation.businessName,
-    businessImageUrl: conversation.businessImageUrl,
+    businessImageUrl: conversation.businessImageUrl ?? '',
     customerId: conversation.customerId,
     customerName: conversation.customerName,
     customerImageUrl: conversation.customerImageUrl,

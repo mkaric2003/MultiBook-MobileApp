@@ -15,6 +15,8 @@ class BookingModelMapper extends ClassMapperBase<BookingModel> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = BookingModelMapper._());
       StayExtraModelMapper.ensureInitialized();
+      BookingStatusMapper.ensureInitialized();
+      PaymentStatusMapper.ensureInitialized();
       CurrencyCodeMapper.ensureInitialized();
     }
     return _instance!;

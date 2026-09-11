@@ -1,7 +1,16 @@
 import 'package:multibook/src/data/enums/currency_code.dart';
 import 'package:multibook/src/data/enums/payment_status.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class AppointmentModel {
+part 'appointment_model.mapper.dart';
+
+@MappableClass()
+class AppointmentModel with AppointmentModelMappable {
+  static AppointmentModel fromMap(Map<String, dynamic> map) =>
+      AppointmentModelMapper.fromMap(map);
+
+  static AppointmentModel fromJson(String json) =>
+      AppointmentModelMapper.fromJson(json);
   const AppointmentModel({
     required this.id,
     required this.businessId,
@@ -69,47 +78,4 @@ class AppointmentModel {
   final CurrencyCode currency;
   final String status;
   final int rescheduleCount;
-
-  AppointmentModel copyWith({
-    String? businessName,
-    String? businessImageUrl,
-    String? status,
-    DateTime? date,
-    int? startMinutes,
-    int? endMinutes,
-    int? rescheduleCount,
-  }) => AppointmentModel(
-    id: id,
-    businessId: businessId,
-    businessOwnerId: businessOwnerId,
-    businessName: businessName ?? this.businessName,
-    businessImageUrl: businessImageUrl ?? this.businessImageUrl,
-    customerId: customerId,
-    customerName: customerName,
-    customerEmail: customerEmail,
-    customerPhone: customerPhone,
-    customerAvatarUrl: customerAvatarUrl,
-    providerId: providerId,
-    providerName: providerName,
-    providerCommissionRate: providerCommissionRate,
-    providerEarnings: providerEarnings,
-    serviceIds: serviceIds,
-    serviceNames: serviceNames,
-    date: date ?? this.date,
-    startMinutes: startMinutes ?? this.startMinutes,
-    endMinutes: endMinutes ?? this.endMinutes,
-    serviceCost: serviceCost,
-    originalServiceCost: originalServiceCost,
-    discountAmount: discountAmount,
-    addOnsCost: addOnsCost,
-    serviceFee: serviceFee,
-    taxes: taxes,
-    total: total,
-    paymentStatus: paymentStatus,
-    paymentMethod: paymentMethod,
-    confirmationCode: confirmationCode,
-    currency: currency,
-    status: status ?? this.status,
-    rescheduleCount: rescheduleCount ?? this.rescheduleCount,
-  );
 }

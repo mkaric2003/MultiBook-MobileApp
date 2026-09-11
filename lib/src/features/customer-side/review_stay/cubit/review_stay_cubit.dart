@@ -1,7 +1,8 @@
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/models/stay_extra_model.dart';
-import 'package:multibook/src/data/repositories/business_repository.dart';
-import 'package:multibook/src/data/repositories/booking_draft_repository.dart';
 import 'package:multibook/src/data/models/booking_draft_model.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
+import 'package:multibook/src/domain/use_cases/drafts/save_booking_draft_use_case.dart';
 import 'package:multibook/src/features/customer-side/review_stay/domain/models/review_stay_arguments.dart';
 import 'package:multibook/src/features/customer-side/review_stay/cubit/review_stay_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,22 +10,29 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class ReviewStayCubit extends Cubit<ReviewStayState> {
-  ReviewStayCubit(this._repository, this._draftRepository)
+  ReviewStayCubit(this._getBusinessDetail, this._saveBookingDraftUseCase)
     : super(const ReviewStayState());
 
-  final BusinessRepository _repository;
-  final BookingDraftRepository _draftRepository;
+  final GetBusinessDetailUseCase _getBusinessDetail;
+  final SaveBookingDraftUseCase _saveBookingDraftUseCase;
 
   Future<void> loadStay(
     String id, {
     List<StayExtraModel> selectedExtras = const [],
   }) async {
-    emit(state.copyWith(isLoading: true));
-    final business = await _repository.getBusiness(businessId: id);
+    emit(state.copyWith(isLoading: true, clearError: true));
+    final result = await _getBusinessDetail.execute(id);
+    if (isClosed) return;
     emit(
       state.copyWith(
         isLoading: false,
-        business: business,
+        business: switch (result) {
+          Success(value: final business) => business,
+          FailureResult() => null,
+        },
+        errorMessage: result is FailureResult
+            ? 'We could not load this stay. Please try again.'
+            : null,
         selectedExtras: selectedExtras,
       ),
     );
@@ -37,7 +45,7 @@ class ReviewStayCubit extends Cubit<ReviewStayState> {
   }
 
   Future<void> saveDraft(ReviewStayArguments arguments) =>
-      _draftRepository.saveDraft(
+      _saveBookingDraftUseCase.execute(
         BookingDraftModel(
           id: '',
           businessId: arguments.booking.stay.id,

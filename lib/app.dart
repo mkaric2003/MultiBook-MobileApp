@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:multibook/l10n/app_localizations.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/core/services/notification_device_service.dart';
 import 'package:multibook/src/core/theme/app_theme.dart';
 import 'package:multibook/src/data/repositories/authentication_repository.dart';
 import 'package:multibook/src/data/repositories/onboarding_repository.dart';
-import 'package:multibook/src/data/repositories/notification_repository.dart';
 import 'package:multibook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
 import 'package:multibook/src/features/business-side/account_settings/presentation/views/account_settings_view.dart';
 import 'package:multibook/src/features/business-side/change_password/presentation/views/change_password_view.dart';
@@ -90,7 +90,7 @@ class App extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() {
       unawaited(
-        getIt<NotificationRepository>().initialize(
+        getIt<NotificationDeviceService>().initialize(
           onNotificationOpened: (data) {
             if (data['type'] != 'chat_message') return;
             final businessId = data['businessId'];

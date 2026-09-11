@@ -1,16 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_mappable/dart_mappable.dart';
 
-class ChatConversationModel {
+part 'chat_conversation_model.mapper.dart';
+
+@MappableClass()
+class ChatConversationModel with ChatConversationModelMappable {
   const ChatConversationModel({
     required this.id,
-    required this.businessId,
+    this.businessId,
+    this.legacyBusinessId,
     required this.businessOwnerId,
     required this.businessName,
-    required this.businessImageUrl,
+    this.businessImageUrl,
     required this.customerId,
     required this.customerName,
     required this.customerImageUrl,
     required this.participantIds,
+    required this.activeParticipantIds,
+    required this.createdAt,
+    required this.updatedAt,
+    this.lastMessageId,
     this.lastMessageText = '',
     this.lastMessageAt,
     this.lastSenderId,
@@ -23,14 +31,17 @@ class ChatConversationModel {
   });
 
   final String id;
-  final String businessId;
+  final String? businessId;
+  final String? legacyBusinessId;
   final String businessOwnerId;
   final String businessName;
-  final String businessImageUrl;
+  final String? businessImageUrl;
   final String customerId;
   final String customerName;
   final String? customerImageUrl;
   final List<String> participantIds;
+  final List<String> activeParticipantIds;
+  final String? lastMessageId;
   final String lastMessageText;
   final DateTime? lastMessageAt;
   final String? lastSenderId;
@@ -40,58 +51,8 @@ class ChatConversationModel {
   final DateTime? lastReadAtBusiness;
   final int unreadCustomerCount;
   final int unreadBusinessCount;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-  factory ChatConversationModel.fromMap(Map<String, dynamic> data) {
-    final lastMessageAt = data['lastMessageAt'];
-    final typingExpiresAt = data['typingExpiresAt'];
-    final lastReadAtCustomer = data['lastReadAtCustomer'];
-    final lastReadAtBusiness = data['lastReadAtBusiness'];
-    return ChatConversationModel(
-      id: data['id'] as String? ?? '',
-      businessId: data['businessId'] as String? ?? '',
-      businessOwnerId: data['businessOwnerId'] as String? ?? '',
-      businessName: data['businessName'] as String? ?? '',
-      businessImageUrl: data['businessImageUrl'] as String? ?? '',
-      customerId: data['customerId'] as String? ?? '',
-      customerName: data['customerName'] as String? ?? '',
-      customerImageUrl: data['customerImageUrl'] as String?,
-      participantIds: List<String>.from(data['participantIds'] as List? ?? []),
-      lastMessageText: data['lastMessageText'] as String? ?? '',
-      lastMessageAt: lastMessageAt is Timestamp ? lastMessageAt.toDate() : null,
-      lastSenderId: data['lastSenderId'] as String?,
-      typingUserId: data['typingUserId'] as String?,
-      typingExpiresAt: typingExpiresAt is Timestamp
-          ? typingExpiresAt.toDate()
-          : null,
-      lastReadAtCustomer: lastReadAtCustomer is Timestamp
-          ? lastReadAtCustomer.toDate()
-          : null,
-      lastReadAtBusiness: lastReadAtBusiness is Timestamp
-          ? lastReadAtBusiness.toDate()
-          : null,
-      unreadCustomerCount: (data['unreadCustomerCount'] as num?)?.toInt() ?? 0,
-      unreadBusinessCount: (data['unreadBusinessCount'] as num?)?.toInt() ?? 0,
-    );
-  }
-
-  Map<String, Object?> toMap() => {
-    'id': id,
-    'businessId': businessId,
-    'businessOwnerId': businessOwnerId,
-    'businessName': businessName,
-    'businessImageUrl': businessImageUrl,
-    'customerId': customerId,
-    'customerName': customerName,
-    'customerImageUrl': customerImageUrl,
-    'participantIds': participantIds,
-    'lastMessageText': lastMessageText,
-    'lastMessageAt': lastMessageAt,
-    'lastSenderId': lastSenderId,
-    'typingUserId': typingUserId,
-    'typingExpiresAt': typingExpiresAt,
-    'lastReadAtCustomer': lastReadAtCustomer,
-    'lastReadAtBusiness': lastReadAtBusiness,
-    'unreadCustomerCount': unreadCustomerCount,
-    'unreadBusinessCount': unreadBusinessCount,
-  };
+  String get businessReferenceId => businessId ?? legacyBusinessId ?? '';
 }

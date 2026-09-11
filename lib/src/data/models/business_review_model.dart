@@ -1,4 +1,9 @@
-class BusinessReviewModel {
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'business_review_model.mapper.dart';
+
+@MappableClass()
+class BusinessReviewModel with BusinessReviewModelMappable {
   const BusinessReviewModel({
     required this.id,
     required this.customerName,
@@ -6,15 +11,6 @@ class BusinessReviewModel {
     this.customerAvatarUrl,
     this.comment,
   });
-
-  factory BusinessReviewModel.fromJson(Map<String, dynamic> json) =>
-      BusinessReviewModel(
-        id: json['id'] as String? ?? '',
-        customerName: json['customerName'] as String? ?? '',
-        customerAvatarUrl: json['customerAvatarUrl'] as String?,
-        rating: (json['rating'] as num?)?.toInt() ?? 0,
-        comment: json['comment'] as String?,
-      );
 
   final String id;
   final String customerName;

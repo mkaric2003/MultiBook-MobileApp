@@ -25,7 +25,14 @@ class SupportTicketsView extends StatelessWidget {
             child: CustomButton(
               buttonName: context.l10n.newSupportRequest,
               leadingIcon: const Icon(Icons.add),
-              onPressed: () => context.push(AppRoutes.CREATE_SUPPORT_TICKET),
+              onPressed: () async {
+                final created = await context.push<bool>(
+                  AppRoutes.CREATE_SUPPORT_TICKET,
+                );
+                if (created == true && context.mounted) {
+                  await context.read<SupportTicketsCubit>().load();
+                }
+              },
             ),
           ),
         ),

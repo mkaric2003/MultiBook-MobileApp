@@ -1,14 +1,14 @@
 import 'package:multibook/src/data/models/appointment_draft_model.dart';
 import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/data/repositories/appointment_draft_repository.dart';
+import 'package:multibook/src/domain/use_cases/drafts/save_appointment_draft_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class AppointmentDraftCubit extends Cubit<bool> {
-  AppointmentDraftCubit(this._repository) : super(false);
+  AppointmentDraftCubit(this._saveAppointmentDraftUseCase) : super(false);
 
-  final AppointmentDraftRepository _repository;
+  final SaveAppointmentDraftUseCase _saveAppointmentDraftUseCase;
 
   Future<void> save({
     required BusinessModel business,
@@ -21,7 +21,7 @@ class AppointmentDraftCubit extends Cubit<bool> {
   }) async {
     emit(true);
     try {
-      await _repository.saveDraft(
+      await _saveAppointmentDraftUseCase.execute(
         AppointmentDraftModel(
           id: '',
           businessId: business.id,
