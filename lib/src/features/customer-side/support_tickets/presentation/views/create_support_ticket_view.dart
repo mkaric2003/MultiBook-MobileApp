@@ -24,7 +24,7 @@ class CreateSupportTicketView extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             title: Text(context.l10n.supportRequestSent),
           );
-          context.pop();
+          context.pop(true);
         }
         if (state.hasError) {
           toastification.show(

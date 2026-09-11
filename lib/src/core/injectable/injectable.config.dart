@@ -79,6 +79,8 @@ import 'package:multibook/src/data/data_sources/service_search_data_source.dart'
     as _i139;
 import 'package:multibook/src/data/data_sources/stay_search_data_source.dart'
     as _i665;
+import 'package:multibook/src/data/data_sources/support_ticket_api_data_source.dart'
+    as _i145;
 import 'package:multibook/src/data/data_sources/users_api_data_source.dart'
     as _i364;
 import 'package:multibook/src/data/models/booking_model.dart' as _i259;
@@ -132,8 +134,8 @@ import 'package:multibook/src/data/repositories/service_search_repository.dart'
     as _i459;
 import 'package:multibook/src/data/repositories/stay_search_repository.dart'
     as _i1001;
-import 'package:multibook/src/data/repositories/support_ticket_repository.dart'
-    as _i142;
+import 'package:multibook/src/data/repositories/support_ticket_repository_impl.dart'
+    as _i295;
 import 'package:multibook/src/data/repositories/user_location_repository.dart'
     as _i682;
 import 'package:multibook/src/data/repositories/users_repository_impl.dart'
@@ -168,6 +170,8 @@ import 'package:multibook/src/domain/repositories/reviews_repository.dart'
     as _i155;
 import 'package:multibook/src/domain/repositories/saved_business_repository.dart'
     as _i146;
+import 'package:multibook/src/domain/repositories/support_ticket_repository.dart'
+    as _i444;
 import 'package:multibook/src/domain/repositories/users_repository.dart'
     as _i946;
 import 'package:multibook/src/domain/use_cases/appointments/cancel_customer_appointment_use_case.dart'
@@ -282,6 +286,10 @@ import 'package:multibook/src/domain/use_cases/saved/remove_saved_business_use_c
     as _i626;
 import 'package:multibook/src/domain/use_cases/saved/save_business_use_case.dart'
     as _i876;
+import 'package:multibook/src/domain/use_cases/support_tickets/create_support_ticket_use_case.dart'
+    as _i958;
+import 'package:multibook/src/domain/use_cases/support_tickets/get_support_tickets_use_case.dart'
+    as _i206;
 import 'package:multibook/src/domain/use_cases/users/get_current_user_use_case.dart'
     as _i850;
 import 'package:multibook/src/domain/use_cases/users/update_user_profile_use_case.dart'
@@ -489,6 +497,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i82.DevelopmentSeedApiDataSource>(
       () => _i82.DevelopmentSeedApiDataSource(gh<_i234.ApiClient>()),
     );
+    gh.lazySingleton<_i145.SupportTicketApiDataSource>(
+      () => _i145.SupportTicketApiDataSource(gh<_i234.ApiClient>()),
+    );
     gh.lazySingleton<_i190.NotificationDataSource>(
       () => _i190.NotificationDataSourceImpl(gh<_i892.FirebaseMessaging>()),
     );
@@ -627,6 +638,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i139.ServiceSearchDataSource>(
       () => _i139.ServiceSearchDataSourceImpl(gh<_i234.ApiClient>()),
     );
+    gh.lazySingleton<_i444.SupportTicketRepository>(
+      () => _i295.SupportTicketRepositoryImpl(
+        gh<_i145.SupportTicketApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
+    );
     gh.lazySingleton<_i553.EarningsMetricsRepository>(
       () => _i318.EarningsMetricsRepositoryImpl(
         gh<_i449.EarningsMetricsApiDataSource>(),
@@ -752,6 +769,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.factory<_i206.GetSupportTicketsUseCase>(
+      () => _i206.GetSupportTicketsUseCase(gh<_i444.SupportTicketRepository>()),
+    );
+    gh.factory<_i958.CreateSupportTicketUseCase>(
+      () =>
+          _i958.CreateSupportTicketUseCase(gh<_i444.SupportTicketRepository>()),
+    );
     gh.factory<_i776.CreateCustomerAppointmentUseCase>(
       () => _i776.CreateCustomerAppointmentUseCase(
         gh<_i465.CustomerCheckoutRepository>(),
@@ -824,6 +848,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i883.GetSavedBusinessesUseCase>(
       () =>
           _i883.GetSavedBusinessesUseCase(gh<_i146.SavedBusinessRepository>()),
+    );
+    gh.factory<_i806.SupportTicketsCubit>(
+      () => _i806.SupportTicketsCubit(gh<_i206.GetSupportTicketsUseCase>()),
     );
     gh.factory<_i948.SavedCubit>(
       () => _i948.SavedCubit(
@@ -981,6 +1008,11 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i212.CustomerBookingsCubit(
         gh<_i498.GetCustomerBookingsUseCase>(),
         gh<_i213.GetCustomerAppointmentsUseCase>(),
+      ),
+    );
+    gh.factory<_i974.CreateSupportTicketCubit>(
+      () => _i974.CreateSupportTicketCubit(
+        gh<_i958.CreateSupportTicketUseCase>(),
       ),
     );
     gh.factory<_i269.RescheduleAppointmentCubit>(
@@ -1164,13 +1196,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1025.SessionStreamRegistry>(),
       ),
     );
-    gh.lazySingleton<_i142.SupportTicketRepository>(
-      () => _i142.SupportTicketRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
-        gh<_i981.UserProfileUseCase>(),
-      ),
-    );
     gh.factory<_i582.AvailabilityCalendarCubit>(
       () => _i582.AvailabilityCalendarCubit(
         gh<_i253.GetProviderBookingsUseCase>(),
@@ -1255,12 +1280,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i869.AuthenticationRepository>(),
         gh<_i981.UserProfileUseCase>(),
       ),
-    );
-    gh.factory<_i806.SupportTicketsCubit>(
-      () => _i806.SupportTicketsCubit(gh<_i142.SupportTicketRepository>()),
-    );
-    gh.factory<_i974.CreateSupportTicketCubit>(
-      () => _i974.CreateSupportTicketCubit(gh<_i142.SupportTicketRepository>()),
     );
     gh.factory<_i103.CustomerProfileCubit>(
       () => _i103.CustomerProfileCubit(
