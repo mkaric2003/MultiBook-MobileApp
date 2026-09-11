@@ -67,6 +67,8 @@ import 'package:multibook/src/data/data_sources/nominatim_data_source.dart'
     as _i117;
 import 'package:multibook/src/data/data_sources/notification_data_source.dart'
     as _i190;
+import 'package:multibook/src/data/data_sources/payment_methods_api_data_source.dart'
+    as _i176;
 import 'package:multibook/src/data/data_sources/promotions_api_data_source.dart'
     as _i218;
 import 'package:multibook/src/data/data_sources/provider_bookings_api_data_source.dart'
@@ -118,8 +120,8 @@ import 'package:multibook/src/data/repositories/locale_repository.dart'
     as _i724;
 import 'package:multibook/src/data/repositories/onboarding_repository.dart'
     as _i38;
-import 'package:multibook/src/data/repositories/payment_methods_repository.dart'
-    as _i447;
+import 'package:multibook/src/data/repositories/payment_methods_repository_impl.dart'
+    as _i875;
 import 'package:multibook/src/data/repositories/promotions_repository_impl.dart'
     as _i122;
 import 'package:multibook/src/data/repositories/provider_bookings_repository_impl.dart'
@@ -164,6 +166,8 @@ import 'package:multibook/src/domain/repositories/earnings_metrics_repository.da
     as _i553;
 import 'package:multibook/src/domain/repositories/in_app_notifications_repository.dart'
     as _i587;
+import 'package:multibook/src/domain/repositories/payment_methods_repository.dart'
+    as _i784;
 import 'package:multibook/src/domain/repositories/promotions_repository.dart'
     as _i622;
 import 'package:multibook/src/domain/repositories/provider_bookings_repository.dart'
@@ -264,6 +268,14 @@ import 'package:multibook/src/domain/use_cases/notifications/register_notificati
     as _i801;
 import 'package:multibook/src/domain/use_cases/notifications/unregister_notification_device_use_case.dart'
     as _i154;
+import 'package:multibook/src/domain/use_cases/payment_methods/delete_payment_method_use_case.dart'
+    as _i721;
+import 'package:multibook/src/domain/use_cases/payment_methods/get_payment_methods_use_case.dart'
+    as _i64;
+import 'package:multibook/src/domain/use_cases/payment_methods/save_payment_method_use_case.dart'
+    as _i457;
+import 'package:multibook/src/domain/use_cases/payment_methods/set_default_payment_method_use_case.dart'
+    as _i478;
 import 'package:multibook/src/domain/use_cases/promotions/create_promotion_use_case.dart'
     as _i840;
 import 'package:multibook/src/domain/use_cases/promotions/delete_promotion_use_case.dart'
@@ -517,6 +529,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i218.PromotionsApiDataSource>(
       () => _i218.PromotionsApiDataSource(gh<_i234.ApiClient>()),
     );
+    gh.lazySingleton<_i176.PaymentMethodsApiDataSource>(
+      () => _i176.PaymentMethodsApiDataSource(gh<_i234.ApiClient>()),
+    );
     gh.lazySingleton<_i622.PromotionsRepository>(
       () => _i122.PromotionsRepositoryImpl(
         gh<_i218.PromotionsApiDataSource>(),
@@ -525,6 +540,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i190.NotificationDataSource>(
       () => _i190.NotificationDataSourceImpl(gh<_i892.FirebaseMessaging>()),
+    );
+    gh.lazySingleton<_i784.PaymentMethodsRepository>(
+      () => _i875.PaymentMethodsRepositoryImpl(
+        gh<_i176.PaymentMethodsApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
     );
     gh.lazySingleton<_i594.FirebaseStorageDataSource>(
       () => _i594.FirebaseStorageDataSourceImpl(gh<_i457.FirebaseStorage>()),
@@ -561,16 +582,27 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i696.ProviderBookingsRepository>(),
       ),
     );
+    gh.factory<_i64.GetPaymentMethodsUseCase>(
+      () => _i64.GetPaymentMethodsUseCase(gh<_i784.PaymentMethodsRepository>()),
+    );
+    gh.factory<_i721.DeletePaymentMethodUseCase>(
+      () => _i721.DeletePaymentMethodUseCase(
+        gh<_i784.PaymentMethodsRepository>(),
+      ),
+    );
+    gh.factory<_i457.SavePaymentMethodUseCase>(
+      () =>
+          _i457.SavePaymentMethodUseCase(gh<_i784.PaymentMethodsRepository>()),
+    );
+    gh.factory<_i478.SetDefaultPaymentMethodUseCase>(
+      () => _i478.SetDefaultPaymentMethodUseCase(
+        gh<_i784.PaymentMethodsRepository>(),
+      ),
+    );
     gh.lazySingleton<_i465.CustomerCheckoutRepository>(
       () => _i865.CustomerCheckoutRepositoryImpl(
         gh<_i563.CustomerCheckoutApiDataSource>(),
         gh<_i411.RestRepositoryExecutor>(),
-      ),
-    );
-    gh.lazySingleton<_i447.PaymentMethodsRepository>(
-      () => _i447.PaymentMethodsRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
       ),
     );
     gh.lazySingleton<_i175.ServiceAvailabilityRepository>(
@@ -639,6 +671,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i594.FirebaseStorageDataSource>(),
       ),
     );
+    gh.factory<_i108.PaymentMethodsCubit>(
+      () => _i108.PaymentMethodsCubit(
+        gh<_i64.GetPaymentMethodsUseCase>(),
+        gh<_i457.SavePaymentMethodUseCase>(),
+        gh<_i721.DeletePaymentMethodUseCase>(),
+        gh<_i478.SetDefaultPaymentMethodUseCase>(),
+      ),
+    );
     gh.factory<_i725.RecordRecentlyViewedUseCase>(
       () => _i725.RecordRecentlyViewedUseCase(
         gh<_i840.RecentlyViewedRepository>(),
@@ -696,9 +736,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i264.CustomerAppointmentsApiDataSource>(),
         gh<_i411.RestRepositoryExecutor>(),
       ),
-    );
-    gh.factory<_i108.PaymentMethodsCubit>(
-      () => _i108.PaymentMethodsCubit(gh<_i447.PaymentMethodsRepository>()),
     );
     gh.lazySingleton<_i587.InAppNotificationsRepository>(
       () => _i367.InAppNotificationsRepositoryImpl(
