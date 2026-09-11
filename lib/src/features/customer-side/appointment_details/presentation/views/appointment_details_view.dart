@@ -45,7 +45,6 @@ class AppointmentDetailsView extends StatelessWidget {
         }
       },
       builder: (context, state) => Scaffold(
-        backgroundColor: context.appPalette.background,
         body: SafeArea(
           child: Column(
             children: [

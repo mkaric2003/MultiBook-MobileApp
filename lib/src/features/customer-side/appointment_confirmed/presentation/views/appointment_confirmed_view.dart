@@ -16,7 +16,6 @@ class AppointmentConfirmedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: context.appPalette.background,
     body: SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(22, 30, 22, 22),

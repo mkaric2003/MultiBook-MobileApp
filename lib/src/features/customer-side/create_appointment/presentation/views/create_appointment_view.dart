@@ -124,7 +124,6 @@ class CreateAppointmentView extends HookWidget {
                       selectedTime.value,
                     );
                 return Scaffold(
-                  backgroundColor: context.appPalette.background,
                   body: SafeArea(
                     child: Column(
                       children: [

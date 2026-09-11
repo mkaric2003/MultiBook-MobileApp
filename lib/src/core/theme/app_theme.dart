@@ -10,7 +10,9 @@ abstract final class AppTheme {
       ThemeData(
         useMaterial3: true,
         brightness: brightness,
-        scaffoldBackgroundColor: palette.background,
+        scaffoldBackgroundColor: brightness == Brightness.light
+            ? Colors.transparent
+            : palette.background,
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
           brightness: brightness,
@@ -26,7 +28,9 @@ abstract final class AppTheme {
           displayColor: palette.foreground,
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: palette.background,
+          backgroundColor: brightness == Brightness.light
+              ? Colors.transparent
+              : palette.background,
           foregroundColor: palette.foreground,
           surfaceTintColor: Colors.transparent,
           elevation: 0,

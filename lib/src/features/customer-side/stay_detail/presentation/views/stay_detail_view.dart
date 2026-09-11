@@ -45,7 +45,6 @@ class StayDetailView extends StatelessWidget {
           final business = state.business!;
           final listing = StayListing.fromBusiness(business);
           return Scaffold(
-            backgroundColor: context.appPalette.background,
             body: SafeArea(
               top: false,
               child: SingleChildScrollView(

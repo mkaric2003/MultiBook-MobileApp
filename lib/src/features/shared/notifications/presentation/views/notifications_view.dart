@@ -19,7 +19,6 @@ class NotificationsView extends StatelessWidget {
   Widget build(BuildContext context) => BlocProvider(
     create: (_) => getIt<NotificationsCubit>()..load(),
     child: Scaffold(
-      backgroundColor: context.appPalette.background,
       body: SafeArea(
         child: Column(
           children: [

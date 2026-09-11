@@ -30,7 +30,6 @@ class ReviewAppointmentView extends HookWidget {
       create: (_) =>
           getIt<AppointmentPromotionCubit>()..load(arguments.business.id),
       child: Scaffold(
-        backgroundColor: context.appPalette.background,
         body: SafeArea(
           child: Column(
             children: [

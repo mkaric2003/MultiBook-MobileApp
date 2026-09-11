@@ -34,7 +34,6 @@ class BookingDetailsView extends StatelessWidget {
       },
       child: BlocBuilder<BookingDetailsCubit, BookingDetailsState>(
         builder: (context, state) => Scaffold(
-          backgroundColor: context.appPalette.background,
           body: SafeArea(
             child: Column(
               children: [

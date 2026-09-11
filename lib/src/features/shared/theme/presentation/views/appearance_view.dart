@@ -11,7 +11,6 @@ class AppearanceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: context.appPalette.background,
     body: SafeArea(
       child: Column(
         children: [
@@ -42,9 +41,8 @@ class AppearanceView extends StatelessWidget {
                         : Icons.dark_mode_rounded,
                     color: AppColors.primary,
                   ),
-                  onChanged: (value) => context
-                      .read<ThemeCubit>()
-                      .setLightTheme(isLight: value),
+                  onChanged: (value) =>
+                      context.read<ThemeCubit>().setLightTheme(isLight: value),
                 ),
               ),
             ),

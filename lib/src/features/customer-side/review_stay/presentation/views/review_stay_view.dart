@@ -61,7 +61,6 @@ class ReviewStayView extends StatelessWidget {
         final dates =
             '${DateFormat('MMM d').format(booking.checkIn)}–${DateFormat('MMM d, yyyy').format(booking.checkOut)}';
         return Scaffold(
-          backgroundColor: context.appPalette.background,
           body: SafeArea(
             child: Column(
               children: [

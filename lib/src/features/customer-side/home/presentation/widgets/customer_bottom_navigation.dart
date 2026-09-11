@@ -39,14 +39,16 @@ class CustomerBottomNavigation extends StatelessWidget {
     ];
 
     return Container(
-      color: context.appPalette.surfaceHighlight,
+      color: context.appPalette.navigationSurface,
       child: SafeArea(
         top: false,
         child: Container(
           height: 68,
           decoration: BoxDecoration(
-            color: context.appPalette.surfaceHighlight,
-            border: Border(top: BorderSide(color: context.appPalette.border)),
+            color: context.appPalette.navigationSurface,
+            border: Border(
+              top: BorderSide(color: context.appPalette.navigationBorder),
+            ),
           ),
           child: Row(
             children: List.generate(items.length, (index) {

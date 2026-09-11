@@ -101,7 +101,6 @@ class AppointmentPaymentView extends HookWidget {
           }
         },
         child: Scaffold(
-          backgroundColor: context.appPalette.background,
           body: SafeArea(
             child: Column(
               children: [

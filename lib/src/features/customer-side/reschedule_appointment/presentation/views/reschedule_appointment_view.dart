@@ -96,7 +96,6 @@ class RescheduleAppointmentView extends HookWidget {
                     ) &&
                     !rescheduleState.isSubmitting;
                 return Scaffold(
-                  backgroundColor: context.appPalette.background,
                   body: SafeArea(
                     child: Column(
                       children: [

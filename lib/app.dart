@@ -4,6 +4,7 @@ import 'package:multibook/l10n/app_localizations.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/services/notification_device_service.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/core/theme/app_theme.dart';
 import 'package:multibook/src/data/repositories/authentication_repository.dart';
 import 'package:multibook/src/data/repositories/onboarding_repository.dart';
@@ -133,25 +134,46 @@ class App extends HookWidget {
         BlocProvider.value(value: getIt<ThemeCubit>()),
       ],
       child: BlocBuilder<LocaleCubit, LocaleState>(
-        builder: (context, localeState) =>
-            BlocBuilder<ThemeCubit, ThemeState>(
-              builder: (context, themeState) => MaterialApp.router(
-                routerConfig: router,
-                onGenerateTitle: (context) => context.l10n.appName,
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.light,
-                darkTheme: AppTheme.dark,
-                themeMode: themeState.themeMode,
-                locale: localeState.locale,
-                supportedLocales: AppLocalizations.supportedLocales,
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
+        builder: (context, localeState) => BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, themeState) => MaterialApp.router(
+            routerConfig: router,
+            onGenerateTitle: (context) => context.l10n.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeState.themeMode,
+            builder: (context, child) {
+              final content = child ?? const SizedBox.shrink();
+              if (Theme.of(context).brightness == Brightness.dark) {
+                return ColoredBox(
+                  color: context.appPalette.background,
+                  child: content,
+                );
+              }
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  const ColoredBox(color: Colors.white),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: context.appPalette.backgroundGradient,
+                    ),
+                  ),
+                  ColoredBox(color: Colors.white.withValues(alpha: 0.6)),
+                  content,
                 ],
-              ),
-            ),
+              );
+            },
+            locale: localeState.locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+          ),
+        ),
       ),
     );
   }

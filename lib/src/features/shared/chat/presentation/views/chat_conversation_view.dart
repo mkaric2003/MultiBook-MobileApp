@@ -52,7 +52,6 @@ class ChatConversationView extends HookWidget {
               ? conversation.lastReadAtBusiness
               : conversation?.lastReadAtCustomer;
           return Scaffold(
-            backgroundColor: context.appPalette.background,
             body: SafeArea(
               child: Column(
                 children: [

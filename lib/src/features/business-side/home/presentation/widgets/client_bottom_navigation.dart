@@ -26,14 +26,16 @@ class ClientBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: context.appPalette.surfaceHighlight,
+      color: context.appPalette.navigationSurface,
       child: SafeArea(
         top: false,
         child: Container(
           height: 58,
           decoration: BoxDecoration(
-            color: context.appPalette.surfaceHighlight,
-            border: Border(top: BorderSide(color: context.appPalette.border)),
+            color: context.appPalette.navigationSurface,
+            border: Border(
+              top: BorderSide(color: context.appPalette.navigationBorder),
+            ),
           ),
           child: Row(
             children: List.generate(_items.length, (index) {

@@ -309,7 +309,7 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 
 ## 6. Dizajn sistema
 
-- Aplikacija ima light i dark UI. Osnovna pozadina, kartice, navigation surface, foreground, muted tekst i borderi dolaze iz theme-aware `AppPalette`, dok ljubičasti accent i status boje ostaju centralizovani u `AppColors`.
+- Aplikacija ima light i dark UI. Light ekrani koriste zelenkasto-tirkizni gradient iz `AppPalette`, dok kartice i forme ostaju pune surface boje, a bottom navigation koristi zasebne `navigationSurface` i `navigationBorder` boje usklađene s gradientom. Dark pozadina ostaje jednobojna. Foreground, muted tekst i ostali borderi također dolaze iz theme-aware `AppPalette`, dok ljubičasti accent i status boje ostaju centralizovani u `AppColors`.
 - Customer i provider kroz **Settings → Appearance** mogu odmah uključiti ili isključiti light temu. `ThemeCubit` mijenja `MaterialApp.themeMode`, a `ThemeRepositoryImpl` odabir trajno sprema u Shared Preferences; zadnja tema se vraća pri sljedećem pokretanju aplikacije.
 - Selektovana stanja koriste primarnu ljubičastu; statusi koriste semantičke boje (confirmed, cancelled/declined, completed).
 - Customer i provider bottom navigation imaju isti vizuelni jezik, ali različite tabove.

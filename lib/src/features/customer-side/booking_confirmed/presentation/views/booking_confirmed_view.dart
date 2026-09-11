@@ -16,7 +16,6 @@ class BookingConfirmedView extends StatelessWidget {
     final booking = arguments.payment.review.bookingState;
     final total = arguments.booking.total;
     return Scaffold(
-      backgroundColor: context.appPalette.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(22, 28, 22, 5),
