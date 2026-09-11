@@ -23,7 +23,7 @@ class SavedBusinessCard extends StatelessWidget {
     final isStay = business.type == BusinessType.stays;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       clipBehavior: Clip.antiAlias,
@@ -37,9 +37,9 @@ class SavedBusinessCard extends StatelessWidget {
                 height: 190,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => const SizedBox(
+                errorBuilder: (_, _, _) => SizedBox(
                   height: 190,
-                  child: ColoredBox(color: AppColors.surfaceHighlight),
+                  child: ColoredBox(color: context.appPalette.surfaceHighlight),
                 ),
               ),
               Positioned(
@@ -73,12 +73,12 @@ class SavedBusinessCard extends StatelessWidget {
                 const SizedBox(height: 5),
                 Text(
                   stay.location,
-                  style: const TextStyle(color: AppColors.muted),
+                  style: TextStyle(color: context.appPalette.muted),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   '⭐ ${stay.rating.toStringAsFixed(1)} (${context.l10n.reviews(stay.reviewCount)})',
-                  style: const TextStyle(color: AppColors.muted),
+                  style: TextStyle(color: context.appPalette.muted),
                 ),
                 const SizedBox(height: 14),
                 Row(

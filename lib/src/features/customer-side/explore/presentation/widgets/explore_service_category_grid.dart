@@ -31,7 +31,7 @@ class ExploreServiceCategoryGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.appPalette.surface,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(

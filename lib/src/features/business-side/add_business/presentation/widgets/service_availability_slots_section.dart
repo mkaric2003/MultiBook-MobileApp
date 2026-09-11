@@ -33,9 +33,9 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
         initialTime: notifier.value,
         builder: (context, child) => Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
+            colorScheme: ColorScheme.dark(
               primary: AppColors.primary,
-              surface: AppColors.surface,
+              surface: context.appPalette.surface,
             ),
           ),
           child: child!,
@@ -51,13 +51,13 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
         const SizedBox(height: 8),
         Text(
           context.l10n.recurringSlotsDescription,
-          style: TextStyle(color: AppColors.muted, fontSize: 13),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 13),
         ),
         const SizedBox(height: 14),
         DropdownButtonFormField<ServiceWeekday>(
           initialValue: weekday.value,
-          dropdownColor: AppColors.surface,
-          style: const TextStyle(color: AppColors.white, fontSize: 16),
+          dropdownColor: context.appPalette.surface,
+          style: TextStyle(color: context.appPalette.foreground, fontSize: 16),
           decoration: InputDecoration(labelText: context.l10n.day),
           items: ServiceWeekday.values
               .map(
@@ -98,7 +98,7 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
         const SizedBox(height: 12),
         CustomButton(
           buttonName: context.l10n.addAvailabilitySlot,
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           textColor: AppColors.primary,
           borderColor: AppColors.primary,
           onPressed: !isValid
@@ -124,9 +124,11 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.appPalette.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.surfaceHighlight),
+                  border: Border.all(
+                    color: context.appPalette.surfaceHighlight,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -135,15 +137,15 @@ class ServiceAvailabilitySlotsSection extends HookWidget {
                     Expanded(
                       child: Text(
                         '${slot.weekday.label}: ${_formatMinutes(slot.startMinutes)} – ${_formatMinutes(slot.endMinutes)}',
-                        style: const TextStyle(
-                          color: AppColors.white,
+                        style: TextStyle(
+                          color: context.appPalette.foreground,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     IconButton(
                       onPressed: () => onSlotRemoved(slot.id),
-                      icon: const Icon(Icons.close, color: AppColors.muted),
+                      icon: Icon(Icons.close, color: context.appPalette.muted),
                     ),
                   ],
                 ),

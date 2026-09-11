@@ -20,9 +20,9 @@ class AppointmentPaymentPriceBreakdown extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(18),
-      border: Border.all(color: AppColors.surfaceHighlight),
+      border: Border.all(color: context.appPalette.surfaceHighlight),
     ),
     child: Column(
       children: [
@@ -65,9 +65,9 @@ class AppointmentPaymentPriceBreakdown extends StatelessWidget {
           label: context.l10n.taxes,
           value: arguments.taxesWithPromotion(promotion),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(vertical: 14),
-          child: Divider(color: AppColors.surfaceHighlight),
+          child: Divider(color: context.appPalette.surfaceHighlight),
         ),
         AppointmentPaymentPriceRow(
           label: context.l10n.total,

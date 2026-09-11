@@ -798,4 +798,7 @@
   ,"passwordsDoNotMatch": "Las contraseñas no coinciden."
   ,"passwordMinimumLength": "Usa al menos 6 caracteres."
   ,"passwordChangedSuccessfully": "Contraseña cambiada correctamente."
+  ,"appearance": "Apariencia"
+  ,"lightTheme": "Tema claro"
+  ,"lightThemeDescription": "Usar colores claros en toda la aplicación"
 }

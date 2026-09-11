@@ -24,7 +24,7 @@ class AppointmentTimeGrid extends StatelessWidget {
     if (times.isEmpty) {
       return Text(
         context.l10n.noAppointmentSlotsAvailable,
-        style: const TextStyle(color: AppColors.muted),
+        style: TextStyle(color: context.appPalette.muted),
       );
     }
     return GridView.builder(
@@ -53,9 +53,9 @@ class AppointmentTimeGrid extends StatelessWidget {
               color: isSelected
                   ? AppColors.primary
                   : isBookableStart
-                  ? AppColors.surface
-                  : AppColors.surfaceHighlight,
-              border: Border.all(color: AppColors.surfaceHighlight),
+                  ? context.appPalette.surface
+                  : context.appPalette.surfaceHighlight,
+              border: Border.all(color: context.appPalette.surfaceHighlight),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -63,7 +63,7 @@ class AppointmentTimeGrid extends StatelessWidget {
               style: TextStyle(
                 color: isBookableStart || isSelected
                     ? Colors.white
-                    : AppColors.muted,
+                    : context.appPalette.muted,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),

@@ -42,7 +42,7 @@ class DashboardEarningsChart extends StatelessWidget {
                 maxY: _maximumValue,
                 lineTouchData: LineTouchData(
                   touchTooltipData: LineTouchTooltipData(
-                    getTooltipColor: (_) => AppColors.surface,
+                    getTooltipColor: (_) => context.appPalette.surface,
                     tooltipBorderRadius: BorderRadius.circular(8),
                     fitInsideHorizontally: true,
                     fitInsideVertically: true,
@@ -56,8 +56,8 @@ class DashboardEarningsChart extends StatelessWidget {
                         _showsPaymentBreakdown
                             ? '$label\n${context.l10n.formatCurrency(spot.y)}'
                             : context.l10n.formatCurrency(spot.y),
-                        const TextStyle(
-                          color: AppColors.white,
+                        TextStyle(
+                          color: context.appPalette.foreground,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
@@ -70,7 +70,7 @@ class DashboardEarningsChart extends StatelessWidget {
                   drawVerticalLine: false,
                   horizontalInterval: _maximumValue / 4,
                   getDrawingHorizontalLine: (_) =>
-                      const FlLine(color: AppColors.border, strokeWidth: 1),
+                      FlLine(color: context.appPalette.border, strokeWidth: 1),
                 ),
                 titlesData: FlTitlesData(
                   topTitles: const AxisTitles(
@@ -86,8 +86,8 @@ class DashboardEarningsChart extends StatelessWidget {
                       interval: _maximumValue / 4,
                       getTitlesWidget: (value, meta) => Text(
                         context.l10n.formatCurrency(value),
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 11,
                         ),
                       ),
@@ -103,8 +103,8 @@ class DashboardEarningsChart extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 6),
                           child: Text(
                             context.l10n.week(value.toInt() + 1),
-                            style: const TextStyle(
-                              color: AppColors.muted,
+                            style: TextStyle(
+                              color: context.appPalette.muted,
                               fontSize: 11,
                             ),
                           ),

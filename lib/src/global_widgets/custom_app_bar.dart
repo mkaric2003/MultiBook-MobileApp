@@ -21,8 +21,10 @@ class CustomAppBar extends StatelessWidget {
     return Container(
       height: 92,
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: context.appPalette.surfaceHighlight),
+        ),
       ),
       child: Row(
         children: [

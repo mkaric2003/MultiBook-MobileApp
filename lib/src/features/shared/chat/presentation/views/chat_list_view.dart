@@ -24,7 +24,7 @@ class ChatListView extends HookWidget {
     return BlocProvider(
       create: (_) => getIt<ChatListCubit>()..load(),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appPalette.background,
         body: SafeArea(
           child: Column(
             children: [
@@ -44,7 +44,7 @@ class ChatListView extends HookWidget {
                       return Center(
                         child: Text(
                           context.l10n.noMessagesYet,
-                          style: const TextStyle(color: AppColors.muted),
+                          style: TextStyle(color: context.appPalette.muted),
                         ),
                       );
                     }

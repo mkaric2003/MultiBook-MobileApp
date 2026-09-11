@@ -32,8 +32,8 @@ class PromotionsView extends StatelessWidget {
                     children: [
                       Text(
                         state.business?.name ?? '',
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 14,
                         ),
                       ),
@@ -52,7 +52,7 @@ class PromotionsView extends StatelessWidget {
                           child: Center(
                             child: Text(
                               context.l10n.noPromotions,
-                              style: const TextStyle(color: AppColors.muted),
+                              style: TextStyle(color: context.appPalette.muted),
                             ),
                           ),
                         ),
@@ -61,7 +61,7 @@ class PromotionsView extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
+                            color: context.appPalette.surface,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Column(
@@ -82,9 +82,9 @@ class PromotionsView extends StatelessWidget {
                                     onPressed: () => context
                                         .read<PromotionsCubit>()
                                         .remove(promotion),
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.delete_outline,
-                                      color: AppColors.muted,
+                                      color: context.appPalette.muted,
                                     ),
                                   ),
                                   Switch(
@@ -112,8 +112,8 @@ class PromotionsView extends StatelessWidget {
                               const SizedBox(height: 5),
                               Text(
                                 '${context.l10n.startsOn}: ${promotion.startsAt.day}.${promotion.startsAt.month}.${promotion.startsAt.year}  •  ${context.l10n.endsOn}: ${promotion.endsAt.day}.${promotion.endsAt.month}.${promotion.endsAt.year}',
-                                style: const TextStyle(
-                                  color: AppColors.muted,
+                                style: TextStyle(
+                                  color: context.appPalette.muted,
                                   fontSize: 12,
                                 ),
                               ),
@@ -122,8 +122,8 @@ class PromotionsView extends StatelessWidget {
                                   padding: const EdgeInsets.only(top: 7),
                                   child: Text(
                                     promotion.code!,
-                                    style: const TextStyle(
-                                      color: AppColors.muted,
+                                    style: TextStyle(
+                                      color: context.appPalette.muted,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),

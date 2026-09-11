@@ -15,8 +15,8 @@ class MoreMenuSection extends StatelessWidget {
     children: [
       Text(
         title.toUpperCase(),
-        style: const TextStyle(
-          color: AppColors.muted,
+        style: TextStyle(
+          color: context.appPalette.muted,
           fontSize: 13,
           fontWeight: FontWeight.w800,
         ),
@@ -25,7 +25,7 @@ class MoreMenuSection extends StatelessWidget {
       Container(
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
-          color: const Color(0xFF172554),
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Column(
@@ -33,7 +33,7 @@ class MoreMenuSection extends StatelessWidget {
             for (var index = 0; index < items.length; index++) ...[
               MoreMenuTile(item: items[index]),
               if (index < items.length - 1)
-                const Divider(height: 1, color: AppColors.surfaceHighlight),
+                Divider(height: 1, color: context.appPalette.surfaceHighlight),
             ],
           ],
         ),

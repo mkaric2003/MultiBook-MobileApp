@@ -60,7 +60,7 @@ class ExploreDestinationsList extends StatelessWidget {
                 context.l10n.fromPrice(
                   '${context.l10n.formatCurrency(destination.startingPrice)}${context.l10n.perNight}',
                 ),
-                style: const TextStyle(color: AppColors.muted, fontSize: 12),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 12),
               ),
             ],
           ),

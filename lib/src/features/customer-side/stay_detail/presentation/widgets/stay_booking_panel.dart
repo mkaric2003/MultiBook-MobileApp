@@ -17,9 +17,9 @@ class StayBookingPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(18),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.border)),
+      decoration: BoxDecoration(
+        color: context.appPalette.surface,
+        border: Border(top: BorderSide(color: context.appPalette.border)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

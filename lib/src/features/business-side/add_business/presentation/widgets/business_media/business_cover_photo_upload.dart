@@ -23,9 +23,9 @@ class BusinessCoverPhotoUpload extends StatelessWidget {
         width: double.infinity,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.appPalette.border),
         ),
         child: PickedImagePreview(
           imagePath: imagePath,
@@ -33,9 +33,9 @@ class BusinessCoverPhotoUpload extends StatelessWidget {
           fallback: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.image_outlined,
-                color: AppColors.iconMuted,
+                color: context.appPalette.iconMuted,
                 size: 28,
               ),
               const SizedBox(height: 9),
@@ -49,7 +49,7 @@ class BusinessCoverPhotoUpload extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 context.l10n.coverPhotoFormatHint,
-                style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 13),
               ),
             ],
           ),

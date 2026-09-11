@@ -4,6 +4,7 @@ import 'package:multibook/src/features/customer-side/help_center/domain/models/h
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 class HelpArticleDetailView extends StatelessWidget {
@@ -26,7 +27,7 @@ class HelpArticleDetailView extends StatelessWidget {
                 children: [
                   Text(
                     context.l10n.helpTopicTitle(article.topic),
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Color(0xFF8B5CF6),
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -44,8 +45,8 @@ class HelpArticleDetailView extends StatelessWidget {
                   const SizedBox(height: 12),
                   Text(
                     context.l10n.helpArticleSummary(article.id),
-                    style: const TextStyle(
-                      color: Color(0xFF9CA3AF),
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 15,
                       height: 1.5,
                     ),
@@ -53,8 +54,8 @@ class HelpArticleDetailView extends StatelessWidget {
                   const SizedBox(height: 26),
                   SelectableText(
                     context.l10n.helpArticleBody(article.id),
-                    style: const TextStyle(
-                      color: Color(0xFFD1D5DB),
+                    style: TextStyle(
+                      color: context.appPalette.foreground,
                       fontSize: 15,
                       height: 1.65,
                     ),

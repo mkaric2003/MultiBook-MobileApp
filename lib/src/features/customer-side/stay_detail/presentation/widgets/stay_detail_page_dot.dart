@@ -13,7 +13,7 @@ class StayDetailPageDot extends StatelessWidget {
       height: 9,
       margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: active ? Colors.white : AppColors.muted,
+        color: active ? Colors.white : context.appPalette.muted,
         shape: BoxShape.circle,
       ),
     );

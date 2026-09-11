@@ -1,6 +1,7 @@
 import 'package:multibook/src/data/models/business_model.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class ServiceGallerySection extends StatelessWidget {
   const ServiceGallerySection({required this.business, super.key});
@@ -18,7 +19,7 @@ class ServiceGallerySection extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(22, 26, 0, 26),
-      color: Colors.white.withValues(alpha: 0.04),
+      color: context.appPalette.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

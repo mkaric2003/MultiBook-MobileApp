@@ -21,7 +21,7 @@ class ServiceFilterTimePickerSheet extends HookWidget {
     );
 
     return Material(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       child: SafeArea(
         top: false,
         bottom: false,
@@ -33,8 +33,10 @@ class ServiceFilterTimePickerSheet extends HookWidget {
               Container(
                 height: 56,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: AppColors.border)),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: context.appPalette.border),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,15 +67,15 @@ class ServiceFilterTimePickerSheet extends HookWidget {
               ),
               Expanded(
                 child: CupertinoTheme(
-                  data: const CupertinoThemeData(
-                    brightness: Brightness.dark,
+                  data: CupertinoThemeData(
+                    brightness: Theme.of(context).brightness,
                     primaryColor: AppColors.primary,
                   ),
                   child: CupertinoDatePicker(
                     mode: CupertinoDatePickerMode.time,
                     minuteInterval: 30,
                     initialDateTime: initialDate,
-                    backgroundColor: AppColors.surface,
+                    backgroundColor: context.appPalette.surface,
                     onDateTimeChanged: (value) =>
                         selectedMinutes.value = value.hour * 60 + value.minute,
                   ),

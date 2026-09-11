@@ -21,7 +21,7 @@ class CustomerProfileMenuItem extends StatelessWidget {
       height: 78,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -30,7 +30,7 @@ class CustomerProfileMenuItem extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: AppColors.surfaceHighlight,
+              color: context.appPalette.surfaceHighlight,
               borderRadius: BorderRadius.circular(9),
             ),
             child: Icon(icon, color: AppColors.primary),
@@ -58,7 +58,7 @@ class CustomerProfileMenuItem extends StatelessWidget {
             ),
             const SizedBox(width: 8),
           ],
-          const Icon(Icons.chevron_right, color: AppColors.muted),
+          Icon(Icons.chevron_right, color: context.appPalette.muted),
         ],
       ),
     ),

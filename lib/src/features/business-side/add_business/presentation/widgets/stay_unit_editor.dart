@@ -50,7 +50,7 @@ class StayUnitEditor extends HookWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Padding(

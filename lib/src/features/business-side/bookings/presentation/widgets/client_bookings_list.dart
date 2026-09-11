@@ -10,6 +10,7 @@ import 'package:multibook/src/features/customer-side/reschedule_appointment/doma
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class ClientBookingsList extends StatelessWidget {
   const ClientBookingsList({
@@ -38,17 +39,17 @@ class ClientBookingsList extends StatelessWidget {
           child: Text(
             state.errorMessage!,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: context.appPalette.foreground),
           ),
         ),
       );
     }
 
     if (itemCount == 0) {
-      return const Center(
+      return Center(
         child: Text(
           'No bookings found for this business.',
-          style: TextStyle(color: Colors.white, fontSize: 16),
+          style: TextStyle(color: context.appPalette.foreground, fontSize: 16),
         ),
       );
     }

@@ -24,9 +24,9 @@ class BookingSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.appPalette.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +46,7 @@ class BookingSummaryCard extends StatelessWidget {
             label: context.l10n.guestSelection,
             value: context.l10n.guests(state.totalGuests),
           ),
-          const Divider(height: 28, color: AppColors.border),
+          Divider(height: 28, color: context.appPalette.border),
           BookingSummaryRow(
             label: context.l10n.nights(state.nightCount),
             value:
@@ -62,7 +62,7 @@ class BookingSummaryCard extends StatelessWidget {
             label: context.l10n.taxes,
             value: context.l10n.formatCurrency(taxes),
           ),
-          const Divider(height: 28, color: AppColors.border),
+          Divider(height: 28, color: context.appPalette.border),
           BookingSummaryRow(
             label: context.l10n.total,
             value: context.l10n.formatCurrency(total),

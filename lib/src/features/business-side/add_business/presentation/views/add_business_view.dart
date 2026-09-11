@@ -152,7 +152,7 @@ class AddBusinessView extends HookWidget {
           void selectImage(BusinessImageType imageType) {
             showModalBottomSheet<void>(
               context: context,
-              backgroundColor: AppColors.surface,
+              backgroundColor: context.appPalette.surface,
               builder: (sheetContext) => ImageSourcePickerSheet(
                 onSourceSelected: (ImageSource source) {
                   Navigator.of(sheetContext).pop();
@@ -190,7 +190,7 @@ class AddBusinessView extends HookWidget {
                             context.l10n.addBusinessIntro,
                             style: GoogleFonts.inter(
                               fontSize: 16,
-                              color: AppColors.muted,
+                              color: context.appPalette.muted,
                             ),
                           ),
                           const SizedBox(height: 30),
@@ -213,8 +213,8 @@ class AddBusinessView extends HookWidget {
                             state.businessType == BusinessType.stays
                                 ? context.l10n.stayBusinessExamples
                                 : context.l10n.serviceBusinessExamples,
-                            style: const TextStyle(
-                              color: AppColors.muted,
+                            style: TextStyle(
+                              color: context.appPalette.muted,
                               fontSize: 13,
                             ),
                           ),
@@ -231,16 +231,18 @@ class AddBusinessView extends HookWidget {
                           DropdownButtonFormField<String>(
                             key: ValueKey(state.businessType),
                             initialValue: state.categoryId,
-                            dropdownColor: AppColors.surface,
-                            iconEnabledColor: AppColors.muted,
-                            style: const TextStyle(
-                              color: AppColors.white,
+                            dropdownColor: context.appPalette.surface,
+                            iconEnabledColor: context.appPalette.muted,
+                            style: TextStyle(
+                              color: context.appPalette.foreground,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                             hint: Text(
                               context.l10n.selectCategory,
-                              style: const TextStyle(color: AppColors.white),
+                              style: TextStyle(
+                                color: context.appPalette.foreground,
+                              ),
                             ),
                             items: categories
                                 .map(
@@ -443,7 +445,7 @@ class AddBusinessView extends HookWidget {
                               state.businessType == BusinessType.stays) ...[
                             CustomButton(
                               buttonName: context.l10n.seedDemoStays,
-                              color: AppColors.surface,
+                              color: context.appPalette.surface,
                               textColor: AppColors.primary,
                               borderColor: AppColors.primary,
                               onPressed: state.isLoading
@@ -459,7 +461,7 @@ class AddBusinessView extends HookWidget {
                               state.businessType == BusinessType.services) ...[
                             CustomButton(
                               buttonName: context.l10n.seedDemoServices,
-                              color: AppColors.surface,
+                              color: context.appPalette.surface,
                               textColor: AppColors.primary,
                               borderColor: AppColors.primary,
                               onPressed: state.isLoading

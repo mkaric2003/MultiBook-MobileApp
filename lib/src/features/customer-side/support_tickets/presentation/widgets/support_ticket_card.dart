@@ -16,7 +16,7 @@ class SupportTicketCard extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(14),
     ),
     child: Column(
@@ -49,8 +49,8 @@ class SupportTicketCard extends StatelessWidget {
           ticket.message,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: AppColors.muted,
+          style: TextStyle(
+            color: context.appPalette.muted,
             fontSize: 14,
             height: 1.35,
           ),
@@ -61,7 +61,7 @@ class SupportTicketCard extends StatelessWidget {
             DateFormat.yMMMd(
               Localizations.localeOf(context).toLanguageTag(),
             ).format(ticket.createdAt!),
-            style: const TextStyle(color: AppColors.muted, fontSize: 12),
+            style: TextStyle(color: context.appPalette.muted, fontSize: 12),
           ),
         ],
       ],

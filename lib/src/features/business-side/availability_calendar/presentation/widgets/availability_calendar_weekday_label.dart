@@ -11,8 +11,8 @@ class AvailabilityCalendarWeekdayLabel extends StatelessWidget {
     child: Text(
       label,
       textAlign: TextAlign.center,
-      style: const TextStyle(
-        color: AppColors.muted,
+      style: TextStyle(
+        color: context.appPalette.muted,
         fontWeight: FontWeight.w700,
       ),
     ),

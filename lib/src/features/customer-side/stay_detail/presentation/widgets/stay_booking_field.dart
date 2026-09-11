@@ -13,15 +13,15 @@ class StayBookingField extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
-        color: AppColors.background,
+        border: Border.all(color: context.appPalette.border),
+        color: context.appPalette.background,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(color: AppColors.muted, fontSize: 13),
+            style: TextStyle(color: context.appPalette.muted, fontSize: 13),
           ),
           const SizedBox(height: 6),
           Text(

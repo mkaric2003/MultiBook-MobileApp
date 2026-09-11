@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class ClientPlaceholderView extends StatelessWidget {
   const ClientPlaceholderView({super.key, required this.title});
@@ -10,7 +11,7 @@ class ClientPlaceholderView extends StatelessWidget {
     return Center(
       child: Text(
         '$title placeholder',
-        style: const TextStyle(color: Colors.white, fontSize: 18),
+        style: TextStyle(color: context.appPalette.foreground, fontSize: 18),
       ),
     );
   }

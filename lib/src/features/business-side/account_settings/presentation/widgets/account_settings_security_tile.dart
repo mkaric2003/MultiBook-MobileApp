@@ -15,8 +15,8 @@ class AccountSettingsSecurityTile extends StatelessWidget {
       height: 62,
       padding: const EdgeInsets.symmetric(horizontal: 18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.border),
+        color: context.appPalette.surface,
+        border: Border.all(color: context.appPalette.border),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -27,7 +27,7 @@ class AccountSettingsSecurityTile extends StatelessWidget {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.muted, size: 24),
+          Icon(Icons.chevron_right, color: context.appPalette.muted, size: 24),
         ],
       ),
     ),

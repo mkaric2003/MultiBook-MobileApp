@@ -19,7 +19,7 @@ class TodaysAppointmentCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(17),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -47,14 +47,14 @@ class TodaysAppointmentCard extends StatelessWidget {
                   appointment.serviceNames.join(', '),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.muted),
+                  style: TextStyle(color: context.appPalette.muted),
                 ),
               ],
             ),
           ),
           Text(
             '${DateFormat('h:mm a').format(startsAt)}–${DateFormat('h:mm a').format(endsAt)}',
-            style: const TextStyle(color: AppColors.muted, fontSize: 12),
+            style: TextStyle(color: context.appPalette.muted, fontSize: 12),
           ),
         ],
       ),

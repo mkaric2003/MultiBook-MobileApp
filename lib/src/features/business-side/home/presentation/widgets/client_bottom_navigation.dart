@@ -26,14 +26,14 @@ class ClientBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.surfaceHighlight,
+      color: context.appPalette.surfaceHighlight,
       child: SafeArea(
         top: false,
         child: Container(
           height: 58,
-          decoration: const BoxDecoration(
-            color: AppColors.surfaceHighlight,
-            border: Border(top: BorderSide(color: Color(0xFF46465C))),
+          decoration: BoxDecoration(
+            color: context.appPalette.surfaceHighlight,
+            border: Border(top: BorderSide(color: context.appPalette.border)),
           ),
           child: Row(
             children: List.generate(_items.length, (index) {
@@ -41,7 +41,7 @@ class ClientBottomNavigation extends StatelessWidget {
               final isSelected = index == currentIndex;
               final color = isSelected
                   ? const Color.fromARGB(255, 166, 131, 245)
-                  : const Color(0xFF9CA3AF);
+                  : context.appPalette.muted;
 
               return Expanded(
                 child: InkWell(

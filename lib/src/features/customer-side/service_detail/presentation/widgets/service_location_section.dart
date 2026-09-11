@@ -15,8 +15,10 @@ class ServiceLocationSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(22),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.surfaceHighlight)),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: context.appPalette.surfaceHighlight),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +44,10 @@ class ServiceLocationSection extends StatelessWidget {
                     business.location.address,
                     business.location.city,
                   ].where((value) => value.isNotEmpty).join(', '),
-                  style: const TextStyle(color: AppColors.muted, fontSize: 16),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
@@ -51,7 +56,7 @@ class ServiceLocationSection extends StatelessWidget {
           CustomButton(
             buttonName: context.l10n.openInMaps,
             color: Colors.transparent,
-            borderColor: AppColors.border,
+            borderColor: context.appPalette.border,
             onPressed: _openInGoogleMaps,
           ),
         ],

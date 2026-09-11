@@ -125,6 +125,11 @@ class MoreView extends HookWidget {
                               context.push(AppRoutes.LANGUAGE_CURRENCY),
                         ),
                         MoreMenuItem(
+                          label: context.l10n.appearance,
+                          icon: Icons.palette_outlined,
+                          onTap: () => context.push(AppRoutes.APPEARANCE),
+                        ),
+                        MoreMenuItem(
                           label: context.l10n.helpAndSupport,
                           icon: Icons.help_rounded,
                           onTap: () => context.push(AppRoutes.HELP_CENTER),

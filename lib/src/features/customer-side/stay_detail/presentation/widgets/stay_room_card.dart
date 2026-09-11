@@ -15,7 +15,7 @@ class StayRoomCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 18),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -42,7 +42,10 @@ class StayRoomCard extends StatelessWidget {
                 const SizedBox(height: 7),
                 Text(
                   room.description,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 15),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 15,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Row(

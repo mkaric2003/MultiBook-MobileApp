@@ -27,7 +27,7 @@ class AmenitiesSelector extends StatelessWidget {
             selectedColor: AppColors.primary,
             checkmarkColor: Colors.white,
             labelStyle: const TextStyle(fontWeight: FontWeight.w600),
-            side: const BorderSide(color: AppColors.border),
+            side: BorderSide(color: context.appPalette.border),
           ),
       ],
     );

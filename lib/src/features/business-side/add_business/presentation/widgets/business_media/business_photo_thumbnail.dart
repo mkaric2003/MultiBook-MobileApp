@@ -38,8 +38,8 @@ class BusinessPhotoThumbnail extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
             child: Container(
               padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: AppColors.background,
+              decoration: BoxDecoration(
+                color: context.appPalette.background,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.close_rounded, size: 16),

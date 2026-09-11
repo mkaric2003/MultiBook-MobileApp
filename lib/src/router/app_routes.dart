@@ -27,6 +27,7 @@ class AppRoutes {
   static const ACCOUNT_SETTINGS = '/account-settings';
   static const CHANGE_PASSWORD = '/change-password';
   static const LANGUAGE_CURRENCY = '/language-currency';
+  static const APPEARANCE = '/appearance';
   static const CUSTOMER_EDIT_PROFILE = '/customer-edit-profile';
   static const TERMS_OF_SERVICE = '/terms-of-service';
   static const PRIVACY_POLICY = '/privacy-policy';

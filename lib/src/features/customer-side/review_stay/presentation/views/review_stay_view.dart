@@ -61,7 +61,7 @@ class ReviewStayView extends StatelessWidget {
         final dates =
             '${DateFormat('MMM d').format(booking.checkIn)}–${DateFormat('MMM d, yyyy').format(booking.checkOut)}';
         return Scaffold(
-          backgroundColor: AppColors.background,
+          backgroundColor: context.appPalette.background,
           body: SafeArea(
             child: Column(
               children: [
@@ -106,7 +106,7 @@ class ReviewStayView extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
+                            color: context.appPalette.surface,
                             borderRadius: BorderRadius.circular(18),
                           ),
                           child: Row(
@@ -120,11 +120,12 @@ class ReviewStayView extends StatelessWidget {
                                   width: 90,
                                   height: 90,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_, _, _) => const SizedBox(
+                                  errorBuilder: (_, _, _) => SizedBox(
                                     width: 90,
                                     height: 90,
                                     child: ColoredBox(
-                                      color: AppColors.surfaceHighlight,
+                                      color:
+                                          context.appPalette.surfaceHighlight,
                                     ),
                                   ),
                                 ),
@@ -144,22 +145,22 @@ class ReviewStayView extends StatelessWidget {
                                     const SizedBox(height: 6),
                                     Text(
                                       business.location.city,
-                                      style: const TextStyle(
-                                        color: AppColors.muted,
+                                      style: TextStyle(
+                                        color: context.appPalette.muted,
                                       ),
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
                                       '📅 $dates',
-                                      style: const TextStyle(
-                                        color: AppColors.muted,
+                                      style: TextStyle(
+                                        color: context.appPalette.muted,
                                       ),
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
                                       '👤 ${booking.adults} adults, ${booking.children} children',
-                                      style: const TextStyle(
-                                        color: AppColors.muted,
+                                      style: TextStyle(
+                                        color: context.appPalette.muted,
                                       ),
                                     ),
                                   ],
@@ -207,9 +208,11 @@ class ReviewStayView extends StatelessWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(22, 16, 22, 22),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: AppColors.surfaceHighlight),
+                      top: BorderSide(
+                        color: context.appPalette.surfaceHighlight,
+                      ),
                     ),
                   ),
                   child: CustomButton(

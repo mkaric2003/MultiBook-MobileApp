@@ -61,7 +61,7 @@ class ExploreStayCategoryGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.appPalette.surface,
             borderRadius: BorderRadius.circular(18),
           ),
           child: Column(

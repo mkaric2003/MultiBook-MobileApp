@@ -28,7 +28,7 @@ class CustomerProfileEditorAvatar extends HookWidget {
         ? Image.memory(snapshot.data!, fit: BoxFit.cover)
         : (imageUrl?.isNotEmpty ?? false)
         ? Image.network(imageUrl!, fit: BoxFit.cover)
-        : const Icon(Icons.person_rounded, size: 52, color: AppColors.muted);
+        : Icon(Icons.person_rounded, size: 52, color: context.appPalette.muted);
 
     return Center(
       child: Stack(
@@ -36,7 +36,7 @@ class CustomerProfileEditorAvatar extends HookWidget {
         children: [
           CircleAvatar(
             radius: 52,
-            backgroundColor: AppColors.border,
+            backgroundColor: context.appPalette.border,
             child: ClipOval(
               child: SizedBox(height: 98, width: 98, child: image),
             ),

@@ -28,7 +28,7 @@ class ServiceDetailHero extends StatelessWidget {
             service.imageUrl,
             fit: BoxFit.cover,
             errorBuilder: (_, _, _) =>
-                const ColoredBox(color: AppColors.surfaceHighlight),
+                ColoredBox(color: context.appPalette.surfaceHighlight),
           ),
           const DecoratedBox(
             decoration: BoxDecoration(

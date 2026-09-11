@@ -27,9 +27,9 @@ class AppointmentDetailsInformationCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class AppointmentDetailsInformationCard extends StatelessWidget {
                 '${appointment.status[0].toUpperCase()}${appointment.status.substring(1)}',
             valueColor: appointment.status == 'confirmed'
                 ? AppColors.success
-                : AppColors.muted,
+                : context.appPalette.muted,
           ),
           const SizedBox(height: 14),
           AppointmentDetailsRow(

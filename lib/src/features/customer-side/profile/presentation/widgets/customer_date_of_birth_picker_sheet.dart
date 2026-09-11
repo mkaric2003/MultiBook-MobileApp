@@ -22,7 +22,7 @@ class CustomerDateOfBirthPickerSheet extends HookWidget {
       top: false,
       bottom: false,
       child: Material(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         child: SizedBox(
           width: double.infinity,
           height: 350,
@@ -32,8 +32,10 @@ class CustomerDateOfBirthPickerSheet extends HookWidget {
                 width: double.infinity,
                 height: 56,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: AppColors.border)),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: context.appPalette.border),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,7 +48,7 @@ class CustomerDateOfBirthPickerSheet extends HookWidget {
                     Text(
                       context.l10n.dateOfBirth,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: context.appPalette.foreground,
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                       ),
@@ -67,8 +69,8 @@ class CustomerDateOfBirthPickerSheet extends HookWidget {
               ),
               Expanded(
                 child: CupertinoTheme(
-                  data: const CupertinoThemeData(
-                    brightness: Brightness.dark,
+                  data: CupertinoThemeData(
+                    brightness: Theme.of(context).brightness,
                     primaryColor: AppColors.primary,
                     textTheme: CupertinoTextThemeData(
                       dateTimePickerTextStyle: TextStyle(fontSize: 24),
@@ -79,7 +81,7 @@ class CustomerDateOfBirthPickerSheet extends HookWidget {
                     initialDateTime: initialDate,
                     minimumDate: DateTime(1900),
                     maximumDate: DateTime.now(),
-                    backgroundColor: AppColors.surface,
+                    backgroundColor: context.appPalette.surface,
                     onDateTimeChanged: (value) => selectedDate.value = value,
                   ),
                 ),

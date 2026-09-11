@@ -20,18 +20,18 @@ class EarningsProviderSelector extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.symmetric(horizontal: 14),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: AppColors.border),
+      border: Border.all(color: context.appPalette.border),
     ),
     child: DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: selectedProvider?.id ?? '',
         isExpanded: true,
-        dropdownColor: AppColors.surface,
-        icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.muted),
-        style: const TextStyle(
-          color: AppColors.white,
+        dropdownColor: context.appPalette.surface,
+        icon: Icon(Icons.keyboard_arrow_down, color: context.appPalette.muted),
+        style: TextStyle(
+          color: context.appPalette.foreground,
           fontSize: 14,
           fontWeight: FontWeight.w700,
         ),

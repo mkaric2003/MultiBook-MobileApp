@@ -20,7 +20,9 @@ class RatingStarSelector extends StatelessWidget {
         onPressed: () => onChanged(index + 1),
         iconSize: 38,
         splashRadius: 24,
-        color: index < rating ? const Color(0xFFFACC15) : AppColors.border,
+        color: index < rating
+            ? const Color(0xFFFACC15)
+            : context.appPalette.border,
         icon: Icon(
           index < rating ? Icons.star_rounded : Icons.star_outline_rounded,
         ),

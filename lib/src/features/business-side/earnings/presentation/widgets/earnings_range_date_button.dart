@@ -26,9 +26,9 @@ class EarningsRangeDateButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary.withValues(alpha: .18)
-              : AppColors.background,
+              : context.appPalette.background,
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
+            color: isSelected ? AppColors.primary : context.appPalette.border,
           ),
           borderRadius: BorderRadius.circular(10),
         ),
@@ -37,7 +37,7 @@ class EarningsRangeDateButton extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(color: AppColors.muted, fontSize: 12),
+              style: TextStyle(color: context.appPalette.muted, fontSize: 12),
             ),
             const SizedBox(height: 4),
             Text(DateFormat('dd.MM.yyyy').format(value)),

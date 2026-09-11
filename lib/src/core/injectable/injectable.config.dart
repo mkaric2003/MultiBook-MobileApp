@@ -139,6 +139,8 @@ import 'package:multibook/src/data/repositories/stay_search_repository.dart'
     as _i1001;
 import 'package:multibook/src/data/repositories/support_ticket_repository_impl.dart'
     as _i295;
+import 'package:multibook/src/data/repositories/theme_repository_impl.dart'
+    as _i1006;
 import 'package:multibook/src/data/repositories/user_location_repository.dart'
     as _i682;
 import 'package:multibook/src/data/repositories/users_repository_impl.dart'
@@ -185,6 +187,8 @@ import 'package:multibook/src/domain/repositories/service_availability_repositor
     as _i277;
 import 'package:multibook/src/domain/repositories/support_ticket_repository.dart'
     as _i444;
+import 'package:multibook/src/domain/repositories/theme_repository.dart'
+    as _i119;
 import 'package:multibook/src/domain/repositories/users_repository.dart'
     as _i946;
 import 'package:multibook/src/domain/use_cases/appointments/cancel_customer_appointment_use_case.dart'
@@ -333,6 +337,10 @@ import 'package:multibook/src/domain/use_cases/support_tickets/create_support_ti
     as _i958;
 import 'package:multibook/src/domain/use_cases/support_tickets/get_support_tickets_use_case.dart'
     as _i206;
+import 'package:multibook/src/domain/use_cases/theme/get_theme_mode_use_case.dart'
+    as _i43;
+import 'package:multibook/src/domain/use_cases/theme/set_theme_mode_use_case.dart'
+    as _i11;
 import 'package:multibook/src/domain/use_cases/users/get_current_user_use_case.dart'
     as _i850;
 import 'package:multibook/src/domain/use_cases/users/update_user_profile_use_case.dart'
@@ -439,6 +447,8 @@ import 'package:multibook/src/features/shared/sign_in/cubit/signin_cubit.dart'
     as _i488;
 import 'package:multibook/src/features/shared/sign_up/cubit/signup_cubit.dart'
     as _i379;
+import 'package:multibook/src/features/shared/theme/cubit/theme_cubit.dart'
+    as _i844;
 import 'package:multibook/src/features/shared/user_location/cubit/user_location_cubit.dart'
     as _i134;
 import 'package:multibook/src/features/shared/user_type_checker/cubit/user_type_checker_cubit.dart'
@@ -545,6 +555,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i82.DevelopmentSeedApiDataSource>(
       () => _i82.DevelopmentSeedApiDataSource(gh<_i234.ApiClient>()),
+    );
+    gh.lazySingleton<_i119.ThemeRepository>(
+      () => _i1006.ThemeRepositoryImpl(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i941.BusinessLocationRepository>(
       () =>
@@ -850,6 +863,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i206.CustomerDiscoveryRepository>(),
       ),
     );
+    gh.factory<_i11.SetThemeModeUseCase>(
+      () => _i11.SetThemeModeUseCase(gh<_i119.ThemeRepository>()),
+    );
+    gh.factory<_i43.GetThemeModeUseCase>(
+      () => _i43.GetThemeModeUseCase(gh<_i119.ThemeRepository>()),
+    );
     gh.factory<_i829.GetOwnedBusinessUseCase>(
       () => _i829.GetOwnedBusinessUseCase(gh<_i197.BusinessesRepository>()),
     );
@@ -985,6 +1004,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i378.CustomerSearchCubit>(
       () => _i378.CustomerSearchCubit(
         gh<_i540.SearchDiscoveryBusinessesUseCase>(),
+      ),
+    );
+    gh.lazySingleton<_i844.ThemeCubit>(
+      () => _i844.ThemeCubit(
+        gh<_i43.GetThemeModeUseCase>(),
+        gh<_i11.SetThemeModeUseCase>(),
       ),
     );
     gh.factory<_i857.HasBusinessReviewUseCase>(

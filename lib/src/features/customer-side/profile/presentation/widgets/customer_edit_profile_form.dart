@@ -80,16 +80,22 @@ class CustomerEditProfileForm extends HookWidget {
         context: context,
         showPhoneCode: true,
         countryListTheme: CountryListThemeData(
-          backgroundColor: AppColors.background,
-          textStyle: TextStyle(color: Colors.white, fontSize: 16),
-          searchTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+          backgroundColor: context.appPalette.background,
+          textStyle: TextStyle(
+            color: context.appPalette.foreground,
+            fontSize: 16,
+          ),
+          searchTextStyle: TextStyle(
+            color: context.appPalette.foreground,
+            fontSize: 16,
+          ),
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           inputDecoration: InputDecoration(
             hintText: context.l10n.searchCountry,
-            hintStyle: TextStyle(color: AppColors.muted),
-            prefixIcon: Icon(Icons.search, color: AppColors.muted),
+            hintStyle: TextStyle(color: context.appPalette.muted),
+            prefixIcon: Icon(Icons.search, color: context.appPalette.muted),
             filled: true,
-            fillColor: AppColors.surface,
+            fillColor: context.appPalette.surface,
           ),
         ),
         onSelect: (country) {
@@ -102,7 +108,7 @@ class CustomerEditProfileForm extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(context.l10n.firstNameRequired, style: _labelStyle),
+        Text(context.l10n.firstNameRequired, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: firstNameController,
@@ -110,7 +116,7 @@ class CustomerEditProfileForm extends HookWidget {
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 24),
-        Text(context.l10n.lastNameRequired, style: _labelStyle),
+        Text(context.l10n.lastNameRequired, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: lastNameController,
@@ -118,7 +124,7 @@ class CustomerEditProfileForm extends HookWidget {
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 24),
-        Text(context.l10n.emailAddressRequired, style: _labelStyle),
+        Text(context.l10n.emailAddressRequired, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: emailController,
@@ -127,7 +133,7 @@ class CustomerEditProfileForm extends HookWidget {
           prefixIcon: Icons.email_outlined,
         ),
         const SizedBox(height: 24),
-        Text(context.l10n.phoneNumber, style: _labelStyle),
+        Text(context.l10n.phoneNumber, style: _labelStyle(context)),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -140,8 +146,8 @@ class CustomerEditProfileForm extends HookWidget {
                   height: 56,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    border: Border.all(color: AppColors.border),
+                    color: context.appPalette.surface,
+                    border: Border.all(color: context.appPalette.border),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Row(
@@ -151,9 +157,9 @@ class CustomerEditProfileForm extends HookWidget {
                         countryCode.value,
                         style: const TextStyle(fontSize: 16),
                       ),
-                      const Icon(
+                      Icon(
                         Icons.keyboard_arrow_down,
-                        color: AppColors.muted,
+                        color: context.appPalette.muted,
                       ),
                     ],
                   ),
@@ -174,7 +180,7 @@ class CustomerEditProfileForm extends HookWidget {
           ],
         ),
         const SizedBox(height: 24),
-        Text(context.l10n.dateOfBirth, style: _labelStyle),
+        Text(context.l10n.dateOfBirth, style: _labelStyle(context)),
         const SizedBox(height: 10),
         InkWell(
           onTap: selectDateOfBirth,
@@ -188,7 +194,7 @@ class CustomerEditProfileForm extends HookWidget {
           ),
         ),
         const SizedBox(height: 24),
-        Text(context.l10n.cityOptional, style: _labelStyle),
+        Text(context.l10n.cityOptional, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: cityController,
@@ -197,7 +203,7 @@ class CustomerEditProfileForm extends HookWidget {
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 24),
-        Text(context.l10n.addressOptional, style: _labelStyle),
+        Text(context.l10n.addressOptional, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomerAddressField(
           controller: addressController,
@@ -207,8 +213,8 @@ class CustomerEditProfileForm extends HookWidget {
     );
   }
 
-  static const _labelStyle = TextStyle(
-    color: Colors.white,
+  TextStyle _labelStyle(BuildContext context) => TextStyle(
+    color: context.appPalette.foreground,
     fontSize: 16,
     fontWeight: FontWeight.w600,
   );

@@ -22,7 +22,7 @@ class ServiceFilterPriceRange extends StatelessWidget {
           max: 500,
           divisions: 50,
           activeColor: AppColors.primary,
-          inactiveColor: AppColors.surface,
+          inactiveColor: context.appPalette.surface,
           labels: RangeLabels(
             context.l10n.formatCurrency(values.start.round() * 100),
             context.l10n.formatCurrency(values.end.round() * 100),

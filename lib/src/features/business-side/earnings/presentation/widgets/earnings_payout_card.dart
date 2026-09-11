@@ -17,8 +17,8 @@ class EarningsPayoutCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: AppColors.surface,
-      border: Border.all(color: AppColors.border),
+      color: context.appPalette.surface,
+      border: Border.all(color: context.appPalette.border),
       borderRadius: BorderRadius.circular(16),
     ),
     child: Column(
@@ -26,7 +26,7 @@ class EarningsPayoutCard extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(color: AppColors.muted, fontSize: 14),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 14),
         ),
         const SizedBox(height: 10),
         Text(

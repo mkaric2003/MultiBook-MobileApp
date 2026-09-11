@@ -291,7 +291,7 @@ functions/src/
 - Novi REST repository koristi `RestRepositoryExecutor`; ne kopirati HTTP-to-failure mapping u pojedinačne `RepositoryImpl` klase.
 - Novi REST Cubit prima use case, a ne `RepositoryImpl`, `DataSource` ili `ApiClient`.
 - Globalno ponovljive komponente su u `src/global_widgets`: `CustomAppBar`, `CustomButton`, `CustomTextfield`, `SearchableCityPickerSheet` i `LabeledDivider`.
-- Tamna tema i boje dolaze iz `AppTheme` i `AppColors`, ne iz nasumičnih hardkodiranih boja u viewu.
+- Light/dark teme i boje dolaze iz `AppTheme`, `AppPalette` i stabilnih brand/status vrijednosti u `AppColors`, ne iz nasumičnih hardkodiranih neutralnih boja u viewu.
 
 ---
 
@@ -309,7 +309,8 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 
 ## 6. Dizajn sistema
 
-- Aplikacija koristi tamni UI: osnovna pozadina, kartice, navigation surface, muted tekst i ljubičasti accent su centralizovani u `AppColors`.
+- Aplikacija ima light i dark UI. Osnovna pozadina, kartice, navigation surface, foreground, muted tekst i borderi dolaze iz theme-aware `AppPalette`, dok ljubičasti accent i status boje ostaju centralizovani u `AppColors`.
+- Customer i provider kroz **Settings → Appearance** mogu odmah uključiti ili isključiti light temu. `ThemeCubit` mijenja `MaterialApp.themeMode`, a `ThemeRepositoryImpl` odabir trajno sprema u Shared Preferences; zadnja tema se vraća pri sljedećem pokretanju aplikacije.
 - Selektovana stanja koriste primarnu ljubičastu; statusi koriste semantičke boje (confirmed, cancelled/declined, completed).
 - Customer i provider bottom navigation imaju isti vizuelni jezik, ali različite tabove.
 - Globalni `CustomAppBar` standardizira centrirani naslov, Cupertino back strelicu i border pri dnu.

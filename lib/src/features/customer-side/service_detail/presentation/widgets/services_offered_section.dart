@@ -3,6 +3,7 @@ import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/data/models/service_offering_model.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_offering_card.dart';
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class ServicesOfferedSection extends StatelessWidget {
   const ServicesOfferedSection({
@@ -22,7 +23,7 @@ class ServicesOfferedSection extends StatelessWidget {
     if (offerings.isEmpty) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.fromLTRB(22, 26, 22, 24),
-      color: Colors.white.withValues(alpha: 0.04),
+      color: context.appPalette.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

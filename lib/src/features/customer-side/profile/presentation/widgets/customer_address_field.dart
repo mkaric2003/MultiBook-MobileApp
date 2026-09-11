@@ -23,18 +23,18 @@ class CustomerAddressField extends StatelessWidget {
           maxLines: null,
           minLines: null,
           onChanged: onChanged,
-          style: const TextStyle(color: Colors.white, fontSize: 16),
+          style: TextStyle(color: context.appPalette.foreground, fontSize: 16),
           textAlignVertical: TextAlignVertical.center,
           cursorColor: AppColors.primary,
           decoration: InputDecoration(
             filled: true,
-            fillColor: AppColors.surface,
+            fillColor: context.appPalette.surface,
             hintText: context.l10n.enterAddress,
-            hintStyle: TextStyle(color: AppColors.muted, fontSize: 16),
+            hintStyle: TextStyle(color: context.appPalette.muted, fontSize: 16),
             contentPadding: EdgeInsets.fromLTRB(46, 16, 14, 16),
           ),
         ),
-        const Positioned.fill(
+        Positioned.fill(
           child: Align(
             alignment: Alignment.centerLeft,
             child: Padding(
@@ -43,7 +43,7 @@ class CustomerAddressField extends StatelessWidget {
                 child: Icon(
                   Icons.location_on_outlined,
                   size: 20,
-                  color: AppColors.muted,
+                  color: context.appPalette.muted,
                 ),
               ),
             ),

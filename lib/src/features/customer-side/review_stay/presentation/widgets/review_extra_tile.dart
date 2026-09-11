@@ -18,8 +18,8 @@ class ReviewExtraTile extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: AppColors.surface,
-      border: Border.all(color: AppColors.border),
+      color: context.appPalette.surface,
+      border: Border.all(color: context.appPalette.border),
       borderRadius: BorderRadius.circular(16),
     ),
     child: Row(
@@ -29,7 +29,7 @@ class ReviewExtraTile extends StatelessWidget {
           height: 58,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.surfaceHighlight,
+            color: context.appPalette.surfaceHighlight,
             borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(_icon(extra.type), color: AppColors.primary, size: 29),
@@ -49,7 +49,7 @@ class ReviewExtraTile extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                 extra.type.description,
-                style: const TextStyle(color: AppColors.muted),
+                style: TextStyle(color: context.appPalette.muted),
               ),
               const SizedBox(height: 5),
               Text(

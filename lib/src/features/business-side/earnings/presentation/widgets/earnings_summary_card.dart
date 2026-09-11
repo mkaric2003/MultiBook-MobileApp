@@ -16,8 +16,8 @@ class EarningsSummaryCard extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: AppColors.surface,
-      border: Border.all(color: AppColors.border),
+      color: context.appPalette.surface,
+      border: Border.all(color: context.appPalette.border),
       borderRadius: BorderRadius.circular(16),
     ),
     child: Row(
@@ -28,7 +28,7 @@ class EarningsSummaryCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(color: AppColors.muted, fontSize: 15),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 15),
               ),
               const SizedBox(height: 8),
               Text(
@@ -45,7 +45,7 @@ class EarningsSummaryCard extends StatelessWidget {
           width: 58,
           height: 58,
           decoration: BoxDecoration(
-            color: const Color(0xFF3F315E),
+            color: AppColors.primary.withValues(alpha: .18),
             borderRadius: BorderRadius.circular(13),
           ),
           child: const Icon(

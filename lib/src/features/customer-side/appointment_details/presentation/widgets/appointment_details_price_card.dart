@@ -17,9 +17,9 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +37,8 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
             const SizedBox(height: 12),
             AppointmentDetailsRow(
               label: context.l10n.promotion,
-              value: '-${context.l10n.formatCurrency(appointment.discountAmount)}',
+              value:
+                  '-${context.l10n.formatCurrency(appointment.discountAmount)}',
               valueColor: AppColors.success,
             ),
           ],
@@ -58,9 +59,9 @@ class AppointmentDetailsPriceCard extends StatelessWidget {
             label: 'Taxes',
             value: context.l10n.formatCurrency(appointment.taxes),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 14),
-            child: Divider(color: AppColors.surfaceHighlight),
+            child: Divider(color: context.appPalette.surfaceHighlight),
           ),
           AppointmentDetailsRow(
             label: 'Total paid',

@@ -9,8 +9,10 @@ class MyBusinessesHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.fromLTRB(24, 22, 20, 18),
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: context.appPalette.surfaceHighlight),
+      ),
     ),
     child: Row(
       children: [

@@ -14,7 +14,7 @@ class TodaysBookingCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(17),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -40,7 +40,7 @@ class TodaysBookingCard extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   '${booking.roomType ?? 'Stay booking'} · $guestCount guests',
-                  style: const TextStyle(color: AppColors.muted),
+                  style: TextStyle(color: context.appPalette.muted),
                 ),
               ],
             ),
@@ -48,7 +48,7 @@ class TodaysBookingCard extends StatelessWidget {
           Text(
             context.l10n.checkIn,
             style: TextStyle(
-              color: AppColors.muted,
+              color: context.appPalette.muted,
               fontWeight: FontWeight.w700,
             ),
           ),

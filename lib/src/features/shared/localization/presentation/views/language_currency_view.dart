@@ -30,7 +30,7 @@ class LanguageCurrencyView extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appPalette.background,
       body: SafeArea(
         child: Column(
           children: [

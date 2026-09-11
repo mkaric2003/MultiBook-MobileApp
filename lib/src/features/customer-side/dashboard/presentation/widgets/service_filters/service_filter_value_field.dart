@@ -22,15 +22,15 @@ class ServiceFilterValueField extends StatelessWidget {
         height: 80,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.appPalette.border),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label, style: const TextStyle(color: AppColors.muted)),
+            Text(label, style: TextStyle(color: context.appPalette.muted)),
             Row(
               children: [
                 Expanded(
@@ -41,9 +41,9 @@ class ServiceFilterValueField extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.muted,
+                  color: context.appPalette.muted,
                 ),
               ],
             ),

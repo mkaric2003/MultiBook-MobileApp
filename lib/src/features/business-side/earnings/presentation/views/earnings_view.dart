@@ -78,8 +78,8 @@ class EarningsView extends HookWidget {
                       if (state.hasError) ...[
                         Text(
                           context.l10n.earningsLoadFailed,
-                          style: const TextStyle(
-                            color: AppColors.muted,
+                          style: TextStyle(
+                            color: context.appPalette.muted,
                             fontSize: 13,
                           ),
                         ),

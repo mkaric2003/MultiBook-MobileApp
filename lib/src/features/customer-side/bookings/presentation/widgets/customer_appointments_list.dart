@@ -25,7 +25,7 @@ class CustomerAppointmentsList extends StatelessWidget {
       return Center(
         child: Text(
           state.errorMessage ?? context.l10n.noServiceBookingsYet,
-          style: const TextStyle(color: AppColors.muted, fontSize: 16),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 16),
         ),
       );
     }

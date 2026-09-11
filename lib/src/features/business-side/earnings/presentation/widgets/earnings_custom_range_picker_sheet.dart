@@ -19,7 +19,7 @@ class EarningsCustomRangePickerSheet extends HookWidget {
     final selectedDate = selectingStart.value ? start.value : end.value;
 
     return Material(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       child: SafeArea(
         top: false,
         child: Padding(
@@ -68,8 +68,8 @@ class EarningsCustomRangePickerSheet extends HookWidget {
               SizedBox(
                 height: 190,
                 child: CupertinoTheme(
-                  data: const CupertinoThemeData(
-                    brightness: Brightness.dark,
+                  data: CupertinoThemeData(
+                    brightness: Theme.of(context).brightness,
                     primaryColor: AppColors.primary,
                   ),
                   child: CupertinoDatePicker(

@@ -199,6 +199,11 @@ final router = GoRouter(
       builder: (context, state) => const LanguageCurrencyView(),
     ),
     GoRoute(
+      path: AppRoutes.APPEARANCE,
+      name: AppRoutes.APPEARANCE,
+      builder: (context, state) => const AppearanceView(),
+    ),
+    GoRoute(
       path: AppRoutes.CUSTOMER_EDIT_PROFILE,
       name: AppRoutes.CUSTOMER_EDIT_PROFILE,
       builder: (context, state) => const CustomerEditProfileView(),

@@ -1,6 +1,7 @@
 import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
@@ -61,7 +62,9 @@ class DashboardView extends HookWidget {
                     value: (state.metrics?.activeReservationCount ?? 0)
                         .toString(),
                     icon: Icons.event_available,
-                    iconBackgroundColor: Color(0xFF3F315E),
+                    iconBackgroundColor: AppColors.primary.withValues(
+                      alpha: .18,
+                    ),
                   ),
                   const SizedBox(height: 14),
                   DashboardMetricCard(
@@ -71,7 +74,9 @@ class DashboardView extends HookWidget {
                     ),
                     valueColor: Color(0xFF24E5C5),
                     icon: Icons.attach_money,
-                    iconBackgroundColor: Color(0xFF164A4A),
+                    iconBackgroundColor: AppColors.success.withValues(
+                      alpha: .18,
+                    ),
                     iconColor: Color(0xFF24E5C5),
                   ),
                   const SizedBox(height: 14),
@@ -79,7 +84,9 @@ class DashboardView extends HookWidget {
                     title: context.l10n.averageRating,
                     value: business.averageRating.toStringAsFixed(1),
                     icon: Icons.star,
-                    iconBackgroundColor: const Color(0xFF55472A),
+                    iconBackgroundColor: const Color(
+                      0xFFF59E0B,
+                    ).withValues(alpha: .18),
                     suffix: const Text(
                       '★★★★★',
                       style: TextStyle(color: Color(0xFFFBBF24), fontSize: 18),

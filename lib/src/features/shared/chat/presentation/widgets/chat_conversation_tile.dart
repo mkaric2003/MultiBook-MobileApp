@@ -33,14 +33,14 @@ class ChatConversationTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(13),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           children: [
             CircleAvatar(
               radius: 25,
-              backgroundColor: AppColors.surfaceHighlight,
+              backgroundColor: context.appPalette.surfaceHighlight,
               backgroundImage: imageUrl.isEmpty ? null : NetworkImage(imageUrl),
               child: imageUrl.isEmpty
                   ? Icon(
@@ -68,8 +68,8 @@ class ChatConversationTile extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     isCustomer ? conversation.businessName : 'Customer',
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 13,
                     ),
                   ),
@@ -80,8 +80,8 @@ class ChatConversationTile extends StatelessWidget {
                         : conversation.lastMessageText,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 13,
                     ),
                   ),
@@ -95,8 +95,8 @@ class ChatConversationTile extends StatelessWidget {
                 if (conversation.lastMessageAt != null)
                   Text(
                     DateFormat('MMM d').format(conversation.lastMessageAt!),
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 11,
                     ),
                   ),

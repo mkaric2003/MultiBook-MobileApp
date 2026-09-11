@@ -52,7 +52,7 @@ class ChatConversationView extends HookWidget {
               ? conversation.lastReadAtBusiness
               : conversation?.lastReadAtCustomer;
           return Scaffold(
-            backgroundColor: AppColors.background,
+            backgroundColor: context.appPalette.background,
             body: SafeArea(
               child: Column(
                 children: [
@@ -61,10 +61,10 @@ class ChatConversationView extends HookWidget {
                     child: state.isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : state.messages.isEmpty && !isOtherUserTyping
-                        ? const Center(
+                        ? Center(
                             child: Text(
                               'Start the conversation.',
-                              style: TextStyle(color: AppColors.muted),
+                              style: TextStyle(color: context.appPalette.muted),
                             ),
                           )
                         : ListView.builder(

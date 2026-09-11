@@ -65,7 +65,7 @@ class SignupView extends HookWidget {
                       style: GoogleFonts.inter(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: context.appPalette.foreground,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -73,7 +73,7 @@ class SignupView extends HookWidget {
                       context.l10n.signUpDescription,
                       style: GoogleFonts.inter(
                         fontSize: 16,
-                        color: AppColors.muted,
+                        color: context.appPalette.muted,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -133,7 +133,7 @@ class SignupView extends HookWidget {
                         Text(
                           context.l10n.alreadyHaveAccount,
                           style: TextStyle(
-                            color: AppColors.muted,
+                            color: context.appPalette.muted,
                             fontSize: 18,
                           ),
                         ),

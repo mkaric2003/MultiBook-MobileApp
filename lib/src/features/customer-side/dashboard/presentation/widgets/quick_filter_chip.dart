@@ -22,13 +22,13 @@ class QuickFilterChip extends StatelessWidget {
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 17),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.surface,
+          color: isSelected ? AppColors.primary : context.appPalette.surface,
           borderRadius: BorderRadius.circular(22),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? AppColors.white : AppColors.muted,
+            color: isSelected ? AppColors.white : context.appPalette.muted,
             fontWeight: FontWeight.w600,
           ),
         ),

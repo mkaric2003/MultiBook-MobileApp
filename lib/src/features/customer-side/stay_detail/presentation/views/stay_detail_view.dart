@@ -45,7 +45,7 @@ class StayDetailView extends StatelessWidget {
           final business = state.business!;
           final listing = StayListing.fromBusiness(business);
           return Scaffold(
-            backgroundColor: AppColors.background,
+            backgroundColor: context.appPalette.background,
             body: SafeArea(
               top: false,
               child: SingleChildScrollView(
@@ -89,7 +89,7 @@ class StayDetailView extends StatelessWidget {
                         reviews: state.reviews,
                         onViewAll: () async => showModalBottomSheet<void>(
                           context: context,
-                          backgroundColor: AppColors.background,
+                          backgroundColor: context.appPalette.background,
                           isScrollControlled: true,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(

@@ -798,4 +798,7 @@
   ,"passwordsDoNotMatch": "Die Passwörter stimmen nicht überein."
   ,"passwordMinimumLength": "Verwenden Sie mindestens 6 Zeichen."
   ,"passwordChangedSuccessfully": "Passwort erfolgreich geändert."
+  ,"appearance": "Darstellung"
+  ,"lightTheme": "Helles Design"
+  ,"lightThemeDescription": "Helle Farben in der App verwenden"
 }

@@ -103,15 +103,15 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                       child: Text(
                         state.errorMessage!,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     )
                   : providers.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         'Add a service provider to manage appointment availability.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     )
                   : SingleChildScrollView(
@@ -134,7 +134,7 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                           Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: AppColors.surface,
+                              color: context.appPalette.surface,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -156,7 +156,7 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                           Text(
                             context.l10n.selectDayForSlots,
                             style: TextStyle(
-                              color: AppColors.muted,
+                              color: context.appPalette.muted,
                               fontSize: 14,
                             ),
                           ),

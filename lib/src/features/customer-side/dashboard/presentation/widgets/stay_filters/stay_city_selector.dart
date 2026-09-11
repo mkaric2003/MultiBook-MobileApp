@@ -36,9 +36,9 @@ class StayCitySelector extends StatelessWidget {
         height: 54,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.appPalette.border),
         ),
         child: Row(
           children: [
@@ -47,15 +47,15 @@ class StayCitySelector extends StatelessWidget {
                 selectedCity ?? 'All cities',
                 style: TextStyle(
                   color: selectedCity == null
-                      ? AppColors.muted
-                      : AppColors.white,
+                      ? context.appPalette.muted
+                      : context.appPalette.foreground,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-            const Icon(
+            Icon(
               Icons.keyboard_arrow_down_rounded,
-              color: AppColors.muted,
+              color: context.appPalette.muted,
             ),
           ],
         ),

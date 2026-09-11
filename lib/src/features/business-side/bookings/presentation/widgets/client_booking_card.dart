@@ -18,7 +18,7 @@ class ClientBookingCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
-      color: const Color(0xFF172554),
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(18),
     ),
     child: Column(
@@ -32,7 +32,7 @@ class ClientBookingCard extends StatelessWidget {
                   ? null
                   : NetworkImage(booking.customerAvatarUrl!),
               child: (booking.customerAvatarUrl ?? '').isEmpty
-                  ? const Icon(Icons.person, color: AppColors.muted)
+                  ? Icon(Icons.person, color: context.appPalette.muted)
                   : null,
             ),
             const SizedBox(width: 14),
@@ -50,8 +50,8 @@ class ClientBookingCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     booking.roomType ?? 'Stay booking',
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 14,
                     ),
                   ),
@@ -68,7 +68,7 @@ class ClientBookingCard extends StatelessWidget {
             const SizedBox(width: 5),
             Text(
               '${DateFormat('MMM d, y').format(booking.checkIn)} – ${DateFormat('MMM d, y').format(booking.checkOut)}',
-              style: const TextStyle(color: AppColors.muted, fontSize: 14),
+              style: TextStyle(color: context.appPalette.muted, fontSize: 14),
             ),
           ],
         ),
@@ -83,7 +83,7 @@ class ClientBookingCard extends StatelessWidget {
             const SizedBox(width: 5),
             Text(
               '$_totalGuests ${_totalGuests == 1 ? 'guest' : 'guests'}',
-              style: const TextStyle(color: AppColors.muted, fontSize: 14),
+              style: TextStyle(color: context.appPalette.muted, fontSize: 14),
             ),
           ],
         ),

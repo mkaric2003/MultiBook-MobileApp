@@ -24,7 +24,7 @@ class ChatTypingIndicator extends HookWidget {
               height: 36,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: AppColors.surface,
+                color: context.appPalette.surface,
                 borderRadius: BorderRadius.circular(
                   16,
                 ).copyWith(bottomLeft: const Radius.circular(3)),
@@ -45,7 +45,7 @@ class ChatTypingIndicator extends HookWidget {
             const SizedBox(width: 8),
             Text(
               context.l10n.isTyping(name),
-              style: const TextStyle(color: AppColors.muted, fontSize: 12),
+              style: TextStyle(color: context.appPalette.muted, fontSize: 12),
             ),
           ],
         ),

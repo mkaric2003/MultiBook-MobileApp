@@ -17,7 +17,7 @@ class CustomerServiceSearchResultTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
@@ -29,10 +29,10 @@ class CustomerServiceSearchResultTile extends StatelessWidget {
                 height: 78,
                 width: 78,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => const SizedBox(
+                errorBuilder: (_, _, _) => SizedBox(
                   height: 78,
                   width: 78,
-                  child: ColoredBox(color: AppColors.surfaceHighlight),
+                  child: ColoredBox(color: context.appPalette.surfaceHighlight),
                 ),
               ),
             ),
@@ -55,7 +55,7 @@ class CustomerServiceSearchResultTile extends StatelessWidget {
                     service.location,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: AppColors.muted),
+                    style: TextStyle(color: context.appPalette.muted),
                   ),
                   if (service.price != null) ...[
                     const SizedBox(height: 6),

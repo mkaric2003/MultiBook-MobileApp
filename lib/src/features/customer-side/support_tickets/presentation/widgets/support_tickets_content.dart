@@ -21,7 +21,7 @@ class SupportTicketsContent extends StatelessWidget {
           child: Text(
             context.l10n.noSupportRequests,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.muted, fontSize: 15),
+            style: TextStyle(color: context.appPalette.muted, fontSize: 15),
           ),
         ),
       );

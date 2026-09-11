@@ -11,7 +11,7 @@ class BusinessReviewCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(14),
     ),
     child: Column(
@@ -21,13 +21,13 @@ class BusinessReviewCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 18,
-              backgroundColor: AppColors.surfaceHighlight,
+              backgroundColor: context.appPalette.surfaceHighlight,
               backgroundImage: review.customerAvatarUrl?.isNotEmpty == true
                   ? NetworkImage(review.customerAvatarUrl!)
                   : null,
               child: review.customerAvatarUrl?.isNotEmpty == true
                   ? null
-                  : const Icon(Icons.person, color: AppColors.muted),
+                  : Icon(Icons.person, color: context.appPalette.muted),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -60,7 +60,7 @@ class BusinessReviewCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             review.comment!,
-            style: const TextStyle(color: AppColors.muted, height: 1.4),
+            style: TextStyle(color: context.appPalette.muted, height: 1.4),
           ),
         ],
       ],

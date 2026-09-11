@@ -17,13 +17,15 @@ class CustomerBookingsTypeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: context.appPalette.surfaceHighlight),
+      ),
     ),
     child: Container(
       height: 52,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

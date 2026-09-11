@@ -19,8 +19,8 @@ class BookingConfirmationCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.border),
+        color: context.appPalette.surface,
+        border: Border.all(color: context.appPalette.border),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -34,10 +34,12 @@ class BookingConfirmationCard extends StatelessWidget {
                   width: 72,
                   height: 72,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const SizedBox(
+                  errorBuilder: (_, _, _) => SizedBox(
                     width: 72,
                     height: 72,
-                    child: ColoredBox(color: AppColors.surfaceHighlight),
+                    child: ColoredBox(
+                      color: context.appPalette.surfaceHighlight,
+                    ),
                   ),
                 ),
               ),
@@ -56,24 +58,33 @@ class BookingConfirmationCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       '⭐ ${stay.rating.toStringAsFixed(1)} (${context.l10n.reviews(stay.reviewCount)})',
-                      style: const TextStyle(color: AppColors.muted),
+                      style: TextStyle(color: context.appPalette.muted),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       '${stay.location} • 0.5 km from center',
-                      style: const TextStyle(color: AppColors.muted),
+                      style: TextStyle(color: context.appPalette.muted),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          const Divider(height: 32, color: AppColors.border),
-          _row('Check-in', '${format.format(booking.checkIn)} • 3:00 PM'),
-          const SizedBox(height: 18),
-          _row('Check-out', '${format.format(booking.checkOut)} • 11:00 AM'),
+          Divider(height: 32, color: context.appPalette.border),
+          _row(
+            context,
+            'Check-in',
+            '${format.format(booking.checkIn)} • 3:00 PM',
+          ),
           const SizedBox(height: 18),
           _row(
+            context,
+            'Check-out',
+            '${format.format(booking.checkOut)} • 11:00 AM',
+          ),
+          const SizedBox(height: 18),
+          _row(
+            context,
             'Guests',
             '${booking.adults} Adults • ${booking.children} Children',
           ),
@@ -82,10 +93,10 @@ class BookingConfirmationCard extends StatelessWidget {
     );
   }
 
-  Widget _row(String label, String value) => Row(
+  Widget _row(BuildContext context, String label, String value) => Row(
     children: [
       Expanded(
-        child: Text(label, style: const TextStyle(color: AppColors.muted)),
+        child: Text(label, style: TextStyle(color: context.appPalette.muted)),
       ),
       Text(value, style: const TextStyle(fontWeight: FontWeight.w800)),
     ],

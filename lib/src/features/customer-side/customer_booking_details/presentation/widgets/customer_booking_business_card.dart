@@ -9,7 +9,7 @@ class CustomerBookingBusinessCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(18),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(18),
     ),
     child: Row(
@@ -21,10 +21,10 @@ class CustomerBookingBusinessCard extends StatelessWidget {
             width: 82,
             height: 82,
             fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => const SizedBox(
+            errorBuilder: (_, _, _) => SizedBox(
               width: 82,
               height: 82,
-              child: ColoredBox(color: AppColors.surfaceHighlight),
+              child: ColoredBox(color: context.appPalette.surfaceHighlight),
             ),
           ),
         ),
@@ -43,17 +43,17 @@ class CustomerBookingBusinessCard extends StatelessWidget {
               const SizedBox(height: 7),
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.location_on,
                     size: 18,
-                    color: AppColors.muted,
+                    color: context.appPalette.muted,
                   ),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
                       booking.businessCity,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 15,
                       ),
                       overflow: TextOverflow.ellipsis,

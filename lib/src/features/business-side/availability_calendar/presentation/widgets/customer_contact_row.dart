@@ -16,7 +16,7 @@ class CustomerContactRow extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
@@ -27,7 +27,7 @@ class CustomerContactRow extends StatelessWidget {
           child: Text(
             value.isEmpty ? 'Not provided' : value,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
         ),
       ],

@@ -50,8 +50,8 @@ class UserTypeCheckerView extends StatelessWidget {
                     const SizedBox(height: 12),
                     Text(
                       context.l10n.userTypeDescription,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 16,
                         height: 1.5,
                       ),

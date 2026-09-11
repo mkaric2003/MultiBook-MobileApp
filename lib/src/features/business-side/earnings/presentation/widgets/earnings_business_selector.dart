@@ -42,7 +42,7 @@ class EarningsBusinessSelector extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 165),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.appPalette.border),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

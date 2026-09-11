@@ -22,9 +22,9 @@ class ServiceProviderAvailabilityCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: AppColors.surfaceHighlight),
+      border: Border.all(color: context.appPalette.surfaceHighlight),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,7 +47,7 @@ class ServiceProviderAvailabilityCard extends StatelessWidget {
             ),
             IconButton(
               onPressed: onRemove,
-              icon: const Icon(Icons.close, color: AppColors.muted),
+              icon: Icon(Icons.close, color: context.appPalette.muted),
             ),
           ],
         ),

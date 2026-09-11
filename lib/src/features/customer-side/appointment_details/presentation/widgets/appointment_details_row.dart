@@ -19,7 +19,7 @@ class AppointmentDetailsRow extends StatelessWidget {
     children: [
       SizedBox(
         width: 104,
-        child: Text(label, style: const TextStyle(color: AppColors.muted)),
+        child: Text(label, style: TextStyle(color: context.appPalette.muted)),
       ),
       const SizedBox(width: 12),
       Expanded(

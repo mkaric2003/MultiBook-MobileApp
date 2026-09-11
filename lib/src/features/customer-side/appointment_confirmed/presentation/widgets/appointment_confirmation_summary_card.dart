@@ -33,9 +33,9 @@ class AppointmentConfirmationSummaryCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,10 +49,12 @@ class AppointmentConfirmationSummaryCard extends StatelessWidget {
                   width: 74,
                   height: 74,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const SizedBox(
+                  errorBuilder: (_, _, _) => SizedBox(
                     width: 74,
                     height: 74,
-                    child: ColoredBox(color: AppColors.surfaceHighlight),
+                    child: ColoredBox(
+                      color: context.appPalette.surfaceHighlight,
+                    ),
                   ),
                 ),
               ),
@@ -75,7 +77,7 @@ class AppointmentConfirmationSummaryCard extends StatelessWidget {
                       review.offerings.map((item) => item.name).join(', '),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: AppColors.muted),
+                      style: TextStyle(color: context.appPalette.muted),
                     ),
                     const SizedBox(height: 6),
                     Text(

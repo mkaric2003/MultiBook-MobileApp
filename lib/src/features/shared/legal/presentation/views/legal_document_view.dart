@@ -1,4 +1,5 @@
 import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/shared/legal/domain/enums/legal_document_type.dart';
 import 'package:multibook/src/features/shared/legal/domain/enums/legal_document_audience.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
@@ -42,10 +43,10 @@ class LegalDocumentView extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(24, 24, 24, 40),
                 child: SelectableText(
                   content,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     height: 1.6,
-                    color: Color(0xFFD1D5DB),
+                    color: context.appPalette.foreground,
                   ),
                 ),
               ),

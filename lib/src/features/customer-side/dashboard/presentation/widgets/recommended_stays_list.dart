@@ -27,12 +27,12 @@ class RecommendedStaysList extends HookWidget {
     }
 
     if (stays.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 72,
         child: Center(
           child: Text(
             'No stays available yet.',
-            style: TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
         ),
       );

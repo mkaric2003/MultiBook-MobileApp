@@ -3,42 +3,47 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract final class AppTheme {
-  static final dark = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppColors.background,
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.primary,
-      onPrimary: AppColors.white,
-      secondary: AppColors.surfaceHighlight,
-      onSecondary: AppColors.white,
-      surface: AppColors.surface,
-      onSurface: AppColors.white,
-      outline: AppColors.border,
-      outlineVariant: AppColors.surfaceHighlight,
-    ),
-    textTheme: GoogleFonts.interTextTheme().apply(
-      bodyColor: AppColors.white,
-      displayColor: AppColors.white,
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.background,
-      foregroundColor: AppColors.white,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0,
-    ),
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: AppColors.surface,
-      hintStyle: const TextStyle(color: AppColors.muted),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.border),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.primary),
-      ),
-    ),
-  );
+  static final dark = _theme(Brightness.dark, AppPalette.dark);
+  static final light = _theme(Brightness.light, AppPalette.light);
+
+  static ThemeData _theme(Brightness brightness, AppPalette palette) =>
+      ThemeData(
+        useMaterial3: true,
+        brightness: brightness,
+        scaffoldBackgroundColor: palette.background,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          brightness: brightness,
+          primary: AppColors.primary,
+          onPrimary: AppColors.white,
+          surface: palette.surface,
+          onSurface: palette.foreground,
+          outline: palette.border,
+          outlineVariant: palette.surfaceHighlight,
+        ),
+        textTheme: GoogleFonts.interTextTheme().apply(
+          bodyColor: palette.foreground,
+          displayColor: palette.foreground,
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: palette.background,
+          foregroundColor: palette.foreground,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: palette.surface,
+          hintStyle: TextStyle(color: palette.muted),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide(color: palette.border),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: AppColors.primary),
+          ),
+        ),
+        extensions: [palette],
+      );
 }

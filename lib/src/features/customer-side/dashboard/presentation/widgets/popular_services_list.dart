@@ -44,12 +44,12 @@ class PopularServicesList extends HookWidget {
       );
     }
     if (services.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 72,
         child: Center(
           child: Text(
             'No services available yet.',
-            style: TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
         ),
       );

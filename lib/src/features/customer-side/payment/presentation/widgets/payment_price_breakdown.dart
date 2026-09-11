@@ -32,7 +32,7 @@ class PaymentPriceBreakdown extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -44,29 +44,36 @@ class PaymentPriceBreakdown extends StatelessWidget {
           ),
           const SizedBox(height: 22),
           _row(
+            context,
             'Room (${booking.nightCount} nights)',
             context.l10n.formatCurrency(room),
           ),
           if (extras > 0) ...[
             const SizedBox(height: 12),
-            _row('Extras', context.l10n.formatCurrency(extras)),
+            _row(context, 'Extras', context.l10n.formatCurrency(extras)),
           ],
           if (discount > 0) ...[
             const SizedBox(height: 12),
             _row(
+              context,
               context.l10n.promotion,
               '-${context.l10n.formatCurrency(discount)}',
               valueColor: AppColors.success,
             ),
           ],
           const SizedBox(height: 12),
-          _row('Cleaning fee', context.l10n.formatCurrency(cleaning)),
+          _row(context, 'Cleaning fee', context.l10n.formatCurrency(cleaning)),
           const SizedBox(height: 12),
-          _row('Service fee', context.l10n.formatCurrency(service)),
+          _row(context, 'Service fee', context.l10n.formatCurrency(service)),
           const SizedBox(height: 12),
-          _row('Taxes', context.l10n.formatCurrency(taxes)),
-          const Divider(height: 28, color: AppColors.border),
-          _row('Total', context.l10n.formatCurrency(total), bold: true),
+          _row(context, 'Taxes', context.l10n.formatCurrency(taxes)),
+          Divider(height: 28, color: context.appPalette.border),
+          _row(
+            context,
+            'Total',
+            context.l10n.formatCurrency(total),
+            bold: true,
+          ),
         ],
       ),
     );
@@ -94,6 +101,7 @@ class PaymentPriceBreakdown extends StatelessWidget {
     (sum, extra) => sum + extra.price * (extra.isPerNight ? nights : 1),
   );
   Widget _row(
+    BuildContext context,
     String label,
     String value, {
     bool bold = false,
@@ -104,7 +112,9 @@ class PaymentPriceBreakdown extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: bold ? Colors.white : AppColors.muted,
+            color: bold
+                ? context.appPalette.foreground
+                : context.appPalette.muted,
             fontSize: 16,
             fontWeight: bold ? FontWeight.w800 : FontWeight.w500,
           ),

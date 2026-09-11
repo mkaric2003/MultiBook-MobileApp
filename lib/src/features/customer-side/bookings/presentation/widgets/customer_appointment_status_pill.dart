@@ -12,7 +12,7 @@ class CustomerAppointmentStatusPill extends StatelessWidget {
     final normalized = status.toLowerCase();
     final color = switch (normalized) {
       'confirmed' => AppColors.success,
-      'completed' => AppColors.iconMuted,
+      'completed' => context.appPalette.iconMuted,
       'cancelled' => Colors.redAccent,
       'declined' => const Color(0xFFF59E0B),
       _ => AppColors.primary,

@@ -1,6 +1,7 @@
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/service_listing_card.dart';
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class OtherServicesGrid extends StatelessWidget {
   const OtherServicesGrid({
@@ -24,7 +25,7 @@ class OtherServicesGrid extends StatelessWidget {
             child: Text(
               emptyMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Color(0xFF9CA3AF)),
+              style: TextStyle(color: context.appPalette.muted),
             ),
           ),
         GridView.builder(

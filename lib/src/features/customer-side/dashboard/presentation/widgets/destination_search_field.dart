@@ -24,17 +24,17 @@ class DestinationSearchField extends StatelessWidget {
         height: 52,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFF101010),
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(13),
-          border: Border.all(color: AppColors.surfaceHighlight),
+          border: Border.all(color: context.appPalette.surfaceHighlight),
         ),
         child: Row(
           children: [
             Expanded(
               child: Text(
                 hintText,
-                style: const TextStyle(
-                  color: AppColors.muted,
+                style: TextStyle(
+                  color: context.appPalette.muted,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
@@ -47,7 +47,9 @@ class DestinationSearchField extends StatelessWidget {
                 constraints: const BoxConstraints(),
                 icon: Icon(
                   Icons.tune_rounded,
-                  color: hasActiveFilters ? AppColors.primary : AppColors.muted,
+                  color: hasActiveFilters
+                      ? AppColors.primary
+                      : context.appPalette.muted,
                   size: 22,
                 ),
               ),

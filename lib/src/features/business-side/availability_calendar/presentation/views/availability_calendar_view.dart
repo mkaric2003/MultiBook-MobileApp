@@ -50,11 +50,11 @@ class AvailabilityCalendarView extends HookWidget {
                   child: state.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : state.business == null
-                      ? const Center(
+                      ? Center(
                           child: Text(
                             'Select a business to view availability.',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: AppColors.muted),
+                            style: TextStyle(color: context.appPalette.muted),
                           ),
                         )
                       : state.business!.type == BusinessType.services
@@ -70,7 +70,7 @@ class AvailabilityCalendarView extends HookWidget {
                               Container(
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
-                                  color: AppColors.surface,
+                                  color: context.appPalette.surface,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Row(

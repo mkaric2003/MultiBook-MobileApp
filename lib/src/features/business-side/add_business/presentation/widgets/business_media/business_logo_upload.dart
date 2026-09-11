@@ -27,15 +27,15 @@ class BusinessLogoUpload extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.border),
-          color: AppColors.surface,
+          border: Border.all(color: context.appPalette.border),
+          color: context.appPalette.surface,
         ),
         child: PickedImagePreview(
           imagePath: imagePath,
           fit: BoxFit.cover,
           fallback: Icon(
             isService ? Icons.camera_alt : Icons.add,
-            color: AppColors.iconMuted,
+            color: context.appPalette.iconMuted,
             size: isService ? 25 : 31,
           ),
         ),
@@ -66,7 +66,7 @@ class BusinessLogoUpload extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 context.l10n.logoFormatHint,
-                style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 13),
               ),
             ],
           ),

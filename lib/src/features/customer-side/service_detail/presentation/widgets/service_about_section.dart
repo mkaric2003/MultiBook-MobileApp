@@ -26,8 +26,8 @@ class ServiceAboutSection extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             description,
-            style: const TextStyle(
-              color: AppColors.muted,
+            style: TextStyle(
+              color: context.appPalette.muted,
               fontSize: 16,
               height: 1.55,
             ),

@@ -20,8 +20,8 @@ class StayExtraPriceField extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.fromLTRB(14, 10, 10, 10),
     decoration: BoxDecoration(
-      color: AppColors.surface,
-      border: Border.all(color: AppColors.border),
+      color: context.appPalette.surface,
+      border: Border.all(color: context.appPalette.border),
       borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
@@ -41,7 +41,7 @@ class StayExtraPriceField extends StatelessWidget {
                     : extra.isPerNight
                     ? context.l10n.chargedPerNight
                     : context.l10n.oneTimeCharge,
-                style: const TextStyle(color: AppColors.muted, fontSize: 12),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 12),
               ),
             ],
           ),

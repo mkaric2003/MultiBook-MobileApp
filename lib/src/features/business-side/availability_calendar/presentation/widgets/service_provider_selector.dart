@@ -18,14 +18,14 @@ class ServiceProviderSelector extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(14),
     ),
     child: DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: selectedProviderId,
         isExpanded: true,
-        dropdownColor: AppColors.surface,
+        dropdownColor: context.appPalette.surface,
         icon: const Icon(Icons.keyboard_arrow_down_rounded),
         items: providers
             .map(

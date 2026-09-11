@@ -25,7 +25,7 @@ class DashboardBusinessHeader extends StatelessWidget {
           width: 44,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: AppColors.border,
+            color: context.appPalette.border,
             borderRadius: BorderRadius.circular(10),
           ),
           child: business.logoUrl == null
@@ -59,15 +59,15 @@ class DashboardBusinessHeader extends StatelessWidget {
                   children: [
                     Text(
                       context.l10n.switchBusiness,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 13,
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Icon(
+                    Icon(
                       Icons.keyboard_arrow_down,
-                      color: AppColors.muted,
+                      color: context.appPalette.muted,
                       size: 19,
                     ),
                   ],

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class BookingConfirmationHeader extends StatelessWidget {
   const BookingConfirmationHeader({super.key});
   @override
-  Widget build(BuildContext context) => const Column(
+  Widget build(BuildContext context) => Column(
     children: [
       CircleAvatar(
         radius: 49,
@@ -19,7 +20,7 @@ class BookingConfirmationHeader extends StatelessWidget {
       Text(
         'Your reservation has been successfully\nprocessed',
         textAlign: TextAlign.center,
-        style: TextStyle(color: Color(0xFF9CA3AF), fontSize: 16),
+        style: TextStyle(color: context.appPalette.muted, fontSize: 16),
       ),
     ],
   );

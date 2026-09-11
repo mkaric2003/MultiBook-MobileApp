@@ -18,24 +18,24 @@ class LabeledDivider extends StatelessWidget {
       padding: padding,
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Divider(
               height: 1,
               thickness: 1,
-              color: AppColors.surfaceHighlight,
+              color: context.appPalette.surfaceHighlight,
             ),
           ),
           const SizedBox(width: 12),
           Text(
             label ?? context.l10n.orContinueWith,
-            style: const TextStyle(color: AppColors.muted, fontSize: 16),
+            style: TextStyle(color: context.appPalette.muted, fontSize: 16),
           ),
           const SizedBox(width: 12),
-          const Expanded(
+          Expanded(
             child: Divider(
               height: 1,
               thickness: 1,
-              color: AppColors.surfaceHighlight,
+              color: context.appPalette.surfaceHighlight,
             ),
           ),
         ],

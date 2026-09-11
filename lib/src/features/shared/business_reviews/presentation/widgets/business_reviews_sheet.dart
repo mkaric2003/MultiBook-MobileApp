@@ -49,7 +49,7 @@ class BusinessReviewsSheet extends HookWidget {
                       width: 42,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppColors.border,
+                        color: context.appPalette.border,
                         borderRadius: BorderRadius.circular(99),
                       ),
                     ),

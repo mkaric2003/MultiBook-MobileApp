@@ -26,7 +26,7 @@ class SearchableCityPickerSheet extends HookWidget {
         !cities.any((city) => city.toLowerCase() == normalizedQuery);
 
     return Material(
-      color: AppColors.background,
+      color: context.appPalette.background,
       child: SafeArea(
         top: false,
         child: SizedBox(
@@ -36,9 +36,11 @@ class SearchableCityPickerSheet extends HookWidget {
               Container(
                 height: 64,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: AppColors.surfaceHighlight),
+                    bottom: BorderSide(
+                      color: context.appPalette.surfaceHighlight,
+                    ),
                   ),
                 ),
                 child: Row(
@@ -65,12 +67,12 @@ class SearchableCityPickerSheet extends HookWidget {
                   controller: controller,
                   autofocus: true,
                   onChanged: (value) => query.value = value,
-                  style: const TextStyle(color: AppColors.white),
+                  style: TextStyle(color: context.appPalette.foreground),
                   decoration: InputDecoration(
                     hintText: context.l10n.searchCities,
-                    prefixIcon: const Icon(
+                    prefixIcon: Icon(
                       Icons.search_rounded,
-                      color: AppColors.muted,
+                      color: context.appPalette.muted,
                     ),
                     suffixIcon: query.value.isEmpty
                         ? null
@@ -82,7 +84,7 @@ class SearchableCityPickerSheet extends HookWidget {
                             icon: const Icon(Icons.close_rounded),
                           ),
                     filled: true,
-                    fillColor: AppColors.surface,
+                    fillColor: context.appPalette.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
                       borderSide: BorderSide.none,
@@ -111,7 +113,7 @@ class SearchableCityPickerSheet extends HookWidget {
                         child: Center(
                           child: Text(
                             context.l10n.noCitiesFound,
-                            style: TextStyle(color: AppColors.muted),
+                            style: TextStyle(color: context.appPalette.muted),
                           ),
                         ),
                       ),

@@ -21,7 +21,9 @@ class CustomerBookingPriceRow extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: highlighted ? Colors.white : AppColors.muted,
+            color: highlighted
+                ? context.appPalette.foreground
+                : context.appPalette.muted,
             fontSize: 17,
             fontWeight: highlighted ? FontWeight.w800 : FontWeight.w500,
           ),
@@ -30,7 +32,9 @@ class CustomerBookingPriceRow extends StatelessWidget {
       Text(
         context.l10n.formatCurrency(value),
         style: TextStyle(
-            color: valueColor ?? (highlighted ? AppColors.primary : Colors.white),
+          color:
+              valueColor ??
+              (highlighted ? AppColors.primary : context.appPalette.foreground),
           fontSize: 17,
           fontWeight: FontWeight.w800,
         ),

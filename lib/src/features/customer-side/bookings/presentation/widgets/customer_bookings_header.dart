@@ -10,8 +10,10 @@ class CustomerBookingsHeader extends StatelessWidget {
     height: 86,
     padding: const EdgeInsets.symmetric(horizontal: 20),
     alignment: Alignment.centerLeft,
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: context.appPalette.surfaceHighlight),
+      ),
     ),
     child: Row(
       children: [

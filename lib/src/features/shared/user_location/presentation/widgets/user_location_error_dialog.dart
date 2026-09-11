@@ -17,10 +17,10 @@ class UserLocationErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.surface,
+      backgroundColor: context.appPalette.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Text(context.l10n.locationUnavailable),
-      content: Text(message, style: const TextStyle(color: AppColors.muted)),
+      content: Text(message, style: TextStyle(color: context.appPalette.muted)),
       actions: [
         if (canOpenSettings)
           TextButton(

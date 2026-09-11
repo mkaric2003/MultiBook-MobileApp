@@ -2209,4 +2209,13 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'Passwort erfolgreich geändert.';
+
+  @override
+  String get appearance => 'Darstellung';
+
+  @override
+  String get lightTheme => 'Helles Design';
+
+  @override
+  String get lightThemeDescription => 'Helle Farben in der App verwenden';
 }

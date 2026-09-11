@@ -2,6 +2,7 @@ import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/global_widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class SigninFormData {
   const SigninFormData({required this.email, required this.password});
@@ -44,8 +45,8 @@ class SigninForm extends HookWidget {
       return null;
     }, [emailController.text, passwordController.text]);
 
-    const labelStyle = TextStyle(
-      color: Colors.white,
+    final labelStyle = TextStyle(
+      color: context.appPalette.foreground,
       fontSize: 16,
       fontWeight: FontWeight.w500,
     );

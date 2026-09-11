@@ -50,7 +50,7 @@ class CustomerProfileView extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 48,
-                        backgroundColor: AppColors.surfaceHighlight,
+                        backgroundColor: context.appPalette.surfaceHighlight,
                         backgroundImage: (user?.profileImageUrl ?? '').isEmpty
                             ? null
                             : NetworkImage(user!.profileImageUrl!),
@@ -69,7 +69,7 @@ class CustomerProfileView extends StatelessWidget {
                       const SizedBox(height: 5),
                       Text(
                         user?.email ?? '',
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     ],
                   ),
@@ -127,6 +127,12 @@ class CustomerProfileView extends StatelessWidget {
                   icon: Icons.language,
                   label: context.l10n.languageAndCurrency,
                   onTap: () => context.push(AppRoutes.LANGUAGE_CURRENCY),
+                ),
+                const SizedBox(height: 10),
+                CustomerProfileMenuItem(
+                  icon: Icons.palette_outlined,
+                  label: context.l10n.appearance,
+                  onTap: () => context.push(AppRoutes.APPEARANCE),
                 ),
                 const SizedBox(height: 32),
                 Text(

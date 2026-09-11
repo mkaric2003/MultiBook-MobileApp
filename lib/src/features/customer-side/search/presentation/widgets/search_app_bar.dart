@@ -24,8 +24,8 @@ class SearchAppBar extends StatelessWidget {
         Container(
           width: 56,
           height: 56,
-          decoration: const BoxDecoration(
-            color: AppColors.surface,
+          decoration: BoxDecoration(
+            color: context.appPalette.surface,
             shape: BoxShape.circle,
           ),
           child: IconButton(
@@ -39,7 +39,7 @@ class SearchAppBar extends StatelessWidget {
             height: 64,
             padding: const EdgeInsets.only(left: 20),
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: context.appPalette.surface,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
@@ -53,7 +53,7 @@ class SearchAppBar extends StatelessWidget {
                     style: const TextStyle(fontSize: 17),
                     decoration: InputDecoration(
                       hintText: hintText,
-                      hintStyle: const TextStyle(color: AppColors.muted),
+                      hintStyle: TextStyle(color: context.appPalette.muted),
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
@@ -67,7 +67,7 @@ class SearchAppBar extends StatelessWidget {
                     controller.clear();
                     onChanged('');
                   },
-                  icon: const Icon(Icons.close, color: AppColors.muted),
+                  icon: Icon(Icons.close, color: context.appPalette.muted),
                 ),
               ],
             ),

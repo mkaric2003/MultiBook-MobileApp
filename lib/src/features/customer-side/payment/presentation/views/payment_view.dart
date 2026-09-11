@@ -94,7 +94,7 @@ class PaymentView extends HookWidget {
           }
         },
         child: Scaffold(
-          backgroundColor: AppColors.background,
+          backgroundColor: context.appPalette.background,
           body: SafeArea(
             child: Column(
               children: [
@@ -228,7 +228,9 @@ class PaymentView extends HookWidget {
                             Expanded(
                               child: Text(
                                 context.l10n.agreeToTermsAndPrivacy,
-                                style: const TextStyle(color: AppColors.muted),
+                                style: TextStyle(
+                                  color: context.appPalette.muted,
+                                ),
                               ),
                             ),
                           ],
@@ -240,9 +242,11 @@ class PaymentView extends HookWidget {
                 BlocBuilder<BookingPromotionCubit, BookingPromotionState>(
                   builder: (context, promotionState) => Container(
                     padding: const EdgeInsets.fromLTRB(22, 12, 22, 22),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       border: Border(
-                        top: BorderSide(color: AppColors.surfaceHighlight),
+                        top: BorderSide(
+                          color: context.appPalette.surfaceHighlight,
+                        ),
                       ),
                     ),
                     child: Column(
@@ -254,8 +258,8 @@ class PaymentView extends HookWidget {
                               !agreed.value
                                   ? context.l10n.acceptTermsToContinue
                                   : context.l10n.validCardDetailsRequired,
-                              style: const TextStyle(
-                                color: AppColors.muted,
+                              style: TextStyle(
+                                color: context.appPalette.muted,
                                 fontSize: 13,
                               ),
                             ),

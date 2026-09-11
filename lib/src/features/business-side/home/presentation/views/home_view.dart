@@ -1,5 +1,6 @@
 import 'package:multibook/app.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/business-side/bookings/presentation/views/bookings_view.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/views/dashboard_view.dart';
 import 'package:multibook/src/features/business-side/earnings/presentation/views/earnings_view.dart';
@@ -34,7 +35,7 @@ class HomeView extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: const Color(0xFF1A1A2E),
+            backgroundColor: context.appPalette.background,
             body: IndexedStack(
               index: state.currentTabIndex,
               children: [

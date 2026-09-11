@@ -49,7 +49,7 @@ class ExploreTrendingServicesList extends HookWidget {
         child: Center(
           child: Text(
             context.l10n.noServicesAvailableInCity,
-            style: const TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
         ),
       );

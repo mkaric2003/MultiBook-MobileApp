@@ -8,9 +8,9 @@ class SocialSigninButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.height = 60,
-    this.backgroundColor = AppColors.surface,
-    this.borderColor = AppColors.border,
-    this.textColor = Colors.white,
+    this.backgroundColor,
+    this.borderColor,
+    this.textColor,
     this.radius = 24,
     this.enabled = true,
   });
@@ -19,9 +19,9 @@ class SocialSigninButton extends StatelessWidget {
   final Widget icon;
   final VoidCallback? onPressed;
   final double height;
-  final Color backgroundColor;
-  final Color borderColor;
-  final Color textColor;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final Color? textColor;
   final double radius;
   final bool enabled;
 
@@ -35,14 +35,14 @@ class SocialSigninButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           backgroundColor: enabled
-              ? backgroundColor
-              : AppColors.surfaceHighlight,
-          disabledBackgroundColor: AppColors.surfaceHighlight,
+              ? backgroundColor ?? context.appPalette.surface
+              : context.appPalette.surfaceHighlight,
+          disabledBackgroundColor: context.appPalette.surfaceHighlight,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
-            side: BorderSide(color: borderColor),
+            side: BorderSide(color: borderColor ?? context.appPalette.border),
           ),
-          foregroundColor: textColor,
+          foregroundColor: textColor ?? context.appPalette.foreground,
           padding: const EdgeInsets.symmetric(horizontal: 16),
         ),
         child: Stack(
@@ -53,7 +53,10 @@ class SocialSigninButton extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 12),
                 child: IconTheme(
-                  data: const IconThemeData(size: 22, color: Colors.white),
+                  data: IconThemeData(
+                    size: 22,
+                    color: textColor ?? context.appPalette.foreground,
+                  ),
                   child: icon,
                 ),
               ),
@@ -61,7 +64,7 @@ class SocialSigninButton extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: textColor,
+                color: textColor ?? context.appPalette.foreground,
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),

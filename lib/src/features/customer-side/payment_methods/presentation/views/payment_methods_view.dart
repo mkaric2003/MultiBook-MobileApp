@@ -41,8 +41,8 @@ class PaymentMethodsView extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         context.l10n.savedPaymentMethodsDescription,
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 14,
                         ),
                       ),
@@ -52,15 +52,17 @@ class PaymentMethodsView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 48),
                           child: Column(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.credit_card_off_outlined,
                                 size: 46,
-                                color: AppColors.muted,
+                                color: context.appPalette.muted,
                               ),
                               const SizedBox(height: 12),
                               Text(
                                 context.l10n.noSavedPaymentMethods,
-                                style: const TextStyle(color: AppColors.muted),
+                                style: TextStyle(
+                                  color: context.appPalette.muted,
+                                ),
                               ),
                             ],
                           ),

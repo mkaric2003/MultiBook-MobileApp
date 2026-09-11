@@ -21,22 +21,22 @@ class ServiceTimePickerButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.surfaceHighlight),
+          border: Border.all(color: context.appPalette.surfaceHighlight),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: const TextStyle(color: AppColors.muted, fontSize: 12),
+              style: TextStyle(color: context.appPalette.muted, fontSize: 12),
             ),
             const SizedBox(height: 4),
             Text(
               time.format(context),
-              style: const TextStyle(
-                color: AppColors.white,
+              style: TextStyle(
+                color: context.appPalette.foreground,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),

@@ -22,7 +22,7 @@ class PromotionDatePickerSheet extends HookWidget {
       initialDate.isBefore(minimumDate) ? minimumDate : initialDate,
     );
     return Material(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       child: SafeArea(
         top: false,
         bottom: false,
@@ -34,8 +34,10 @@ class PromotionDatePickerSheet extends HookWidget {
               Container(
                 height: 56,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: AppColors.border)),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: context.appPalette.border),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,8 +62,8 @@ class PromotionDatePickerSheet extends HookWidget {
               ),
               Expanded(
                 child: CupertinoTheme(
-                  data: const CupertinoThemeData(
-                    brightness: Brightness.dark,
+                  data: CupertinoThemeData(
+                    brightness: Theme.of(context).brightness,
                     primaryColor: AppColors.primary,
                     textTheme: CupertinoTextThemeData(
                       dateTimePickerTextStyle: TextStyle(fontSize: 23),
@@ -72,7 +74,7 @@ class PromotionDatePickerSheet extends HookWidget {
                     initialDateTime: selectedDate.value,
                     minimumDate: minimumDate,
                     maximumDate: DateTime.now().add(const Duration(days: 730)),
-                    backgroundColor: AppColors.surface,
+                    backgroundColor: context.appPalette.surface,
                     onDateTimeChanged: (date) => selectedDate.value = date,
                   ),
                 ),

@@ -53,7 +53,7 @@ class CustomerBookingActions extends StatelessWidget {
       if (_isPast) ...[
         CustomButton(
           buttonName: context.l10n.bookAgain,
-          color: AppColors.surfaceHighlight,
+          color: context.appPalette.surfaceHighlight,
           onPressed: onBookAgain,
         ),
       ],

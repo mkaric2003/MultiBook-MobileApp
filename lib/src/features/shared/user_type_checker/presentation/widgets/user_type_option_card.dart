@@ -26,10 +26,10 @@ class UserTypeOptionCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.border,
+            color: isSelected ? AppColors.primary : context.appPalette.border,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -41,7 +41,7 @@ class UserTypeOptionCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? AppColors.primary
-                    : AppColors.surfaceHighlight,
+                    : context.appPalette.surfaceHighlight,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(icon, color: AppColors.white, size: 28),
@@ -61,8 +61,8 @@ class UserTypeOptionCard extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     description,
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 14,
                       height: 1.4,
                     ),
@@ -72,7 +72,9 @@ class UserTypeOptionCard extends StatelessWidget {
             ),
             Icon(
               isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
-              color: isSelected ? AppColors.primary : AppColors.iconMuted,
+              color: isSelected
+                  ? AppColors.primary
+                  : context.appPalette.iconMuted,
             ),
           ],
         ),

@@ -15,8 +15,10 @@ class StayLocationSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(22),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.surfaceHighlight)),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: context.appPalette.surfaceHighlight),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,13 +38,13 @@ class StayLocationSection extends StatelessWidget {
             business.location.address.isEmpty
                 ? context.l10n.locationOnRequest
                 : business.location.address,
-            style: const TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
           const SizedBox(height: 14),
           CustomButton(
             buttonName: context.l10n.openInMaps,
             color: Colors.transparent,
-            borderColor: AppColors.border,
+            borderColor: context.appPalette.border,
             onPressed: () => _openInGoogleMaps(context),
           ),
         ],

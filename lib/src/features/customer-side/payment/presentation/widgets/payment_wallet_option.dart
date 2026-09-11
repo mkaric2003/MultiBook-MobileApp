@@ -6,16 +6,16 @@ class PaymentWalletOption extends StatelessWidget {
     super.key,
     required this.label,
     required this.icon,
-    this.backgroundColor = AppColors.surface,
-    this.foregroundColor = Colors.white,
+    this.backgroundColor,
+    this.foregroundColor,
     this.borderColor,
     this.onTap,
     this.isSelected = false,
   });
   final String label;
   final Widget icon;
-  final Color backgroundColor;
-  final Color foregroundColor;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
   final Color? borderColor;
   final VoidCallback? onTap;
   final bool isSelected;
@@ -27,7 +27,7 @@ class PaymentWalletOption extends StatelessWidget {
       height: 72,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: backgroundColor ?? context.appPalette.surface,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: isSelected
@@ -44,7 +44,7 @@ class PaymentWalletOption extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: foregroundColor,
+              color: foregroundColor ?? context.appPalette.foreground,
               fontSize: 19,
               fontWeight: FontWeight.w800,
             ),

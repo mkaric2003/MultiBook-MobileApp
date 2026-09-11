@@ -23,10 +23,12 @@ class AppointmentServiceOptionCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.surfaceHighlight,
+            color: isSelected
+                ? AppColors.primary
+                : context.appPalette.surfaceHighlight,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -46,7 +48,7 @@ class AppointmentServiceOptionCard extends StatelessWidget {
                   const SizedBox(height: 7),
                   Text(
                     context.l10n.serviceDuration(offering.durationMinutes),
-                    style: const TextStyle(color: AppColors.muted),
+                    style: TextStyle(color: context.appPalette.muted),
                   ),
                   const SizedBox(height: 7),
                   Text(
@@ -62,7 +64,9 @@ class AppointmentServiceOptionCard extends StatelessWidget {
             ),
             Icon(
               isSelected ? Icons.check_box : Icons.check_box_outline_blank,
-              color: isSelected ? AppColors.primary : AppColors.white,
+              color: isSelected
+                  ? AppColors.primary
+                  : context.appPalette.foreground,
               size: 24,
             ),
           ],

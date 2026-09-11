@@ -713,4 +713,7 @@
   ,"passwordsDoNotMatch": "Lozinke se ne podudaraju."
   ,"passwordMinimumLength": "Koristite najmanje 6 znakova."
   ,"passwordChangedSuccessfully": "Lozinka je uspješno promijenjena."
+  ,"appearance": "Izgled"
+  ,"lightTheme": "Svijetla tema"
+  ,"lightThemeDescription": "Koristi svijetle boje u aplikaciji"
 }

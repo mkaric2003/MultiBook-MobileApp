@@ -22,8 +22,10 @@ class ExploreAppBar extends StatelessWidget {
     height: 86,
     padding: const EdgeInsets.symmetric(horizontal: 20),
     alignment: Alignment.centerLeft,
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: context.appPalette.surfaceHighlight),
+      ),
     ),
     child: Row(
       children: [
@@ -60,16 +62,16 @@ class ExploreAppBar extends StatelessWidget {
                       : context.l10n.allCities,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: AppColors.muted,
+                  style: TextStyle(
+                    color: context.appPalette.muted,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-              const Icon(
+              Icon(
                 Icons.keyboard_arrow_down_rounded,
-                color: AppColors.muted,
+                color: context.appPalette.muted,
                 size: 18,
               ),
             ],

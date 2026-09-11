@@ -9,7 +9,7 @@ class BookingDateValue extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(13),
     ),
     child: Column(
@@ -17,7 +17,7 @@ class BookingDateValue extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(color: AppColors.muted, fontSize: 13),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 13),
         ),
         const SizedBox(height: 7),
         Text(

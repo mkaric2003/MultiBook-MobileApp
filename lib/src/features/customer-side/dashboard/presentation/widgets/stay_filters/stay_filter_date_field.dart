@@ -23,14 +23,14 @@ class StayFilterDateField extends StatelessWidget {
           height: 82,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.appPalette.surface,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: context.appPalette.border),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: const TextStyle(color: AppColors.muted)),
+              Text(label, style: TextStyle(color: context.appPalette.muted)),
               const SizedBox(height: 7),
               Text(
                 date == null

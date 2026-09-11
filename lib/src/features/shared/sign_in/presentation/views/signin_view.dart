@@ -57,7 +57,7 @@ class SigninView extends HookWidget {
                       style: GoogleFonts.inter(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: context.appPalette.foreground,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -66,7 +66,7 @@ class SigninView extends HookWidget {
                       style: GoogleFonts.inter(
                         fontSize: 17,
                         height: 1.5,
-                        color: AppColors.muted,
+                        color: context.appPalette.muted,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -138,7 +138,7 @@ class SigninView extends HookWidget {
                         Text(
                           context.l10n.dontHaveAccount,
                           style: TextStyle(
-                            color: AppColors.muted,
+                            color: context.appPalette.muted,
                             fontSize: 18,
                           ),
                         ),

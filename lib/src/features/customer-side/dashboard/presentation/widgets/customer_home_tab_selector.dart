@@ -20,7 +20,7 @@ class CustomerHomeTabSelector extends StatelessWidget {
       height: 48,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

@@ -23,7 +23,10 @@ class ClientBookingStatusPill extends StatelessWidget {
         context.l10n.cancelled,
         const Color(0xFFFB7185),
       ),
-      BookingStatus.completed => (context.l10n.completed, AppColors.muted),
+      BookingStatus.completed => (
+        context.l10n.completed,
+        context.appPalette.muted,
+      ),
       BookingStatus.noShow => (context.l10n.noShow, const Color(0xFFFB4B4B)),
     };
 

@@ -18,7 +18,9 @@ class ReviewPriceRow extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: bold ? Colors.white : AppColors.muted,
+            color: bold
+                ? context.appPalette.foreground
+                : context.appPalette.muted,
             fontSize: 16,
             fontWeight: bold ? FontWeight.w800 : FontWeight.w500,
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class DashboardEarningsLegendItem extends StatelessWidget {
   const DashboardEarningsLegendItem({
@@ -22,8 +23,8 @@ class DashboardEarningsLegendItem extends StatelessWidget {
       const SizedBox(width: 5),
       Text(
         label,
-        style: const TextStyle(
-          color: Color(0xFF9CA3AF),
+        style: TextStyle(
+          color: context.appPalette.muted,
           fontSize: 11,
           fontWeight: FontWeight.w600,
         ),

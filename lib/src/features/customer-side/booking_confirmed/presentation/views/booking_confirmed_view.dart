@@ -16,7 +16,7 @@ class BookingConfirmedView extends StatelessWidget {
     final booking = arguments.payment.review.bookingState;
     final total = arguments.booking.total;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appPalette.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(22, 28, 22, 5),
@@ -47,7 +47,7 @@ class BookingConfirmedView extends StatelessWidget {
                           color: AppColors.primary.withValues(alpha: .18),
                           borderRadius: BorderRadius.circular(18),
                         ),
-                        child: const Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -60,12 +60,12 @@ class BookingConfirmedView extends StatelessWidget {
                             SizedBox(height: 14),
                             Text(
                               '✉  Confirmation email sent\nCheck your inbox for details',
-                              style: TextStyle(color: AppColors.muted),
+                              style: TextStyle(color: context.appPalette.muted),
                             ),
                             SizedBox(height: 12),
                             Text(
                               '▣  Added to calendar\nReminder set for check-in day',
-                              style: TextStyle(color: AppColors.muted),
+                              style: TextStyle(color: context.appPalette.muted),
                             ),
                           ],
                         ),
@@ -78,7 +78,7 @@ class BookingConfirmedView extends StatelessWidget {
 
               CustomButton(
                 buttonName: context.l10n.backToHome,
-                color: AppColors.surfaceHighlight,
+                color: context.appPalette.surfaceHighlight,
                 onPressed: () async => context.go('/customer-home'),
               ),
             ],

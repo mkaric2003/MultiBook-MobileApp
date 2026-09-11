@@ -64,7 +64,7 @@ class ServiceOfferingsSection extends HookWidget {
         const SizedBox(height: 8),
         Text(
           context.l10n.addEveryBookableService,
-          style: TextStyle(color: AppColors.muted, fontSize: 13),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 13),
         ),
         const SizedBox(height: 14),
         FormFieldLabel(context.l10n.serviceTypeRequired),
@@ -124,7 +124,7 @@ class ServiceOfferingsSection extends HookWidget {
         const SizedBox(height: 12),
         CustomButton(
           buttonName: context.l10n.addService,
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           textColor: AppColors.primary,
           borderColor: AppColors.primary,
           onPressed: canAdd ? addOffering : null,
@@ -138,9 +138,11 @@ class ServiceOfferingsSection extends HookWidget {
               child: Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.appPalette.surface,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.surfaceHighlight),
+                  border: Border.all(
+                    color: context.appPalette.surfaceHighlight,
+                  ),
                 ),
                 child: Row(
                   children: [
@@ -152,8 +154,8 @@ class ServiceOfferingsSection extends HookWidget {
                         children: [
                           Text(
                             entry.$2.name,
-                            style: const TextStyle(
-                              color: AppColors.white,
+                            style: TextStyle(
+                              color: context.appPalette.foreground,
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                             ),
@@ -161,8 +163,8 @@ class ServiceOfferingsSection extends HookWidget {
                           const SizedBox(height: 3),
                           Text(
                             '${context.l10n.serviceDuration(entry.$2.durationMinutes)} · ${context.l10n.formatCurrency(entry.$2.price)}',
-                            style: const TextStyle(
-                              color: AppColors.muted,
+                            style: TextStyle(
+                              color: context.appPalette.muted,
                               fontSize: 13,
                             ),
                           ),
@@ -171,7 +173,7 @@ class ServiceOfferingsSection extends HookWidget {
                     ),
                     IconButton(
                       onPressed: () => onOfferingRemoved(entry.$2.id),
-                      icon: const Icon(Icons.close, color: AppColors.muted),
+                      icon: Icon(Icons.close, color: context.appPalette.muted),
                     ),
                   ],
                 ),

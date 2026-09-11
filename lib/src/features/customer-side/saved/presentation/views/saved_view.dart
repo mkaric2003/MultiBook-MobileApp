@@ -21,9 +21,11 @@ class SavedView extends StatelessWidget {
               height: 86,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               alignment: Alignment.centerLeft,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: AppColors.surfaceHighlight),
+                  bottom: BorderSide(
+                    color: context.appPalette.surfaceHighlight,
+                  ),
                 ),
               ),
               child: Text(
@@ -48,7 +50,7 @@ class SavedView extends StatelessWidget {
                   ? Center(
                       child: Text(
                         context.l10n.noSavedStaysYet,
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     )
                   : ListView.separated(

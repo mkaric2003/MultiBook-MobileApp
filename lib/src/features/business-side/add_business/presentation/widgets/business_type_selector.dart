@@ -19,7 +19,7 @@ class BusinessTypeSelector extends StatelessWidget {
       height: 54,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -67,7 +67,7 @@ class _BusinessTypeOption extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppColors.white : AppColors.muted,
+              color: isSelected ? AppColors.white : context.appPalette.muted,
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),

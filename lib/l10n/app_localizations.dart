@@ -4227,6 +4227,24 @@ abstract class AppLocalizations {
   /// In bs, this message translates to:
   /// **'Lozinka je uspješno promijenjena.'**
   String get passwordChangedSuccessfully;
+
+  /// No description provided for @appearance.
+  ///
+  /// In bs, this message translates to:
+  /// **'Izgled'**
+  String get appearance;
+
+  /// No description provided for @lightTheme.
+  ///
+  /// In bs, this message translates to:
+  /// **'Svijetla tema'**
+  String get lightTheme;
+
+  /// No description provided for @lightThemeDescription.
+  ///
+  /// In bs, this message translates to:
+  /// **'Koristi svijetle boje u aplikaciji'**
+  String get lightThemeDescription;
 }
 
 class _AppLocalizationsDelegate

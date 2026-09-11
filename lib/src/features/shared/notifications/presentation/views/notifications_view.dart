@@ -19,7 +19,7 @@ class NotificationsView extends StatelessWidget {
   Widget build(BuildContext context) => BlocProvider(
     create: (_) => getIt<NotificationsCubit>()..load(),
     child: Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appPalette.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -37,7 +37,7 @@ class NotificationsView extends StatelessWidget {
                     return Center(
                       child: Text(
                         context.l10n.noNotificationsYet,
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     );
                   }

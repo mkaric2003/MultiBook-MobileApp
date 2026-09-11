@@ -40,7 +40,7 @@ class StayDetailHero extends HookWidget {
               galleryImages[index],
               fit: BoxFit.cover,
               errorBuilder: (_, _, _) =>
-                  const ColoredBox(color: AppColors.surfaceHighlight),
+                  ColoredBox(color: context.appPalette.surfaceHighlight),
             ),
           ),
           const IgnorePointer(

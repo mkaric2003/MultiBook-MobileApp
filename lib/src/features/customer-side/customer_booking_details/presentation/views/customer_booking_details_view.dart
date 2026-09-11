@@ -28,7 +28,7 @@ class CustomerBookingDetailsView extends StatelessWidget {
     child:
         BlocBuilder<CustomerBookingDetailsCubit, CustomerBookingDetailsState>(
           builder: (context, state) => Scaffold(
-            backgroundColor: AppColors.background,
+            backgroundColor: context.appPalette.background,
             body: SafeArea(
               child: Column(
                 children: [
@@ -73,7 +73,8 @@ class CustomerBookingDetailsView extends StatelessWidget {
                                   await showModalBottomSheet<bool>(
                                     context: context,
                                     isScrollControlled: true,
-                                    backgroundColor: AppColors.background,
+                                    backgroundColor:
+                                        context.appPalette.background,
                                     shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(24),

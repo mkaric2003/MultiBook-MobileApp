@@ -2196,4 +2196,13 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'Lozinka je uspješno promijenjena.';
+
+  @override
+  String get appearance => 'Izgled';
+
+  @override
+  String get lightTheme => 'Svijetla tema';
+
+  @override
+  String get lightThemeDescription => 'Koristi svijetle boje u aplikaciji';
 }

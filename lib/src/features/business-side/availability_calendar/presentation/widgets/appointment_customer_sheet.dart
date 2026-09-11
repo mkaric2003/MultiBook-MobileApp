@@ -27,7 +27,7 @@ class AppointmentCustomerSheet extends StatelessWidget {
                 height: 4,
                 width: 42,
                 decoration: BoxDecoration(
-                  color: AppColors.muted,
+                  color: context.appPalette.muted,
                   borderRadius: BorderRadius.circular(99),
                 ),
               ),

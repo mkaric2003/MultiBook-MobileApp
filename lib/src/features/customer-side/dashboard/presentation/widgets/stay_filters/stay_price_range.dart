@@ -22,7 +22,7 @@ class StayPriceRange extends StatelessWidget {
           max: 500,
           divisions: 45,
           activeColor: AppColors.primary,
-          inactiveColor: AppColors.surface,
+          inactiveColor: context.appPalette.surface,
           labels: null,
           onChanged: onChanged,
         ),

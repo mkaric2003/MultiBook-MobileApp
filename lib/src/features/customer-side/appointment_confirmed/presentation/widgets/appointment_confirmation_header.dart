@@ -5,7 +5,7 @@ class AppointmentConfirmationHeader extends StatelessWidget {
   const AppointmentConfirmationHeader({super.key});
 
   @override
-  Widget build(BuildContext context) => const Column(
+  Widget build(BuildContext context) => Column(
     children: [
       CircleAvatar(
         radius: 48,
@@ -22,7 +22,7 @@ class AppointmentConfirmationHeader extends StatelessWidget {
       Text(
         'Your appointment has been successfully confirmed',
         textAlign: TextAlign.center,
-        style: TextStyle(color: AppColors.muted, fontSize: 16),
+        style: TextStyle(color: context.appPalette.muted, fontSize: 16),
       ),
     ],
   );

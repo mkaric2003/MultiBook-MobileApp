@@ -1,6 +1,7 @@
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stay_listing_card.dart';
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class OtherStaysGrid extends StatelessWidget {
   const OtherStaysGrid({
@@ -24,7 +25,7 @@ class OtherStaysGrid extends StatelessWidget {
             child: Text(
               emptyMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Color(0xFF9CA3AF)),
+              style: TextStyle(color: context.appPalette.muted),
             ),
           ),
         GridView.builder(

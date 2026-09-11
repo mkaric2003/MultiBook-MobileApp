@@ -18,8 +18,8 @@ class BookingConfirmationDetails extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(18),
     decoration: BoxDecoration(
-      color: AppColors.surface,
-      border: Border.all(color: AppColors.border),
+      color: context.appPalette.surface,
+      border: Border.all(color: context.appPalette.border),
       borderRadius: BorderRadius.circular(18),
     ),
     child: Column(
@@ -33,7 +33,7 @@ class BookingConfirmationDetails extends StatelessWidget {
           const SizedBox(height: 18),
           Text(
             context.l10n.promotion,
-            style: const TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
           const SizedBox(height: 5),
           Text(
@@ -48,14 +48,14 @@ class BookingConfirmationDetails extends StatelessWidget {
         const SizedBox(height: 18),
         Text(
           context.l10n.confirmationCode,
-          style: TextStyle(color: AppColors.muted),
+          style: TextStyle(color: context.appPalette.muted),
         ),
         const SizedBox(height: 8),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: AppColors.surfaceHighlight,
+            color: context.appPalette.surfaceHighlight,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -77,7 +77,7 @@ class BookingConfirmationDetails extends StatelessWidget {
         const SizedBox(height: 18),
         Text(
           context.l10n.totalPaid,
-          style: const TextStyle(color: AppColors.muted),
+          style: TextStyle(color: context.appPalette.muted),
         ),
         const SizedBox(height: 5),
         Row(
@@ -85,10 +85,10 @@ class BookingConfirmationDetails extends StatelessWidget {
             if (discountAmount > 0) ...[
               Text(
                 context.l10n.formatCurrency(originalTotal),
-                style: const TextStyle(
-                  color: AppColors.muted,
+                style: TextStyle(
+                  color: context.appPalette.muted,
                   decoration: TextDecoration.lineThrough,
-                  decorationColor: AppColors.muted,
+                  decorationColor: context.appPalette.muted,
                 ),
               ),
               const SizedBox(width: 8),
