@@ -94,10 +94,8 @@ class HomeView extends HookWidget {
                 PersistentTabConfig(
                   screen: const EarningsView(),
                   item: ItemConfig(
-                    icon: const Icon(Icons.account_balance_wallet_rounded),
-                    inactiveIcon: const Icon(
-                      Icons.account_balance_wallet_outlined,
-                    ),
+                    icon: const Icon(Icons.paid_outlined),
+                    inactiveIcon: const Icon(Icons.paid_outlined),
                     title: context.l10n.earnings,
                     activeForegroundColor: activeColor,
                     inactiveForegroundColor: inactiveColor,
@@ -127,7 +125,7 @@ class HomeView extends HookWidget {
                   context.read<HomeBloc>().add(UpdateTabIndex(index));
                 }
               },
-              navBarBuilder: (navBarConfig) => InstagramBottomNavigation(
+              navBarBuilder: (navBarConfig) => CustomBottomNavigation(
                 navBarConfig: navBarConfig,
                 isCompact: isNavigationCompact.value,
               ),

@@ -41,7 +41,11 @@ class ChatMessageBubble extends StatelessWidget {
             children: [
               Text(
                 message.text,
-                style: const TextStyle(fontSize: 15, height: 1.3),
+                style: TextStyle(
+                  color: isMine ? AppColors.white : null,
+                  fontSize: 15,
+                  height: 1.3,
+                ),
               ),
               const SizedBox(height: 4),
               Text(

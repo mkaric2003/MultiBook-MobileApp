@@ -121,7 +121,7 @@ class CustomerHomeView extends HookWidget {
                   );
                 }
               },
-              navBarBuilder: (navBarConfig) => InstagramBottomNavigation(
+              navBarBuilder: (navBarConfig) => CustomBottomNavigation(
                 navBarConfig: navBarConfig,
                 isCompact: isNavigationCompact.value,
               ),
