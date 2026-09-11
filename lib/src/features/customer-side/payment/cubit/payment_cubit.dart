@@ -44,6 +44,9 @@ class PaymentCubit extends Cubit<PaymentState> {
           customerName: customerName,
           customerEmail: customerEmail,
           paymentMethod: paymentMethod,
+          promoCode: promoCode?.trim().isEmpty == true
+              ? null
+              : promoCode?.trim(),
         ),
       );
       if (bookingResult is FailureResult) {

@@ -72,6 +72,12 @@ class CreateBookingRequestMapper extends ClassMapperBase<CreateBookingRequest> {
     'paymentMethod',
     _$paymentMethod,
   );
+  static String? _$promoCode(CreateBookingRequest v) => v.promoCode;
+  static const Field<CreateBookingRequest, String> _f$promoCode = Field(
+    'promoCode',
+    _$promoCode,
+    opt: true,
+  );
 
   @override
   final MappableFields<CreateBookingRequest> fields = const {
@@ -85,6 +91,7 @@ class CreateBookingRequestMapper extends ClassMapperBase<CreateBookingRequest> {
     #customerName: _f$customerName,
     #customerEmail: _f$customerEmail,
     #paymentMethod: _f$paymentMethod,
+    #promoCode: _f$promoCode,
   };
 
   static CreateBookingRequest _instantiate(DecodingData data) {
@@ -99,6 +106,7 @@ class CreateBookingRequestMapper extends ClassMapperBase<CreateBookingRequest> {
       customerName: data.dec(_f$customerName),
       customerEmail: data.dec(_f$customerEmail),
       paymentMethod: data.dec(_f$paymentMethod),
+      promoCode: data.dec(_f$promoCode),
     );
   }
 
@@ -189,6 +197,7 @@ abstract class CreateBookingRequestCopyWith<
     String? customerName,
     String? customerEmail,
     String? paymentMethod,
+    String? promoCode,
   });
   CreateBookingRequestCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -226,6 +235,7 @@ class _CreateBookingRequestCopyWithImpl<$R, $Out>
     String? customerName,
     String? customerEmail,
     String? paymentMethod,
+    Object? promoCode = $none,
   }) => $apply(
     FieldCopyWithData({
       if (stayUnitTypeId != $none) #stayUnitTypeId: stayUnitTypeId,
@@ -238,6 +248,7 @@ class _CreateBookingRequestCopyWithImpl<$R, $Out>
       if (customerName != null) #customerName: customerName,
       if (customerEmail != null) #customerEmail: customerEmail,
       if (paymentMethod != null) #paymentMethod: paymentMethod,
+      if (promoCode != $none) #promoCode: promoCode,
     }),
   );
   @override
@@ -252,6 +263,7 @@ class _CreateBookingRequestCopyWithImpl<$R, $Out>
     customerName: data.get(#customerName, or: $value.customerName),
     customerEmail: data.get(#customerEmail, or: $value.customerEmail),
     paymentMethod: data.get(#paymentMethod, or: $value.paymentMethod),
+    promoCode: data.get(#promoCode, or: $value.promoCode),
   );
 
   @override

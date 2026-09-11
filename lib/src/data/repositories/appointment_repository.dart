@@ -13,7 +13,8 @@ import 'package:multibook/src/data/repositories/business_repository.dart';
 import 'package:multibook/src/data/repositories/service_availability_repository.dart';
 import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_arguments.dart';
 import 'package:multibook/src/features/business-side/promotions/domain/promotion_price_calculator.dart';
-import 'package:multibook/src/data/repositories/promotion_repository.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/domain/use_cases/promotions/get_active_promotion_use_case.dart';
 import 'package:multibook/src/features/customer-side/appointment_payment/domain/models/appointment_payment_request.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
@@ -31,7 +32,7 @@ class AppointmentRepository {
     this._firestore,
     this._businessRepository,
     this._serviceAvailabilityRepository,
-    this._promotionRepository,
+    this._getActivePromotion,
   );
 
   static const _collection = 'appointments';
@@ -41,7 +42,7 @@ class AppointmentRepository {
   final FirestoreDataSource _firestore;
   final BusinessRepository _businessRepository;
   final ServiceAvailabilityRepository _serviceAvailabilityRepository;
-  final PromotionRepository _promotionRepository;
+  final GetActivePromotionUseCase _getActivePromotion;
 
   Future<AppointmentModel> createAppointment({
     required AppointmentPaymentArguments arguments,
@@ -103,10 +104,14 @@ class AppointmentRepository {
     final dateKey = _dateKey(arguments.review.date);
 
     final id = _firestore.createDocumentId(collection: _collection);
-    final promotion = await _promotionRepository.getActiveForBusiness(
+    final promotionResult = await _getActivePromotion.execute(
       business.id,
       promoCode: promoCode,
     );
+    final promotion = switch (promotionResult) {
+      Success(value: final value) => value,
+      FailureResult() => null,
+    };
     if (promoCode?.trim().isNotEmpty == true && promotion == null) {
       throw const AppointmentException('The promo code is invalid or expired.');
     }

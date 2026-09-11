@@ -68,6 +68,13 @@ class CreateAppointmentRequestMapper
     _$paymentMethod,
     key: r'payment_method',
   );
+  static String? _$promoCode(CreateAppointmentRequest v) => v.promoCode;
+  static const Field<CreateAppointmentRequest, String> _f$promoCode = Field(
+    'promoCode',
+    _$promoCode,
+    key: r'promo_code',
+    opt: true,
+  );
 
   @override
   final MappableFields<CreateAppointmentRequest> fields = const {
@@ -79,6 +86,7 @@ class CreateAppointmentRequestMapper
     #customerEmail: _f$customerEmail,
     #customerPhone: _f$customerPhone,
     #paymentMethod: _f$paymentMethod,
+    #promoCode: _f$promoCode,
   };
 
   static CreateAppointmentRequest _instantiate(DecodingData data) {
@@ -91,6 +99,7 @@ class CreateAppointmentRequestMapper
       customerEmail: data.dec(_f$customerEmail),
       customerPhone: data.dec(_f$customerPhone),
       paymentMethod: data.dec(_f$paymentMethod),
+      promoCode: data.dec(_f$promoCode),
     );
   }
 
@@ -174,6 +183,7 @@ abstract class CreateAppointmentRequestCopyWith<
     String? customerEmail,
     String? customerPhone,
     String? paymentMethod,
+    String? promoCode,
   });
   CreateAppointmentRequestCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -206,6 +216,7 @@ class _CreateAppointmentRequestCopyWithImpl<$R, $Out>
     String? customerEmail,
     String? customerPhone,
     String? paymentMethod,
+    Object? promoCode = $none,
   }) => $apply(
     FieldCopyWithData({
       if (staffId != null) #staffId: staffId,
@@ -216,6 +227,7 @@ class _CreateAppointmentRequestCopyWithImpl<$R, $Out>
       if (customerEmail != null) #customerEmail: customerEmail,
       if (customerPhone != null) #customerPhone: customerPhone,
       if (paymentMethod != null) #paymentMethod: paymentMethod,
+      if (promoCode != $none) #promoCode: promoCode,
     }),
   );
   @override
@@ -228,6 +240,7 @@ class _CreateAppointmentRequestCopyWithImpl<$R, $Out>
     customerEmail: data.get(#customerEmail, or: $value.customerEmail),
     customerPhone: data.get(#customerPhone, or: $value.customerPhone),
     paymentMethod: data.get(#paymentMethod, or: $value.paymentMethod),
+    promoCode: data.get(#promoCode, or: $value.promoCode),
   );
 
   @override

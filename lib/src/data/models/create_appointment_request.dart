@@ -13,6 +13,7 @@ class CreateAppointmentRequest with CreateAppointmentRequestMappable {
     required this.customerEmail,
     required this.customerPhone,
     required this.paymentMethod,
+    this.promoCode,
   });
 
   @MappableField(key: 'staff_id')
@@ -31,4 +32,6 @@ class CreateAppointmentRequest with CreateAppointmentRequestMappable {
   final String customerPhone;
   @MappableField(key: 'payment_method')
   final String paymentMethod;
+  @MappableField(key: 'promo_code')
+  final String? promoCode;
 }

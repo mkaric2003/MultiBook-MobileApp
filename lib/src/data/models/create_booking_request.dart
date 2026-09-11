@@ -16,6 +16,7 @@ class CreateBookingRequest with CreateBookingRequestMappable {
     required this.customerName,
     required this.customerEmail,
     required this.paymentMethod,
+    this.promoCode,
   });
 
   final String? stayUnitTypeId;
@@ -28,4 +29,5 @@ class CreateBookingRequest with CreateBookingRequestMappable {
   final String customerName;
   final String customerEmail;
   final String paymentMethod;
+  final String? promoCode;
 }

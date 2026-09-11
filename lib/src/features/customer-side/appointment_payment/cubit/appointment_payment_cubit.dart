@@ -38,6 +38,9 @@ class AppointmentPaymentCubit extends Cubit<AppointmentPaymentState> {
           customerEmail: request.customerEmail,
           customerPhone: request.customerPhone,
           paymentMethod: request.paymentMethod,
+          promoCode: promoCode?.trim().isEmpty == true
+              ? null
+              : promoCode?.trim(),
         ),
       );
       if (appointmentResult is FailureResult) {

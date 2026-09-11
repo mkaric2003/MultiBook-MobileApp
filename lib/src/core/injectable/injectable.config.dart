@@ -67,6 +67,8 @@ import 'package:multibook/src/data/data_sources/nominatim_data_source.dart'
     as _i117;
 import 'package:multibook/src/data/data_sources/notification_data_source.dart'
     as _i190;
+import 'package:multibook/src/data/data_sources/promotions_api_data_source.dart'
+    as _i218;
 import 'package:multibook/src/data/data_sources/provider_bookings_api_data_source.dart'
     as _i651;
 import 'package:multibook/src/data/data_sources/recently_viewed_api_data_source.dart'
@@ -118,8 +120,8 @@ import 'package:multibook/src/data/repositories/onboarding_repository.dart'
     as _i38;
 import 'package:multibook/src/data/repositories/payment_methods_repository.dart'
     as _i447;
-import 'package:multibook/src/data/repositories/promotion_repository.dart'
-    as _i1038;
+import 'package:multibook/src/data/repositories/promotions_repository_impl.dart'
+    as _i122;
 import 'package:multibook/src/data/repositories/provider_bookings_repository_impl.dart'
     as _i656;
 import 'package:multibook/src/data/repositories/recently_viewed_repository_impl.dart'
@@ -162,6 +164,8 @@ import 'package:multibook/src/domain/repositories/earnings_metrics_repository.da
     as _i553;
 import 'package:multibook/src/domain/repositories/in_app_notifications_repository.dart'
     as _i587;
+import 'package:multibook/src/domain/repositories/promotions_repository.dart'
+    as _i622;
 import 'package:multibook/src/domain/repositories/provider_bookings_repository.dart'
     as _i696;
 import 'package:multibook/src/domain/repositories/recently_viewed_repository.dart'
@@ -260,6 +264,16 @@ import 'package:multibook/src/domain/use_cases/notifications/register_notificati
     as _i801;
 import 'package:multibook/src/domain/use_cases/notifications/unregister_notification_device_use_case.dart'
     as _i154;
+import 'package:multibook/src/domain/use_cases/promotions/create_promotion_use_case.dart'
+    as _i840;
+import 'package:multibook/src/domain/use_cases/promotions/delete_promotion_use_case.dart'
+    as _i843;
+import 'package:multibook/src/domain/use_cases/promotions/get_active_promotion_use_case.dart'
+    as _i356;
+import 'package:multibook/src/domain/use_cases/promotions/get_business_promotions_use_case.dart'
+    as _i759;
+import 'package:multibook/src/domain/use_cases/promotions/set_promotion_active_use_case.dart'
+    as _i716;
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_appointments_use_case.dart'
     as _i308;
 import 'package:multibook/src/domain/use_cases/provider_bookings/get_provider_bookings_use_case.dart'
@@ -500,6 +514,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i145.SupportTicketApiDataSource>(
       () => _i145.SupportTicketApiDataSource(gh<_i234.ApiClient>()),
     );
+    gh.lazySingleton<_i218.PromotionsApiDataSource>(
+      () => _i218.PromotionsApiDataSource(gh<_i234.ApiClient>()),
+    );
+    gh.lazySingleton<_i622.PromotionsRepository>(
+      () => _i122.PromotionsRepositoryImpl(
+        gh<_i218.PromotionsApiDataSource>(),
+        gh<_i411.RestRepositoryExecutor>(),
+      ),
+    );
     gh.lazySingleton<_i190.NotificationDataSource>(
       () => _i190.NotificationDataSourceImpl(gh<_i892.FirebaseMessaging>()),
     );
@@ -546,12 +569,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i447.PaymentMethodsRepository>(
       () => _i447.PaymentMethodsRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
-      ),
-    );
-    gh.lazySingleton<_i1038.PromotionRepository>(
-      () => _i1038.PromotionRepository(
         gh<_i715.AuthenticationDataSource>(),
         gh<_i198.FirestoreDataSource>(),
       ),
@@ -610,9 +627,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
-    gh.factory<_i1053.CreatePromotionCubit>(
-      () => _i1053.CreatePromotionCubit(gh<_i1038.PromotionRepository>()),
-    );
     gh.lazySingleton<_i768.BusinessesApiDataSource>(
       () => _i768.BusinessesApiDataSource(
         gh<_i234.ApiClient>(),
@@ -650,6 +664,22 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.factory<_i716.SetPromotionActiveUseCase>(
+      () => _i716.SetPromotionActiveUseCase(gh<_i622.PromotionsRepository>()),
+    );
+    gh.factory<_i840.CreatePromotionUseCase>(
+      () => _i840.CreatePromotionUseCase(gh<_i622.PromotionsRepository>()),
+    );
+    gh.factory<_i843.DeletePromotionUseCase>(
+      () => _i843.DeletePromotionUseCase(gh<_i622.PromotionsRepository>()),
+    );
+    gh.factory<_i759.GetBusinessPromotionsUseCase>(
+      () =>
+          _i759.GetBusinessPromotionsUseCase(gh<_i622.PromotionsRepository>()),
+    );
+    gh.factory<_i356.GetActivePromotionUseCase>(
+      () => _i356.GetActivePromotionUseCase(gh<_i622.PromotionsRepository>()),
+    );
     gh.factory<_i427.WatchEarningsMetricsUseCase>(
       () => _i427.WatchEarningsMetricsUseCase(
         gh<_i553.EarningsMetricsRepository>(),
@@ -679,12 +709,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i69.ChatApiDataSource>(
       () =>
           _i69.ChatApiDataSource(gh<_i234.ApiClient>(), gh<_i486.SseClient>()),
-    );
-    gh.factory<_i455.BookingPromotionCubit>(
-      () => _i455.BookingPromotionCubit(gh<_i1038.PromotionRepository>()),
-    );
-    gh.factory<_i305.AppointmentPromotionCubit>(
-      () => _i305.AppointmentPromotionCubit(gh<_i1038.PromotionRepository>()),
     );
     gh.lazySingleton<_i146.SavedBusinessRepository>(
       () => _i475.SavedBusinessRepositoryImpl(
@@ -799,6 +823,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i411.RestRepositoryExecutor>(),
       ),
     );
+    gh.factory<_i455.BookingPromotionCubit>(
+      () => _i455.BookingPromotionCubit(gh<_i356.GetActivePromotionUseCase>()),
+    );
+    gh.factory<_i305.AppointmentPromotionCubit>(
+      () => _i305.AppointmentPromotionCubit(
+        gh<_i356.GetActivePromotionUseCase>(),
+      ),
+    );
     gh.lazySingleton<_i155.ReviewsRepository>(
       () => _i824.ReviewsRepositoryImpl(
         gh<_i411.ReviewsApiDataSource>(),
@@ -851,6 +883,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i806.SupportTicketsCubit>(
       () => _i806.SupportTicketsCubit(gh<_i206.GetSupportTicketsUseCase>()),
+    );
+    gh.factory<_i1053.CreatePromotionCubit>(
+      () => _i1053.CreatePromotionCubit(gh<_i840.CreatePromotionUseCase>()),
     );
     gh.factory<_i948.SavedCubit>(
       () => _i948.SavedCubit(
@@ -1085,13 +1120,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i835.UpdateBusinessUseCase>(),
       ),
     );
-    gh.lazySingleton<_i331.AppointmentRepository>(
-      () => _i331.AppointmentRepository(
-        gh<_i715.AuthenticationDataSource>(),
-        gh<_i198.FirestoreDataSource>(),
-        gh<_i590.BusinessRepository>(),
-        gh<_i175.ServiceAvailabilityRepository>(),
-        gh<_i1038.PromotionRepository>(),
+    gh.factory<_i51.PromotionsCubit>(
+      () => _i51.PromotionsCubit(
+        gh<_i41.GetOwnedBusinessesUseCase>(),
+        gh<_i981.UserProfileUseCase>(),
+        gh<_i759.GetBusinessPromotionsUseCase>(),
+        gh<_i716.SetPromotionActiveUseCase>(),
+        gh<_i843.DeletePromotionUseCase>(),
       ),
     );
     gh.factory<_i328.AccountSettingsCubit>(
@@ -1177,12 +1212,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i52.AppointmentDraftCubit>(
       () => _i52.AppointmentDraftCubit(gh<_i811.SaveAppointmentDraftUseCase>()),
     );
-    gh.factory<_i496.AppointmentAvailabilityCubit>(
-      () => _i496.AppointmentAvailabilityCubit(
-        gh<_i331.AppointmentRepository>(),
-        gh<_i175.ServiceAvailabilityRepository>(),
-      ),
-    );
     gh.factory<_i113.ExploreStayResultsCubit>(
       () => _i113.ExploreStayResultsCubit(gh<_i1001.StaySearchRepository>()),
     );
@@ -1210,18 +1239,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i857.HasBusinessReviewUseCase>(),
       ),
     );
+    gh.lazySingleton<_i331.AppointmentRepository>(
+      () => _i331.AppointmentRepository(
+        gh<_i715.AuthenticationDataSource>(),
+        gh<_i198.FirestoreDataSource>(),
+        gh<_i590.BusinessRepository>(),
+        gh<_i175.ServiceAvailabilityRepository>(),
+        gh<_i356.GetActivePromotionUseCase>(),
+      ),
+    );
     gh.factory<_i739.MyBusinessesCubit>(
       () => _i739.MyBusinessesCubit(
         gh<_i590.BusinessRepository>(),
         gh<_i981.UserProfileUseCase>(),
         gh<_i41.GetOwnedBusinessesUseCase>(),
-      ),
-    );
-    gh.factory<_i51.PromotionsCubit>(
-      () => _i51.PromotionsCubit(
-        gh<_i590.BusinessRepository>(),
-        gh<_i981.UserProfileUseCase>(),
-        gh<_i1038.PromotionRepository>(),
       ),
     );
     gh.lazySingleton<_i869.AuthenticationRepository>(
@@ -1279,6 +1310,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i488.SigninCubit(
         gh<_i869.AuthenticationRepository>(),
         gh<_i981.UserProfileUseCase>(),
+      ),
+    );
+    gh.factory<_i496.AppointmentAvailabilityCubit>(
+      () => _i496.AppointmentAvailabilityCubit(
+        gh<_i331.AppointmentRepository>(),
+        gh<_i175.ServiceAvailabilityRepository>(),
       ),
     );
     gh.factory<_i103.CustomerProfileCubit>(

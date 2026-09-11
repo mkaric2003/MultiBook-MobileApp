@@ -145,7 +145,7 @@ class CreatePromotionView extends HookWidget {
                           if (!state.submitting &&
                               state.errorMessage == null &&
                               context.mounted) {
-                            context.pop();
+                            context.pop(true);
                           }
                         },
                         builder: (context, state) => CustomButton(
