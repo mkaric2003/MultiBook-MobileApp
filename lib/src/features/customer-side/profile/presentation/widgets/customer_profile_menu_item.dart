@@ -53,7 +53,10 @@ class CustomerProfileMenuItem extends StatelessWidget {
               ),
               child: Text(
                 '${badgeCount! > 9 ? '9+' : badgeCount}',
-                style: const TextStyle(fontWeight: FontWeight.w800),
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             const SizedBox(width: 8),

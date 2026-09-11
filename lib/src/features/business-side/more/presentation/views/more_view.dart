@@ -151,9 +151,8 @@ class MoreView extends HookWidget {
                     const SizedBox(height: 30),
                     CustomButton(
                       buttonName: context.l10n.logOut,
-                      color: Colors.transparent,
-                      textColor: const Color(0xFFFF4B4B),
-                      borderColor: const Color(0xFFFF4B4B),
+                      color: const Color(0xFFFF4B4B),
+                      textColor: Colors.white,
                       leadingIcon: const Icon(Icons.logout_rounded),
                       height: 48,
                       fontSize: 15,

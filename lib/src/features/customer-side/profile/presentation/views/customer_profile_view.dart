@@ -167,6 +167,7 @@ class CustomerProfileView extends StatelessWidget {
                 CustomButton(
                   buttonName: context.l10n.logOut,
                   color: const Color(0xFFDC2626),
+                  textColor: AppColors.white,
                   onPressed: state.isLoading
                       ? null
                       : () => context.read<CustomerProfileCubit>().signOut(),

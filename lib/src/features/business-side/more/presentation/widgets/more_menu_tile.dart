@@ -41,7 +41,10 @@ class MoreMenuTile extends StatelessWidget {
               ),
               child: Text(
                 '${item.badgeCount}',
-                style: const TextStyle(fontWeight: FontWeight.w800),
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             const SizedBox(width: 8),

@@ -114,6 +114,7 @@ class ChatConversationTile extends StatelessWidget {
                     child: Text(
                       '$unreadCount',
                       style: const TextStyle(
+                        color: AppColors.white,
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
                       ),

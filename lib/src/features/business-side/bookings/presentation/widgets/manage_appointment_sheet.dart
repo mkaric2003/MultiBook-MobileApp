@@ -166,6 +166,7 @@ class ManageAppointmentSheet extends StatelessWidget {
                 CustomButton(
                   buttonName: context.l10n.declineAppointment,
                   color: Colors.redAccent,
+                  textColor: Colors.white,
                   height: 48,
                   fontSize: 16,
                   onPressed: () async {
