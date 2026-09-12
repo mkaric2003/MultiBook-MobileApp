@@ -18,9 +18,8 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# Keep shared launch configurations, ignore developer-local VS Code state.
-.vscode/*
-!.vscode/launch.json
+# VS Code developer-local workspace state
+.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
