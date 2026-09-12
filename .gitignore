@@ -69,4 +69,9 @@ functions/.secret.local
 
 # Firebase configuration
 /android/app/google-services.json
+/android/app/src/*/google-services.json
 /ios/Runner/GoogleService-Info.plist
+/ios/Runner/*/GoogleService-Info.plist
+
+# Flavor-specific local credentials
+/ios/Flutter/Secrets-*.xcconfig

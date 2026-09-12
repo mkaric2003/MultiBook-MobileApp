@@ -55,6 +55,7 @@ dev_dependencies:
   flutter_gen_runner: ^5.11.0
   flutter_launcher_icons: ^0.14.4
   injectable_generator: null
+  flutter_flavorizr: ^2.5.0
 
 flutter:
   generate: true

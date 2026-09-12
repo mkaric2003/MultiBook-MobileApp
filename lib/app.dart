@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:multibook/l10n/app_localizations.dart';
 import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/config/app_environment.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
-import 'package:multibook/src/core/services/notification_device_service.dart';
 import 'package:multibook/src/core/theme/app_theme.dart';
 import 'package:multibook/src/data/repositories/authentication_repository.dart';
 import 'package:multibook/src/data/repositories/onboarding_repository.dart';
@@ -78,56 +76,21 @@ import 'package:multibook/src/features/customer-side/payment_methods/presentatio
 import 'package:multibook/src/features/business-side/promotions/presentation/views/create_promotion_view.dart';
 import 'package:multibook/src/features/business-side/promotions/presentation/views/promotions_view.dart';
 import 'package:multibook/src/global_widgets/app_background.dart';
+import 'package:multibook/src/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 
-part 'src/router/app_pages.dart';
-part 'src/router/app_routes.dart';
+export 'package:multibook/src/router/app_routes.dart';
 
-class App extends HookWidget {
+part 'src/router/app_pages.dart';
+
+class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      unawaited(
-        getIt<NotificationDeviceService>().initialize(
-          onNotificationOpened: (data) {
-            if (data['type'] != 'chat_message') return;
-            final businessId = data['businessId'];
-            final businessOwnerId = data['businessOwnerId'];
-            final businessName = data['businessName'];
-            final customerId = data['customerId'];
-            final customerName = data['customerName'];
-            if ([
-              businessId,
-              businessOwnerId,
-              businessName,
-              customerId,
-              customerName,
-            ].any((value) => value == null || value.isEmpty)) {
-              return;
-            }
-            router.push(
-              AppRoutes.CHAT_CONVERSATION,
-              extra: ChatConversationArguments(
-                businessId: businessId!,
-                businessOwnerId: businessOwnerId!,
-                businessName: businessName!,
-                businessImageUrl: data['businessImageUrl'] ?? '',
-                customerId: customerId,
-                customerName: customerName,
-                customerImageUrl: data['customerImageUrl'],
-              ),
-            );
-          },
-        ),
-      );
-      return null;
-    }, const []);
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: getIt<LocaleCubit>()),
@@ -139,6 +102,23 @@ class App extends HookWidget {
             routerConfig: router,
             onGenerateTitle: (context) => context.l10n.appName,
             debugShowCheckedModeBanner: false,
+            builder: (context, child) {
+              final content = child ?? const SizedBox.shrink();
+              if (!AppEnvironment.isDevelopment) return content;
+
+              return Banner(
+                message: 'DEV',
+                location: BannerLocation.topEnd,
+                color: Colors.red.shade700,
+                textStyle: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1,
+                ),
+                child: content,
+              );
+            },
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,
             themeMode: themeState.themeMode,

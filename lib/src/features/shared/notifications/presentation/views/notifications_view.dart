@@ -1,11 +1,10 @@
-import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/models/app_notification_model.dart';
-import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:multibook/src/features/shared/notifications/cubit/notifications_cubit.dart';
 import 'package:multibook/src/features/shared/notifications/cubit/notifications_state.dart';
+import 'package:multibook/src/features/shared/notifications/presentation/navigation/notification_router.dart';
 import 'package:multibook/src/features/shared/notifications/presentation/widgets/notification_tile.dart';
 import 'package:multibook/src/features/shared/notifications/presentation/widgets/notifications_skeleton.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
@@ -68,27 +67,7 @@ class NotificationsView extends StatelessWidget {
   ) async {
     await context.read<NotificationsCubit>().markAsRead(notification.id);
     final data = notification.data;
-    if (data['type'] != 'chat_message') return;
-    final required = [
-      data['businessId'],
-      data['businessOwnerId'],
-      data['businessName'],
-      data['customerId'],
-      data['customerName'],
-    ];
-    if (required.any((value) => value == null || value.isEmpty)) return;
     if (!context.mounted) return;
-    context.push(
-      AppRoutes.CHAT_CONVERSATION,
-      extra: ChatConversationArguments(
-        businessId: data['businessId']!,
-        businessOwnerId: data['businessOwnerId']!,
-        businessName: data['businessName']!,
-        businessImageUrl: data['businessImageUrl'] ?? '',
-        customerId: data['customerId']!,
-        customerName: data['customerName']!,
-        customerImageUrl: data['customerImageUrl'],
-      ),
-    );
+    NotificationRouter(GoRouter.of(context)).open(data);
   }
 }

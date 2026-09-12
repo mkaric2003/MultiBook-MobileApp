@@ -1,4 +1,3 @@
-import 'package:multibook/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,9 +9,7 @@ abstract class FirebaseModule {
   @preResolve
   @Singleton(order: -1)
   Future<FirebaseApp> get firebaseApp async {
-    final app = await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    final app = await Firebase.initializeApp();
     return app;
   }
 
