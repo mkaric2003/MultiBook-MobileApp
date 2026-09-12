@@ -1,864 +1,768 @@
-# MultiBook — projektna dokumentacija
+# MultiBook — Project Documentation
 
-## 1. Projekat i ideja
+## 1. Purpose of This Document
 
-**MultiBook** je mobilna marketplace aplikacija za rezervaciju smještaja i termina za usluge. Aplikacija objedinjuje dva tržišta koja imaju sličan tok rezervacije, ali različita pravila dostupnosti:
+This document describes the current production-oriented direction of the MultiBook mobile application, its architecture, integrations, business flows, and development rules. The source of truth for specific package versions is `pubspec.yaml`, for mobile routes it is `lib/src/router`, and for requests sent by the client it is the corresponding API data source.
 
-- **Stays** — hoteli, apartmani, vile, kabine, vikendice, resorti i sličan smještaj.
-- **Services** — frizerski i beauty saloni, stomatološke ordinacije, wellness, autoservisi, električari, edukatori i druge usluge koje se rezervišu u terminu.
+MultiBook was originally developed on the Firebase platform, including Firestore, while business data and server-side logic were later migrated to a Go REST API and PostgreSQL; Firebase was retained for Authentication, Storage, and Cloud Messaging.
 
-Postoje dvije korisničke uloge:
-
-- **Customer** pronalazi business, pregleda ponudu, filtrira rezultate, rezerviše smještaj ili termin, plaća, čuva favorite i komunicira s businessom.
-- **Provider** (business owner) kreira i upravlja jednim ili više businessa, prati rezervacije/termine, upravlja dostupnošću i komunicira s customerima.
-
-Ključna poslovna odluka je da razgovor i rezervacija pripadaju **businessu**, a ne samo provider korisniku. Jedan provider može imati više businessa, zato conversation i booking/appointment uvijek nose `businessId` i `businessOwnerId`.
+This document describes only the active system. The mobile application does not access the PostgreSQL database or the Supabase platform directly.
 
 ---
 
-## 2. Glavni korisnički tokovi
+## 2. Product and User Roles
 
-### Customer
+MultiBook is a marketplace for two types of reservations:
 
-1. Onboarding se prvi put prikaže i lokalno zapamti.
-2. Customer se registruje email/password ili Google prijavom.
-3. Nakon autentikacije bira tip računa; customer ide na customer home, provider na business home.
-4. Pri ulasku na customer home aplikacija traži dozvolu za lokaciju i sprema adresu/grad u profil.
-5. Customer bira **Stays** ili **Services**, pretražuje, filtrira, otvara detail, čuva business ili započinje rezervaciju.
-6. Prekinuti booking/appointment tok može biti spremljen kao draft i kasnije nastavljen.
-7. Nakon potvrđenog plaćanja nastaje booking ili appointment, prikazan je confirmation ekran i stavka se pojavljuje u *My bookings*.
+- **Stays** — hotels, apartments, villas, cabins, holiday homes, resorts, and other forms of accommodation.
+- **Services** — beauty, wellness, healthcare, education, home, automotive, and other services booked for a specific time slot.
 
-### Provider
+The system supports two user roles:
 
-1. Provider kreira ili uređuje stay/service business, unosi lokaciju, slike, ponudu i dostupnost.
-2. Nakon prvog businessa početni ekran postaje dashboard; selektovani business se čuva u user profilu.
-3. Provider mijenja business na dashboardu / business selectoru, pregleda njegove bookinge ili appointmente i upravlja njima.
-4. Iz **Manage Stays & Services** otvara puni, unaprijed popunjeni editor selektovanog businessa i sprema izmjene preko REST API-ja.
-5. Za stays vidi zauzete dane; za services vidi zauzete i blokirane 30-minutne slotove po radniku.
+- **Customer** searches the offering, filters results, opens details, saves a business, creates a booking or appointment, manages reservations, leaves reviews, and communicates with the provider.
+- **Provider** creates and edits one or more businesses, manages offerings and availability, processes reservations, tracks metrics, and communicates with customers.
+
+Bookings, appointments, promotions, availability, and chat are tied to a specific `businessId`. A provider may own multiple businesses, so the provider's user identity alone is not sufficient as the domain context.
+
+### 2.1 Customer Flow
+
+1. Onboarding is shown on the first launch and recorded locally.
+2. The user registers or signs in with email and password or a Google account.
+3. A new account selects a user role.
+4. Customer home, with the user's permission, retrieves the location and uses the city for local ranking of offerings.
+5. The customer chooses stays or services, uses discovery or search, opens details, and starts the corresponding checkout.
+6. An unfinished booking or appointment can be saved as a draft.
+7. The backend validates availability, prices, promotions, and reservation creation.
+8. A created reservation is available in **My Bookings**, and changes to it may produce in-app and push notifications.
+
+### 2.2 Provider Flow
+
+1. The provider creates a stay or service business with a location, media, offering, and availability rules.
+2. The active business determines the context for the dashboard, reservations, calendar, earnings, and promotions.
+3. The provider can change the active business without changing the user account.
+4. **Manage Stays & Services** loads the full business aggregate and uses the same editor for create and update flows.
+5. The provider processes bookings or appointments and manages availability.
 
 ---
 
-## 3. Tehnološki stack
+## 3. System Overview
 
-| Oblast | Tehnologija | Namjena |
+```text
+Flutter application
+  ├─ Firebase Authentication ── identity and ID token
+  ├─ Firebase Storage ───────── profile and business images
+  ├─ Firebase Cloud Messaging ─ push delivery and notification opening
+  └─ HTTPS / SSE ─────────────── Go API under /v1
+```
+
+### 3.1 Source of Truth
+
+- The Go REST API is the only mobile boundary for profiles, businesses, offerings, availability, reservations, chat, notifications, promotions, payment-method metadata, saved items, and other business data.
+- Firebase Authentication is the source of authentication identity. API requests use a Firebase ID token.
+- Firebase Storage contains binary media objects, while application models use stable storage paths.
+- FCM is the transport for push messages. The in-app list and read status are loaded through REST.
+
+### 3.2 Why Firebase Remains in the System
+
+**Authentication** was retained because it handles the security-sensitive identity layer through maintained iOS/Android SDKs, session management, token rotation, email/password flows, and Google federation. The mobile client receives a short-lived ID token for API requests without manually implementing an identity protocol.
+
+**Storage** was retained because purpose-built object storage is better suited for image upload and delivery than sending binary content through the application API. The mobile SDK supports direct, controlled upload, Storage rules restrict access, and the client resolves a stable path into a download URL only when displaying the image.
+
+**Cloud Messaging** was retained as the standard transport to APNs and Android push infrastructure. Push is not a source of business state: after receiving a push, the application refreshes the authorized REST snapshot.
+
+---
+
+## 4. Technology Stack
+
+| Area | Technology | Responsibility |
 |---|---|---|
-| Mobilna aplikacija | Flutter / Dart | Jedan kod za iOS i Android |
-| State management | `flutter_bloc` | Cubit/BLoC i eksplicitna UI stanja |
-| Lokalni widget state | `flutter_hooks` | HookWidget/useEffect bez `setState` |
-| Navigacija | `go_router` | Declarativne rute i auth/onboarding redirecti |
-| DI | `get_it` + `injectable` | Registracija data sourcea, repozitorija i Firebase servisa |
-| Modeli | `dart_mappable` | Tipizirani modeli i serializacija |
-| Backend | Firebase Auth, Firestore, Storage, Functions, Messaging | Auth, baza, fajlovi, server-side pretraga i notifikacije |
-| Cloud Functions | TypeScript, Node.js 22, Functions v2 | Trigger notifikacije, agregirane metrike i callable pretrage |
-| Mape i lokacija | `google_maps_flutter`, `geolocator`, Nominatim preko `dio` | Pin na mapi, lokacija uređaja i besplatni reverse geocoding |
-| Slike | `image_picker`, `flutter_image_compress` | Odabir i WebP kompresija prije Storage uploada |
-| UI | Google Fonts, Flutter SVG, Cupertino, FL Chart | Dark dizajn, ikone, date picker i dashboard chartovi |
-| Ostalo | Shared Preferences, country_picker, toastification, url_launcher | Cache, country code, toast poruke i otvaranje mapa |
-
-Pune verzije paketa su u [pubspec.yaml](pubspec.yaml). Node dependencies i build skripte su u [functions/package.json](functions/package.json).
+| Mobile application | Flutter / Dart | Shared iOS and Android client |
+| State management | `flutter_bloc` | Cubit/BLoC, events, and explicit UI states |
+| Local widget state | `flutter_hooks` | Short-lived state tied to a single widget |
+| Navigation | `go_router` | Routes, redirects, and navigation stack |
+| Bottom navigation | `persistent_bottom_nav_bar_v2` | Separate customer and provider tab stacks |
+| Dependency injection | `get_it` + `injectable` | Construction and lifecycle of application dependencies |
+| Models | `dart_mappable` | Typed serialization and copy operations |
+| HTTP | `dio` | Authenticated JSON requests to the Go API |
+| Realtime | Server-Sent Events | Targeted invalidations for chat, dashboard, and earnings |
+| Identity | Firebase Authentication | Session, ID token, email/password, and Google sign-in |
+| Media | Firebase Storage | Avatar and business images |
+| Push | Firebase Cloud Messaging | Push transport and device token lifecycle |
+| Remote API | Go REST API | Business data and server-authoritative operations |
+| Location | `geolocator`, Google Maps, Nominatim | Permission, map, and reverse geocoding |
+| Local storage | Shared Preferences | Onboarding, locale, and theme preference |
+| UI | Material, Cupertino, Google Fonts, SVG, FL Chart | Visual system and charts |
+| Images | `image_picker`, `flutter_image_compress` | Selection and optimization before upload |
 
 ---
 
-## 4. Arhitektura aplikacije
+## 5. Mobile Application Architecture
 
-### 4.1 Slojevi
-
-Projekt prati odvajanje odgovornosti:
+### 5.1 Layers and Dependency Direction
 
 ```text
-Presentation (View / Widget / Cubit-BLoC)
-                  │
-                  ▼
-              Use case
-                  │
-                  ▼
-        Repository contract
-                  │
-                  ▼
-        Repository implementation
-                  │
-                  ▼
-          Data source adapteri
-                  │
-                  ▼
-         ApiClient / Firebase / lokalni cache
+View / Widget
+      │
+      ▼
+Cubit or BLoC
+      │
+      ▼
+Action-specific use case
+      │
+      ▼
+Repository contract
+      │
+      ▼
+Repository implementation
+      │
+      ▼
+API / Firebase / device data source
+      │
+      ▼
+ApiClient, SseClient, or platform SDK
 ```
 
-- **Presentation** prikazuje stanje i šalje korisničke akcije Cubit/BLoC-u. Nema direktnih Firebase poziva.
-- **Use case** je obavezan ulaz u REST module. Svaki use case izlaže jednu tipiziranu operaciju kroz `execute()` i zavisi samo od repository ugovora; nalazi se u `src/domain/use_cases/<module>/`.
-- **Repository contract** je u `src/domain/repositories/`, a njegova `Impl` klasa u `src/data/repositories/`. Implementacija koordinira data sourcee, dok use case ne poznaje HTTP detalje.
-- **Data source** implementira adapter prema konkretnom backend resursu ili pluginu uređaja. HTTP adapter koristi zajedničku networking infrastrukturu umjesto da sam upravlja transportom.
-- **Core networking** (`src/core/networking/`) sadrži transportne primitive koje nisu vezane ni za jedan feature: `ApiClient`, `SseClient` i `SseConnection`.
-- **Models/enums** su eksplicitni i tipizirani. Feature-specifični modeli idu u `feature/domain/models`, a zajednički persisted modeli u `src/data/models`.
+- **Presentation** renders state and forwards user actions to a Cubit or BLoC. A View does not call the HTTP client, a data source, or a repository implementation.
+- A **Use case** represents one business action through a typed `execute()` or stream method. The use case depends on the repository contract, not the transport.
+- The **Repository contract** belongs to the domain layer. The implementation in the data layer coordinates concrete data sources and error mapping.
+- A **Data source** knows the endpoint, HTTP payload, or platform SDK. It does not make presentation decisions.
+- **Core networking** contains shared transport primitives: `ApiClient`, `SseClient`, and `SseConnection`.
 
-### 4.1.1 REST moduli i greške
+This structure allows the transport or backend implementation to change without moving infrastructure details into the UI and without introducing a generic repository layer that hides domain actions.
 
-REST migracija se uvodi modul po modul. Standardni tok za migrirani modul je:
+### 5.2 REST Request
 
-```text
-Cubit → Use case → Repository contract → RepositoryImpl → Data source → ApiClient
-```
+A protected request follows this flow:
 
-`users` je prvi migrirani REST modul. Njegov contract je `UsersRepository`, implementacija `UsersRepositoryImpl`, a HTTP endpointi su u `UsersApiDataSource`.
+1. `ApiClient` reads the active Firebase user.
+2. The SDK returns a valid ID token and the client adds `Authorization: Bearer <token>`.
+3. The request is sent to the corresponding `/v1` endpoint.
+4. A successful JSON response is mapped into a typed Dart model.
+5. An unsuccessful response goes through the standard application error mapping.
 
-### 4.1.3 Customer drafts REST migracija
+The mobile client does not send a user ID as a substitute for authentication. User-scoped calls rely on the bearer token, while `businessId` represents the domain context of the operation.
 
-Customer booking i appointment draftovi koriste jedan `CustomerDraftsRepository` jer pripadaju istoj customer-drafts odgovornosti. Tok je striktno:
+### 5.3 Errors
 
-```text
-CustomerDashboardCubit / draft Cubit → action-specific draft use case → CustomerDraftsRepository → CustomerDraftsRepositoryImpl → CustomerDraftsApiDataSource → ApiClient
-```
+`ApiClient` converts a transport error into `ApiException`. `RestRepositoryExecutor` is the single place for standard mapping of HTTP results into application-level `Result<T>` and `AppFailure`:
 
-`CustomerDraftsApiDataSource` koristi `GET`, `PUT` i `DELETE` endpoint-e pod `/v1/drafts/booking` i `/v1/drafts/appointment`. `ApiClient.delete` normalizuje Dio grešku u isti `ApiException` oblik kao `get`, `post`, `put` i `patch`.
+| HTTP / cause | Application failure |
+|---|---|
+| `400`, `422` | `ValidationFailure` |
+| `401` | `UnauthorizedFailure` |
+| `403` | `ForbiddenFailure` |
+| `404` | `NotFoundFailure` |
+| `5xx` | `ServerFailure` |
+| timeout or transport | `NetworkFailure` |
+| unexpected local error | `UnknownFailure` |
 
-- Svaki customer ima najviše jedan booking i jedan appointment draft.
-- `GET` koji dobije `404` vraća `Success(null)`; dashboard zato ne prikazuje grešku kada draft ne postoji.
-- Odgovori su camelCase-kompatibilni s postojećim `BookingDraftModel` i `AppointmentDraftModel`.
-- `businessImageUrl` može biti Firebase Storage path ili direktni HTTPS URL. `FirebaseStorageDataSource.getDownloadUrl` prosljeđuje HTTPS URL bez dodatnog Firebase lookup-a.
-- Nastavak appointmenta i bookinga učitava puni business agregat preko postojećeg REST `GetBusinessDetailUseCase`, a ne preko Firestore business dokumenta. Ako business više nije dostupan, UI prikazuje stanje greške umjesto beskonačnog loadera.
+The Cubit branches on `Success<T>` and `FailureResult<T>`. Technical text from the backend response is used for logging and diagnostics; user-facing text comes from the localization layer.
 
-Očekivane REST greške ne putuju do Cubit-a kao `DioException` ili `ApiException`. `ApiClient` normalizuje Dio grešku u `ApiException`, a `RestRepositoryExecutor` iz `src/core/errors/` je centralno mjesto koje je mapira u `Result<T>` i `AppFailure`:
+### 5.4 Models and Code Organization
 
-- `401` → `UnauthorizedFailure`
-- `403` → `ForbiddenFailure`
-- `400` i `422` → `ValidationFailure`
-- `404` → `NotFoundFailure`
-- timeout/network i nepoznati HTTP status → `NetworkFailure`
-- `5xx` → `ServerFailure`
-- neočekivana lokalna greška → `UnknownFailure`
+- Every model, enum, widget, Cubit/BLoC, and use case has its own file.
+- Models use `dart_mappable`; manual serialization and multiple model classes in one file are not allowed.
+- Shared persisted models are located in `lib/src/data/models`.
+- Feature-specific inputs, arguments, and view models are located in `domain/models` of the corresponding feature.
+- Repository contracts are in `lib/src/domain/repositories`, implementations in `lib/src/data/repositories`, and adapters in `lib/src/data/data_sources`.
+- Each business action has a separate use case. One broad facade for unrelated actions is not used.
+- Globally reusable widgets belong in `lib/src/global_widgets`; a widget belonging to a single feature remains in that feature's `presentation/widgets` directory.
+- `setState` is not used. Local UI state is managed with Hooks, while business and asynchronous state is managed by Cubit or BLoC.
+- Generated `.mapper.dart` and Injectable files are not edited manually.
 
-Use case vraća `Success<T>` ili `FailureResult<T>`. Cubit grana po tom rezultatu i emituje odgovarajuće UI stanje; ne hvata exception za očekivani REST failure. Korisnički tekst ostaje u presentation/lokalizacijskom sloju, dok se tehnički detalji koriste samo za logovanje.
-
-Svaka poslovna radnja ima vlastiti use case i vlastiti fajl: `GetBookingDraftUseCase`, `SaveBookingDraftUseCase`, `DeleteBookingDraftUseCase`, te ekvivalenti za appointment draft. Isti princip važi za create, list, cancel, availability i reschedule radnje; use case nije generički facade nad više nepovezanih akcija.
-
-### 4.1.4 Customer stay bookings REST migracija
-
-Customer stay booking read flow koristi poseban `CustomerBookingsRepository`, jer je odgovornost drugačija od checkout kreiranja i od customer draftova:
-
-```text
-CustomerBookingsCubit / CustomerBookingDetailsCubit / BookingDetailsCubit
-        → GetCustomerBookingsUseCase / CancelCustomerBookingUseCase / GetStayAvailabilityUseCase
-        → CustomerBookingsRepository
-        → CustomerBookingsRepositoryImpl
-        → CustomerBookingsApiDataSource
-        → ApiClient
-```
-
-- `GET /v1/bookings` vraća samo booking-e prijavljenog customera i REST offset cursor (`nextCursor`); `CustomerBookingsCubit` više ne koristi Firestore `DataCursor` za stay tab.
-- `PATCH /v1/bookings/{id}/cancel` vraća ažurirani `BookingModel`; detail Cubit njime zamjenjuje lokalnu stavku nakon uspješnog otkazivanja.
-- `GET /v1/businesses/{id}/stay/availability` vraća samo `unavailableRanges`, bez tuđih booking detalja. Za multiple-unit stay šalje se `room_type_id`, a backend označava datum nedostupnim tek kada je kapacitet tog room typea popunjen.
-- `BookingListResponse`, `StayAvailabilityResponse` i `StayUnavailableRange` su tipizirani REST response modeli; svaki model je u vlastitom fajlu. `BookingModel` ostaje zajednički persisted model.
-- Customer stay lista, customer cancel i customer calendar availability nemaju Firestore fallback. Stari Firestore `BookingRepository` je uklonjen; provider booking i provider stay calendar koriste REST.
-
-### 4.1.5 Customer service appointments REST migracija
-
-Customer service tab, customer cancellation i reschedule koriste zaseban `CustomerAppointmentsRepository` i akcijski razdvojene use case-e:
-
-```text
-CustomerBookingsCubit / AppointmentDetailsCubit / RescheduleAppointmentCubit
-        → GetCustomerAppointmentsUseCase / CancelCustomerAppointmentUseCase / RescheduleCustomerAppointmentUseCase
-        → CustomerAppointmentsRepository
-        → CustomerAppointmentsRepositoryImpl
-        → CustomerAppointmentsApiDataSource
-        → ApiClient
-```
-
-- `GET /v1/appointments` vraća samo appointment-e prijavljenog customera za customer poziv i koristi REST offset cursor (`nextCursor`), sa zasebnim cursorom od stay taba.
-- `PATCH /v1/appointments/{id}/status` koristi se za customer cancellation, a `PATCH /v1/appointments/{id}/reschedule` vraća novi kompletni `AppointmentModel` nakon uspješne promjene.
-- `AppointmentListResponse` je tipizirani paginirani response. Lista/status/reschedule REST odgovori već sadrže presentation podatke i offerings, pa nema Firestore business enrichment/fallbacka u customer service flowu.
-- Calendar availability koristi `GET /v1/businesses/{businessID}/service/staff/{staffID}/available-slots` sa odabranim offering ID-evima. Backend iz PostgreSQL weekly availabilityja, ručnih blokada i potvrđenih appointmenta vraća samo bookable start minute; kod reschedule-a `exclude_appointment_id` zadržava mogućnost izbora trenutnog termina.
-- Appointment details business učitava kroz `GetBusinessDetailUseCase`, a dashboard gradove kroz `GetDiscoveryCitiesUseCase`; oba toka koriste customer discovery REST API.
-
-### 4.1.6 Reviews REST migracija
-
-Kreiranje, provjera i prikaz recenzija koriste zaseban Reviews modul:
-
-```text
-RateBusinessCubit / detail Cubit / BusinessReviewsSheet
-        → CreateReviewUseCase | HasBusinessReviewUseCase |
-          GetBusinessReviewsUseCase
-        → ReviewsRepository
-        → ReviewsRepositoryImpl
-        → ReviewsApiDataSource
-        → ApiClient
-```
-
-- `POST /v1/businesses/{businessId}/reviews` prihvata source ID/tip, rating i opcionalni komentar. Backend iz rezervacije ili termina određuje customera, business ownera i snapshot prikazne podatke.
-- `GET /v1/businesses/{businessId}/review-status` provjerava da li je prijavljeni customer već ocijenio business.
-- `GET /v1/businesses/{businessId}/reviews` vraća newest-first offset stranice; detail preview traži 4 stavke, a *All reviews* učitava stranice po 20.
-- I dalje vrijedi pravilo jedne recenzije po customeru i businessu, ne po pojedinačnoj rezervaciji. Izvor mora pripadati calleru i businessu te biti završen.
-- PostgreSQL čuva Storage path avatara; `ReviewsApiDataSource` ga razrješava u download URL samo za prikaz.
-- Flutter nema Firestore ni callable fallback za recenzije. Postojeći `createReview` Cloud Function i Firestore pravila ostaju u projektu, ali ih migrirani Flutter flow više ne koristi.
-
-### 4.1.7 Dashboard metrics REST migracija
-
-Provider dashboard koristi zaseban live Metrics tok:
-
-```text
-DashboardCubit → WatchDashboardMetricsUseCase → DashboardMetricsRepository
-        → DashboardMetricsRepositoryImpl → DashboardMetricsApiDataSource
-        → ApiClient SSE
-```
-
-- `GET /v1/businesses/{businessId}/dashboard-metrics/stream` odmah šalje kompletan snapshot i zatim novi snapshot nakon svake commitane promjene rezervacije.
-- Flutter koristi jedan SSE subscription umjesto odvojenih Firestore summary i current-month subscriptiona. Stream se registruje u `SessionStreamRegistry` i automatski reconnecta s ograničenim exponential backoffom.
-- `DashboardMetrics` i zasebni `DashboardMetricsMonth` model koriste `dart_mappable`; iznosi s API-ja ostaju u minor units sve do zajedničkog currency formattera koji ih pretvara u decimalni prikaz.
-- Dashboard više ne čita `business_metrics` Firestore dokumente niti poziva metrics callable initializer.
-- Firebase metrics Functions i pravila ostaju u projektu kao legacy infrastruktura; Flutter dashboard ih više ne koristi.
-
-### 4.1.8 Earnings REST migracija
-
-Provider Earnings koristi isti generički SSE transport kao dashboard, ali zaseban domenski tok:
-
-```text
-EarningsView → EarningsCubit → WatchEarningsMetricsUseCase
-        → EarningsMetricsRepository → EarningsMetricsRepositoryImpl
-        → EarningsMetricsApiDataSource → SseClient → ApiClient
-```
-
-- `GET /v1/businesses/{businessId}/earnings/stream` prima inkluzivni `startDate`/`endDate` raspon, lokalni `utcOffsetMinutes` i opcionalni `staffId`, odmah šalje rezultat i osvježava ga nakon commitane promjene rezervacije. Offset uređaja određuje granice kalendarskog dana/sedmice/mjeseca, tako da lokalni period ne zavisi od UTC datuma.
-- Datum se primjenjuje na `created_at`: prihod pripada momentu kreiranja rezervacije, bez obzira kada će se termin ili boravak desiti.
-- Potvrđeni i završeni cash booking ulazi odmah; no-show/status promjena ga izuzima. Online booking ulazi tek kada je `payment_status=paid`.
-- `EarningsCubit` upravlja aktivnim businessom, periodom, provider filterom i SSE subscriptionom. Widget ne poziva use case direktno.
-- API i Flutter koriste minor units za ukupni, online, cash i historijski provider iznos. Konverzija u decimalni prikaz dešava se samo u zajedničkom currency formatteru.
-- Flutter Earnings više nema Firestore repository/data source niti čita `business_metrics` kolekciju. Postojeće Firebase aggregate funkcije i pravila ostaju samo kao legacy infrastruktura dok se zasebno ne uklone.
-
-### 4.1.2 Businesses REST migracija
-
-Provider business modul koristi postojeći `BusinessModel` i njegov `dart_mappable` `toMap`/`fromMap`; za REST se ne uvode posebni `CreateBusinessInput`, `CreatedBusiness` ili slični transport modeli.
-
-```text
-AddBusinessBloc / provider Cubit
-        → CreateBusinessUseCase | GetOwnedBusinessesUseCase |
-          GetOwnedBusinessUseCase | UpdateBusinessUseCase
-        → BusinessesRepository
-        → BusinessesRepositoryImpl
-        → BusinessesApiDataSource
-        → ApiClient
-```
-
-- `GET /v1/businesses` vraća samo lagane sažetke za *My Businesses*, tabove i business selector. `GetOwnedBusinessesUseCase` ih cacheira i sprečava paralelne identične zahtjeve.
-- `GET /v1/businesses/{id}` vraća puni owner-only aggregate i poziva se samo kad provider otvori **Manage Stays & Services** editor. Zato se pri saveu ne izgube `amenities`, `extras`, rooms, offerings ili staff koji nisu dio summary odgovora.
-- `POST /v1/businesses` i `PUT /v1/businesses/{id}` primaju `BusinessModel.toMap()` i vraćaju puni `BusinessModel`. `PUT` je potpuna zamjena editabilnog aggregata, ne parcijalni update.
-- Firebase ostaje samo za Auth i Storage. PostgreSQL čuva Firebase Storage path; `BusinessesApiDataSource` download URL koristi samo za prikaz i prije REST `PUT` ga normalizuje nazad u Storage path.
-
-### 4.1.3 Customer discovery i development seed
-
-Customer home **Popular Near You** više ne koristi Firestore cursore. `CustomerDashboardCubit` preko `GetPopularNearbyBusinessesUseCase` poziva `GET /v1/discovery/businesses` s parametrima `type` (`stays` ili `services`), `city`, `limit` i `offset`. Odgovor ostaje `BusinessModel`-kompatibilan, a postojeći UI zadržava paginaciju i *load more* ponašanje.
-
-Customer **Explore** također ne čita Firestore business kolekciju: izbor grada koristi `GET /v1/discovery/cities`, koji čita trajni deduplicirani katalog gradova popunjen pri svakom upisu business lokacije, a *Trending near you* koristi isti paginirani `GET /v1/discovery/businesses` za `type=services`. Kategorijski i collection rezultati ostaju na server-side `GET /v1/stays/search` i `GET /v1/services/search` rutama.
-
-Featured stay i service collections koriste `GET /v1/discovery/featured-collections`. PostgreSQL čuva redoslijed, ID i image URL, dok backend vraća postojeće l10n ključeve pa Flutter zadržava prijevode za sve podržane jezike.
-
-**Recommended for you** koristi `GET /v1/discovery/recommended-stays`, a ne Firestore. Backend vraća do tri staya, prioritizira korisnikov spremljeni grad i preostala mjesta popunjava globalnim rankingom po ratingu i broju recenzija.
-
-Development-only seed akcije u Add Business ekranu koriste `DevelopmentSeedUseCase` i REST endpoint-e `POST /v1/development/seed/stays` i `POST /v1/development/seed/services`. Seed media koristi direktne HTTPS URL-ove za demo kartice; Firebase Storage se ne poziva za te slike.
-
-### 4.2 Struktura direktorija
+### 5.5 Project Structure
 
 ```text
 lib/
- ├─ main.dart                         # kompatibilni DEV entrypoint
- ├─ bootstrap.dart                    # zajednička inicijalizacija DI-ja i aplikacije
- ├─ entry_points/
- │   ├─ main_dev.dart                 # MultiBook DEV entrypoint
- │   └─ main_prod.dart                # MultiBook production entrypoint
- ├─ app.dart                          # MaterialApp, tema, locale i router konfiguracija
- ├─ src/
- │   ├─ core/                         # konfiguracija, tema, DI, session lifecycle i shared errors
- │   ├─ domain/                       # use caseovi i repository ugovori
- │   ├─ data/
- │   │   ├─ data_sources/             # Firebase/HTTP/plugin adapteri
- │   │   ├─ repositories/             # repository implementacije
- │   │   ├─ models/ i enums/          # shared persisted modeli
- │   ├─ features/
- │   │   ├─ customer-side/            # customer featurei
- │   │   ├─ business-side/            # provider featurei
- │   │   └─ shared/                   # auth, chat, onboarding, notifikacije, lokacija
- │   ├─ global_widgets/               # reusable app bar, button, text field, picker
- │   └─ router/                       # AppRoutes i GoRouter stranice
- └─ utils/                            # npr. image compression
-
-functions/src/
- ├─ notifications/                    # Firestore trigger notifikacije i dispatch
- ├─ metrics/                          # agregati zarade i KPI metrika po businessu
- ├─ stays/                            # modularni callable stay search
- └─ services/                         # modularni callable service search
+  main.dart                         compatible DEV entrypoint
+  bootstrap.dart                    shared application initialization
+  entry_points/
+    main_dev.dart                   MultiBook DEV
+    main_prod.dart                  MultiBook production
+  app.dart                          MaterialApp, theme, locale, and router
+  src/
+    core/                            config, DI, networking, error, and services
+    domain/
+      repositories/                 repository contracts
+      use_cases/                     action-specific use cases
+    data/
+      data_sources/                  HTTP, Firebase, and device adapters
+      repositories/                 contract implementations
+      models/                        shared typed models
+    features/
+      customer-side/                 customer features
+      business-side/                 provider features
+      shared/                        auth, chat, theme, locale, notifications
+    global_widgets/                  reusable application components
+    router/                          route constants and GoRouter pages
+  l10n/                              ARB localization catalogs
 ```
 
-### 4.3 Pravila implementacije
+---
 
-- Ne koristiti `setState`; za lokalne interakcije koristiti `HookWidget`, `useState`, `useEffect` ili Cubit stanje.
-- Ne stavljati privatne pomoćne UI klase u veliki view fajl. Svaki custom widget ima svoj fajl u `presentation/widgets`.
-- Feature modeli/enumi nisu u presentation fajlovima; idu u `domain/models` ili `domain/enums`.
-- Svaki model ima vlastiti fajl i koristi `dart_mappable`; ručni `fromMap`, `toMap` i više model-klasa u jednom fajlu nisu dozvoljeni.
-- Novi REST repository koristi `RestRepositoryExecutor`; ne kopirati HTTP-to-failure mapping u pojedinačne `RepositoryImpl` klase.
-- Novi REST Cubit prima use case, a ne `RepositoryImpl`, `DataSource` ili `ApiClient`.
-- Globalno ponovljive komponente su u `src/global_widgets`: `AppBackground`, `CustomAppBar`, `CustomButton`, `CustomTextfield`, `CustomBottomNavigation`, `SkeletonShimmer`, `SearchableCityPickerSheet` i `LabeledDivider`.
-- Light/dark teme i boje dolaze iz `AppTheme`, `AppPalette` i stabilnih brand/status vrijednosti u `AppColors`, ne iz nasumičnih hardkodiranih neutralnih boja u viewu.
+## 6. Application Startup, Flavors, and Navigation
+
+### 6.1 Bootstrap
+
+`bootstrap.dart` performs shared startup:
+
+1. initializes Flutter binding and the active `AppFlavor`;
+2. configures Injectable/GetIt dependencies, including Firebase Core;
+3. locks orientation to portrait;
+4. constructs the notification coordinator;
+5. starts `App`;
+6. after the first frame, activates the notification lifecycle when the router is ready for navigation.
+
+`app.dart` is limited to global Bloc providers, `MaterialApp.router`, theme, locale, and the DEV banner. FCM payload handling is not part of the root widget.
+
+### 6.2 Flavors
+
+| Flavor | Name | Android application ID | iOS bundle ID | Entry point |
+|---|---|---|---|---|
+| `dev` | MultiBook DEV | `com.multibook.app.dev` | `com.multibook.app.dev` | `lib/entry_points/main_dev.dart` |
+| `prod` | MultiBook | `com.multibook.app` | `com.multibook.app` | `lib/entry_points/main_prod.dart` |
+
+Flavor configuration is generated by `flutter_flavorizr`. The DEV build shows a visible `DEV` banner. Each flavor has separate native application identification, API base URL, Firebase application, and Maps configuration.
+
+Active Dart define values:
+
+- `MULTIBOOK_DEV_API_BASE_URL`
+- `MULTIBOOK_PROD_API_BASE_URL`
+- `MULTIBOOK_PROD_GOOGLE_SERVER_CLIENT_ID`
+
+`MULTIBOOK_API_BASE_URL` remains a compatibility fallback for DEV only. Production configuration does not inherit DEV credentials.
+
+### 6.3 Navigation Guards
+
+`GoRouter` centralizes routes and applies three entry rules:
+
+1. a user who has not completed onboarding remains in the onboarding flow;
+2. a user without an active Firebase session is sent to sign-in;
+3. an authenticated user is routed according to their `UserType`, and a provider without a business is routed to the Add Business flow.
+
+The router listens to `authStateChanges`, so the protected stack is removed immediately after sign-out. While the profile required to choose the customer/provider home is loading, a small Cupertino loader is used; skeletons are shown only within a known screen and follow its layout.
+
+### 6.4 Root Tabs
+
+Customer and provider use `PersistentTabView` with the shared `CustomBottomNavigation` view:
+
+- floating pill without labels and a top indicator line;
+- a white selection segment slides between icons;
+- tab content appears without horizontal page animation;
+- each tab keeps its own navigation stack and state;
+- content extends below the navigation overlay;
+- the bar slightly shrinks when scrolling toward the bottom and returns when scrolling toward the top;
+- the end of scrollable content receives enough spacing so the last item is not covered.
 
 ---
 
-## 5. Navigacija i ulaz u aplikaciju
+## 7. Identity, Profile, and Session Lifecycle
 
-`GoRouter` koristi tri zaštitna nivoa:
+### 7.1 Authentication
 
-1. **Onboarding**: dok `has_seen_onboarding` nije postavljen u Shared Preferences, korisnik ostaje na `/onboarding`.
-2. **Autentikacija**: neprijavljen korisnik ide na `/sign-in`. `GoRouter` prati Firebase Auth stanje preko `refreshListenable`, pa se zaštićene rute odmah uklanjaju nakon odjave. Nakon uspješnog sign-ina `SigninCubit` eksplicitno bira Home ili User Type Checker, kako novi Google/email account ne bi preskočio izbor tipa korisnika.
-3. **Tip korisnika i entry screen**: user profil određuje customer/provider tok. Provider entry dodatno provjerava ima li business i otvara Add Business ili dashboard.
+Supported flows:
 
-Customer entry ne izvršava provider-only provjeru selektovanog businessa. Dok se učitava profil potreban za izbor customer/provider Home ekrana, prikazuje se jednostavni Cupertino loader. Skeletoni se koriste tek unutar odabranog Home ekrana za učitavanje njegovih sadržajnih sekcija.
+- registration and sign-in with email and password;
+- Google Sign-In;
+- password reset;
+- reauthentication and password change for password accounts;
+- logout and deletion of an unfinished auth account when profile registration fails.
 
-Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app_routes.dart) i [lib/src/router/app_pages.dart](lib/src/router/app_pages.dart).
+The Firebase user represents identity and credential providers. The application profile, role, phone number, date of birth, avatar path, address, city, and `selectedBusinessId` are read through `/v1/users/me`.
 
----
+### 7.2 User API
 
-## 6. Dizajn sistema
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/v1/users/me` | Load the current profile |
+| `PATCH` | `/v1/users/me` | Update profile and location data |
+| `PUT` | `/v1/users/me/role` | Set the customer/provider role |
+| `PUT` | `/v1/users/me/selected-business` | Change the active provider business |
 
-- Aplikacija ima light i dark UI. Light ekrani koriste zelenkasto-tirkizni gradient iz `AppPalette`, koji `AppBackground` dodaje na nivou svake rute kako bi pozadina i sadržaj učestvovali u istoj navigacijskoj tranziciji. Kartice i forme ostaju pune surface boje, a podignuti bottom navigation koristi zasebnu `navigationSurface` boju usklađenu s gradientom. Dark pozadina ostaje jednobojna. Foreground, muted tekst i ostali borderi također dolaze iz theme-aware `AppPalette`, dok ljubičasti accent i status boje ostaju centralizovani u `AppColors`.
-- Customer i provider kroz **Settings → Appearance** mogu odmah uključiti ili isključiti light temu. `ThemeCubit` mijenja `MaterialApp.themeMode`, a `ThemeRepositoryImpl` odabir trajno sprema u Shared Preferences; zadnja tema se vraća pri sljedećem pokretanju aplikacije.
-- Selektovana stanja koriste primarnu ljubičastu; statusi koriste semantičke boje (confirmed, cancelled/declined, completed).
-- Customer i provider home tokovi koriste `persistent_bottom_nav_bar_v2` `PersistentTabView` sa zajedničkim Instagram-style `CustomBottomNavigation` prikazom. Navigacija je floating pill bez labela i indikatorske linije, a jedan selekcijski segment animirano klizi između tabova. Tab sadržaj se mijenja trenutno, bez horizontalne tranzicije ekrana. Pri vertikalnom scrollu prema dnu cijeli bar se blago smanjuje, a pri scrollu prema vrhu vraća punu veličinu; horizontalni scroll ne mijenja bar. Svaki tab zadržava vlastiti navigation stack i stanje, dok postojeći `GoRouter` i dalje upravlja aplikacijskim rutama izvan tabova. Root tabovi ne rezervišu donji `SafeArea`, pa se pozadina i scroll sadržaj protežu do dna i prolaze ispod navigation overlaya.
-- Globalni `CustomAppBar` standardizira centrirani naslov, Cupertino back strelicu i border pri dnu.
-- Forme koriste zajednički `CustomTextfield` i `CustomButton`; validacije, disable stanje i loading ostaju konzistentni.
-- Inicijalno učitavanje sadržaja koristi reusable `SkeletonShimmer` i skeleton koji prati stvarni oblik ekrana ili kartice. Customer Home koristi horizontalni, featured i grid listing skeleton bez promjene visine pri dolasku podataka, a chat koristi message-bubble skeleton do prvog kompletnog snapshot-a. Mali indikatori za submit, slanje poruke i pagination ostaju akcijski loaderi jer tada postojeći sadržaj ostaje vidljiv.
-- Feedback za sačuvane stavke koristi `toastification`, pozicioniran pri dnu i horizontalno centriran.
+The API associates the profile with the authenticated session. The client does not send an arbitrary user ID for operations on its own profile.
 
----
+### 7.3 Sign-Out and Active Streams
 
-## 7. Autentikacija, profil i lokacija
+SSE and other session-scoped streams must be closed before the auth session ends:
 
-### Autentikacija
+1. The UI removes the protected navigation stack.
+2. `SessionStreamRegistry.cancelAll()` cancels dashboard, earnings, and chat subscriptions.
+3. The registry rejects a new subscription that a delayed async flow attempts to open during sign-out.
+4. Notification device registration is removed.
+5. Firebase Auth ends the session.
 
-- Email/password sign-up i sign-in preko Firebase Authentication.
-- Google Sign-In je integrisan kroz `google_sign_in` i Firebase credential.
-- Prilikom registracije se kreira Firestore dokument u `users/{uid}`.
-- Ako kreiranje profila ne uspije nakon email sign-upa, aplikacija uklanja nepotpun Firebase Auth account da ne ostane nekonzistentan korisnik.
-- Logout koristi replacement navigaciju (`context.go`) na sign-in, bez vraćanja na dashboard u navigation stacku.
-- `AuthenticationRepository` izlaže Firebase `authStateChanges` kroz router notifier. Time auth redirect reaguje na stvarno Firebase stanje, a ne na zakašnjeli UI callback.
+This order prevents authorization requests after sign-out and prevents emitting state into an already closed Cubit. After each asynchronous boundary, the code checks whether the Cubit or event handler can still emit.
 
-### Session stream lifecycle
+### 7.4 Location
 
-Autentificirani Firestore i SSE streamovi nakon Firebase Auth odjave više nemaju važeći pristup. Zato aplikacija ne prepušta zatvaranje streamova slučajnom redoslijedu rebuilda i navigacije:
-
-1. Root view odmah zamijeni trenutnu rutu sa sign-in ekranom.
-2. `AuthenticationRepository.signOut()` poziva `SessionStreamRegistry.cancelAll()` **prije** `FirebaseAuth.signOut()`.
-3. Registry otkazuje aktivne, autentikacijom vezane pretplate, uključujući dashboard/Earnings SSE i chat unread indikatore.
-4. Dok je session u završavanju, registry odmah otkazuje svaku pretplatu koju neki sporiji async `load()` pokuša otvoriti.
-5. Tek nakon toga briše se notification device registracija i poziva Firebase sign-out.
-
-Ovaj redoslijed sprečava `cloud_firestore/permission-denied` race condition i `Cannot emit new states after calling close` greške pri prelazu između prijavljenog i neprijavljenog stanja. Cubiti/BLoC-i dodatno provjeravaju `isClosed` / `emit.isDone` poslije async granica.
-
-### User model
-
-`UserModel` sadrži identitet, `UserType` (`provider`/`customer`), `selectedBusinessId`, telefon, avatar, country code, datum rođenja, adresu i grad. Provider se inicijalno može postaviti kao default, a *User Type Checker* eksplicitno bira customer/provider tok za nov account.
-
-### Lokacija
-
-- `geolocator` traži runtime permission na customer home ulazu.
-- Koordinate se reverse-geocodeuju preko Nominatim/OpenStreetMap endpointa, bez plaćenog Google Geocoding API-ja.
-- Grad i adresa se spremaju u user profil i koriste za **Popular near you** / **Trending near you**.
-- Location update odmah osvježava cached user profil. Dashboard normalizuje grad (`trim` + lowercase) i ne ponavlja nearby REST zahtjev ako location servis emituje grad koji je već učitan ili se upravo učitava; stvarna promjena grada i dalje pokreće novi snapshot.
-- Business lokacija se bira na Google mapi; klik na *Open in Maps* koristi `url_launcher` za vanjsku Google Maps aplikaciju.
+- `geolocator` requests runtime permission in the customer home flow.
+- Nominatim/OpenStreetMap performs reverse geocoding from coordinates into an address and city.
+- The city is normalized before discovery requests; the same city does not trigger parallel or repeated fetches.
+- Business location is selected on Google Maps.
+- **Open in Maps** uses `url_launcher` to open an external maps application.
 
 ---
 
-## 7.1 Lokalizacija
+## 8. Media Storage
 
-Lokalizacija koristi Flutterov službeni `gen-l10n` mehanizam, bez dodatnog third-party localization sloja:
-
-- ARB katalozi: `lib/l10n/app_{bs,en,de,es,fr,it}.arb`.
-- Generisani, tipizirani API: `AppLocalizations`; UI mu pristupa kroz `context.l10n` ekstenziju.
-- Bosanski (`bs`) je početni i fallback jezik. Podržani su i engleski (`en`), njemački (`de`), španski (`es`), francuski (`fr`) i italijanski (`it`).
-- `LocaleRepository` sprema odabrani kod jezika u SharedPreferences, a globalni `LocaleCubit` odmah mijenja `MaterialApp.locale` bez restarta aplikacije.
-- Izbor jezika je dostupan na customer Profile i provider More ekranima. iOS `Info.plist` eksplicitno navodi `bs` i `en`.
-
-Novi tekst uvijek treba dodati u sve ARB fajlove, zatim pokrenuti:
-
-```bash
-flutter gen-l10n
-```
-
-Ne treba hardkodirati korisnički vidljiv tekst u novim widgetima. Za dinamički tekst koristiti ICU plural/select poruke u ARB-u, posebno za goste, noći, slotove, cijene i statuse.
-
----
-
-## 8. Business domen
-
-`BusinessModel` je zajednički entitet za oba tržišta:
-
-- identitet i vlasništvo: `id`, `ownerId`, `type`;
-- sadržaj: naziv, kategorija, opis, lokacija, logo, cover i do sedam dodatnih slika;
-- discovery: aktivnost, prosječna ocjena, broj recenzija i `featuredCollectionIds`;
-- promotion signal: `isPromotionActive` je lagani discovery indikator za badge na karticama; puni promotion podaci se ne dupliciraju u business dokumentu;
-- tip-specifični podaci: `stayDetails` ili `serviceDetails`.
-
-### 8.1 Stays
-
-Podržane kategorije: hotel, apartment, cabin, villa, beach villa, mountain cabin, cottage/weekend house, pool villa, resort, guesthouse, hostel, aparthotel, glamping i vacation home.
-
-Stay može biti:
-
-- **single unit** — npr. jedna vila/apartman; booking zauzima cijeli business za datume;
-- **multiple units** — hotel/aparthotel ili bilo koji business s više jedinica; room modeli nose cijenu i raspoloživost.
-
-Stay detalji sadrže cijenu po noći, rooms, amenities i optional extras. Dostupni amenityji uključuju Wi‑Fi, parking, pool, spa, pet-friendly, gym, kuhinju, balkon, pogled, ski-in/ski-out, ski storage/rental/shuttle i druge. Extras imaju cijenu i jedinicu naplate (po noći, jednokratno ili po satu), npr. breakfast, transfer, parking, quad bike rental, boat tour i local guide.
-
-Stay collections bira provider jer isti hotel može imati smisla u više kolekcija:
-
-`romantic_getaways`, `family_friendly`, `weekend_escapes`, `beachfront_stays`, `pet_friendly`, `pool_stays`, `mountain_escapes`, `city_breaks`.
-
-### 8.2 Services
-
-Podržani su hair/barber/beauty/nail saloni, dentalne i medicinske ordinacije, physiotherapy, masaža/spa, treneri, edukacija, electrician/plumber/cleaning, automotive, detailing, tattoo, veterina, photo/video, locksmith, HVAC, painter/decorator, legal/accounting i ostale profesionalne usluge.
-
-Service business sadrži:
-
-- listu **service offerings** (naziv, trajanje, cijena, add-ons);
-- jednog ili više **provider/staff** članova;
-- availability slotove po provideru;
-- automatski dodijeljene service featured collections na osnovu kategorije.
-
-Kolekcije su `wellness_spa`, `beauty_grooming`, `home_repairs`, `auto_services`, `health_care`, `learn_grow`, `pet_care` i `professional_services`. Provider ih ne bira ručno, što sprječava nelogične kombinacije kategorije i kolekcije.
-
-### 8.3 Dodavanje businessa
-
-Add Business feature koristi BLoC, zasebne widgete za formu, medije, stay jedinice, service ponude, osoblje i slotove. Slike se biraju iz galerije/kamere, kompresuju i uploaduju u Firebase Storage; nakon toga se kompletan postojeći `BusinessModel` šalje na Go REST API, koji ga trajno upisuje u PostgreSQL.
-
-Razvojni seed metod puni bazu realističnim stay i service podacima (različiti gradovi, kategorije, cijene, rating, slike, rooms, extras, staff i ponuda). Seed je samo za development/testiranje i ne treba biti dostupan u produkcijskom UI-ju.
-
-### 8.4 Upravljanje i uređivanje businessa
-
-**Manage Stays & Services** nije zaseban, ograničen katalog editor. Lista/selector prvo koriste lagani `GET /v1/businesses` summary. Kada provider otvori editor, `AddBusinessBloc` poziva `GET /v1/businesses/{id}` i tek iz punog REST aggregata popunjava isti **Add Business** obrazac u edit modu. Time create i update dijele istu validaciju, strukturu forme i `BusinessModel`, a nepotrebni detaljni request se ne radi za svaki business u listi.
-
-- Formu unaprijed popunjavaju naziv, kategorija, grad/adresa, koordinate, opis, inventory tip, cijena, amenities, extras i njihove cijene, featured collections, ponude, zaposlenici, provizije i availability slotovi.
-- Za multiple-unit stay provider može uređivati, dodavati i uklanjati više bookable room/unit stavki. Svaka stavka nosi naziv, kapacitet, kvadraturu, cijenu po noći, količinu i aktivnost.
-- Service business zadržava uređivanje kompletne liste offeringsa i provider/staff članova zajedno s njihovim slotovima i commission rate-om.
-- Tip businessa je zaključan tokom izmjene kako postojeći stay/service dokument ne bi promijenio domenski tip i ostavio nekonzistentne rezervacije ili appointmente.
-- Postojeći logo, cover i `photoUrls` se prikažu kao mrežne slike i ne uploaduju se ponovo. Firebase download URL je UI-only vrijednost: prije `PUT` se normalizuje u trajni Storage path, koji Go API sprema u PostgreSQL. Galerija ostaje ograničena na najviše sedam dodatnih slika.
-- Update zadržava identitet businessa, ownera, valutu, rating, broj recenzija, aktivno stanje i `isPromotionActive`; REST `PUT` zamjenjuje editabilni business aggregate. Zbog toga editor uvijek prvo fetch-a puni detail, umjesto da šalje nepotpun list summary.
-
-### 8.5 Promotions & Discounts
-
-Provider za pojedinačni business upravlja promocijama kroz **Promotions & Discounts** feature. Promotion je zaseban dokument u `promotions` kolekciji i sadrži business/vlasnika, naziv, tip, vrijednost, period važenja, opcionalni promo kod, minimum iznosa, stay-only minimum noći, usage limit i aktivno stanje.
-
-- Tipovi su `percentage`, `fixedAmount` i `couponCode`. Coupon code koristi definisanu procentualnu vrijednost tek nakon ispravnog unosa koda.
-- Nakon create, activate/deactivate ili delete akcije repository ažurira samo `business.isPromotionActive`. Time kartice mogu odmah prikazati dijagonalni **Popust** banner bez čitanja kompletne promotion definicije za svaki business u feedu.
-- Automatski percentage/fixed popust se učitava u review/payment toku. Coupon se server-side ponovo validira pri potvrdi plaćanja; nepostojeći ili istekao kod zaustavlja kreiranje rezervacije.
-- Popust se računa nad stay subtotalom (room + extras) odnosno appointment service subtotalom, prije service fee i poreza. Kod staya se provjerava i minimalan broj noći; appointment nema minimum-nights pravilo.
-- Review, payment, confirmation i details ekrani prikazuju popust i umanjeni total. Payment/confirmation prikaz dodatno koristi precrtanu izvornu vrijednost gdje je relevantno.
-- Snapshoti se čuvaju uz rezultat transakcije: booking ima `discountAmount` i `originalTotal`, a appointment ima `originalServiceCost` i `discountAmount`. Stare rezervacije bez tih polja sigurno koriste postojeći total kao fallback.
-
----
-
-## 9. Customer featurei
-
-### Home / Dashboard
-
-- Tabovi **Stays** i **Services**.
-- Discovery podaci bez aktivnih filtera dolaze s Go REST API-ja i PostgreSQL source of truth-a, bez Firestore fallbacka.
-- Recommended stays, popular/trending businessi u customerovom gradu, horizontalni scroll i cursor/offset paginacija.
-- Quick filter chipovi ostaju vidljivi kad se prikažu rezultati, kako kontekst pretrage ne nestaje.
-- Kartice otvaraju odgovarajući stay/service detail.
-
-### Search i filters
-
-- Debounce sprječava Firestore request na svako upisano slovo.
-- Pretraga podržava naziv businessa i grad.
-- Stay filteri: check-in/check-out, broj gostiju, grad, raspon cijene, rating i amenityji.
-- Service filteri: datum, vrijeme u 30-minutnim koracima, kategorija businessa, grad, raspon cijene i sortiranje.
-- Ako nema aktivnih filtera, home koristi discovery feed. Ako su stay filteri aktivni, `StaySearchDataSource` koristi autentificirani `GET /v1/stays/search` Go endpoint; Flutter šalje samo vrijednosti koje je korisnik stvarno odabrao, uz tehničke pagination parametre. Time se kombinovano filtriranje i availability izvršavaju server-side bez preuzimanja kandidata na uređaj.
-
-### Stay detail i booking
-
-- Hero galerija prikazuje cover kao prvu sliku, zatim `photoUrls`; broj page indikatora odgovara stvarnom broju slika.
-- Prikazani su cijena, ocjene, lokacija i mapa, rooms, amenities, extras, opis i recenzije.
-- Ako customer ne odabere room type, flow koristi default jedinicu/cijenu businessa gdje je to dozvoljeno.
-- Booking details bira raspon datuma (ponedjeljak je prvi dan sedmice), goste i provjerava dostupnost.
-- Review stay bira extras i izračunava room subtotal, cleaning/service fee, taxes i total. Ako business ima aktivnu promociju, review/payment koriste umanjeni subtotal, jasno prikazuju popust i sniženi ukupni iznos.
-- Payment podržava karticu, Apple Pay, Google Pay i **plaćanje gotovinom**. Kartica validira format broja, expiry i 3-cifreni CVV; gotovina ne traži kartične podatke.
-- Booking se kreira kao `confirmed`; mogući statusi su `confirmed`, `declined`, `cancelled`, `completed` i `noShow`.
-- Customer može otkazati booking; providerovo odbijanje je `declined`, customerovo otkazivanje je `cancelled`.
-- Za gotovinske rezervacije business odmah vidi očekivanu zaradu. Nakon isteka termina provider može označiti `noShow`; iznos se tada uklanja iz zarade, cash/online podjele, broja rezervacija i chart agregata.
-
-### Service detail i appointment
-
-- Detail prikazuje galeriju, kategoriju, ocjenu, mapu, service offeringe, cijene/trajanja, opis i staff.
-- Customer može odabrati više usluga; ukupno trajanje određuje koliko susjednih 30-minutnih slotova mora ostati slobodno.
-- Dostupnost se provjerava po konkretnom provideru; zauzeti ili blokirani slotovi nisu selektabilni.
-- Review appointment prikazuje odabrane usluge i add-ons; special requests su namjerno izbačeni iz sadašnjeg flowa. Aktivni popust se prikazuje prije payment koraka, a konačni obračun se ponovo validira pri kreiranju appointmenta.
-- Payment kreira `confirmed` appointment i atomarno zauzima njegove slotove. Dostupni su kartica, Apple Pay, Google Pay i gotovina.
-- Appointment detail prikazuje business, izvođača, usluge, datum/vrijeme, cijene, payment metodu i confirmation code.
-- Customer može otkazati appointment i može ga rescheduleati samo jednom; provider može rescheduleati bez tog ograničenja. Past cash appointment može biti označen kao `no_show` kada customer ne dođe.
-
-### Draftovi
-
-- REST `GET /v1/drafts/booking` i `PUT /v1/drafts/booking` čuvaju i vraćaju prekinuti stay flow za trenutno prijavljenog customera.
-- REST `GET /v1/drafts/appointment` i `PUT /v1/drafts/appointment` čuvaju i vraćaju odabrane usluge, providera, datum, slotove i add-ons service flowa.
-- REST `DELETE` endpointi brišu odgovarajući draft nakon uspješne potvrde plaćanja.
-- Pri napuštanju flowa prikazuje se odluka da se draft sačuva ili odbaci.
-- Draft vraća označene datume, slotove i extras/add-ons pri nastavku.
-
-### My Bookings, Saved, Profile i Explore
-
-- **My bookings** razdvaja stays i services na upcoming/past. Oba taba učitavaju REST stranice sa zasebnim cursorima i lokalno se osvježavaju nakon REST cancel/reschedule akcija; customer tabovi nemaju Firestore fallback.
-- **Saved** koristi Go REST za spremanje, uklanjanje, provjeru i listanje korisnikovih businessa. Lista prikazuje aktuelne podatke za smještaje i servise, a lokalni broadcast odmah osvježava listu i stanje srca nakon uspješne promjene. Animirano uklanjanje, toast feedback i optimistic UX ostaju sačuvani.
-- **Profile/Edit Profile** omogućava avatar, puno ime, telefon sa country pickerom, datum rođenja preko Cupertino pickera, adresu i grad.
-- **Contact us** koristi zaseban Support Tickets feature, a ne customer-business chat. Customer kreira ticket s kategorijom, naslovom i porukom te vidi samo vlastite tickete i njihove statuse (`open`, `inProgress`, `resolved`).
-- Ticketi se čuvaju u Supabase `support_tickets` tabeli i dostupni su samo kroz customer-only `GET/POST /v1/support-tickets`. Backend izvodi customer identitet, ime, email i početni `open` status iz autentificiranog profila; Flutter šalje samo kategoriju, naslov i poruku. Lista se osvježava pri otvaranju i nakon uspješnog kreiranja, bez Firestore fallbacka, streama ili pollinga. Status kasnije mijenja interni support/admin alat.
-- **Explore** ima odvojene stay/service prikaze, izbor grada uključujući *All cities*, browse-by-category, kolekcije, top/trending poslovanja i recently viewed. Dinamički discovery/search podaci dolaze s Go endpointa, bez Firestore fallbacka.
-- Recently viewed se sprema po useru i businessu preko `PUT /v1/recently-viewed/{businessID}`, a stay/service liste čitaju `GET /v1/recently-viewed`. Backend zadržava najviše 30 referenci po useru i pri čitanju vraća aktuelne business podatke, bez Firestore fallbacka ili dupliciranja kartica. Nakon uspješnog REST upisa, `RecentlyViewedUpdatesService` šalje lokalni broadcast signal aktivnim Recently Viewed cubitima da osvježe listu; nema socket konekcije ni periodičnog pollinga.
-- Rezultati kategorije/kolekcije koriste cursor paginaciju.
-
----
-
-## 10. Provider featurei
-
-### Dashboard, earnings i business management
-
-- Dashboard prikazuje selektovani business, aktivne bookinge/appointmente, zaradu u tekućem mjesecu, prosječni rating i FL Chart trendove iz PostgreSQL snapshot metrika koje dobija kroz SSE.
-- Earnings prikazuje ukupnu mjesečnu zaradu, odvojeno **online** i **cash** earnings, te trend prihoda i volumena rezervacija.
-- Earnings period filter podržava: current week, past week, this month, past month, this year, last year i custom raspon. Custom početni/završni datum se bira u Cupertino date pickeru.
-- Kod service businessa Earnings omogućava i izbor zaposlenika. Prikazuju se **gross earnings** (ukupna vrijednost njegovih appointmenta) i **provider earnings** (njegova ugovorena provizija), uz trend prihoda i broj appointmenta za odabrani period.
-- Svaki zaposlenik ima `commissionRate` (podrazumijevano 100%). Pri kreiranju appointmenta spremaju se historijski snapshoti `providerCommissionRate` i `providerEarnings`, pa kasnija promjena provizije ne mijenja ranije obračune.
-- Go backend računa owner-only earnings projekciju direktno iz indeksiranih PostgreSQL rezervacija. Dnevni gross/provider iznosi omogućavaju week i custom filtere bez čitanja pojedinačnih appointmenta na mobilnoj strani.
-- Za djelimične mjesece (sedmica i custom period) API vraća samo dnevne vrijednosti unutar inkluzivnog odabranog raspona, uključujući zasebne daily online i cash earnings, pa podjela ostaje tačna.
-- Cash rezervacija/appointment ulazi u earnings odmah pri potvrdi kao očekivani prihod. No-show je dostupan samo provideru, samo za završeni cash termin/rezervaciju sa statusom `confirmed` ili `completed`; uz akciju se prikazuje objašnjenje o uticaju na metrike.
-- Dashboard i Earnings metrike backend računa iz indeksiranih PostgreSQL reservation redova, bez kopirane aggregate tabele i inicijalizacijskog poziva. Firestore `business_metrics` dokumente migrirani Flutter flow više ne čita.
-- `selectedBusinessId` u user dokumentu je jedini izvor aktivnog businessa i promjene se reaktivno reflektuju na dashboard i booking ekran.
-- Ako provider nema businessa, dashboard prikazuje empty state i *Add new business* akciju.
-- *My Businesses* lista podržava dodavanje, biranje aktivnog businessa i swipe-to-delete sa animacijom kartice bez reloadanja cijelog ekrana.
-- Swipe-to-delete poziva `DELETE /v1/businesses/{businessID}` kroz zaseban `DeleteBusinessUseCase`; Flutter više ne briše business ni povezane podatke direktno iz Firestorea.
-
-### Provider bookings i appointments
-
-- Bookings ekran i provider stay calendar koriste `ProviderBookingsRepository` REST sloj za selektovani business, status filtere i cursor paginaciju; nemaju Firestore booking fallback.
-- Manage Booking prikazuje customera, room, datume, goste, cijenu, završavanje i odbijanje. Kod past cash stavki nudi i No-show akciju sa hintom o uklanjanju iz earnings metrika.
-- Service appointment kartice imaju Manage akciju za customer detalje, završavanje, cancel, reschedule, kontakt i No-show za past cash termine.
-- Provider cancel rezultira statusom `declined`; customer cancel rezultira `cancelled`.
-
-### Availability & Calendar
-
-- Provider service calendar čita i mijenja ručne blokade kroz `/v1/businesses/{businessID}/service/staff/{staffID}/availability-blocks`.
-- Svaki REST poziv prolazi kroz action-specific use case, `ServiceAvailabilityRepository` ugovor, implementaciju, API data source i `ApiClient`.
-- Blokade su PostgreSQL vremenski rasponi; Flutter zadržava postojeći UX 30-minutnog block/unblock slota.
-
-- Prikaz zavisi od tipa selektovanog businessa.
-- **Stays:** zauzeti datumi se generišu iz potvrđenih bookinga; multiple-unit business može imati više bookinga istog dana.
-- **Services:** odabirom dana prikazuju se slobodni, zauzeti i ručno blokirani 30-minutni slotovi po provideru.
-- Klik na zauzeti appointment može otvoriti overlay s customer avatarom, imenom, emailom, telefonom i contact akcijom.
-- Provider može ručno blokirati slobodan slot ili ga kasnije odblokirati. Blokovi su odvojeni dokumenti kako ne nose privatne customer podatke.
-
-### More i account settings
-
-- More grupiše business management, financijske placeholder sekcije, komunikaciju i settings.
-- Stvarni unread indikator za Messages ne koristi dummy vrijednost.
-- Account settings podržava izmjenu osnovnog profila, avatar upload i password/security akcije.
-
----
-
-## 11. Chat i komunikacija
-
-Chat je shared feature između customera i konkretnog businessa:
-
-- Jedinstven conversation je deterministički vezan za business i customera.
-- PostgreSQL tabele `chat_conversations`, `chat_participant_state` i `chat_messages` su jedini aktivni source of truth; Flutter nema Firestore fallback i ne pristupa Supabaseu direktno.
-- Tok je `Cubit → action-specific use case → ChatRepository → ChatRepositoryImpl → ChatApiDataSource → ApiClient/SseClient`.
-- REST rute pod `/v1/conversations` otvaraju conversation, listaju conversatione i poruke, šalju idempotentnu poruku s client-generated UUID-em te ažuriraju read, typing i presence stanje.
-- `/v1/chat/stream` šalje samo `chat_sync` i participant-scoped `chat_changed` invalidacije bez sadržaja poruke. Repository nakon invalidacije ponovo učitava autorizovani REST snapshot; reconnect dobija novi `chat_sync`.
-- Otvoren chat obnavlja presence s expiry vremenom; ako je recipient trenutno u istom chatu, backend ne povećava unread count i ne kreira push outbox zapis.
-- Typing indikator je transient state s kratkim expirationom.
-- Seen se prikazuje samo ispod stvarne posljednje outgoing poruke koja je pročitana, ne u bubbleu i ne na starijim porukama.
-- Unread counters se računaju u backendu, a streamovi za indikatore se aktiviraju samo dok je relevantan view u widget stacku, ne globalno kroz cijeli lifecycle aplikacije. SSE je primarni invalidator, foreground chat FCM odmah pokreće REST refresh, a jednokratni REST refresh se radi i kada se aplikacija vrati u foreground. Chat nema periodični polling.
-- API vraća trajne Firebase Storage pathove; `ChatRepositoryImpl` ih pretvara u download URL-ove samo za prikaz.
-
-Chat se otvara iz booking/appointment detalja kroz *Message provider/customer* i iz Messages stavke na More/Profile ekranima.
-
----
-
-## 12. Notifikacije
-
-### In-app i push podjela
-
-- Booking i appointment događaji se zapisuju kao **in-app notification** u Supabase PostgreSQL bazu preko Go API-ja. Nakon uspješnog zapisa API šalje FCM push na registrirane uređaje.
-- Chat koristi **samo push** (ako chat nije otvoren) i unread message counter; ne proizvodi dupliciranu in-app notifikaciju.
-- Potvrda kreiranja booking/appointmenta ne šalje customeru suvišnu “confirmed” notifikaciju, jer confirmation ekran već potvrđuje uspjeh.
-
-Flutter FCM lifecycle vodi `NotificationDeviceService`: nakon prijave registruje token putem `PUT /v1/notification-devices/{deviceId}`, a pri odjavi ga uklanja putem `DELETE` rute. Servis izlaže odvojene streamove za foreground i otvorene notifikacije, bez navigacijskih callbackova. `NotificationCoordinator`, pokrenut iz `bootstrap.dart` nakon prvog framea, sluša otvorene notifikacije, dok `NotificationRouter` centralno validira payload i mapira notification tip na GoRouter destinaciju. `app.dart` ne sadrži FCM lifecycle, payload ni navigation logiku. Isti `NotificationRouter` koristi i tap na in-app notification stavku. `NotificationBellCubit` poziva `GetUnreadNotificationsCountUseCase`, ne poziva use case iz widgeta. Kada aplikacija u foregroundu primi FCM poruku, Cubit odmah osvježi `GET /v1/notifications/unread-count`; periodični refresh svakih 30 sekundi ostaje samo kao fallback. Nema WebSocket konekcije.
-
-### Dispatch događaja
-
-| Izvor | Efekat |
-|---|---|
-| Go API: booking created | Provider dobija in-app i FCM notifikaciju o novom bookingu |
-| Go API: booking status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa bookinga |
-| Go API: booking cancelled by customer | Provider dobija in-app i FCM notifikaciju o customer otkazivanju |
-| Go API: appointment created | Provider dobija in-app i FCM notifikaciju o novom appointmentu |
-| Go API: appointment status changed | Customer dobija in-app i FCM notifikaciju o promjeni statusa appointmenta |
-| Go API: appointment cancelled by customer | Provider dobija in-app i FCM notifikaciju o customer otkazivanju |
-| Go API: chat message committed | `chat_push_outbox` worker šalje push samo ako recipient nije aktivan u istom chatu |
-| `initializeBusinessMetrics` | Callable inicijalizacija ili verzionirana obnova KPI i earnings agregata za owner business |
-
-Migracija `000019_notifications` kreira Supabase tabele `notification_devices` i `in_app_notifications`. API je jedini klijent Supabasea; Flutter ne pristupa Supabaseu direktno. Customer ne dobija notifikaciju kada sam otkaže booking ili appointment; tada se notifikacija šalje samo provideru. Push failure ne poništava već uspješno spremljenu booking/appointment promjenu ili in-app zapis.
-
-FCM tokeni se čuvaju po `user_id` i `device_id`; ponovna registracija istog uređaja osvježava token. API koristi idempotentne ID-jeve notifikacija, pa se isti business događaj ne upisuje duplo.
-
-Za iOS push na stvarnom uređaju je potreban APNs token/certifikat; bez njega FCM push ne može biti pouzdano testiran na iOS-u. In-app podaci i dalje rade nezavisno od APNs-a.
-
----
-
-## 13. Firebase i backend model podataka
-
-| Spremište / putanja | Svrha |
-|---|---|
-| `users/{uid}` | korisnički profil, tip, selected business i grad/adresa |
-| Supabase `notification_devices` | FCM tokeni uređaja, dostupni samo kroz Go API |
-| Supabase `in_app_notifications` | in-app notifikacije, read status i payload, dostupni samo kroz Go API |
-| Supabase `business_reviews` | recenzije i source/customer snapshoti; dostupno samo kroz Go API |
-| Supabase `support_tickets` | customer support zahtjevi i statusi; dostupno samo kroz Go API |
-| Supabase `recently_viewed_businesses` | nedavno otvoreni businessi, dostupni samo kroz Go API |
-| Supabase business tabele | stay ili service business, detalji, mediji, lokacija i discovery polja |
-| Supabase `business_promotions` | ownerov promotion konfigurisan za jedan business |
-| Supabase `stay_bookings` | stay rezervacije i payment/guest snapshot |
-| Supabase `service_appointments` | service termini, provider, services, payment i reschedule stanje |
-| Supabase `stay_bookings` / `service_appointments` | source of truth za dashboard metrike; Go API iz njih računa indeksirani current-month snapshot i šalje live invalidacije kroz SSE |
-| Supabase `chat_conversations` / `chat_participant_state` / `chat_messages` | chat metadata, participant read/typing/presence stanje i poruke; dostupno samo kroz Go API |
-| Supabase `chat_push_outbox` | trajni chat push red sa retry i delivery statusom; obrađuje ga Go API worker |
-| `business_metrics/{businessId}` | legacy Firebase aggregate; migrirani Flutter dashboard i Earnings ga više ne čitaju |
-| `business_metrics/{businessId}/months/{YYYY-MM}` | legacy Firestore revenue/cash/online i dnevni podaci; nisu dio aktivnog Flutter toka |
-| Supabase `service_staff_availability_blocks` | providerove ručne blokade vremenskih raspona, dostupne samo kroz Go API |
-
-Storage putanje:
+Images are selected from the gallery or camera, compressed to WebP where appropriate, and uploaded to Firebase Storage. Business data references a storage path, for example:
 
 ```text
+profiles/{userId}/profile.webp
 businesses/{ownerId}/{businessId}/{fileName}
-profiles/{userId}/{fileName}
 ```
 
-Za Go/PostgreSQL backend Storage path je trajni podatak, dok Firebase download URL nije. PostgreSQL čuva samo path, npr. `profiles/{userId}/profile.webp`. Flutter preko Firebase Storage SDK-a iz tog patha dobija trenutni download URL samo za prikaz slike; URL se ne upisuje u PostgreSQL niti šalje nazad Go API-ju.
+Media contract rules:
+
+- Application data does not use a Firebase download URL as a persistent value.
+- The API returns a storage path as the persistent value.
+- Flutter resolves the path to the current download URL when displaying the image.
+- A direct `https` URL is allowed for development seed images and is passed through without a Storage lookup.
+- Before a REST create/update request, a download URL is normalized back into a storage path.
+- An existing network image is not uploaded again unless it has been replaced.
+- The business gallery remains limited to seven additional photos.
+- Storage rules and authenticated paths restrict upload, modification, and deletion.
+
+This contract prevents the database from being coupled to a revocable download URL token and allows the media delivery method to change without modifying business records.
 
 ---
 
-## 14. Sigurnost
+## 9. Business Domain
 
-Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules).
+`BusinessModel` is the shared application model for stay and service aggregates. It contains identity, owner, type, name, category, description, location, media references, currency, active state, rating, review count, featured collections, and an active promotion signal. Type-specific content is stored in `stayDetails` or `serviceDetails`.
 
-- Business je čitljiv prijavljenim korisnicima, ali create/update/delete radi samo owner.
-- Promotion dokument može kreirati, mijenjati ili obrisati samo owner pripadajućeg businessa; customer ga ne može mijenjati niti proizvoljno postaviti `isPromotionActive`.
-- Booking i appointment mogu čitati/mijenjati samo customer ili business owner; ID-jevi customer/owner ne mogu se prepisati updateom.
-- Customer može rescheduleati appointment najviše jednom; owner nema taj limit.
-- Appointment slotovi izlažu samo dostupnost, a ne privatne podatke customera.
-- Service availability blocks može kreirati/brisati samo business owner.
-- Conversation i messages su dostupni samo učesnicima; create provjerava da business stvarno pripada navedenom owneru.
-- Saved, draftovi, uređaji, notifikacije i recently viewed su scoped na vlastitog usera.
-- Recenziju kreira samo customer iz vlastite završene rezervacije ili termina; baza garantuje najviše jednu recenziju po customeru i businessu, a prosjek se ažurira atomski.
-- Storage dozvoljava samo vlasniku upload/update/delete slike, do 10 MB i isključivo `image/*` sadržaj.
-- Flavor-specifični `google-services.json`, `GoogleService-Info.plist` i Maps secret xcconfig fajlovi su u `.gitignore`; API ključevi i credential konfiguracija ne idu u Git.
+### 9.1 Provider Business API
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/v1/businesses` | Lightweight owner-only summaries for selectors and lists |
+| `GET` | `/v1/businesses/{businessId}` | Full owner-only aggregate for the editor |
+| `POST` | `/v1/businesses` | Create a business |
+| `PUT` | `/v1/businesses/{businessId}` | Fully replace the editable aggregate |
+| `DELETE` | `/v1/businesses/{businessId}` | Archive a business |
+
+The list intentionally does not return all nested data. Before editing, the editor loads the full aggregate so an update does not unintentionally remove rooms, amenities, extras, offerings, staff, or availability data that are not part of the summary response.
+
+Business type is immutable after creation. Items with historical booking/appointment references are deactivated or archived instead of being physically deleted.
+
+### 9.2 Stays
+
+A stay supports single-unit and multiple-unit inventory:
+
+- a single-unit booking occupies the entire accommodation for the date range;
+- multiple-unit availability is calculated per room type and its capacity;
+- rooms contain name, price, capacity, area, quantity, and active state;
+- amenities and extras belong to the business aggregate;
+- an extra can be charged once, per night, or per hour.
+
+Stay featured collections are selected explicitly by the provider because one accommodation may belong to multiple contexts, such as city break, beachfront, mountain, family, romantic, or pet-friendly.
+
+### 9.3 Services
+
+A service business contains:
+
+- service offerings with a name, price, duration, and add-ons;
+- one or more staff members;
+- the relationship between staff and the services they can perform;
+- weekly availability per staff member;
+- manual availability blocks;
+- a commission rate used to calculate staff earnings.
+
+An appointment occupies consecutive 30-minute slots based on the total duration of the selected services. Availability is always checked for the specific staff member.
+
+### 9.4 Creating and Editing
+
+The Add Business BLoC manages validation, media selection, location, stay inventory, or service offerings. Create and edit use the same form shape and the same typed aggregate. Server UUIDs of existing nested entities preserve identity during updates, while new local draft IDs receive server IDs after saving.
+
+Development seed actions use provider-only endpoints `/v1/development/seed/stays` and `/v1/development/seed/services`. The backend exposes them only when `APP_ENV=development`.
 
 ---
 
-## 15. Pretraga, filtriranje i paginacija
+## 10. Customer Features
 
-### REST discovery put
+### 10.1 Discovery, Home, and Explore
 
-Početni home feed, city feed, popular/trending sekcije, kategorije i kolekcije koriste paginirane Go REST endpoint-e. Flutter nema `DataCursor`, `FirestoreDataSource` ni `cloud_firestore` dependency; server kontroliše upite, autorizaciju i PostgreSQL paginaciju.
+Customer discovery uses lightweight business projections from the REST API:
 
-### Server-side filter put
-
-Stay filteri koriste Go endpoint `GET /v1/stays/search`, a service filteri `GET /v1/services/search`. Oba endpointa obrađuju:
-
-- parsiranje/validacija filtera;
-- validaciju, normalizaciju i mapiranje rezultata;
-- availability provjeru;
-- sortiranje i cursor response.
-
-Service endpoint prihvata datum/vrijeme, kategoriju, featured kolekciju, grad, raspon cijene, sortiranje i cursor. Vraća isti `BusinessModel` oblik koji je Flutter ranije primao od callable funkcije, uključujući ponude, providere, media URL-ove i `nextCursor`.
-
-Service availability provjerava da li barem jedan provider ima cijeli uzastopni raspon slobodnih 30-minutnih slotova za traženo trajanje. To sprječava da se business vrati u rezultatima ako su svi radnici zauzeti u tom vremenu.
-
-Customer stay i service detail ekrani učitavaju puni aktivni business agregat preko `GET /v1/discovery/businesses/{businessID}`. Endpoint vraća isti `BusinessModel` oblik, uključujući media, stay sobe/amenities ili service ponude/providere, pa detail ekran ne čita business dokument direktno iz Firestorea.
-
-Backend greške se na serveru loguju i vraćaju kao standardni API error response; `ApiClient` ih pretvara u `ApiException`, pa se greška ne miješa s praznim rezultatom.
-
-### Normalizacija
-
-Za pouzdan search/filter gradova koriste se normalizovana polja, posebno `location.cityLowercase`. Normalizacija je usklađena između Fluttera i Functions-a (lowercase, trim i uklanjanje dijakritika). Identifikatori kategorija/kolekcija čuvaju underscore (`tattoo_piercing`, `beauty_grooming`) i ne tretiraju se kao običan tekst.
-
----
-
-## 16. Optimizacija troškova i resursa
-
-| Mjera | Zašto smanjuje trošak / resurse |
+| Endpoint | Purpose |
 |---|---|
-| Cursor paginacija | Čitaju se samo naredne stranice, ne kompletna kolekcija |
-| Direktni Firestore bez filtera | Ne poziva Cloud Function za obične home/explore queryje |
-| Callable samo za kompleksne filtere | Skupi kombinovani availability/filter posao ostaje server-side, bez skidanja velikih skupova na uređaj |
-| Limitirani candidate batch i opaque endpoint cursor | Funkcija obrađuje kontrolisan broj dokumenata po pozivu |
-| Composite indeksi | Firestore može izvršiti query bez punog skeniranja kolekcije |
-| City denormalizacija | `location.cityLowercase` omogućava efikasan city query |
-| Lagani promotion signal | Feed kartice čitaju samo `isPromotionActive`, a detalji promocije se učitavaju tek u checkoutu |
-| Checkout revalidacija popusta | Čuva integritet cijene bez stalnog učitavanja promotion dokumenata kroz feedove |
-| `appointment_slots` metadata | Dostupnost se čita bez preuzimanja privatnih appointment dokumenata |
-| Indeksirani dashboard metrics query + SSE invalidacija | Dashboard čita samo relevantne PostgreSQL redove tekućeg mjeseca i dobija novi snapshot tek nakon commitane promjene |
-| Precomputed Earnings metrics | Nemigrirani Earnings čita male Firestore month/provider agregate umjesto svih historijskih rezervacija |
-| Debounced text search | Smanjuje broj requestova dok korisnik tipka |
-| Slika: WebP, quality 42, max 1080 | Znatno manje Storage bandwidtha i vremena uploada; original se zadrži samo ako kompresija nije bolja ili plugin zakaže |
-| Max 7 business fotografija | Kontrolisan Storage i payload obim |
-| Nominatim reverse geocoding | Izbjegava plaćeni Google Geocoding API |
-| Lazy/feature-scoped streamovi | Unread/chat stream nije globalno aktivan kroz cijelu aplikaciju |
-| Centralni session stream cleanup | Sve registrirane root Firestore pretplate se otkažu prije Auth sign-outa; nema zabranjenih read pokušaja ni nepotrebnih reconnecta |
-| FCM token cleanup | Ne troši push attempt na nevalidne tokena |
-| Idempotent notification dispatcher | Retry ne šalje i ne broji duplikate |
-| Chat bez in-app duplikata | Chat poruke koriste push samo kada chat nije otvoren |
+| `GET /v1/discovery/businesses` | Paginated popular/global stays or services |
+| `GET /v1/discovery/cities` | Persistent, deduplicated city catalog |
+| `GET /v1/discovery/featured-collections` | Curated stay/service collections and l10n keys |
+| `GET /v1/discovery/recommended-stays` | Up to three personalized stay recommendations |
+| `GET /v1/discovery/search` | Prefix search by name or city |
+| `GET /v1/discovery/businesses/{businessId}` | Full active customer detail aggregate |
 
-Cloud Functions i dalje generišu usage kada se pozovu. Zato se ne smiju koristiti za svaki obični feed request; sadašnji hibridni model je namjerno postavljen upravo da ih koristi samo kada kompleksni filteri to opravdavaju.
+Popular Near You uses the normalized customer city. Recommended stays prioritize that city and fill the remainder with a global ranking based on rating and review count. Explore supports separate stay/service views, selection of all cities, categories, featured collections, trending content, and recently viewed items.
+
+### 10.2 Search and Filters
+
+- Text search uses debounce so typing does not generate a request for every character.
+- `GET /v1/stays/search` handles stay filters, availability, sorting, and pagination.
+- `GET /v1/services/search` handles service category, date, time, city, price, collection, sorting, and pagination.
+- The client sends only filters activated by the user.
+- Service search returns a business only if at least one matching staff member has the full required consecutive time range.
+- Filters and pagination state remain in the Cubit, not in the view.
+
+### 10.3 Stay Booking
+
+1. Detail shows the media gallery, location, map, rooms, amenities, extras, and reviews.
+2. The customer selects check-in, check-out, guests, and, when required, a room type.
+3. `GET /v1/businesses/{businessId}/stay/availability` returns only unavailable ranges without exposing other users' booking data.
+4. The Review screen calculates an informational preview.
+5. `POST /v1/businesses/{businessId}/stay/bookings` revalidates availability, price, extras, promotion, fee, and tax, and creates a confirmed booking.
+6. The customer reads the list through `GET /v1/bookings` and cancels their own confirmed booking through `PATCH /v1/bookings/{bookingId}/cancel`.
+
+The server is authoritative for the final total, promotion consumption, confirmation code, and payment status. A multiple-unit date is considered unavailable only when the capacity of the selected room type is fully booked.
+
+### 10.4 Service Appointment
+
+1. Detail shows offerings, durations, prices, staff, location, and reviews.
+2. The customer selects one or more services and a staff member.
+3. `GET /v1/businesses/{businessId}/service/staff/{staffId}/available-slots` returns bookable start minutes for the total selected duration.
+4. During creation, the backend rechecks weekly availability, manual blocks, and existing appointments.
+5. `POST /v1/businesses/{businessId}/service/appointments` atomically creates the appointment and reserves the time.
+6. The customer uses `PATCH /v1/appointments/{appointmentId}/status` for cancellation and `/reschedule` to change the time.
+
+A customer can reschedule an appointment once. The provider has separate status and rescheduling rules. During reschedule validation, the current appointment is excluded from conflict detection.
+
+### 10.5 Drafts
+
+For the currently signed-in customer, there can be at most one booking draft and one appointment draft:
+
+- `GET`, `PUT`, `DELETE /v1/drafts/booking`
+- `GET`, `PUT`, `DELETE /v1/drafts/appointment`
+
+A missing draft is an expected empty state. Successful checkout removes the corresponding draft. Resuming the flow reloads the active business detail so a saved selection cannot bypass current prices and availability.
+
+### 10.6 Saved and Recently Viewed
+
+Saved endpoints allow listing, checking, idempotent saving, and removal of businesses under `/v1/saved-businesses`. The list always returns the current business projection. A local broadcast after a successful mutation immediately synchronizes the list and heart state across open screens.
+
+`PUT /v1/recently-viewed/{businessId}` records a view, while `GET /v1/recently-viewed` returns up to 30 most recent active business projections. No network realtime channel is opened for these local UI invalidations.
+
+### 10.7 Reviews
+
+- `POST /v1/businesses/{businessId}/reviews` accepts source, type, rating, and an optional comment.
+- `GET /v1/businesses/{businessId}/review-status` checks whether the customer has already submitted a review.
+- `GET /v1/businesses/{businessId}/reviews` returns newest-first pages.
+
+The API determines the customer and business from the source booking or appointment. A review is allowed only after a completed reservation and can exist at most once per customer and business.
+
+### 10.8 Payment Methods and Checkout
+
+Saved payment methods use `/v1/payment-methods` for listing, creation, setting the default method, and deletion. The API accepts only display metadata: brand, last four digits, expiry, and cardholder name. The full card number and CVV never leave the device and are not stored.
+
+The current payment UI supports card, Apple Pay, Google Pay, and cash as checkout experiences, but it is not connected to a production payment processor. Server-side charging and tokenization remain required before real online payments.
+
+### 10.9 Help Center
+
+The customer creates and reads their own support tickets through `GET/POST /v1/support-tickets`. The client sends category, title, and message; identity, contact data, and the initial `open` status are not client-editable values. The list refreshes when opened and after the create action. Statuses are `open`, `inProgress`, and `resolved`.
+
+---
+## 11. Provider Features
+
+### 11.1 Dashboard and Earnings
+
+The dashboard shows active reservations, current revenue, reservation count, average rating, and daily charts. Earnings supports current/past week, current/past month, current/last year, and a custom range, while service businesses also support a staff filter.
+
+The client receives ready-made metric snapshots and does not aggregate reservation lists locally. Money remains in integer minor units throughout the API and models; formatting into a decimal display is handled by a shared currency formatter.
+
+Revenue rules:
+
+- cash confirmed/completed reservations are included as expected revenue;
+- an online reservation is included after `payment_status=paid`;
+- `noShow` excludes revenue and the corresponding aggregates;
+- the date is attributed to the reservation's `created_at` timestamp;
+- a custom period uses validated `utcOffsetMinutes` for local calendar boundaries;
+- an appointment stores historical `providerCommissionRate` and `providerEarnings`, so changing the commission later does not alter past results.
+
+Dashboard and earnings have a REST snapshot endpoint and an SSE stream endpoint under `/v1/businesses/{businessId}`.
+
+### 11.2 Bookings and Appointments
+
+The provider uses paginated `/v1/bookings` and `/v1/appointments` routes with `business_id` and status filters. Before reading or modifying data, the API verifies ownership of the active business.
+
+- A stay booking can be `confirmed`, `declined`, `cancelled`, `completed`, or `noShow`.
+- The provider can complete or decline a reservation and mark an allowed completed cash case as no-show.
+- Appointment management includes customer details, status, rescheduling, contact, and no-show rules.
+- Provider rejection uses `declined`, while customer cancellation uses `cancelled`.
+
+### 11.3 Availability & Calendar
+
+The stay calendar displays confirmed ranges while accounting for single/multiple-unit capacity. The service calendar displays weekly availability, existing appointments, and manual blocks per staff member.
+
+Manual blocks use endpoints under:
+
+```text
+/v1/businesses/{businessId}/service/staff/{staffId}/availability-blocks
+```
+
+A block is a time range that does not contain customer data. A free slot can be blocked and later unblocked. Opening an occupied appointment may display authorized customer contact details.
+
+### 11.4 Promotions & Discounts
+
+Promotions are business-scoped resources under `/v1/businesses/{businessId}/promotions`. Supported types are percentage, fixed amount, and coupon code. A promotion contains a period, value, minimum amount, optional stay minimum nights, usage limit, and active state.
+
+- The feed uses only the `isPromotionActive` signal for the badge.
+- Checkout loads the active promotion or validates an entered coupon through the `/active` endpoint.
+- Automatic discounts and coupons are validated on the backend.
+- Booking or appointment creation applies and records the consumed promotion together with the reservation.
+- The API recalculates subtotal, discount, fee, tax, total, and provider earnings; the client preview is not authoritative.
+- The reservation snapshot stores the original and discounted amounts for historical consistency.
+
+### 11.5 Business Management
+
+**My Businesses** allows creating, selecting the active business, and archiving. **Manage Stays & Services** loads the full aggregate before editing. Changing the active business invalidates dashboard, earnings, bookings, and calendar context so each feature loads data for the same `selectedBusinessId`.
 
 ---
 
-## 17. Firestore indeksi
+## 12. Chat and Realtime Behavior
 
-[firestore.indexes.json](firestore.indexes.json) sadrži indekse za kombinacije koje aplikacija koristi, uključujući:
+A conversation is uniquely identified by a customer and a specific business. The mobile model includes conversation metadata, messages, read state, typing, and presence.
 
-- aktivne stays/services sortirane po ratingu, reviews i imenu;
-- city + type + active queryje;
-- city + category za services;
-- category i featured collection (`array-contains`) kombinacije;
-- booking date/status queryje;
-- appointment business/date/status queryje;
-- slot i provider availability queryje.
+### 12.1 API
 
-Prilikom Firebase deploya ne treba automatski brisati index koji CLI navede kao “defined in project but not present in file” ako je i dalje potreban aplikaciji. Prvo treba provjeriti query koji ga koristi, zatim index zadržati ili svjesno ukloniti iz koda i konfiguracije.
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `POST` | `/v1/conversations` | Retrieve or create a conversation |
+| `GET` | `/v1/conversations` | Keyset-paginated conversation list |
+| `GET` | `/v1/conversations/unread-count` | Total unread count for the participant |
+| `GET` | `/v1/conversations/{id}` | Authorized conversation detail |
+| `GET` | `/v1/conversations/{id}/messages` | Keyset-paginated messages |
+| `POST` | `/v1/conversations/{id}/messages` | Idempotent message sending |
+| `PATCH` | `/v1/conversations/{id}/read` | Advance the read boundary |
+| `PUT` | `/v1/conversations/{id}/typing` | Refresh or remove the typing lease |
+| `PUT` | `/v1/conversations/{id}/presence` | Refresh or remove the active-viewer lease |
+| `GET` | `/v1/chat/stream` | Participant-scoped SSE invalidations |
+
+The client generates message UUIDs, which keeps retries of the same send operation idempotent.
+
+### 12.2 SSE Strategy
+
+The chat stream sends `chat_sync` and `chat_changed` invalidations, not message content. After an event, the repository loads a new authorized REST snapshot. This decision:
+
+- keeps authorization and response mapping on a single HTTP read path;
+- does not transmit message content through the invalidation event;
+- allows reliable reconnect with an initial `chat_sync` event;
+- avoids a global WebSocket lifecycle.
+
+Unread and conversation streams are active only while the corresponding screen uses them. Returning the application to the foreground triggers a one-time refresh, while a foreground chat FCM event can immediately invalidate the view. Periodic chat polling is not used.
+
+### 12.3 Presence, Typing, and Push
+
+Presence and typing are short-lived states refreshed by the active screen. If the recipient is active in the same conversation, they do not receive an unnecessary unread or push signal. The Seen indicator is displayed only next to the last outgoing message read by the recipient. Chat push does not create a duplicated in-app notification item.
 
 ---
 
-## 18. Build, lokalni razvoj i deploy
+## 13. Notifications
 
-### Flutter
+### 13.1 API Behavior
+
+The mobile application uses the following notification endpoints:
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/v1/notifications` | Paginated user list |
+| `GET` | `/v1/notifications/unread-count` | Number of unread items |
+| `PATCH` | `/v1/notifications/{id}/read` | Mark the user's own item as read |
+| `PUT` | `/v1/notification-devices/{deviceId}` | Register or refresh an FCM token |
+| `DELETE` | `/v1/notification-devices/{deviceId}` | Remove a device registration |
+
+A booking or appointment event may produce an in-app item and an FCM push. A failed push delivery does not change an already successful business action, and a repeated event must not produce a duplicate notification item.
+
+The provider receives events for a new reservation or a customer-cancelled reservation. The customer receives relevant provider status changes. The customer does not receive a notification for their own cancellation action.
+
+### 13.2 Flutter Responsibilities
+
+- `NotificationDeviceService` manages permission, the FCM token, token refresh, and device registration through REST.
+- The service exposes separate streams for foreground messages and notifications used to open the application.
+- `NotificationCoordinator`, started from `bootstrap.dart`, connects an opened notification event with navigation.
+- `NotificationRouter` validates the payload in one place and maps the type to a GoRouter destination.
+- The same router is used by both an FCM tap and a tap on the in-app notification list.
+- `NotificationBellCubit` reads unread count from REST; foreground FCM triggers an immediate refresh, while the 30-second refresh remains a fallback mechanism.
+
+The FCM payload is a signal, not a reliable business record. After navigation, the screen loads the current data through the API.
+
+---
+
+## 14. Mobile Application Security
+
+- Every `/v1` route verifies the Firebase ID token.
+- The mobile client does not treat a user ID from the local model as authentication proof.
+- Customer and provider screens call only endpoints intended for the active role and business context.
+- The availability endpoint returns free/unavailable state without exposing other users' reservation data.
+- A review source must belong to the signed-in customer and the selected business.
+- Prices, discounts, totals, commission, and availability are recalculated on the server.
+- The full card number and CVV are not part of the REST contract or persistent storage.
+- The mobile client does not contain a database service key or direct database access.
+- API, Firebase, Maps, and signing credentials are not stored in Git.
+- Flavor-specific `google-services.json`, `GoogleService-Info.plist`, and `Secrets-*.xcconfig` files are ignored.
+- Storage rules restrict upload type, size, and ownership.
+
+---
+
+## 15. Performance, Reliability, and Costs
+
+| Decision | Effect |
+|---|---|
+| Paginated list endpoints | Limited response size and memory footprint |
+| Lightweight discovery/business projections | Nested aggregate is loaded only for detail or edit |
+| Debounced search | Fewer HTTP requests while typing |
+| Server-side filters and availability | Client does not download large sets for local filtering |
+| SSE invalidations | Live UI without continuous short-interval polling |
+| Snapshot reload after invalidation | One authorized read path and simpler reconnect |
+| Feature-scoped streams | Connections exist only while the UI uses them |
+| Centralized stream cleanup | No reconnects or requests after sign-out |
+| Minor units for money | No floating-point calculation errors |
+| Stable Storage path | Database does not depend on a temporary download token |
+| WebP compression, max 1080, and limited gallery | Smaller upload, bandwidth, and Storage footprint |
+| Idempotent create/send operations | Safer retry on unstable networks |
+| Local broadcast for Saved/Recently Viewed | Immediate UI update without another persistent connection |
+
+`SseConnection` uses bounded exponential backoff and reestablishes the stream after a transport interruption. The initial snapshot or sync event allows the client to recover without relying on events missed while offline.
+
+Skeleton shimmer is used for the initial loading of content screens. An action loader remains for submit, pagination, and message sending because the existing content should stay visible in those cases.
+
+---
+
+## 16. Design System and Localization
+
+### 16.1 Theme
+
+MultiBook supports light and dark themes. `ThemeCubit` changes `MaterialApp.themeMode`, and the selection is stored in Shared Preferences.
+
+- The light background uses a green-teal gradient through `AppBackground`.
+- Cards and forms use theme surface values for readability.
+- The floating navigation surface is aligned with the background.
+- Foreground, muted, border, navigation, and surface colors come from `AppPalette`.
+- Brand accent and semantic status colors are centralized in `AppColors`.
+- Text on primary/status surfaces uses the contrasting color defined by the design system.
+- Colors are not arbitrarily hardcoded in view files.
+
+### 16.2 Shared Components
+
+`AppBackground`, `CustomAppBar`, `CustomButton`, `CustomTextfield`, `CustomBottomNavigation`, `SkeletonShimmer`, `SearchableCityPickerSheet`, and other reusable components ensure consistent layout, feedback, and theme behavior across features.
+
+### 16.3 Localization
+
+Flutter `gen-l10n` generates the typed `AppLocalizations` API from:
+
+```text
+lib/l10n/app_bs.arb
+lib/l10n/app_en.arb
+lib/l10n/app_de.arb
+lib/l10n/app_es.arb
+lib/l10n/app_fr.arb
+lib/l10n/app_it.arb
+```
+
+Bosnian is the initial and fallback language. `LocaleCubit` changes the locale without restarting, while `LocaleRepository` stores the selection locally. New user-facing text is added to all ARB catalogs; plural, select, and dynamic values use ICU messages.
+
+---
+
+## 17. Local Development and Build
+
+### 17.1 Flutter
 
 ```bash
 flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter gen-l10n
 flutter analyze
+```
+
+Running DEV:
+
+```bash
 flutter run \
   --flavor dev \
   --target lib/entry_points/main_dev.dart \
   --dart-define=MULTIBOOK_DEV_API_BASE_URL=http://localhost:8080
 ```
 
-MultiBook koristi `flutter_flavorizr` i ima dva potpuno odvojena native
-flavor-a:
+A PROD build must receive separate production values:
 
-| Flavor | Naziv aplikacije | Android application ID / iOS bundle ID | Entry point |
-|---|---|---|---|
-| `dev` | `MultiBook DEV` | `com.multibook.app.dev` | `lib/entry_points/main_dev.dart` |
-| `prod` | `MultiBook` | `com.multibook.app` | `lib/entry_points/main_prod.dart` |
+```bash
+flutter build appbundle \
+  --flavor prod \
+  --target lib/entry_points/main_prod.dart \
+  --dart-define=MULTIBOOK_PROD_API_BASE_URL=https://api.example.com \
+  --dart-define=MULTIBOOK_PROD_GOOGLE_SERVER_CLIENT_ID=<client-id>
+```
 
-`lib/main.dart` ostaje samo kao kompatibilni DEV entrypoint. Native pokretanje i
-build uvijek trebaju eksplicitno navesti `--flavor` i odgovarajući `--target`.
-Produkcijski build koristi `MULTIBOOK_PROD_API_BASE_URL` i
-`MULTIBOOK_PROD_GOOGLE_SERVER_CLIENT_ID` kroz `--dart-define`.
-
-Postojeći Firebase projekt, Google Sign-In client ID i lokalni Maps ključevi
-tretiraju se isključivo kao DEV konfiguracija. Lokalni credential fajlovi nisu u
-Gitu:
-
-- Android Firebase: `android/app/src/dev/google-services.json`
-- iOS Firebase: `ios/Runner/dev/GoogleService-Info.plist`
-- Android Maps: `MULTIBOOK_DEV_GOOGLE_MAPS_API_KEY` u
-  `android/local.properties`
-- iOS Maps: `GOOGLE_MAPS_API_KEY` u `ios/Flutter/Secrets-dev.xcconfig`
-
-Produkcijski Firebase i Maps credentials nisu zamijenjeni DEV vrijednostima.
-Prije production builda moraju se dodati zasebne PROD konfiguracije. Flavor
-native fajlovi i schemeovi se regenerišu komandom:
+Native flavor configuration is regenerated with:
 
 ```bash
 dart run flutter_flavorizr
 ```
 
-Za generisane mapper/DI fajlove, nakon izmjene modela ili Injectable registracija:
+### 17.2 Local Credentials
 
-```bash
-dart run build_runner build --delete-conflicting-outputs
-```
+| Platform | DEV | PROD |
+|---|---|---|
+| Android Firebase | `android/app/src/dev/google-services.json` | expected `android/app/src/prod/google-services.json` |
+| iOS Firebase | `ios/Runner/dev/GoogleService-Info.plist` | expected `ios/Runner/prod/GoogleService-Info.plist` |
+| Android Maps | `MULTIBOOK_DEV_GOOGLE_MAPS_API_KEY` in `android/local.properties` | `MULTIBOOK_PROD_GOOGLE_MAPS_API_KEY` |
+| iOS Maps | `ios/Flutter/Secrets-dev.xcconfig` | `ios/Flutter/Secrets-prod.xcconfig` |
 
-### Functions
+Credential files remain local or are delivered through a secure CI secret mechanism. DEV Firebase and Maps credentials are currently installed. Before a production build, separate PROD files must be added and the iOS copy script must be adjusted to use the prod plist; the existing script intentionally stops the PROD build until that configuration is completed.
 
-```bash
-cd functions
-npm install
-npm run build
-cd ..
-```
+### 17.3 Platform Notes
 
-Lokalni emulator:
-
-```bash
-npm --prefix functions run serve
-```
-
-### Firebase deploy
-
-Korisnik deploy radi ručno. Konfigurisan codebase je **`multibook`**, zato imenovani deploy mora sadržati codebase:
-
-```bash
-firebase deploy --only firestore:rules,firestore:indexes,storage
-firebase deploy --only functions:multibook:searchStays,functions:multibook:searchServices
-firebase deploy --only functions:multibook:initializeBusinessMetrics,functions:multibook:notifyOnBookingCreated,functions:multibook:notifyOnBookingStatusChanged,functions:multibook:notifyOnAppointmentCreated,functions:multibook:notifyOnAppointmentStatusChanged
-firebase deploy --only functions
-```
-
-Ako Firebase CLI predloži brisanje postojećih indeksa, odgovoriti `N` dok se ne potvrdi da nijedan aktivni query više ne zavisi od njih.
-
-### iOS / Android napomene
-
-- `image_picker` zahtijeva `NSPhotoLibraryUsageDescription` i `NSCameraUsageDescription` u iOS `Info.plist`.
-- Google Maps zahtijeva platformsku registraciju plugina, Maps SDK omogućen za iOS/Android i API key u nativnoj konfiguraciji. API key se ne dokumentuje niti commita u Git.
-- Za Firebase Messaging na iOS stvarnom uređaju treba APNs konfiguracija. Simulator nije zamjena za end-to-end push test.
-- Nakon dodavanja ili izmjene nativnog plugina često je potreban puni restart, a ne hot reload.
+- iOS requires camera/photo usage descriptions for `image_picker`.
+- Google Maps SDK and its key must be configured separately per platform and flavor.
+- FCM on a physical iOS device requires a valid APNs configuration.
+- A full rebuild is required after changing a native plugin or flavor configuration.
+- `lib/main.dart` exists only as a compatible DEV entrypoint; standard run/build commands should specify the flavor and target.
 
 ---
 
-## 19. Testiranje i observability
+## 18. Verification and Observability
 
-Minimalna provjera prije predaje promjene:
+Minimum mobile verification before delivery:
 
 ```bash
 flutter analyze
-npm --prefix functions run build
 ```
 
-Za kritične flowove treba ručno provjeriti:
+Critical manual scenarios:
 
-1. email, Google i logout autentikaciju, uključujući direktan prelaz na sign-in bez dashboard flasha i bez `permission-denied` stream grešaka;
-2. kreiranje stay/service businessa sa slikama;
-3. direktni i endpoint search/filter rezultat;
-4. booking i appointment create/cancel/reschedule, cash plaćanje i past-cash No-show;
-5. zauzete slotove sa više providera;
-6. promjenu selektovanog businessa na dashboardu, bookings i calendaru;
-7. chat seen/typing, unread indikator i ponašanje kad je chat otvoren;
-8. in-app/push notifikacije na stvarnom uređaju;
-9. Firestore/Storage permission pravila za customer i provider account.
+1. email and Google authentication, role change, and logout;
+2. create/edit/archive stay and service businesses with media;
+3. discovery, text search, and combined filters;
+4. booking and appointment create, cancel, status, and reschedule;
+5. multiple-unit capacity and service slot conflicts with multiple staff members;
+6. promotion preview and server-authoritative checkout;
+7. changing the active business across dashboard, earnings, bookings, and calendar;
+8. chat pagination, typing, presence, seen, unread, and reconnect;
+9. in-app notification list, unread indicator, and FCM opening;
+10. light/dark theme, localization, and both flavor builds.
 
-Repositoryji i data sourcevi koriste `dart:developer` logove za bitne Firebase i endpoint greške. Funkcije koriste `console.error`; produkcijske greške se tako mogu pronaći u Cloud Functions logovima, a mobilne `FirebaseFunctionsException` greške u Flutter konzoli.
-
----
-
-## 20. Trenutna ograničenja i naredne preporuke
-
-- Payment UI koristi mock potvrdu za karticu, Apple Pay i Google Pay; prije produkcije treba integrisati stvarni payment provider (npr. Stripe), tokenizaciju i server-side verifikaciju. Kartični podaci se ne smiju trajno spremati u Firestore.
-- Search po slobodnom tekstu u Firestoreu ima prirodna ograničenja; za napredni full-text search u produkciji treba procijeniti Algolia, Typesense, Meilisearch ili namjenski indeks, uz troškovnu analizu.
-- Callable endpointi trenutno služe kompleksnim filterima. Ako kasnije business transakcije trebaju strožiju server-side kontrolu, booking/appointment create može se migrirati na callable endpoint uz server-side payment verifikaciju.
-- Za veći obim potrebno je dodati automatizovane unit, repository, widget i integration testove, Crashlytics/analytics strategiju, rate limiting i monitoring budžeta.
+The mobile networking and repository layers use `dart:developer` logs for diagnostics. In debug builds, `ApiClient` logs method, URI, status, and response without requiring the presentation layer to log transport details.
 
 ---
 
-## 21. Referentni fajlovi
+## 19. Known Limitations
 
-- [pubspec.yaml](pubspec.yaml) — Flutter paketi.
-- [firebase.json](firebase.json) — Firebase projekat, rules, indeksi i Functions codebase.
-- [firestore.rules](firestore.rules) i [storage.rules](storage.rules) — autorizacija.
-- [firestore.indexes.json](firestore.indexes.json) — Firestore query indeksi.
-- [lib/src/data/repositories](lib/src/data/repositories) — repository sloj.
-- [lib/src/data/data_sources](lib/src/data/data_sources) — adapteri prema backendu/servisima.
-- [lib/src/features](lib/src/features) — feature organizacija.
-- [functions/src](functions/src) — callable endpointi i Firestore triggeri.
+- Card, Apple Pay, and Google Pay currently represent a checkout UI flow, not production charging. A PCI-compliant payment provider, tokenization, webhook verification, and server-authoritative payment status are required.
+- Production still requires a defined Crashlytics/analytics policy, alerting, centralized metrics, log retention, and budget thresholds.
+- Production Firebase, Maps, API URL, signing, and APNs credentials must be separated from the DEV environment and delivered through a secure release process.
+- Android release currently uses debug signing configuration; before distribution, a production keystore must be connected through secure CI or local signing setup.
+
+---
+
+## 20. Reference Files
+
+- [pubspec.yaml](pubspec.yaml) — Flutter dependencies and asset configuration.
+- [flavorizr.yaml](flavorizr.yaml) — DEV/PROD flavor definition.
+- [lib/bootstrap.dart](lib/bootstrap.dart) — shared startup.
+- [lib/app.dart](lib/app.dart) — global widget, theme, locale, and router.
+- [lib/src/core/networking](lib/src/core/networking) — REST and SSE transport.
+- [lib/src/domain](lib/src/domain) — repository contracts and use cases.
+- [lib/src/data](lib/src/data) — models, adapters, and repository implementations.
+- [lib/src/features](lib/src/features) — customer, provider, and shared features.
+- [lib/src/router](lib/src/router) — application routes.
+- [storage.rules](storage.rules) — Firebase Storage authorization rules.
+- [../MultiBook-Backend/README.md](../MultiBook-Backend/README.md) — separate backend architecture and operational documentation.
+- [../MultiBook-Backend/api/openapi](../MultiBook-Backend/api/openapi) — available machine-readable API descriptions.
