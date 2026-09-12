@@ -303,7 +303,7 @@ functions/src/
 2. **Autentikacija**: neprijavljen korisnik ide na `/sign-in`. `GoRouter` prati Firebase Auth stanje preko `refreshListenable`, pa se zaštićene rute odmah uklanjaju nakon odjave. Nakon uspješnog sign-ina `SigninCubit` eksplicitno bira Home ili User Type Checker, kako novi Google/email account ne bi preskočio izbor tipa korisnika.
 3. **Tip korisnika i entry screen**: user profil određuje customer/provider tok. Provider entry dodatno provjerava ima li business i otvara Add Business ili dashboard.
 
-Customer entry ne izvršava provider-only provjeru selektovanog businessa. Dok se profil učitava prikazuje se Home skeleton umjesto centralnog spinnera, čime se izbjegava nepotreban request i vizuelni prekid prije customer dashboarda.
+Customer entry ne izvršava provider-only provjeru selektovanog businessa. Dok se učitava profil potreban za izbor customer/provider Home ekrana, prikazuje se jednostavni Cupertino loader. Skeletoni se koriste tek unutar odabranog Home ekrana za učitavanje njegovih sadržajnih sekcija.
 
 Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app_routes.dart) i [lib/src/router/app_pages.dart](lib/src/router/app_pages.dart).
 

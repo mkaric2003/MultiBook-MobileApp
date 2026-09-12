@@ -21,6 +21,7 @@ import 'package:multibook/src/features/business-side/earnings/presentation/widge
 import 'package:multibook/src/features/business-side/earnings/presentation/widgets/earnings_period_selector.dart';
 import 'package:multibook/src/features/business-side/earnings/presentation/widgets/earnings_provider_selector.dart';
 import 'package:multibook/src/features/business-side/earnings/presentation/widgets/earnings_summary_card.dart';
+import 'package:multibook/src/features/business-side/earnings/presentation/widgets/earnings_skeleton.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 
 class EarningsView extends HookWidget {
@@ -39,7 +40,7 @@ class EarningsView extends HookWidget {
       child: BlocBuilder<EarningsCubit, EarningsState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const EarningsSkeleton();
           }
           if (state.selectedBusiness == null) {
             return DashboardEmptyState(

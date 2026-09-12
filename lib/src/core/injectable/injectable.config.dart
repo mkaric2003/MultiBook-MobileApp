@@ -1329,6 +1329,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i582.AvailabilityCalendarCubit(
         gh<_i253.GetProviderBookingsUseCase>(),
         gh<_i41.GetOwnedBusinessesUseCase>(),
+        gh<_i829.GetOwnedBusinessUseCase>(),
         gh<_i981.UserProfileUseCase>(),
       ),
     );

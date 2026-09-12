@@ -8,6 +8,7 @@ import 'package:multibook/src/features/business-side/bookings/bloc/client_bookin
 import 'package:multibook/src/features/business-side/bookings/bloc/client_bookings_state.dart';
 import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_appointment_card.dart';
 import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_booking_card.dart';
+import 'package:multibook/src/features/business-side/bookings/presentation/widgets/client_bookings_skeleton.dart';
 import 'package:multibook/src/features/business-side/bookings/presentation/widgets/manage_appointment_sheet.dart';
 import 'package:multibook/src/features/business-side/bookings/presentation/widgets/manage_booking_sheet.dart';
 import 'package:multibook/src/features/customer-side/reschedule_appointment/domain/models/reschedule_appointment_arguments.dart';
@@ -25,7 +26,7 @@ class ClientBookingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const ClientBookingsSkeleton();
     }
 
     final isServices = state.tab.name == 'services';

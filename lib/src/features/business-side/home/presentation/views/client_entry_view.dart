@@ -1,10 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
 import 'package:multibook/src/features/business-side/home/bloc/client_entry_cubit.dart';
 import 'package:multibook/src/features/business-side/home/bloc/client_entry_state.dart';
 import 'package:multibook/src/features/business-side/home/presentation/views/home_view.dart';
-import 'package:multibook/src/features/business-side/home/presentation/widgets/home_entry_skeleton.dart';
 import 'package:multibook/src/features/customer-side/home/presentation/views/customer_home_view.dart';
 import 'package:multibook/src/features/shared/user_location/presentation/widgets/user_location_gate.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,9 @@ class ClientEntryView extends StatelessWidget {
       child: BlocBuilder<ClientEntryCubit, ClientEntryState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const HomeEntrySkeleton();
+            return const Scaffold(
+              body: Center(child: CupertinoActivityIndicator()),
+            );
           }
 
           final entryView = state.userType == UserType.customer

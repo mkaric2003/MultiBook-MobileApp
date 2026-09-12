@@ -14,6 +14,7 @@ import 'package:multibook/src/features/business-side/dashboard/presentation/widg
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_metric_card.dart';
+import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_skeleton.dart';
 
 class DashboardView extends HookWidget {
   const DashboardView({super.key});
@@ -31,7 +32,7 @@ class DashboardView extends HookWidget {
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const DashboardSkeleton();
           }
 
           final business = state.business;

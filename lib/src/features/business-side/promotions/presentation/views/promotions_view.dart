@@ -4,6 +4,7 @@ import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/business-side/promotions/bloc/promotions_cubit.dart';
 import 'package:multibook/src/features/business-side/promotions/bloc/promotions_state.dart';
+import 'package:multibook/src/features/business-side/promotions/presentation/widgets/promotions_skeleton.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class PromotionsView extends StatelessWidget {
               child: BlocBuilder<PromotionsCubit, PromotionsState>(
                 builder: (context, state) {
                   if (state.loading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const PromotionsSkeleton();
                   }
                   return ListView(
                     padding: const EdgeInsets.all(20),

@@ -32,7 +32,11 @@ class AvailabilityCalendarDay extends StatelessWidget {
         children: [
           Text(
             '${date.day}',
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              color: isSelected ? AppColors.white : null,
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 3),
           if (summary != null)

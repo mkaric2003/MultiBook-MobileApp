@@ -17,6 +17,7 @@ import 'package:multibook/src/features/business-side/availability_calendar/domai
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_legend.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_mode_button.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_skeleton.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/service_day_slots.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/service_provider_selector.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/todays_appointment_card.dart';
@@ -97,7 +98,7 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                           first.startMinutes.compareTo(second.startMinutes),
                     );
               return state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const AvailabilityCalendarSkeleton()
                   : state.errorMessage != null
                   ? Center(
                       child: Text(
