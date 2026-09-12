@@ -6,6 +6,7 @@ import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/customer-side/saved/cubit/saved_cubit.dart';
 import 'package:multibook/src/features/customer-side/saved/cubit/saved_state.dart';
 import 'package:multibook/src/features/customer-side/saved/presentation/widgets/saved_business_card.dart';
+import 'package:multibook/src/features/customer-side/saved/presentation/widgets/saved_businesses_skeleton.dart';
 import 'package:toastification/toastification.dart';
 
 class SavedView extends StatelessWidget {
@@ -39,7 +40,7 @@ class SavedView extends StatelessWidget {
             ),
             Expanded(
               child: state.isLoading && state.businesses.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const SavedBusinessesSkeleton()
                   : state.hasError && state.businesses.isEmpty
                   ? Center(
                       child: IconButton(

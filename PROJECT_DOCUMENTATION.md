@@ -290,7 +290,7 @@ functions/src/
 - Svaki model ima vlastiti fajl i koristi `dart_mappable`; ručni `fromMap`, `toMap` i više model-klasa u jednom fajlu nisu dozvoljeni.
 - Novi REST repository koristi `RestRepositoryExecutor`; ne kopirati HTTP-to-failure mapping u pojedinačne `RepositoryImpl` klase.
 - Novi REST Cubit prima use case, a ne `RepositoryImpl`, `DataSource` ili `ApiClient`.
-- Globalno ponovljive komponente su u `src/global_widgets`: `CustomAppBar`, `CustomButton`, `CustomTextfield`, `SearchableCityPickerSheet` i `LabeledDivider`.
+- Globalno ponovljive komponente su u `src/global_widgets`: `AppBackground`, `CustomAppBar`, `CustomButton`, `CustomTextfield`, `CustomBottomNavigation`, `SkeletonShimmer`, `SearchableCityPickerSheet` i `LabeledDivider`.
 - Light/dark teme i boje dolaze iz `AppTheme`, `AppPalette` i stabilnih brand/status vrijednosti u `AppColors`, ne iz nasumičnih hardkodiranih neutralnih boja u viewu.
 
 ---
@@ -303,6 +303,8 @@ functions/src/
 2. **Autentikacija**: neprijavljen korisnik ide na `/sign-in`. `GoRouter` prati Firebase Auth stanje preko `refreshListenable`, pa se zaštićene rute odmah uklanjaju nakon odjave. Nakon uspješnog sign-ina `SigninCubit` eksplicitno bira Home ili User Type Checker, kako novi Google/email account ne bi preskočio izbor tipa korisnika.
 3. **Tip korisnika i entry screen**: user profil određuje customer/provider tok. Provider entry dodatno provjerava ima li business i otvara Add Business ili dashboard.
 
+Customer entry ne izvršava provider-only provjeru selektovanog businessa. Dok se profil učitava prikazuje se Home skeleton umjesto centralnog spinnera, čime se izbjegava nepotreban request i vizuelni prekid prije customer dashboarda.
+
 Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app_routes.dart) i [lib/src/router/app_pages.dart](lib/src/router/app_pages.dart).
 
 ---
@@ -312,9 +314,10 @@ Sve rute su centralizovane u [lib/src/router/app_routes.dart](lib/src/router/app
 - Aplikacija ima light i dark UI. Light ekrani koriste zelenkasto-tirkizni gradient iz `AppPalette`, koji `AppBackground` dodaje na nivou svake rute kako bi pozadina i sadržaj učestvovali u istoj navigacijskoj tranziciji. Kartice i forme ostaju pune surface boje, a podignuti bottom navigation koristi zasebnu `navigationSurface` boju usklađenu s gradientom. Dark pozadina ostaje jednobojna. Foreground, muted tekst i ostali borderi također dolaze iz theme-aware `AppPalette`, dok ljubičasti accent i status boje ostaju centralizovani u `AppColors`.
 - Customer i provider kroz **Settings → Appearance** mogu odmah uključiti ili isključiti light temu. `ThemeCubit` mijenja `MaterialApp.themeMode`, a `ThemeRepositoryImpl` odabir trajno sprema u Shared Preferences; zadnja tema se vraća pri sljedećem pokretanju aplikacije.
 - Selektovana stanja koriste primarnu ljubičastu; statusi koriste semantičke boje (confirmed, cancelled/declined, completed).
-- Customer i provider home tokovi koriste `persistent_bottom_nav_bar_v2` `PersistentTabView` sa zajedničkim Instagram-style `InstagramBottomNavigation` prikazom. Navigacija je floating pill bez labela i indikatorske linije, a jedan selekcijski segment animirano klizi između tabova. Tab sadržaj se mijenja trenutno, bez horizontalne tranzicije ekrana. Pri vertikalnom scrollu prema dnu cijeli bar se blago smanjuje, a pri scrollu prema vrhu vraća punu veličinu; horizontalni scroll ne mijenja bar. Svaki tab zadržava vlastiti navigation stack i stanje, dok postojeći `GoRouter` i dalje upravlja aplikacijskim rutama izvan tabova. Root tabovi ne rezervišu donji `SafeArea`, pa se pozadina i scroll sadržaj protežu do dna i prolaze ispod navigation overlaya.
+- Customer i provider home tokovi koriste `persistent_bottom_nav_bar_v2` `PersistentTabView` sa zajedničkim Instagram-style `CustomBottomNavigation` prikazom. Navigacija je floating pill bez labela i indikatorske linije, a jedan selekcijski segment animirano klizi između tabova. Tab sadržaj se mijenja trenutno, bez horizontalne tranzicije ekrana. Pri vertikalnom scrollu prema dnu cijeli bar se blago smanjuje, a pri scrollu prema vrhu vraća punu veličinu; horizontalni scroll ne mijenja bar. Svaki tab zadržava vlastiti navigation stack i stanje, dok postojeći `GoRouter` i dalje upravlja aplikacijskim rutama izvan tabova. Root tabovi ne rezervišu donji `SafeArea`, pa se pozadina i scroll sadržaj protežu do dna i prolaze ispod navigation overlaya.
 - Globalni `CustomAppBar` standardizira centrirani naslov, Cupertino back strelicu i border pri dnu.
 - Forme koriste zajednički `CustomTextfield` i `CustomButton`; validacije, disable stanje i loading ostaju konzistentni.
+- Inicijalno učitavanje sadržaja koristi reusable `SkeletonShimmer` i skeleton koji prati stvarni oblik ekrana ili kartice. Customer Home koristi horizontalni, featured i grid listing skeleton bez promjene visine pri dolasku podataka, a chat koristi message-bubble skeleton do prvog kompletnog snapshot-a. Mali indikatori za submit, slanje poruke i pagination ostaju akcijski loaderi jer tada postojeći sadržaj ostaje vidljiv.
 - Feedback za sačuvane stavke koristi `toastification`, pozicioniran pri dnu i horizontalno centriran.
 
 ---
@@ -351,6 +354,7 @@ Ovaj redoslijed sprečava `cloud_firestore/permission-denied` race condition i `
 - `geolocator` traži runtime permission na customer home ulazu.
 - Koordinate se reverse-geocodeuju preko Nominatim/OpenStreetMap endpointa, bez plaćenog Google Geocoding API-ja.
 - Grad i adresa se spremaju u user profil i koriste za **Popular near you** / **Trending near you**.
+- Location update odmah osvježava cached user profil. Dashboard normalizuje grad (`trim` + lowercase) i ne ponavlja nearby REST zahtjev ako location servis emituje grad koji je već učitan ili se upravo učitava; stvarna promjena grada i dalje pokreće novi snapshot.
 - Business lokacija se bira na Google mapi; klik na *Open in Maps* koristi `url_launcher` za vanjsku Google Maps aplikaciju.
 
 ---
@@ -448,8 +452,8 @@ Provider za pojedinačni business upravlja promocijama kroz **Promotions & Disco
 ### Home / Dashboard
 
 - Tabovi **Stays** i **Services**.
-- Direktno Firestore učitavanje bez aktivnih filtera.
-- Recommended stays, popular/trending businessi u customerovom gradu, horizontalni scroll i cursor paginacija.
+- Discovery podaci bez aktivnih filtera dolaze s Go REST API-ja i PostgreSQL source of truth-a, bez Firestore fallbacka.
+- Recommended stays, popular/trending businessi u customerovom gradu, horizontalni scroll i cursor/offset paginacija.
 - Quick filter chipovi ostaju vidljivi kad se prikažu rezultati, kako kontekst pretrage ne nestaje.
 - Kartice otvaraju odgovarajući stay/service detail.
 

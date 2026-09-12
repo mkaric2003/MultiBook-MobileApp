@@ -1,16 +1,16 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
-import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/data/models/user_model.dart';
 import 'package:multibook/src/domain/repositories/users_repository.dart';
-import 'package:injectable/injectable.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:multibook/utils/image_utils.dart';
-import 'package:flutter/foundation.dart';
 
 class UserException implements Exception {
   const UserException(this.message);
@@ -139,11 +139,13 @@ class UserProfileUseCase {
     if (user == null) {
       throw const UserException('We could not find your profile.');
     }
-    _requireSuccess(
+    final updatedUser = _requireSuccess(
       await _usersRepository.updateProfile(
         user.copyWith(city: city.trim(), address: address.trim()),
       ),
     );
+    _cachedUser = updatedUser;
+    _cachedUserId = updatedUser.id;
   }
 
   Future<UserModel> updateProfile({

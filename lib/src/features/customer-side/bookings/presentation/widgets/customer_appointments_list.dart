@@ -3,6 +3,7 @@ import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
 import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
 import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_appointment_card.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +20,7 @@ class CustomerAppointmentsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const CustomerBookingsSkeleton.appointments();
     }
     if (state.appointments.isEmpty) {
       return Center(

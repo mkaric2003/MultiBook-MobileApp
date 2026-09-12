@@ -44,6 +44,7 @@ class ExploreCollectionCard extends StatelessWidget {
                     Text(
                       collection.title,
                       style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                       ),
@@ -52,6 +53,7 @@ class ExploreCollectionCard extends StatelessWidget {
                     Text(
                       collection.subtitle,
                       style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),

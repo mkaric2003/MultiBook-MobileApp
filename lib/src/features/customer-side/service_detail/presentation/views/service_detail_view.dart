@@ -8,6 +8,7 @@ import 'package:multibook/src/features/customer-side/service_detail/cubit/servic
 import 'package:multibook/src/features/customer-side/service_detail/cubit/service_detail_state.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_about_section.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_detail_hero.dart';
+import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_detail_skeleton.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_gallery_section.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_location_section.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_overview.dart';
@@ -31,9 +32,7 @@ class ServiceDetailView extends StatelessWidget {
       child: BlocBuilder<ServiceDetailCubit, ServiceDetailState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
+            return ServiceDetailSkeleton(onBack: () => context.pop());
           }
           if (state.business == null) {
             return Scaffold(

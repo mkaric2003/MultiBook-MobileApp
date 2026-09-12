@@ -129,7 +129,10 @@ class BookingCalendar extends StatelessWidget {
                     ),
                     child: Text(
                       '${date.day}',
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        color: selected ? AppColors.white : null,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
