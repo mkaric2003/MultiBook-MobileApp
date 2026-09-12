@@ -1,4 +1,4 @@
-package com.example.aquabook
+package com.multibook.app
 
 import io.flutter.embedding.android.FlutterActivity
 

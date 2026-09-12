@@ -144,7 +144,8 @@ class ApiClient {
   static String _requiredBaseUrl() {
     if (AppConfig.apiBaseUrl.isEmpty) {
       throw StateError(
-        'MULTIBOOK_API_BASE_URL must be supplied with --dart-define.',
+        'The API base URL for the active flavor must be supplied with '
+        '--dart-define.',
       );
     }
     return AppConfig.apiBaseUrl;

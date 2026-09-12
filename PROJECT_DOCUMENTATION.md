@@ -258,8 +258,12 @@ Development-only seed akcije u Add Business ekranu koriste `DevelopmentSeedUseCa
 
 ```text
 lib/
- ├─ main.dart                         # inicijalizacija DI-ja i aplikacije
- ├─ app.dart                          # MaterialApp, router i inicijalizacija notifikacija
+ ├─ main.dart                         # kompatibilni DEV entrypoint
+ ├─ bootstrap.dart                    # zajednička inicijalizacija DI-ja i aplikacije
+ ├─ entry_points/
+ │   ├─ main_dev.dart                 # MultiBook DEV entrypoint
+ │   └─ main_prod.dart                # MultiBook production entrypoint
+ ├─ app.dart                          # MaterialApp, tema, locale i router konfiguracija
  ├─ src/
  │   ├─ core/                         # konfiguracija, tema, DI, session lifecycle i shared errors
  │   ├─ domain/                       # use caseovi i repository ugovori
@@ -580,7 +584,7 @@ Chat se otvara iz booking/appointment detalja kroz *Message provider/customer* i
 - Chat koristi **samo push** (ako chat nije otvoren) i unread message counter; ne proizvodi dupliciranu in-app notifikaciju.
 - Potvrda kreiranja booking/appointmenta ne šalje customeru suvišnu “confirmed” notifikaciju, jer confirmation ekran već potvrđuje uspjeh.
 
-Flutter FCM lifecycle vodi `NotificationDeviceService`: nakon prijave registruje token putem `PUT /v1/notification-devices/{deviceId}`, a pri odjavi ga uklanja putem `DELETE` rute. `NotificationBellCubit` poziva `GetUnreadNotificationsCountUseCase`, ne poziva use case iz widgeta. Kada aplikacija u foregroundu primi FCM poruku, Cubit odmah osvježi `GET /v1/notifications/unread-count`; periodični refresh svakih 30 sekundi ostaje samo kao fallback. Nema WebSocket konekcije.
+Flutter FCM lifecycle vodi `NotificationDeviceService`: nakon prijave registruje token putem `PUT /v1/notification-devices/{deviceId}`, a pri odjavi ga uklanja putem `DELETE` rute. Servis izlaže odvojene streamove za foreground i otvorene notifikacije, bez navigacijskih callbackova. `NotificationCoordinator`, pokrenut iz `bootstrap.dart` nakon prvog framea, sluša otvorene notifikacije, dok `NotificationRouter` centralno validira payload i mapira notification tip na GoRouter destinaciju. `app.dart` ne sadrži FCM lifecycle, payload ni navigation logiku. Isti `NotificationRouter` koristi i tap na in-app notification stavku. `NotificationBellCubit` poziva `GetUnreadNotificationsCountUseCase`, ne poziva use case iz widgeta. Kada aplikacija u foregroundu primi FCM poruku, Cubit odmah osvježi `GET /v1/notifications/unread-count`; periodični refresh svakih 30 sekundi ostaje samo kao fallback. Nema WebSocket konekcije.
 
 ### Dispatch događaja
 
@@ -649,7 +653,7 @@ Pravila su u [firestore.rules](firestore.rules) i [storage.rules](storage.rules)
 - Saved, draftovi, uređaji, notifikacije i recently viewed su scoped na vlastitog usera.
 - Recenziju kreira samo customer iz vlastite završene rezervacije ili termina; baza garantuje najviše jednu recenziju po customeru i businessu, a prosjek se ažurira atomski.
 - Storage dozvoljava samo vlasniku upload/update/delete slike, do 10 MB i isključivo `image/*` sadržaj.
-- `google-services.json` i `GoogleService-Info.plist` su u `.gitignore`; API ključevi i konfiguracija ne idu u Git.
+- Flavor-specifični `google-services.json`, `GoogleService-Info.plist` i Maps secret xcconfig fajlovi su u `.gitignore`; API ključevi i credential konfiguracija ne idu u Git.
 
 ---
 
@@ -734,7 +738,41 @@ Prilikom Firebase deploya ne treba automatski brisati index koji CLI navede kao 
 ```bash
 flutter pub get
 flutter analyze
-flutter run
+flutter run \
+  --flavor dev \
+  --target lib/entry_points/main_dev.dart \
+  --dart-define=MULTIBOOK_DEV_API_BASE_URL=http://localhost:8080
+```
+
+MultiBook koristi `flutter_flavorizr` i ima dva potpuno odvojena native
+flavor-a:
+
+| Flavor | Naziv aplikacije | Android application ID / iOS bundle ID | Entry point |
+|---|---|---|---|
+| `dev` | `MultiBook DEV` | `com.multibook.app.dev` | `lib/entry_points/main_dev.dart` |
+| `prod` | `MultiBook` | `com.multibook.app` | `lib/entry_points/main_prod.dart` |
+
+`lib/main.dart` ostaje samo kao kompatibilni DEV entrypoint. Native pokretanje i
+build uvijek trebaju eksplicitno navesti `--flavor` i odgovarajući `--target`.
+Produkcijski build koristi `MULTIBOOK_PROD_API_BASE_URL` i
+`MULTIBOOK_PROD_GOOGLE_SERVER_CLIENT_ID` kroz `--dart-define`.
+
+Postojeći Firebase projekt, Google Sign-In client ID i lokalni Maps ključevi
+tretiraju se isključivo kao DEV konfiguracija. Lokalni credential fajlovi nisu u
+Gitu:
+
+- Android Firebase: `android/app/src/dev/google-services.json`
+- iOS Firebase: `ios/Runner/dev/GoogleService-Info.plist`
+- Android Maps: `MULTIBOOK_DEV_GOOGLE_MAPS_API_KEY` u
+  `android/local.properties`
+- iOS Maps: `GOOGLE_MAPS_API_KEY` u `ios/Flutter/Secrets-dev.xcconfig`
+
+Produkcijski Firebase i Maps credentials nisu zamijenjeni DEV vrijednostima.
+Prije production builda moraju se dodati zasebne PROD konfiguracije. Flavor
+native fajlovi i schemeovi se regenerišu komandom:
+
+```bash
+dart run flutter_flavorizr
 ```
 
 Za generisane mapper/DI fajlove, nakon izmjene modela ili Injectable registracija:

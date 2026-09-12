@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
 import 'package:multibook/src/data/data_sources/notification_data_source.dart';
@@ -27,21 +26,22 @@ class NotificationDeviceService {
   final RegisterNotificationDeviceUseCase _registerDevice;
   final UnregisterNotificationDeviceUseCase _unregisterDevice;
   final _foregroundMessages = StreamController<Map<String, String>>.broadcast();
+  final _openedNotifications =
+      StreamController<Map<String, String>>.broadcast();
   StreamSubscription<RemoteMessage>? _foregroundMessageSubscription;
   StreamSubscription<RemoteMessage>? _messageOpenedSubscription;
   StreamSubscription<String>? _tokenRefreshSubscription;
-  ValueChanged<Map<String, String>>? _onNotificationOpened;
   bool _isInitialized = false;
 
   Stream<Map<String, String>> get onForegroundMessage =>
       _foregroundMessages.stream;
 
-  Future<void> initialize({
-    required ValueChanged<Map<String, String>> onNotificationOpened,
-  }) async {
+  Stream<Map<String, String>> get onNotificationOpened =>
+      _openedNotifications.stream;
+
+  Future<void> initialize() async {
     if (_isInitialized) return;
     _isInitialized = true;
-    _onNotificationOpened = onNotificationOpened;
     _foregroundMessageSubscription = _notificationDataSource.onMessage.listen(
       (message) =>
           _foregroundMessages.add(Map<String, String>.from(message.data)),
@@ -82,7 +82,7 @@ class NotificationDeviceService {
 
   void _handleOpenedMessage(RemoteMessage message) {
     final data = Map<String, String>.from(message.data);
-    if (data.isNotEmpty) _onNotificationOpened?.call(data);
+    if (data.isNotEmpty) _openedNotifications.add(data);
   }
 
   @disposeMethod
@@ -91,5 +91,6 @@ class NotificationDeviceService {
     await _messageOpenedSubscription?.cancel();
     await _tokenRefreshSubscription?.cancel();
     await _foregroundMessages.close();
+    await _openedNotifications.close();
   }
 }

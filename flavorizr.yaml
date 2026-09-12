@@ -1,0 +1,58 @@
+app:
+  android:
+    flavorDimensions: "environment"
+
+flavors:
+  dev:
+    app:
+      name: "MultiBook DEV"
+
+    android:
+      applicationId: "com.multibook.app.dev"
+      generateDummyAssets: false
+      customConfig:
+        'manifestPlaceholders["googleMapsApiKey"]': 'project.extra["devGoogleMapsApiKey"] as String'
+
+    ios:
+      bundleId: "com.multibook.app.dev"
+      generateDummyAssets: false
+      buildSettings:
+        ASSETCATALOG_COMPILER_APPICON_NAME: "AppIcon"
+      includes:
+        - value: "Secrets-dev.xcconfig"
+          optional: true
+      variables:
+        FLUTTER_TARGET:
+          value: "lib/entry_points/main_dev.dart"
+
+  prod:
+    app:
+      name: "MultiBook"
+
+    android:
+      applicationId: "com.multibook.app"
+      generateDummyAssets: false
+      customConfig:
+        'manifestPlaceholders["googleMapsApiKey"]': 'project.extra["prodGoogleMapsApiKey"] as String'
+
+    ios:
+      bundleId: "com.multibook.app"
+      generateDummyAssets: false
+      buildSettings:
+        ASSETCATALOG_COMPILER_APPICON_NAME: "AppIcon"
+      includes:
+        - value: "Secrets-prod.xcconfig"
+          optional: true
+      variables:
+        FLUTTER_TARGET:
+          value: "lib/entry_points/main_prod.dart"
+
+instructions:
+  - "android:androidManifest"
+  - "android:flavorizrGradle"
+  - "android:buildGradle"
+  - "ios:podfile"
+  - "ios:xcconfig"
+  - "ios:buildTargets"
+  - "ios:schema"
+  - "ios:plist"
