@@ -7,6 +7,7 @@ import 'package:multibook/src/features/shared/chat/domain/models/chat_conversati
 import 'package:multibook/src/features/shared/notifications/cubit/notifications_cubit.dart';
 import 'package:multibook/src/features/shared/notifications/cubit/notifications_state.dart';
 import 'package:multibook/src/features/shared/notifications/presentation/widgets/notification_tile.dart';
+import 'package:multibook/src/features/shared/notifications/presentation/widgets/notifications_skeleton.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +20,6 @@ class NotificationsView extends StatelessWidget {
   Widget build(BuildContext context) => BlocProvider(
     create: (_) => getIt<NotificationsCubit>()..load(),
     child: Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -28,7 +28,7 @@ class NotificationsView extends StatelessWidget {
               child: BlocBuilder<NotificationsCubit, NotificationsState>(
                 builder: (context, state) {
                   if (state.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const NotificationsSkeleton();
                   }
                   if (state.errorMessage != null) {
                     return Center(child: Text(state.errorMessage!));
@@ -37,7 +37,7 @@ class NotificationsView extends StatelessWidget {
                     return Center(
                       child: Text(
                         context.l10n.noNotificationsYet,
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     );
                   }

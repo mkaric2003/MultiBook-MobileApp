@@ -37,8 +37,8 @@ class NotificationTile extends StatelessWidget {
 
     return Material(
       color: notification.isRead
-          ? AppColors.surface
-          : AppColors.surfaceHighlight,
+          ? context.appPalette.surface
+          : context.appPalette.surfaceHighlight,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -84,8 +84,8 @@ class NotificationTile extends StatelessWidget {
                       notification.body,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 13,
                       ),
                     ),
@@ -97,8 +97,8 @@ class NotificationTile extends StatelessWidget {
                 children: [
                   Text(
                     timeLabel,
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 12,
                     ),
                   ),

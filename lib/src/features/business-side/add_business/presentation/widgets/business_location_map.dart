@@ -55,8 +55,8 @@ class BusinessLocationMap extends StatelessWidget {
           selectedLocation == null
               ? context.l10n.tapMapToPlacePin
               : 'Pin location selected',
-          style: const TextStyle(
-            color: AppColors.muted,
+          style: TextStyle(
+            color: context.appPalette.muted,
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),

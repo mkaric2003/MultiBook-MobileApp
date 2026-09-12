@@ -4,6 +4,7 @@ import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/customer-side/payment_methods/cubit/payment_methods_cubit.dart';
 import 'package:multibook/src/features/customer-side/payment_methods/cubit/payment_methods_state.dart';
+import 'package:multibook/src/features/customer-side/payment_methods/presentation/widgets/payment_methods_skeleton.dart';
 import 'package:multibook/src/features/customer-side/payment_methods/presentation/widgets/saved_payment_card.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:multibook/src/global_widgets/custom_button.dart';
@@ -26,7 +27,7 @@ class PaymentMethodsView extends StatelessWidget {
               child: BlocBuilder<PaymentMethodsCubit, PaymentMethodsState>(
                 builder: (context, state) {
                   if (state.loading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const PaymentMethodsSkeleton();
                   }
                   return ListView(
                     padding: const EdgeInsets.fromLTRB(20, 22, 20, 32),
@@ -41,8 +42,8 @@ class PaymentMethodsView extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         context.l10n.savedPaymentMethodsDescription,
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 14,
                         ),
                       ),
@@ -52,15 +53,17 @@ class PaymentMethodsView extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 48),
                           child: Column(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.credit_card_off_outlined,
                                 size: 46,
-                                color: AppColors.muted,
+                                color: context.appPalette.muted,
                               ),
                               const SizedBox(height: 12),
                               Text(
                                 context.l10n.noSavedPaymentMethods,
-                                style: const TextStyle(color: AppColors.muted),
+                                style: TextStyle(
+                                  color: context.appPalette.muted,
+                                ),
                               ),
                             ],
                           ),

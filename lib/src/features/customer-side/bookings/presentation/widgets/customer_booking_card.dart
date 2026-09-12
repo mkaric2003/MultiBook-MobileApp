@@ -27,8 +27,8 @@ class CustomerBookingCard extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(18),
     decoration: BoxDecoration(
-      color: AppColors.surface,
-      border: Border.all(color: AppColors.surfaceHighlight),
+      color: context.appPalette.surface,
+      border: Border.all(color: context.appPalette.surfaceHighlight),
       borderRadius: BorderRadius.circular(18),
     ),
     child: Column(
@@ -43,10 +43,10 @@ class CustomerBookingCard extends StatelessWidget {
                 width: 78,
                 height: 78,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => const SizedBox(
+                errorBuilder: (_, _, _) => SizedBox(
                   width: 78,
                   height: 78,
-                  child: ColoredBox(color: AppColors.surfaceHighlight),
+                  child: ColoredBox(color: context.appPalette.surfaceHighlight),
                 ),
               ),
             ),
@@ -65,8 +65,8 @@ class CustomerBookingCard extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     '${DateFormat('MMM d').format(booking.checkIn)} – ${DateFormat('MMM d').format(booking.checkOut)}',
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 15,
                     ),
                   ),
@@ -77,8 +77,8 @@ class CustomerBookingCard extends StatelessWidget {
                       if (booking.children > 0)
                         context.l10n.children(booking.children),
                     ].join(', '),
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 14,
                     ),
                   ),

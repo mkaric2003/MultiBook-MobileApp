@@ -32,9 +32,9 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,10 +48,12 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
                   width: 64,
                   height: 64,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const SizedBox(
+                  errorBuilder: (_, _, _) => SizedBox(
                     width: 64,
                     height: 64,
-                    child: ColoredBox(color: AppColors.surfaceHighlight),
+                    child: ColoredBox(
+                      color: context.appPalette.surfaceHighlight,
+                    ),
                   ),
                 ),
               ),
@@ -74,7 +76,7 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
                           .join(', '),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: AppColors.muted),
+                      style: TextStyle(color: context.appPalette.muted),
                     ),
                     const SizedBox(height: 6),
                     Text(
@@ -107,9 +109,9 @@ class AppointmentReviewSummaryCard extends StatelessWidget {
             value:
                 '${DateFormat('h:mm a').format(start)} - ${DateFormat('h:mm a').format(end)}',
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: Divider(color: AppColors.surfaceHighlight),
+            child: Divider(color: context.appPalette.surfaceHighlight),
           ),
           AppointmentSummaryRow(
             label: context.l10n.pricePerSession,

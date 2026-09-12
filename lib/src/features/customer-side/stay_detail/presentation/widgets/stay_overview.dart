@@ -23,12 +23,19 @@ class StayOverview extends StatelessWidget {
           const SizedBox(height: 10),
           Row(
             children: [
-              const Icon(Icons.location_on, color: AppColors.muted, size: 19),
+              Icon(
+                Icons.location_on,
+                color: context.appPalette.muted,
+                size: 19,
+              ),
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
                   '${stay.location.isEmpty ? context.l10n.cityCentre : stay.location} · 0.5 km',
-                  style: const TextStyle(color: AppColors.muted, fontSize: 16),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
@@ -45,16 +52,16 @@ class StayOverview extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: context.l10n.formatCurrency(price),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 27,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: context.appPalette.foreground,
                     ),
                   ),
                   TextSpan(
                     text: ' ${context.l10n.perNight}',
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 16,
                     ),
                   ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/features/business-side/add_business/presentation/views/add_business_view.dart';
@@ -20,7 +21,7 @@ class ClientEntryView extends StatelessWidget {
         builder: (context, state) {
           if (state.isLoading) {
             return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
+              body: Center(child: CupertinoActivityIndicator()),
             );
           }
 

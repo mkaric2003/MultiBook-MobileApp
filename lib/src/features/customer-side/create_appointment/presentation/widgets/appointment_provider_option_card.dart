@@ -21,17 +21,19 @@ class AppointmentProviderOptionCard extends StatelessWidget {
     child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.surfaceHighlight,
+          color: isSelected
+              ? AppColors.primary
+              : context.appPalette.surfaceHighlight,
           width: isSelected ? 2 : 1,
         ),
       ),
       child: Row(
         children: [
-          const CircleAvatar(
-            backgroundColor: AppColors.surfaceHighlight,
+          CircleAvatar(
+            backgroundColor: context.appPalette.surfaceHighlight,
             child: Icon(Icons.person_rounded, color: AppColors.primary),
           ),
           const SizedBox(width: 12),
@@ -49,14 +51,14 @@ class AppointmentProviderOptionCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   provider.title ?? 'Service provider',
-                  style: const TextStyle(color: AppColors.muted),
+                  style: TextStyle(color: context.appPalette.muted),
                 ),
               ],
             ),
           ),
           Icon(
             isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
-            color: isSelected ? AppColors.primary : AppColors.muted,
+            color: isSelected ? AppColors.primary : context.appPalette.muted,
           ),
         ],
       ),

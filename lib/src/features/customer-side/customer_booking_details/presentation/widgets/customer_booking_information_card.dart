@@ -14,7 +14,7 @@ class CustomerBookingInformationCard extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(18),
     ),
     child: Column(
@@ -44,10 +44,10 @@ class CustomerBookingInformationCard extends StatelessWidget {
         const SizedBox(height: 18),
         Row(
           children: [
-            const Expanded(
+            Expanded(
               child: Text(
                 'Status',
-                style: TextStyle(color: AppColors.muted, fontSize: 17),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 17),
               ),
             ),
             CustomerBookingStatusPill(status: booking.status),

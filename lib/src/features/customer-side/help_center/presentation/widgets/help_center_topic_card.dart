@@ -20,9 +20,9 @@ class HelpCenterTopicCard extends StatelessWidget {
     child: Ink(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

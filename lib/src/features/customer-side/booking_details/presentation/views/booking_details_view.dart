@@ -34,7 +34,6 @@ class BookingDetailsView extends StatelessWidget {
       },
       child: BlocBuilder<BookingDetailsCubit, BookingDetailsState>(
         builder: (context, state) => Scaffold(
-          backgroundColor: AppColors.background,
           body: SafeArea(
             child: Column(
               children: [
@@ -155,9 +154,11 @@ class BookingDetailsView extends StatelessWidget {
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(22, 16, 22, 22),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: AppColors.surfaceHighlight),
+                      top: BorderSide(
+                        color: context.appPalette.surfaceHighlight,
+                      ),
                     ),
                   ),
                   child: CustomButton(

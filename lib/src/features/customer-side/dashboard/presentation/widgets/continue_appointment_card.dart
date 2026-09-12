@@ -21,7 +21,7 @@ class ContinueAppointmentCard extends StatelessWidget {
     child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -40,18 +40,18 @@ class ContinueAppointmentCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     context.l10n.withProvider(draft.selectedProviderName!),
-                    style: const TextStyle(color: AppColors.muted),
+                    style: TextStyle(color: context.appPalette.muted),
                   ),
                 ],
                 const SizedBox(height: 4),
                 Text(
                   '${draft.businessName} · ${DateFormat('dd.MM').format(draft.date)}',
-                  style: const TextStyle(color: AppColors.muted),
+                  style: TextStyle(color: context.appPalette.muted),
                 ),
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: AppColors.muted),
+          Icon(Icons.chevron_right, color: context.appPalette.muted),
         ],
       ),
     ),

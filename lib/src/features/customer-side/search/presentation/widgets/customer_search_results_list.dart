@@ -18,10 +18,10 @@ class CustomerSearchResultsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (query.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Search by a stay name or city.',
-          style: TextStyle(color: AppColors.muted, fontSize: 16),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 16),
         ),
       );
     }
@@ -29,10 +29,10 @@ class CustomerSearchResultsList extends StatelessWidget {
       return const Center(child: CircularProgressIndicator());
     }
     if (stays.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No stays found.',
-          style: TextStyle(color: AppColors.muted, fontSize: 16),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 16),
         ),
       );
     }

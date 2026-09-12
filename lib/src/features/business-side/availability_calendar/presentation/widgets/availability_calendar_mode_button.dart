@@ -28,7 +28,7 @@ class AvailabilityCalendarModeButton extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : AppColors.muted,
+            color: selected ? Colors.white : context.appPalette.muted,
             fontWeight: FontWeight.w800,
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_state.dart';
 import 'package:multibook/src/features/customer-side/bookings/bloc/customer_bookings_cubit.dart';
 import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_section.dart';
+import 'package:multibook/src/features/customer-side/bookings/presentation/widgets/customer_bookings_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,19 +20,19 @@ class CustomerBookingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const CustomerBookingsSkeleton.stays();
     }
     if (state.bookings.isEmpty) {
       return Center(
         child: Text(
           state.errorMessage ?? context.l10n.noBookingsYet,
-          style: const TextStyle(color: AppColors.muted, fontSize: 16),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 16),
         ),
       );
     }
     return ListView(
       controller: controller,
-      padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 78),
       children: [
         CustomerBookingsSection(
           title: context.l10n.upcoming,

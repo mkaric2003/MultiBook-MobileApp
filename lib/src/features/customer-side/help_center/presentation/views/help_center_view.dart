@@ -43,8 +43,8 @@ class HelpCenterView extends StatelessWidget {
                       const SizedBox(height: 7),
                       Text(
                         context.l10n.helpCenterIntro,
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 14,
                           height: 1.45,
                         ),

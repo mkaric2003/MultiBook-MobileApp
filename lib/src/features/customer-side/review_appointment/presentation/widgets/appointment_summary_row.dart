@@ -21,7 +21,9 @@ class AppointmentSummaryRow extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: emphasized ? Colors.white : AppColors.muted,
+              color: emphasized
+                  ? context.appPalette.foreground
+                  : context.appPalette.muted,
               fontSize: emphasized ? 17 : 15,
               fontWeight: emphasized ? FontWeight.w800 : FontWeight.w500,
             ),

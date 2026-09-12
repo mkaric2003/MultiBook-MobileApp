@@ -109,7 +109,7 @@ class ServiceFiltersSheet extends HookWidget {
     }
 
     return Material(
-      color: AppColors.background,
+      color: context.appPalette.background,
       child: SafeArea(
         top: false,
         child: Column(
@@ -117,9 +117,11 @@ class ServiceFiltersSheet extends HookWidget {
             Container(
               height: 70,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: AppColors.surfaceHighlight),
+                  bottom: BorderSide(
+                    color: context.appPalette.surfaceHighlight,
+                  ),
                 ),
               ),
               child: Stack(
@@ -151,7 +153,7 @@ class ServiceFiltersSheet extends HookWidget {
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(Icons.close_rounded),
                       style: IconButton.styleFrom(
-                        backgroundColor: AppColors.surface,
+                        backgroundColor: context.appPalette.surface,
                       ),
                     ),
                   ),
@@ -197,11 +199,11 @@ class ServiceFiltersSheet extends HookWidget {
                         ),
                       ],
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     ServiceFilterSectionHeader(
@@ -216,11 +218,11 @@ class ServiceFiltersSheet extends HookWidget {
                           context.l10n.allCategories,
                       onTap: selectCategory,
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     ServiceFilterSectionHeader(
@@ -234,11 +236,11 @@ class ServiceFiltersSheet extends HookWidget {
                       onChanged: (city) => filters.value = filters.value
                           .copyWith(city: city, clearCity: city == null),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     ServiceFilterSectionHeader(
@@ -257,11 +259,11 @@ class ServiceFiltersSheet extends HookWidget {
                             maxPrice: values.end,
                           ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     ServiceFilterSectionHeader(
@@ -280,9 +282,9 @@ class ServiceFiltersSheet extends HookWidget {
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(22, 12, 22, 20),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: AppColors.surfaceHighlight),
+                  top: BorderSide(color: context.appPalette.surfaceHighlight),
                 ),
               ),
               child: Column(
@@ -294,7 +296,7 @@ class ServiceFiltersSheet extends HookWidget {
                         context.l10n.filtersApplied(
                           filters.value.appliedFiltersCount,
                         ),
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                       TextButton(
                         onPressed: () => filters.value = const ServiceFilters(),

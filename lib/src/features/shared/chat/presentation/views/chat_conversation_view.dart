@@ -4,6 +4,7 @@ import 'package:multibook/src/features/shared/chat/cubit/chat_conversation_cubit
 import 'package:multibook/src/features/shared/chat/cubit/chat_conversation_state.dart';
 import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:multibook/src/features/shared/chat/presentation/widgets/chat_composer.dart';
+import 'package:multibook/src/features/shared/chat/presentation/widgets/chat_conversation_skeleton.dart';
 import 'package:multibook/src/features/shared/chat/presentation/widgets/chat_message_bubble.dart';
 import 'package:multibook/src/features/shared/chat/presentation/widgets/chat_typing_indicator.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
@@ -52,19 +53,18 @@ class ChatConversationView extends HookWidget {
               ? conversation.lastReadAtBusiness
               : conversation?.lastReadAtCustomer;
           return Scaffold(
-            backgroundColor: AppColors.background,
             body: SafeArea(
               child: Column(
                 children: [
                   CustomAppBar(title: title),
                   Expanded(
                     child: state.isLoading
-                        ? const Center(child: CircularProgressIndicator())
+                        ? const ChatConversationSkeleton()
                         : state.messages.isEmpty && !isOtherUserTyping
-                        ? const Center(
+                        ? Center(
                             child: Text(
                               'Start the conversation.',
-                              style: TextStyle(color: AppColors.muted),
+                              style: TextStyle(color: context.appPalette.muted),
                             ),
                           )
                         : ListView.builder(

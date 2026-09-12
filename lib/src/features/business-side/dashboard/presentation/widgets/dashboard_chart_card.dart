@@ -18,7 +18,7 @@ class DashboardChartCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

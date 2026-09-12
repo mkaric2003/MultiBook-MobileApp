@@ -73,7 +73,6 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
         case Success(:final value):
           emit(
             ChatConversationState(
-              isLoading: false,
               currentUserId: currentUser.id,
               conversation: value,
             ),
@@ -116,6 +115,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
       case Success(:final value):
         emit(
           state.copyWith(
+            isLoading: false,
             conversation: value.conversation,
             messages: value.messages,
             clearError: true,
@@ -130,6 +130,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState>
       case FailureResult():
         emit(
           state.copyWith(
+            isLoading: false,
             errorMessage: 'We could not load messages. Please try again.',
           ),
         );

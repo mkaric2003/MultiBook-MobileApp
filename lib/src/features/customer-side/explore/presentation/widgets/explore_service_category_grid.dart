@@ -16,6 +16,7 @@ class ExploreServiceCategoryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GridView.builder(
     shrinkWrap: true,
+    padding: EdgeInsets.zero,
     physics: const NeverScrollableScrollPhysics(),
     itemCount: categories.length,
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -31,7 +32,7 @@ class ExploreServiceCategoryGrid extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.appPalette.surface,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(

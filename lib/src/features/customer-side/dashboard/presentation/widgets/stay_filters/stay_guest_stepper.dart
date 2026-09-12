@@ -34,7 +34,7 @@ class StayGuestStepper extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 3),
-              Text(subtitle, style: const TextStyle(color: AppColors.muted)),
+              Text(subtitle, style: TextStyle(color: context.appPalette.muted)),
             ],
           ),
         ),

@@ -19,7 +19,7 @@ class ServiceOfferingCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -41,8 +41,8 @@ class ServiceOfferingCard extends StatelessWidget {
                     offering.description!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 13,
                     ),
                   ),
@@ -50,15 +50,15 @@ class ServiceOfferingCard extends StatelessWidget {
                 const SizedBox(height: 9),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.schedule,
-                      color: AppColors.muted,
+                      color: context.appPalette.muted,
                       size: 16,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       context.l10n.serviceDuration(offering.durationMinutes),
-                      style: const TextStyle(color: AppColors.muted),
+                      style: TextStyle(color: context.appPalette.muted),
                     ),
                     const SizedBox(width: 16),
                     Text(

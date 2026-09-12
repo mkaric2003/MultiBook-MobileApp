@@ -8,7 +8,7 @@ class DashboardMetricCard extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.iconBackgroundColor,
-    this.valueColor = AppColors.white,
+    this.valueColor,
     this.suffix,
     this.iconColor = AppColors.primary,
   });
@@ -17,7 +17,7 @@ class DashboardMetricCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color iconBackgroundColor;
-  final Color valueColor;
+  final Color? valueColor;
   final Widget? suffix;
   final Color iconColor;
 
@@ -27,7 +27,7 @@ class DashboardMetricCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -38,7 +38,10 @@ class DashboardMetricCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 14),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 3),
                 Row(
@@ -46,7 +49,7 @@ class DashboardMetricCard extends StatelessWidget {
                     Text(
                       value,
                       style: TextStyle(
-                        color: valueColor,
+                        color: valueColor ?? context.appPalette.foreground,
                         fontSize: 25,
                         fontWeight: FontWeight.w700,
                       ),

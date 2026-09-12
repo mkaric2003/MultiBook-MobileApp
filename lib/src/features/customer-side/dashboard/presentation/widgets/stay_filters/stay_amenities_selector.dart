@@ -25,7 +25,7 @@ class StayAmenitiesSelector extends StatelessWidget {
             onSelected: (_) => onChanged(amenity),
             selectedColor: AppColors.primary,
             checkmarkColor: AppColors.white,
-            side: const BorderSide(color: AppColors.border),
+            side: BorderSide(color: context.appPalette.border),
           ),
         )
         .toList(),

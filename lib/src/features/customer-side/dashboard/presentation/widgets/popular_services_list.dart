@@ -1,5 +1,6 @@
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_listing_skeleton.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/service_listing_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -38,18 +39,18 @@ class PopularServicesList extends HookWidget {
     }, [scrollController, hasMore, isLoadingMore, onLoadMore]);
 
     if (isLoading) {
-      return const SizedBox(
-        height: 300,
-        child: Center(child: CircularProgressIndicator()),
+      return const CustomerHomeListingSkeleton.horizontal(
+        itemHeight: 280,
+        imageHeight: 116,
       );
     }
     if (services.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 72,
         child: Center(
           child: Text(
             'No services available yet.',
-            style: TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
         ),
       );

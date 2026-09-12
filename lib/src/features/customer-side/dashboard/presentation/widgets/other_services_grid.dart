@@ -1,6 +1,8 @@
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/service_listing_card.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_listing_skeleton.dart';
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class OtherServicesGrid extends StatelessWidget {
   const OtherServicesGrid({
@@ -24,23 +26,30 @@ class OtherServicesGrid extends StatelessWidget {
             child: Text(
               emptyMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Color(0xFF9CA3AF)),
+              style: TextStyle(color: context.appPalette.muted),
             ),
           ),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: services.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 14,
-            crossAxisSpacing: 14,
-            mainAxisExtent: 275,
+        if (isLoading && services.isEmpty)
+          const CustomerHomeListingSkeleton.grid(
+            itemHeight: 275,
+            imageHeight: 116,
+          )
+        else
+          GridView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: services.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 14,
+              crossAxisSpacing: 14,
+              mainAxisExtent: 275,
+            ),
+            itemBuilder: (context, index) =>
+                ServiceListingCard(service: services[index], compact: true),
           ),
-          itemBuilder: (context, index) =>
-              ServiceListingCard(service: services[index], compact: true),
-        ),
-        if (isLoading) ...[
+        if (isLoading && services.isNotEmpty) ...[
           const SizedBox(height: 20),
           const Center(child: CircularProgressIndicator()),
         ],

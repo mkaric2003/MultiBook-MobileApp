@@ -21,11 +21,14 @@ class ClientBookingFilterChips extends StatelessWidget {
             child: ChoiceChip(
               label: Text(filter.label),
               selected: selected == filter,
+              showCheckmark: false,
               onSelected: (_) => onSelected(filter),
               selectedColor: AppColors.primary,
-              backgroundColor: AppColors.surfaceHighlight,
+              backgroundColor: context.appPalette.surfaceHighlight,
               labelStyle: TextStyle(
-                color: selected == filter ? Colors.white : AppColors.muted,
+                color: selected == filter
+                    ? Colors.white
+                    : context.appPalette.muted,
                 fontWeight: FontWeight.w700,
               ),
               side: BorderSide.none,

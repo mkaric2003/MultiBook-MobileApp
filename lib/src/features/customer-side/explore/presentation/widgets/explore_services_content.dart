@@ -1,9 +1,12 @@
-import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/data/models/featured_collection_model.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
-import 'package:multibook/src/features/customer-side/explore/domain/models/explore_service_category_catalog.dart';
 import 'package:multibook/src/features/customer-side/explore/domain/models/explore_service_category.dart';
+import 'package:multibook/src/features/customer-side/explore/domain/models/explore_service_category_catalog.dart';
 import 'package:multibook/src/features/customer-side/explore/domain/models/explore_service_collection.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_recent_services.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_service_category_grid.dart';
@@ -11,9 +14,6 @@ import 'package:multibook/src/features/customer-side/explore/presentation/widget
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_service_promotion_carousel.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_trending_services_list.dart';
 import 'package:multibook/src/features/customer-side/explore/presentation/widgets/explore_view_all_categories_button.dart';
-import 'package:multibook/src/data/models/featured_collection_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 class ExploreServicesContent extends HookWidget {
   const ExploreServicesContent({
@@ -49,7 +49,7 @@ class ExploreServicesContent extends HookWidget {
         : ExploreServiceCategoryCatalog.primary;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 78),
       children: [
         CustomerHomeTabSelector(
           selectedTab: selectedTab,
@@ -85,7 +85,7 @@ class ExploreServicesContent extends HookWidget {
           hasMore: hasMoreTrendingServices,
           onLoadMore: onLoadMoreTrendingServices,
         ),
-        const SizedBox(height: 38),
+        const SizedBox(height: 10),
         Text(
           context.l10n.featuredCollections,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),

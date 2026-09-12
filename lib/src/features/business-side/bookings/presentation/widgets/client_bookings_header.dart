@@ -17,8 +17,10 @@ class ClientBookingsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.fromLTRB(20, 16, 20, 14),
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: context.appPalette.surfaceHighlight),
+      ),
     ),
     child: Row(
       children: [
@@ -49,7 +51,7 @@ class ClientBookingsHeader extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 11),
             decoration: BoxDecoration(
-              color: const Color(0xFF172554),
+              color: context.appPalette.surface,
               borderRadius: BorderRadius.circular(11),
             ),
             child: Row(

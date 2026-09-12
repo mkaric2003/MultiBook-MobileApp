@@ -16,7 +16,11 @@ class PromotionBadge extends StatelessWidget {
       child: Text(
         context.l10n.promotion,
         maxLines: 1,
-        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800),
+        style: const TextStyle(
+          color: AppColors.white,
+          fontSize: 10,
+          fontWeight: FontWeight.w800,
+        ),
       ),
     ),
   );

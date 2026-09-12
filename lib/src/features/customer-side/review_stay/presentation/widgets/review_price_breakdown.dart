@@ -38,8 +38,8 @@ class ReviewPriceBreakdown extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.border),
+        color: context.appPalette.surface,
+        border: Border.all(color: context.appPalette.border),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -73,7 +73,7 @@ class ReviewPriceBreakdown extends StatelessWidget {
             label: 'Taxes & fees',
             value: context.l10n.formatCurrency(taxes),
           ),
-          const Divider(height: 28, color: AppColors.border),
+          Divider(height: 28, color: context.appPalette.border),
           ReviewPriceRow(
             label: 'Total',
             value: context.l10n.formatCurrency(total),

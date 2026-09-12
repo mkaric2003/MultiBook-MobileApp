@@ -34,7 +34,7 @@ class AppointmentCalendar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -43,7 +43,7 @@ class AppointmentCalendar extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: onPreviousMonth,
-                icon: const Icon(Icons.chevron_left, color: AppColors.muted),
+                icon: Icon(Icons.chevron_left, color: context.appPalette.muted),
               ),
               Expanded(
                 child: Text(
@@ -57,7 +57,10 @@ class AppointmentCalendar extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onNextMonth,
-                icon: const Icon(Icons.chevron_right, color: AppColors.muted),
+                icon: Icon(
+                  Icons.chevron_right,
+                  color: context.appPalette.muted,
+                ),
               ),
             ],
           ),
@@ -105,8 +108,10 @@ class AppointmentCalendar extends StatelessWidget {
                         '$day',
                         style: TextStyle(
                           color: isPast
-                              ? AppColors.muted.withValues(alpha: 0.45)
-                              : Colors.white,
+                              ? context.appPalette.muted.withValues(alpha: 0.45)
+                              : isSelected
+                              ? AppColors.white
+                              : context.appPalette.foreground,
                           fontWeight: isSelected
                               ? FontWeight.w800
                               : FontWeight.w500,

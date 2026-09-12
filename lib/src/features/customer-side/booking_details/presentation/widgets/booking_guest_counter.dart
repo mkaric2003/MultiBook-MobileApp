@@ -21,7 +21,7 @@ class BookingGuestCounter extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -38,7 +38,10 @@ class BookingGuestCounter extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 3),
-                Text(subtitle, style: const TextStyle(color: AppColors.muted)),
+                Text(
+                  subtitle,
+                  style: TextStyle(color: context.appPalette.muted),
+                ),
               ],
             ),
           ),

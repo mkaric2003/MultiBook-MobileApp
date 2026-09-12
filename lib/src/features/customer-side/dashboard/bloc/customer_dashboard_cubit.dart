@@ -85,6 +85,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         ? city!.trim()
         : (await _userRepository.getCurrentUser())?.city?.trim() ?? '';
     if (customerCity.isEmpty) {
+      _nearbyStaysCity = '';
       emit(
         state.copyWith(
           isNearbyStaysLoading: false,
@@ -94,6 +95,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
       );
       return;
     }
+    if (_sameCity(_nearbyStaysCity, customerCity)) return;
 
     _nearbyStaysOffset = 0;
     _nearbyStaysCity = customerCity;
@@ -146,6 +148,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
       );
       _nearbyStaysOffset += page.length;
     } catch (_) {
+      if (isInitialLoad) _nearbyStaysCity = '';
       emit(
         state.copyWith(
           isNearbyStaysLoading: false,
@@ -166,6 +169,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
   Future<void> applyServiceFilters(ServiceFilters filters) async {
     _servicesOffset = 0;
     _servicesNextCursor = null;
+    if (!filters.hasActiveFilters) _nearbyServicesCity = '';
     emit(
       state.copyWith(
         serviceFilters: filters,
@@ -361,6 +365,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
         ? city!.trim()
         : (await _userRepository.getCurrentUser())?.city?.trim() ?? '';
     if (customerCity.isEmpty) {
+      _nearbyServicesCity = '';
       emit(
         state.copyWith(
           isPopularServicesLoading: false,
@@ -370,6 +375,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
       );
       return;
     }
+    if (_sameCity(_nearbyServicesCity, customerCity)) return;
 
     _nearbyServicesOffset = 0;
     _servicesOffset = 0;
@@ -426,6 +432,7 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
       );
       _nearbyServicesOffset += page.length;
     } catch (_) {
+      if (isInitialLoad) _nearbyServicesCity = '';
       emit(
         state.copyWith(
           isPopularServicesLoading: false,
@@ -539,6 +546,9 @@ class CustomerDashboardCubit extends Cubit<CustomerDashboardState> {
       );
     }
   }
+
+  bool _sameCity(String current, String next) =>
+      current.trim().toLowerCase() == next.trim().toLowerCase();
 
   @override
   Future<void> close() async {

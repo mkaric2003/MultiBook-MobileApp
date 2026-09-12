@@ -25,7 +25,7 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
             children: [
               Text(
                 context.l10n.confirmationCode.toUpperCase(),
-                style: TextStyle(color: AppColors.muted, fontSize: 13),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 13),
               ),
               const SizedBox(height: 10),
               Text(
@@ -38,7 +38,7 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 context.l10n.showCodeToProvider,
-                style: TextStyle(color: AppColors.muted),
+                style: TextStyle(color: context.appPalette.muted),
               ),
             ],
           ),
@@ -48,9 +48,9 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.appPalette.surface,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppColors.surfaceHighlight),
+            border: Border.all(color: context.appPalette.surfaceHighlight),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +65,7 @@ class AppointmentConfirmationCodeCard extends StatelessWidget {
                 children: [
                   Text(
                     context.l10n.serviceProvider,
-                    style: TextStyle(color: AppColors.muted),
+                    style: TextStyle(color: context.appPalette.muted),
                   ),
                   Flexible(
                     child: Text(

@@ -15,7 +15,7 @@ class HelpCenterArticleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-    color: AppColors.surface,
+    color: context.appPalette.surface,
     borderRadius: BorderRadius.circular(14),
     child: InkWell(
       onTap: onTap,
@@ -42,8 +42,8 @@ class HelpCenterArticleTile extends StatelessWidget {
                     summary,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AppColors.muted,
+                    style: TextStyle(
+                      color: context.appPalette.muted,
                       fontSize: 13,
                     ),
                   ),
@@ -51,7 +51,7 @@ class HelpCenterArticleTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            const Icon(Icons.chevron_right, color: AppColors.muted),
+            Icon(Icons.chevron_right, color: context.appPalette.muted),
           ],
         ),
       ),

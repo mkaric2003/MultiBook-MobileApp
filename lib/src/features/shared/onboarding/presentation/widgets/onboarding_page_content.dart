@@ -31,8 +31,8 @@ class OnboardingPageContent extends StatelessWidget {
           Text(
             page.description,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.muted,
+            style: TextStyle(
+              color: context.appPalette.muted,
               fontSize: 17,
               height: 1.6,
             ),

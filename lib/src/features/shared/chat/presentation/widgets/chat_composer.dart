@@ -19,8 +19,10 @@ class ChatComposer extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-    decoration: const BoxDecoration(
-      border: Border(top: BorderSide(color: AppColors.surfaceHighlight)),
+    decoration: BoxDecoration(
+      border: Border(
+        top: BorderSide(color: context.appPalette.surfaceHighlight),
+      ),
     ),
     child: Row(
       children: [
@@ -34,7 +36,7 @@ class ChatComposer extends StatelessWidget {
             decoration: InputDecoration(
               hintText: context.l10n.writeMessage,
               filled: true,
-              fillColor: AppColors.surface,
+              fillColor: context.appPalette.surface,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 12,

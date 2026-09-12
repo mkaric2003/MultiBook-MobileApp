@@ -30,88 +30,87 @@ class ReviewAppointmentView extends HookWidget {
       create: (_) =>
           getIt<AppointmentPromotionCubit>()..load(arguments.business.id),
       child: Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            CustomAppBar(
-              title: context.l10n.reviewAppointment,
-              onBackPressed: () async {
-                final shouldSave = await showDialog<bool>(
-                  context: context,
-                  builder: (dialogContext) => AlertDialog(
-                    title: Text(context.l10n.saveAppointmentDraft),
-                    content: Text(context.l10n.continueAppointmentLater),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(dialogContext, false),
-                        child: Text(context.l10n.discard),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(dialogContext, true),
-                        child: Text(context.l10n.saveDraft),
+        body: SafeArea(
+          child: Column(
+            children: [
+              CustomAppBar(
+                title: context.l10n.reviewAppointment,
+                onBackPressed: () async {
+                  final shouldSave = await showDialog<bool>(
+                    context: context,
+                    builder: (dialogContext) => AlertDialog(
+                      title: Text(context.l10n.saveAppointmentDraft),
+                      content: Text(context.l10n.continueAppointmentLater),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialogContext, false),
+                          child: Text(context.l10n.discard),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(dialogContext, true),
+                          child: Text(context.l10n.saveDraft),
+                        ),
+                      ],
+                    ),
+                  );
+                  if (shouldSave == true) {
+                    await draftCubit.save(
+                      business: arguments.business,
+                      offeringIds: arguments.offerings
+                          .map((offering) => offering.id)
+                          .toList(),
+                      providerId: arguments.provider.id,
+                      providerName: arguments.provider.name,
+                      date: arguments.date,
+                      startMinutes: arguments.startMinutes,
+                      addOnIds: const [],
+                    );
+                    if (context.mounted) context.go(AppRoutes.CUSTOMER_HOME);
+                    return;
+                  }
+                  if (context.mounted) Navigator.of(context).pop();
+                },
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(22, 18, 22, 28),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppointmentReviewSummaryCard(arguments: arguments),
+                      const SizedBox(height: 26),
+                      BlocBuilder<
+                        AppointmentPromotionCubit,
+                        AppointmentPromotionState
+                      >(
+                        builder: (context, state) => AppointmentPriceSummary(
+                          offerings: arguments.offerings,
+                          promotion: state.promotion,
+                        ),
                       ),
                     ],
                   ),
-                );
-                if (shouldSave == true) {
-                  await draftCubit.save(
-                    business: arguments.business,
-                    offeringIds: arguments.offerings
-                        .map((offering) => offering.id)
-                        .toList(),
-                    providerId: arguments.provider.id,
-                    providerName: arguments.provider.name,
-                    date: arguments.date,
-                    startMinutes: arguments.startMinutes,
-                    addOnIds: const [],
-                  );
-                  if (context.mounted) context.go(AppRoutes.CUSTOMER_HOME);
-                  return;
-                }
-                if (context.mounted) Navigator.of(context).pop();
-              },
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(22, 18, 22, 28),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppointmentReviewSummaryCard(arguments: arguments),
-                    const SizedBox(height: 26),
-                    BlocBuilder<
-                      AppointmentPromotionCubit,
-                      AppointmentPromotionState
-                    >(
-                      builder: (context, state) => AppointmentPriceSummary(
-                        offerings: arguments.offerings,
-                        promotion: state.promotion,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(22, 16, 22, 22),
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: AppColors.surfaceHighlight),
+              Container(
+                padding: const EdgeInsets.fromLTRB(22, 16, 22, 22),
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: context.appPalette.surfaceHighlight),
+                  ),
+                ),
+                child: CustomButton(
+                  buttonName: context.l10n.proceedToPayment,
+                  onPressed: () => context.push(
+                    AppRoutes.APPOINTMENT_PAYMENT,
+                    extra: AppointmentPaymentArguments(review: arguments),
+                  ),
                 ),
               ),
-              child: CustomButton(
-                buttonName: context.l10n.proceedToPayment,
-                onPressed: () => context.push(
-                  AppRoutes.APPOINTMENT_PAYMENT,
-                  extra: AppointmentPaymentArguments(review: arguments),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
   }
 }

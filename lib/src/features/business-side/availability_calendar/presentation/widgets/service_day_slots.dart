@@ -41,13 +41,13 @@ class ServiceDaySlots extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           context.l10n.slotColorsExplanation,
-          style: TextStyle(color: AppColors.muted, fontSize: 14),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 14),
         ),
         const SizedBox(height: 16),
         if (slots.isEmpty)
           Text(
             context.l10n.noProviderHoursSelectedDay,
-            style: TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           )
         else
           Wrap(
@@ -74,11 +74,11 @@ class ServiceDaySlots extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isBooked
                         ? AppColors.primary.withValues(alpha: .28)
-                        : AppColors.surface,
+                        : context.appPalette.surface,
                     border: Border.all(
                       color: isBooked
                           ? AppColors.primary
-                          : AppColors.surfaceHighlight,
+                          : context.appPalette.surfaceHighlight,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -96,7 +96,9 @@ class ServiceDaySlots extends StatelessWidget {
                             ? 'Blocked'
                             : 'Available',
                         style: TextStyle(
-                          color: isBooked ? AppColors.primary : AppColors.muted,
+                          color: isBooked
+                              ? AppColors.primary
+                              : context.appPalette.muted,
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                         ),
@@ -150,7 +152,7 @@ class ServiceDaySlots extends StatelessWidget {
     if (appointment != null) {
       showModalBottomSheet<void>(
         context: context,
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appPalette.background,
         showDragHandle: false,
         builder: (_) => AppointmentCustomerSheet(appointment: appointment),
       );
@@ -158,7 +160,7 @@ class ServiceDaySlots extends StatelessWidget {
     }
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appPalette.background,
       showDragHandle: false,
       builder: (_) => ServiceSlotBlockSheet(
         timeLabel: _formatTime(slot),

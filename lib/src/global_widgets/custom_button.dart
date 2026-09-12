@@ -17,8 +17,8 @@ class CustomButton extends StatelessWidget {
     this.leadingIcon,
     this.trailingIcon,
     this.enabled = true,
-    this.disabledBackgroundColor = AppColors.border,
-    this.disabledTextColor = AppColors.muted,
+    this.disabledBackgroundColor,
+    this.disabledTextColor,
     this.radius = 12,
     this.fontSize = 18,
     this.horizontalPadding = 24,
@@ -35,8 +35,8 @@ class CustomButton extends StatelessWidget {
   final Widget? trailingIcon;
   final bool enabled;
 
-  final Color disabledBackgroundColor;
-  final Color disabledTextColor;
+  final Color? disabledBackgroundColor;
+  final Color? disabledTextColor;
   final double radius;
   final double fontSize;
   final double horizontalPadding;
@@ -78,19 +78,26 @@ class CustomButton extends StatelessWidget {
             ),
             backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.disabled)) {
-                return disabledBackgroundColor;
+                return disabledBackgroundColor ?? context.appPalette.border;
               }
               return color!;
             }),
             foregroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.disabled)) {
-                return disabledTextColor;
+                return disabledTextColor ?? context.appPalette.muted;
               }
-              return textColor ?? Colors.white;
+              return textColor ??
+                  ((color ?? AppColors.primary) == AppColors.primary
+                      ? Colors.white
+                      : context.appPalette.foreground);
             }),
             overlayColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.pressed)) {
-                final fg = textColor ?? Colors.white;
+                final fg =
+                    textColor ??
+                    ((color ?? AppColors.primary) == AppColors.primary
+                        ? Colors.white
+                        : context.appPalette.foreground);
                 return fg.withValues(alpha: 0.08);
               }
               return null;

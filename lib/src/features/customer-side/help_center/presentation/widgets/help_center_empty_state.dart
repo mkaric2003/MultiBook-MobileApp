@@ -10,7 +10,11 @@ class HelpCenterEmptyState extends StatelessWidget {
     padding: const EdgeInsets.symmetric(vertical: 36),
     child: Column(
       children: [
-        const Icon(Icons.search_off_outlined, size: 40, color: AppColors.muted),
+        Icon(
+          Icons.search_off_outlined,
+          size: 40,
+          color: context.appPalette.muted,
+        ),
         const SizedBox(height: 12),
         Text(
           context.l10n.helpCenterNoResultsTitle,
@@ -20,7 +24,7 @@ class HelpCenterEmptyState extends StatelessWidget {
         Text(
           context.l10n.helpCenterNoResultsBody,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: AppColors.muted, fontSize: 14),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 14),
         ),
       ],
     ),

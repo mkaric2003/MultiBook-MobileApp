@@ -21,7 +21,7 @@ class DashboardEmptyState extends StatelessWidget {
                 height: 76,
                 width: 76,
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.appPalette.surface,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Icon(
@@ -39,7 +39,7 @@ class DashboardEmptyState extends StatelessWidget {
               Text(
                 context.l10n.createBusinessToStart,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.muted, fontSize: 16),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 16),
               ),
             ],
           ),

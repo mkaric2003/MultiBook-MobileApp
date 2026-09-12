@@ -24,12 +24,12 @@ class StayCollectionsSelector extends StatelessWidget {
             selected: selectedCollectionIds.contains(collection.id),
             onSelected: (_) => onChanged(collection),
             selectedColor: AppColors.primary,
-            backgroundColor: AppColors.surface,
-            side: const BorderSide(color: AppColors.surfaceHighlight),
+            backgroundColor: context.appPalette.surface,
+            side: BorderSide(color: context.appPalette.surfaceHighlight),
             labelStyle: TextStyle(
               color: selectedCollectionIds.contains(collection.id)
                   ? AppColors.white
-                  : AppColors.muted,
+                  : context.appPalette.muted,
               fontWeight: FontWeight.w600,
             ),
           ),

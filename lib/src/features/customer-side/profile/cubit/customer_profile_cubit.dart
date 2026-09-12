@@ -78,6 +78,18 @@ class CustomerProfileCubit extends Cubit<CustomerProfileState>
     }
   }
 
+  Future<void> refreshProfile() async {
+    final user = await _userRepository.getCurrentUser();
+    if (!isClosed) {
+      emit(
+        CustomerProfileState(
+          user: user,
+          unreadMessagesCount: state.unreadMessagesCount,
+        ),
+      );
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {

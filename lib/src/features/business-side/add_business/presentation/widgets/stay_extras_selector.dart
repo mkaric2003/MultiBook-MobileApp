@@ -31,7 +31,7 @@ class StayExtrasSelector extends StatelessWidget {
               onSelected: (_) => onChanged(extra),
               selectedColor: AppColors.primary,
               checkmarkColor: Colors.white,
-              side: const BorderSide(color: AppColors.border),
+              side: BorderSide(color: context.appPalette.border),
             ),
         ],
       ),

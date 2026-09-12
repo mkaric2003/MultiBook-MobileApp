@@ -47,8 +47,8 @@ class ManageAppointmentSheet extends StatelessWidget {
             appointment.paymentStatus.name == 'pending');
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.background,
+      decoration: BoxDecoration(
+        color: context.appPalette.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SafeArea(
@@ -74,16 +74,16 @@ class ManageAppointmentSheet extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(Icons.close, size: 20),
                     style: IconButton.styleFrom(
-                      backgroundColor: AppColors.surfaceHighlight,
+                      backgroundColor: context.appPalette.surfaceHighlight,
                     ),
                   ),
                 ],
               ),
-              const Divider(height: 28, color: AppColors.surfaceHighlight),
+              Divider(height: 28, color: context.appPalette.surfaceHighlight),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.appPalette.surface,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -91,9 +91,12 @@ class ManageAppointmentSheet extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 23,
-                          child: Icon(Icons.person, color: AppColors.muted),
+                          child: Icon(
+                            Icons.person,
+                            color: context.appPalette.muted,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -163,6 +166,7 @@ class ManageAppointmentSheet extends StatelessWidget {
                 CustomButton(
                   buttonName: context.l10n.declineAppointment,
                   color: Colors.redAccent,
+                  textColor: Colors.white,
                   height: 48,
                   fontSize: 16,
                   onPressed: () async {
@@ -200,20 +204,20 @@ class ManageAppointmentSheet extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 1),
                       child: Icon(
                         Icons.info_outline,
                         size: 15,
-                        color: AppColors.muted,
+                        color: context.appPalette.muted,
                       ),
                     ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         context.l10n.noShowEarningsHint,
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 11,
                         ),
                       ),
@@ -224,7 +228,7 @@ class ManageAppointmentSheet extends StatelessWidget {
               const SizedBox(height: 10),
               CustomButton(
                 buttonName: context.l10n.contactCustomer,
-                color: AppColors.surfaceHighlight,
+                color: context.appPalette.surfaceHighlight,
                 height: 48,
                 fontSize: 16,
                 leadingIcon: const Icon(Icons.chat_bubble_outline),

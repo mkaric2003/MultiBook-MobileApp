@@ -12,6 +12,7 @@ import 'package:multibook/src/features/customer-side/stay_detail/presentation/wi
 import 'package:multibook/src/features/customer-side/stay_detail/presentation/widgets/stay_guest_reviews_section.dart';
 import 'package:multibook/src/features/customer-side/stay_detail/presentation/widgets/stay_location_section.dart';
 import 'package:multibook/src/features/customer-side/stay_detail/presentation/widgets/stay_overview.dart';
+import 'package:multibook/src/features/customer-side/stay_detail/presentation/widgets/stay_detail_skeleton.dart';
 import 'package:multibook/src/features/shared/business_reviews/presentation/widgets/business_reviews_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,9 +31,7 @@ class StayDetailView extends StatelessWidget {
       child: BlocBuilder<StayDetailCubit, StayDetailState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
+            return StayDetailSkeleton(onBack: () => context.pop());
           }
           if (state.business == null) {
             return Scaffold(
@@ -45,7 +44,6 @@ class StayDetailView extends StatelessWidget {
           final business = state.business!;
           final listing = StayListing.fromBusiness(business);
           return Scaffold(
-            backgroundColor: AppColors.background,
             body: SafeArea(
               top: false,
               child: SingleChildScrollView(
@@ -89,7 +87,7 @@ class StayDetailView extends StatelessWidget {
                         reviews: state.reviews,
                         onViewAll: () async => showModalBottomSheet<void>(
                           context: context,
-                          backgroundColor: AppColors.background,
+                          backgroundColor: context.appPalette.background,
                           isScrollControlled: true,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(

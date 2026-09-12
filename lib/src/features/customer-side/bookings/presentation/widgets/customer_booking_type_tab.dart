@@ -27,7 +27,7 @@ class CustomerBookingTypeTab extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          color: selected ? Colors.white : AppColors.muted,
+          color: selected ? Colors.white : context.appPalette.muted,
           fontSize: 16,
           fontWeight: FontWeight.w700,
         ),

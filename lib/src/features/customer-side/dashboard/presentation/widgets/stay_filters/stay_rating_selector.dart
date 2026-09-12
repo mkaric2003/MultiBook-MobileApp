@@ -29,14 +29,14 @@ class StayRatingSelector extends StatelessWidget {
                   : Icons.star_outline_rounded,
               color: index <= minimumRating
                   ? const Color(0xFFFACC15)
-                  : AppColors.iconMuted,
+                  : context.appPalette.iconMuted,
               size: 29,
             ),
           ),
         const SizedBox(width: 8),
         Text(
           minimumRating == 0 ? 'Any rating' : '${minimumRating.toInt()}+ stars',
-          style: const TextStyle(color: AppColors.muted, fontSize: 16),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 16),
         ),
       ],
     );

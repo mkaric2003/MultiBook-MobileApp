@@ -29,7 +29,7 @@ class CustomerHomeTabOption extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: isSelected ? AppColors.white : AppColors.muted,
+              color: isSelected ? AppColors.white : context.appPalette.muted,
               fontWeight: FontWeight.w700,
             ),
           ),

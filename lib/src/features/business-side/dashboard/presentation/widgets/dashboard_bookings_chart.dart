@@ -26,15 +26,15 @@ class DashboardBookingsChart extends StatelessWidget {
           alignment: BarChartAlignment.spaceAround,
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
-              getTooltipColor: (_) => AppColors.surface,
+              getTooltipColor: (_) => context.appPalette.surface,
               tooltipBorderRadius: BorderRadius.circular(8),
               fitInsideHorizontally: true,
               fitInsideVertically: true,
               getTooltipItem: (group, groupIndex, rod, rodIndex) =>
                   BarTooltipItem(
                     '${rod.toY.toInt()} $tooltipLabel',
-                    const TextStyle(
-                      color: AppColors.white,
+                    TextStyle(
+                      color: context.appPalette.foreground,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
@@ -46,7 +46,7 @@ class DashboardBookingsChart extends StatelessWidget {
             drawVerticalLine: false,
             horizontalInterval: _maximumValue / 3,
             getDrawingHorizontalLine: (_) =>
-                const FlLine(color: AppColors.border, strokeWidth: 1),
+                FlLine(color: context.appPalette.border, strokeWidth: 1),
           ),
           titlesData: FlTitlesData(
             topTitles: const AxisTitles(
@@ -62,7 +62,10 @@ class DashboardBookingsChart extends StatelessWidget {
                 interval: _maximumValue / 3,
                 getTitlesWidget: (value, meta) => Text(
                   value.toInt().toString(),
-                  style: const TextStyle(color: AppColors.muted, fontSize: 11),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 11,
+                  ),
                 ),
               ),
             ),
@@ -75,8 +78,8 @@ class DashboardBookingsChart extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
                       context.l10n.week(value.toInt() + 1),
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 11,
                       ),
                     ),

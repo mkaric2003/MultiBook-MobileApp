@@ -26,7 +26,7 @@ class AppointmentConfirmationInfo extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
-      color: AppColors.surfaceHighlight,
+      color: context.appPalette.surfaceHighlight,
       borderRadius: BorderRadius.circular(14),
     ),
     child: Row(
@@ -47,7 +47,7 @@ class AppointmentConfirmationInfo extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: const TextStyle(color: AppColors.muted, fontSize: 12),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 12),
               ),
               const SizedBox(height: 3),
               Row(
@@ -55,10 +55,10 @@ class AppointmentConfirmationInfo extends StatelessWidget {
                   if (originalValue != null) ...[
                     Text(
                       originalValue!,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         decoration: TextDecoration.lineThrough,
-                        decorationColor: AppColors.muted,
+                        decorationColor: context.appPalette.muted,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -74,7 +74,10 @@ class AppointmentConfirmationInfo extends StatelessWidget {
               ),
               if (detail != null) ...[
                 const SizedBox(height: 2),
-                Text(detail!, style: const TextStyle(color: AppColors.muted)),
+                Text(
+                  detail!,
+                  style: TextStyle(color: context.appPalette.muted),
+                ),
               ],
             ],
           ),

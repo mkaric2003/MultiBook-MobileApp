@@ -2192,4 +2192,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'Password changed successfully.';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get lightTheme => 'Light theme';
+
+  @override
+  String get lightThemeDescription => 'Use light colors throughout the app';
 }

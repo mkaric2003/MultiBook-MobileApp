@@ -2,6 +2,7 @@ import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/customer-side/support_tickets/cubit/support_tickets_state.dart';
 import 'package:multibook/src/features/customer-side/support_tickets/presentation/widgets/support_ticket_card.dart';
+import 'package:multibook/src/features/customer-side/support_tickets/presentation/widgets/support_tickets_skeleton.dart';
 import 'package:flutter/material.dart';
 
 class SupportTicketsContent extends StatelessWidget {
@@ -12,7 +13,7 @@ class SupportTicketsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const SupportTicketsSkeleton();
     }
     if (state.tickets.isEmpty) {
       return Center(
@@ -21,7 +22,7 @@ class SupportTicketsContent extends StatelessWidget {
           child: Text(
             context.l10n.noSupportRequests,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.muted, fontSize: 15),
+            style: TextStyle(color: context.appPalette.muted, fontSize: 15),
           ),
         ),
       );

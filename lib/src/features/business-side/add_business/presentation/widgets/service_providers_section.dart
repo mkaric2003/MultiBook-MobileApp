@@ -47,7 +47,7 @@ class ServiceProvidersSection extends HookWidget {
         const SizedBox(height: 8),
         Text(
           context.l10n.serviceProvidersDescription,
-          style: TextStyle(color: AppColors.muted, fontSize: 13),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 13),
         ),
         const SizedBox(height: 14),
         CustomTextField(
@@ -59,7 +59,7 @@ class ServiceProvidersSection extends HookWidget {
         const SizedBox(height: 6),
         Text(
           context.l10n.providerCommissionRateDescription,
-          style: const TextStyle(color: AppColors.muted, fontSize: 13),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 13),
         ),
         const SizedBox(height: 8),
         CustomTextField(
@@ -73,7 +73,7 @@ class ServiceProvidersSection extends HookWidget {
         const SizedBox(height: 12),
         CustomButton(
           buttonName: context.l10n.addProvider,
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           textColor: AppColors.primary,
           borderColor: AppColors.primary,
           enabled: canAdd,

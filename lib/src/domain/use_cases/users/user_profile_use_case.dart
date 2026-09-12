@@ -1,16 +1,16 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:injectable/injectable.dart';
+import 'package:multibook/src/core/errors/result.dart';
 import 'package:multibook/src/data/data_sources/authentication_data_source.dart';
 import 'package:multibook/src/data/data_sources/firebase_storage_data_source.dart';
-import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/data/enums/currency_code.dart';
+import 'package:multibook/src/data/enums/user_type.dart';
 import 'package:multibook/src/data/models/user_model.dart';
 import 'package:multibook/src/domain/repositories/users_repository.dart';
-import 'package:injectable/injectable.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:multibook/utils/image_utils.dart';
-import 'package:flutter/foundation.dart';
 
 class UserException implements Exception {
   const UserException(this.message);
@@ -139,11 +139,13 @@ class UserProfileUseCase {
     if (user == null) {
       throw const UserException('We could not find your profile.');
     }
-    _requireSuccess(
+    final updatedUser = _requireSuccess(
       await _usersRepository.updateProfile(
         user.copyWith(city: city.trim(), address: address.trim()),
       ),
     );
+    _cachedUser = updatedUser;
+    _cachedUserId = updatedUser.id;
   }
 
   Future<UserModel> updateProfile({
@@ -184,10 +186,12 @@ class UserProfileUseCase {
           minHeight: 512,
           quality: 38,
         );
-        profileImageUrl = await _storageDataSource.uploadImage(
-          storagePath: 'profiles/${currentUser.uid}/profile.webp',
-          imageBytes: compressedImageBytes,
-          contentType: 'image/webp',
+        profileImageUrl = _withCacheVersion(
+          await _storageDataSource.uploadImage(
+            storagePath: 'profiles/${currentUser.uid}/profile.webp',
+            imageBytes: compressedImageBytes,
+            contentType: 'image/webp',
+          ),
         );
       }
 
@@ -213,10 +217,13 @@ class UserProfileUseCase {
               : 'profiles/${currentUser.uid}/profile.webp',
         ),
       );
-      return response.copyWith(
+      final updatedUser = response.copyWith(
         fullName: fullName,
         profileImageUrl: profileImageUrl,
       );
+      _cachedUser = updatedUser;
+      _cachedUserId = updatedUser.id;
+      return updatedUser;
     } on UserException {
       rethrow;
     } catch (error, stackTrace) {
@@ -228,6 +235,18 @@ class UserProfileUseCase {
       );
       throw const UserException('We could not update your profile.');
     }
+  }
+
+  String _withCacheVersion(String url) {
+    final uri = Uri.parse(url);
+    return uri
+        .replace(
+          queryParameters: {
+            ...uri.queryParameters,
+            'v': DateTime.now().millisecondsSinceEpoch.toString(),
+          },
+        )
+        .toString();
   }
 
   UserModel _requireSuccess(Result<UserModel> result) => switch (result) {

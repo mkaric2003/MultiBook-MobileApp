@@ -18,7 +18,7 @@ class ServiceFilterOptionPickerSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.background,
+      color: context.appPalette.background,
       child: SafeArea(
         top: false,
         child: SizedBox(
@@ -28,9 +28,11 @@ class ServiceFilterOptionPickerSheet extends StatelessWidget {
               Container(
                 height: 64,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: AppColors.surfaceHighlight),
+                    bottom: BorderSide(
+                      color: context.appPalette.surfaceHighlight,
+                    ),
                   ),
                 ),
                 child: Row(

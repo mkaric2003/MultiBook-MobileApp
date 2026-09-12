@@ -19,7 +19,7 @@ class StayInventoryTypeSelector extends StatelessWidget {
     height: 84,
     padding: const EdgeInsets.all(4),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(14),
     ),
     child: Row(

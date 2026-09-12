@@ -16,7 +16,7 @@ class CustomerBookingInformationRow extends StatelessWidget {
       Expanded(
         child: Text(
           label,
-          style: const TextStyle(color: AppColors.muted, fontSize: 17),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 17),
         ),
       ),
       Expanded(

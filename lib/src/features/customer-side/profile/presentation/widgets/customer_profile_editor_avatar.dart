@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -28,34 +29,35 @@ class CustomerProfileEditorAvatar extends HookWidget {
         ? Image.memory(snapshot.data!, fit: BoxFit.cover)
         : (imageUrl?.isNotEmpty ?? false)
         ? Image.network(imageUrl!, fit: BoxFit.cover)
-        : const Icon(Icons.person_rounded, size: 52, color: AppColors.muted);
+        : Icon(Icons.person_rounded, size: 52, color: context.appPalette.muted);
 
     return Center(
-      child: Stack(
-        clipBehavior: Clip.none,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
-            radius: 52,
-            backgroundColor: AppColors.border,
-            child: ClipOval(
-              child: SizedBox(height: 98, width: 98, child: image),
+          InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: CircleAvatar(
+              radius: 58,
+              backgroundColor: context.appPalette.border,
+              child: ClipOval(
+                child: SizedBox(height: 110, width: 110, child: image),
+              ),
             ),
           ),
-          Positioned(
-            right: -4,
-            bottom: -2,
-            child: InkWell(
-              onTap: onTap,
-              customBorder: const CircleBorder(),
-              child: Container(
-                height: 42,
-                width: 42,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.camera_alt_rounded, size: 20),
-              ),
+          const SizedBox(height: 10),
+          TextButton(
+            onPressed: onTap,
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.primary,
+              minimumSize: Size.zero,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: Text(
+              context.l10n.updateProfileImage,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           ),
         ],

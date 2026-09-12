@@ -23,7 +23,9 @@ class AppointmentPaymentPriceRow extends StatelessWidget {
       Text(
         label,
         style: TextStyle(
-          color: emphasized ? Colors.white : AppColors.muted,
+          color: emphasized
+              ? context.appPalette.foreground
+              : context.appPalette.muted,
           fontWeight: emphasized ? FontWeight.w800 : FontWeight.w500,
           fontSize: emphasized ? 18 : 16,
         ),
@@ -34,10 +36,10 @@ class AppointmentPaymentPriceRow extends StatelessWidget {
           if (originalValue != null) ...[
             Text(
               context.l10n.formatCurrency(originalValue!),
-              style: const TextStyle(
-                color: AppColors.muted,
+              style: TextStyle(
+                color: context.appPalette.muted,
                 decoration: TextDecoration.lineThrough,
-                decorationColor: AppColors.muted,
+                decorationColor: context.appPalette.muted,
                 fontSize: 14,
               ),
             ),

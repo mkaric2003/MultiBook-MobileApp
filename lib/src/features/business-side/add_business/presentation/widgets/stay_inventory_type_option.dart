@@ -33,7 +33,7 @@ class StayInventoryTypeOption extends StatelessWidget {
           Text(
             subtitle,
             style: TextStyle(
-              color: isSelected ? AppColors.white : AppColors.muted,
+              color: isSelected ? AppColors.white : context.appPalette.muted,
               fontSize: 11,
             ),
           ),

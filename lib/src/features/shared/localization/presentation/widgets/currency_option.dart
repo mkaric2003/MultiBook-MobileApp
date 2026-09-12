@@ -25,10 +25,12 @@ class CurrencyOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary.withValues(alpha: .14)
-              : AppColors.surface,
+              : context.appPalette.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.surfaceHighlight,
+            color: isSelected
+                ? AppColors.primary
+                : context.appPalette.surfaceHighlight,
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -38,8 +40,8 @@ class CurrencyOption extends StatelessWidget {
               width: 34,
               height: 34,
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: AppColors.surfaceHighlight,
+              decoration: BoxDecoration(
+                color: context.appPalette.surfaceHighlight,
                 shape: BoxShape.circle,
               ),
               child: Text(

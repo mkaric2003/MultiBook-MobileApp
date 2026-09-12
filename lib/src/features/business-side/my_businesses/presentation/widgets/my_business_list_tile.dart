@@ -24,9 +24,9 @@ class MyBusinessListTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: context.appPalette.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.surfaceHighlight),
+          border: Border.all(color: context.appPalette.surfaceHighlight),
         ),
         child: Row(
           children: [
@@ -87,9 +87,9 @@ class MyBusinessListTile extends StatelessWidget {
                         width: 120,
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.location_on,
-                              color: AppColors.muted,
+                              color: context.appPalette.muted,
                               size: 17,
                             ),
                             const SizedBox(width: 3),
@@ -98,8 +98,8 @@ class MyBusinessListTile extends StatelessWidget {
                                 business.location.address,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: AppColors.muted,
+                                style: TextStyle(
+                                  color: context.appPalette.muted,
                                   fontSize: 13,
                                 ),
                               ),
@@ -113,9 +113,9 @@ class MyBusinessListTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 6),
-            const Icon(
+            Icon(
               Icons.chevron_right,
-              color: AppColors.iconMuted,
+              color: context.appPalette.iconMuted,
               size: 24,
             ),
           ],

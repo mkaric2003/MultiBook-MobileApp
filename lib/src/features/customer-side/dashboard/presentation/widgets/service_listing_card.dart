@@ -48,7 +48,7 @@ class ServiceListingCard extends StatelessWidget {
                 '⭐ ${service.rating.toStringAsFixed(1)} (${service.reviewCount})',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 13),
               ),
               if (service.location.isNotEmpty) ...[
                 const SizedBox(height: 4),
@@ -56,14 +56,20 @@ class ServiceListingCard extends StatelessWidget {
                   service.location,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 13,
+                  ),
                 ),
               ],
               if (service.durationMinutes != null) ...[
                 const SizedBox(height: 5),
                 Text(
                   context.l10n.appointmentDuration(service.durationMinutes!),
-                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 13,
+                  ),
                 ),
               ],
               if (service.price != null) ...[
@@ -90,7 +96,7 @@ class ServiceListingCard extends StatelessWidget {
           onTap: () => context.push(AppRoutes.SERVICE_DETAIL, extra: service),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: context.appPalette.surface,
               borderRadius: BorderRadius.circular(13),
             ),
             clipBehavior: Clip.antiAlias,
@@ -106,8 +112,8 @@ class ServiceListingCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorBuilder: (_, _, _) => SizedBox(
                         height: imageHeight,
-                        child: const ColoredBox(
-                          color: AppColors.surfaceHighlight,
+                        child: ColoredBox(
+                          color: context.appPalette.surfaceHighlight,
                         ),
                       ),
                     ),

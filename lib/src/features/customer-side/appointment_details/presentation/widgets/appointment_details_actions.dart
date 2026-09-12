@@ -38,7 +38,7 @@ class AppointmentDetailsActions extends StatelessWidget {
       const SizedBox(height: 12),
       CustomButton(
         buttonName: context.l10n.messageProvider,
-        color: AppColors.surfaceHighlight,
+        color: context.appPalette.surfaceHighlight,
         onPressed: onMessageProvider,
       ),
     ],

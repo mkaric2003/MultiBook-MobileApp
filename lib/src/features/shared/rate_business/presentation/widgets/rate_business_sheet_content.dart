@@ -49,7 +49,7 @@ class RateBusinessSheetContent extends HookWidget {
                 width: 42,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.border,
+                  color: context.appPalette.border,
                   borderRadius: BorderRadius.circular(99),
                 ),
               ),
@@ -65,7 +65,7 @@ class RateBusinessSheetContent extends HookWidget {
               Text(
                 target.businessName,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.muted, fontSize: 15),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 15),
               ),
               const SizedBox(height: 24),
               Text(
@@ -98,19 +98,19 @@ class RateBusinessSheetContent extends HookWidget {
                 maxLines: 5,
                 textCapitalization: TextCapitalization.sentences,
                 autocorrect: false,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: context.appPalette.foreground),
                 decoration: InputDecoration(
                   hintText: context.l10n.shareYourExperience,
-                  hintStyle: const TextStyle(color: AppColors.muted),
+                  hintStyle: TextStyle(color: context.appPalette.muted),
                   filled: true,
-                  fillColor: AppColors.surface,
+                  fillColor: context.appPalette.surface,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
-                    borderSide: const BorderSide(color: AppColors.border),
+                    borderSide: BorderSide(color: context.appPalette.border),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14),
-                    borderSide: const BorderSide(color: AppColors.border),
+                    borderSide: BorderSide(color: context.appPalette.border),
                   ),
                 ),
               ),

@@ -42,7 +42,7 @@ class StayCategorySelector extends StatelessWidget {
             onSelected: (_) => onChanged(category.id),
             selectedColor: AppColors.primary,
             checkmarkColor: AppColors.white,
-            side: const BorderSide(color: AppColors.border),
+            side: BorderSide(color: context.appPalette.border),
           ),
         )
         .toList(),

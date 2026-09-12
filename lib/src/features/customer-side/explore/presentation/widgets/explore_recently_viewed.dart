@@ -54,10 +54,10 @@ class ExploreRecentlyViewed extends StatelessWidget {
                               errorBuilder: (_, _, _) => Container(
                                 height: 66,
                                 width: 66,
-                                color: AppColors.surface,
-                                child: const Icon(
+                                color: context.appPalette.surface,
+                                child: Icon(
                                   Icons.hotel_rounded,
-                                  color: AppColors.muted,
+                                  color: context.appPalette.muted,
                                 ),
                               ),
                             ),
@@ -68,8 +68,8 @@ class ExploreRecentlyViewed extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: AppColors.muted,
+                            style: TextStyle(
+                              color: context.appPalette.muted,
                               fontSize: 11,
                             ),
                           ),

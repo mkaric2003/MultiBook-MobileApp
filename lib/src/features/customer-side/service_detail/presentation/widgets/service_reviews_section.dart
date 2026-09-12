@@ -58,7 +58,7 @@ class ServiceReviewsSection extends StatelessWidget {
             CustomButton(
               buttonName: context.l10n.seeAllReviews,
               color: Colors.transparent,
-              borderColor: AppColors.border,
+              borderColor: context.appPalette.border,
               onPressed: onViewAll,
             ),
         ],

@@ -2204,4 +2204,13 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'Password modificata con successo.';
+
+  @override
+  String get appearance => 'Aspetto';
+
+  @override
+  String get lightTheme => 'Tema chiaro';
+
+  @override
+  String get lightThemeDescription => 'Usa colori chiari in tutta l’app';
 }

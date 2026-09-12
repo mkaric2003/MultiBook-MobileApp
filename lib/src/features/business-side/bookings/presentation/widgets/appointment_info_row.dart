@@ -30,7 +30,7 @@ class AppointmentInfoRow extends StatelessWidget {
             const SizedBox(height: 3),
             Text(
               subtitle,
-              style: const TextStyle(color: AppColors.muted, fontSize: 13),
+              style: TextStyle(color: context.appPalette.muted, fontSize: 13),
             ),
           ],
         ),

@@ -38,8 +38,8 @@ class SupportTicketForm extends HookWidget {
       children: [
         Text(
           context.l10n.supportRequestDescription,
-          style: const TextStyle(
-            color: AppColors.muted,
+          style: TextStyle(
+            color: context.appPalette.muted,
             fontSize: 15,
             height: 1.4,
           ),
@@ -54,20 +54,23 @@ class SupportTicketForm extends HookWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 14),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.appPalette.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: context.appPalette.border),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<SupportTicketCategory>(
               value: category.value,
               isExpanded: true,
-              dropdownColor: AppColors.surface,
-              icon: const Icon(
+              dropdownColor: context.appPalette.surface,
+              icon: Icon(
                 Icons.keyboard_arrow_down,
-                color: AppColors.muted,
+                color: context.appPalette.muted,
               ),
-              style: const TextStyle(color: AppColors.white, fontSize: 15),
+              style: TextStyle(
+                color: context.appPalette.foreground,
+                fontSize: 15,
+              ),
               items: SupportTicketCategory.values
                   .map(
                     (value) => DropdownMenuItem(

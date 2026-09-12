@@ -37,7 +37,7 @@ class MyBusinessesView extends StatelessWidget {
                               Text(
                                 context.l10n.selectBusinessToManage,
                                 style: TextStyle(
-                                  color: AppColors.muted,
+                                  color: context.appPalette.muted,
                                   fontSize: 18,
                                 ),
                               ),
@@ -46,7 +46,9 @@ class MyBusinessesView extends StatelessWidget {
                                 Center(
                                   child: Text(
                                     '${context.l10n.noBusinessesYet}.',
-                                    style: TextStyle(color: AppColors.muted),
+                                    style: TextStyle(
+                                      color: context.appPalette.muted,
+                                    ),
                                   ),
                                 )
                               else

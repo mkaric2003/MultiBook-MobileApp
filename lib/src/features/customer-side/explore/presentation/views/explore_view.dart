@@ -29,6 +29,7 @@ class ExploreView extends HookWidget {
       create: (_) => getIt<ExploreCubit>()..load(),
       child: BlocBuilder<ExploreCubit, ExploreState>(
         builder: (context, state) => SafeArea(
+          bottom: false,
           child: Column(
             children: [
               ExploreAppBar(

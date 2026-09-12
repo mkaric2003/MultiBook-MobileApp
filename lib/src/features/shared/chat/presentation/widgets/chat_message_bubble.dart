@@ -30,7 +30,7 @@ class ChatMessageBubble extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 4),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
           decoration: BoxDecoration(
-            color: isMine ? AppColors.primary : AppColors.surface,
+            color: isMine ? AppColors.primary : context.appPalette.surface,
             borderRadius: BorderRadius.circular(16).copyWith(
               bottomRight: isMine ? const Radius.circular(3) : null,
               bottomLeft: isMine ? null : const Radius.circular(3),
@@ -41,13 +41,17 @@ class ChatMessageBubble extends StatelessWidget {
             children: [
               Text(
                 message.text,
-                style: const TextStyle(fontSize: 15, height: 1.3),
+                style: TextStyle(
+                  color: isMine ? AppColors.white : null,
+                  fontSize: 15,
+                  height: 1.3,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 DateFormat('h:mm a').format(message.createdAt),
                 style: TextStyle(
-                  color: isMine ? Colors.white70 : AppColors.muted,
+                  color: isMine ? Colors.white70 : context.appPalette.muted,
                   fontSize: 10,
                 ),
               ),
@@ -59,7 +63,7 @@ class ChatMessageBubble extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 7),
             child: Text(
               context.l10n.seen,
-              style: const TextStyle(color: AppColors.muted, fontSize: 10),
+              style: TextStyle(color: context.appPalette.muted, fontSize: 10),
             ),
           )
         else

@@ -23,7 +23,9 @@ class RecommendedStaysPageIndicator extends StatelessWidget {
           height: 7,
           margin: const EdgeInsets.symmetric(horizontal: 3),
           decoration: BoxDecoration(
-            color: index == currentIndex ? AppColors.primary : AppColors.border,
+            color: index == currentIndex
+                ? AppColors.primary
+                : context.appPalette.border,
             borderRadius: BorderRadius.circular(20),
           ),
         ),

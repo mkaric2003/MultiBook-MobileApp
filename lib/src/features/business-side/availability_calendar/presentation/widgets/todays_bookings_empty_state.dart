@@ -9,12 +9,16 @@ class TodaysBookingsEmptyState extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(16),
     ),
-    child: const Column(
+    child: Column(
       children: [
-        Icon(Icons.event_available_outlined, color: AppColors.muted, size: 32),
+        Icon(
+          Icons.event_available_outlined,
+          color: context.appPalette.muted,
+          size: 32,
+        ),
         SizedBox(height: 10),
         Text(
           'No bookings today',
@@ -23,7 +27,7 @@ class TodaysBookingsEmptyState extends StatelessWidget {
         SizedBox(height: 4),
         Text(
           'New bookings will appear here.',
-          style: TextStyle(color: AppColors.muted),
+          style: TextStyle(color: context.appPalette.muted),
         ),
       ],
     ),

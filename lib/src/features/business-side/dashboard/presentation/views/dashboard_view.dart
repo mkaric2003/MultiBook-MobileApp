@@ -1,6 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/data/enums/business_type.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_cubit.dart';
 import 'package:multibook/src/features/business-side/dashboard/bloc/dashboard_state.dart';
@@ -9,10 +14,7 @@ import 'package:multibook/src/features/business-side/dashboard/presentation/widg
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_chart.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_empty_state.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_metric_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_skeleton.dart';
 
 class DashboardView extends HookWidget {
   const DashboardView({super.key});
@@ -30,7 +32,7 @@ class DashboardView extends HookWidget {
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const DashboardSkeleton();
           }
 
           final business = state.business;
@@ -41,8 +43,9 @@ class DashboardView extends HookWidget {
           }
 
           return SafeArea(
+            bottom: false,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 120),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -61,7 +64,9 @@ class DashboardView extends HookWidget {
                     value: (state.metrics?.activeReservationCount ?? 0)
                         .toString(),
                     icon: Icons.event_available,
-                    iconBackgroundColor: Color(0xFF3F315E),
+                    iconBackgroundColor: AppColors.primary.withValues(
+                      alpha: .18,
+                    ),
                   ),
                   const SizedBox(height: 14),
                   DashboardMetricCard(
@@ -71,7 +76,9 @@ class DashboardView extends HookWidget {
                     ),
                     valueColor: Color(0xFF24E5C5),
                     icon: Icons.attach_money,
-                    iconBackgroundColor: Color(0xFF164A4A),
+                    iconBackgroundColor: AppColors.success.withValues(
+                      alpha: .18,
+                    ),
                     iconColor: Color(0xFF24E5C5),
                   ),
                   const SizedBox(height: 14),
@@ -79,7 +86,9 @@ class DashboardView extends HookWidget {
                     title: context.l10n.averageRating,
                     value: business.averageRating.toStringAsFixed(1),
                     icon: Icons.star,
-                    iconBackgroundColor: const Color(0xFF55472A),
+                    iconBackgroundColor: const Color(
+                      0xFFF59E0B,
+                    ).withValues(alpha: .18),
                     suffix: const Text(
                       '★★★★★',
                       style: TextStyle(color: Color(0xFFFBBF24), fontSize: 18),

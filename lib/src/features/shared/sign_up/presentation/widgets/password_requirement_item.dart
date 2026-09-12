@@ -13,7 +13,7 @@ class PasswordRequirementItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textColor = AppColors.muted;
+    final textColor = context.appPalette.muted;
     const okColor = Color(0xFF34D399);
     const errColor = Color(0xFFF28B82);
 
@@ -29,7 +29,7 @@ class PasswordRequirementItem extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(color: textColor, fontSize: 16, height: 1.2),
+            style: TextStyle(color: textColor, fontSize: 16, height: 1.2),
           ),
         ),
       ],

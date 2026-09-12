@@ -124,7 +124,6 @@ class CreateAppointmentView extends HookWidget {
                       selectedTime.value,
                     );
                 return Scaffold(
-                  backgroundColor: AppColors.background,
                   body: SafeArea(
                     child: Column(
                       children: [
@@ -218,8 +217,8 @@ class CreateAppointmentView extends HookWidget {
                                 if (providers.isEmpty)
                                   Text(
                                     context.l10n.noServiceProvidersAvailable,
-                                    style: const TextStyle(
-                                      color: AppColors.muted,
+                                    style: TextStyle(
+                                      color: context.appPalette.muted,
                                     ),
                                   )
                                 else
@@ -322,10 +321,10 @@ class CreateAppointmentView extends HookWidget {
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(22, 16, 22, 22),
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             border: Border(
                               top: BorderSide(
-                                color: AppColors.surfaceHighlight,
+                                color: context.appPalette.surfaceHighlight,
                               ),
                             ),
                           ),

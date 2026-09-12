@@ -12,7 +12,7 @@ class CustomerBookingPriceCard extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(18),
     ),
     child: Column(
@@ -48,7 +48,7 @@ class CustomerBookingPriceCard extends StatelessWidget {
         ),
         const SizedBox(height: 14),
         CustomerBookingPriceRow(label: 'Taxes', value: booking.taxes),
-        const Divider(height: 30, color: AppColors.border),
+        Divider(height: 30, color: context.appPalette.border),
         CustomerBookingPriceRow(
           label: 'Total paid',
           value: booking.total,

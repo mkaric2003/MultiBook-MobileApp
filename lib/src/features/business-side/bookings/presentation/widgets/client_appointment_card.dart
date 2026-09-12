@@ -26,7 +26,7 @@ class ClientAppointmentCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFF172554),
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -34,9 +34,9 @@ class ClientAppointmentCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 22,
-                child: Icon(Icons.person, color: AppColors.muted),
+                child: Icon(Icons.person, color: context.appPalette.muted),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -55,8 +55,8 @@ class ClientAppointmentCard extends StatelessWidget {
                       appointment.serviceNames.join(', '),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 14,
                       ),
                     ),
@@ -74,7 +74,10 @@ class ClientAppointmentCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   appointment.providerName,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 14),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 14,
+                  ),
                 ),
               ),
             ],
@@ -86,7 +89,7 @@ class ClientAppointmentCard extends StatelessWidget {
               const SizedBox(width: 7),
               Text(
                 '${DateFormat('MMM d, y').format(start)} · ${DateFormat('h:mm a').format(start)}',
-                style: const TextStyle(color: AppColors.muted, fontSize: 14),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 14),
               ),
             ],
           ),

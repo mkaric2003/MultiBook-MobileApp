@@ -41,7 +41,7 @@ class StayListingCard extends StatelessWidget {
                 '⭐ ${stay.rating.toStringAsFixed(1)} (${stay.reviewCount})',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                style: TextStyle(color: context.appPalette.muted, fontSize: 13),
               ),
               if (stay.location.isNotEmpty) ...[
                 const SizedBox(height: 3),
@@ -49,7 +49,10 @@ class StayListingCard extends StatelessWidget {
                   stay.location,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 13,
+                  ),
                 ),
               ],
               if (stay.pricePerNight != null) ...[
@@ -74,7 +77,7 @@ class StayListingCard extends StatelessWidget {
           onTap: () => context.push(AppRoutes.STAY_DETAIL, extra: stay),
           child: Container(
             decoration: BoxDecoration(
-              color: AppColors.surface,
+              color: context.appPalette.surface,
               borderRadius: BorderRadius.circular(13),
             ),
             clipBehavior: Clip.antiAlias,
@@ -90,8 +93,8 @@ class StayListingCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorBuilder: (_, _, _) => SizedBox(
                         height: imageHeight,
-                        child: const ColoredBox(
-                          color: AppColors.surfaceHighlight,
+                        child: ColoredBox(
+                          color: context.appPalette.surfaceHighlight,
                         ),
                       ),
                     ),

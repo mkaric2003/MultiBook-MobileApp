@@ -37,6 +37,7 @@ class CustomerDashboardView extends StatelessWidget {
       child: BlocBuilder<CustomerDashboardCubit, CustomerDashboardState>(
         builder: (context, state) {
           return SafeArea(
+            bottom: false,
             child: Column(
               children: [
                 Padding(

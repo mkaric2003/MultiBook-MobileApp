@@ -4,6 +4,7 @@ import 'package:multibook/src/core/injectable/injectable.dart';
 import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/business-side/promotions/bloc/promotions_cubit.dart';
 import 'package:multibook/src/features/business-side/promotions/bloc/promotions_state.dart';
+import 'package:multibook/src/features/business-side/promotions/presentation/widgets/promotions_skeleton.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:multibook/src/global_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -25,15 +26,15 @@ class PromotionsView extends StatelessWidget {
               child: BlocBuilder<PromotionsCubit, PromotionsState>(
                 builder: (context, state) {
                   if (state.loading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const PromotionsSkeleton();
                   }
                   return ListView(
                     padding: const EdgeInsets.all(20),
                     children: [
                       Text(
                         state.business?.name ?? '',
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 14,
                         ),
                       ),
@@ -52,7 +53,7 @@ class PromotionsView extends StatelessWidget {
                           child: Center(
                             child: Text(
                               context.l10n.noPromotions,
-                              style: const TextStyle(color: AppColors.muted),
+                              style: TextStyle(color: context.appPalette.muted),
                             ),
                           ),
                         ),
@@ -61,7 +62,7 @@ class PromotionsView extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: AppColors.surface,
+                            color: context.appPalette.surface,
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Column(
@@ -82,9 +83,9 @@ class PromotionsView extends StatelessWidget {
                                     onPressed: () => context
                                         .read<PromotionsCubit>()
                                         .remove(promotion),
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.delete_outline,
-                                      color: AppColors.muted,
+                                      color: context.appPalette.muted,
                                     ),
                                   ),
                                   Switch(
@@ -112,8 +113,8 @@ class PromotionsView extends StatelessWidget {
                               const SizedBox(height: 5),
                               Text(
                                 '${context.l10n.startsOn}: ${promotion.startsAt.day}.${promotion.startsAt.month}.${promotion.startsAt.year}  •  ${context.l10n.endsOn}: ${promotion.endsAt.day}.${promotion.endsAt.month}.${promotion.endsAt.year}',
-                                style: const TextStyle(
-                                  color: AppColors.muted,
+                                style: TextStyle(
+                                  color: context.appPalette.muted,
                                   fontSize: 12,
                                 ),
                               ),
@@ -122,8 +123,8 @@ class PromotionsView extends StatelessWidget {
                                   padding: const EdgeInsets.only(top: 7),
                                   child: Text(
                                     promotion.code!,
-                                    style: const TextStyle(
-                                      color: AppColors.muted,
+                                    style: TextStyle(
+                                      color: context.appPalette.muted,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),

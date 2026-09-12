@@ -1,6 +1,8 @@
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stay_listing_card.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_listing_skeleton.dart';
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class OtherStaysGrid extends StatelessWidget {
   const OtherStaysGrid({
@@ -24,23 +26,30 @@ class OtherStaysGrid extends StatelessWidget {
             child: Text(
               emptyMessage!,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Color(0xFF9CA3AF)),
+              style: TextStyle(color: context.appPalette.muted),
             ),
           ),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: stays.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 14,
-            crossAxisSpacing: 14,
-            mainAxisExtent: 280,
+        if (isLoading && stays.isEmpty)
+          const CustomerHomeListingSkeleton.grid(
+            itemHeight: 280,
+            imageHeight: 134,
+          )
+        else
+          GridView.builder(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: stays.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 14,
+              crossAxisSpacing: 14,
+              mainAxisExtent: 280,
+            ),
+            itemBuilder: (context, index) =>
+                StayListingCard(stay: stays[index], compact: true),
           ),
-          itemBuilder: (context, index) =>
-              StayListingCard(stay: stays[index], compact: true),
-        ),
-        if (isLoading) ...[
+        if (isLoading && stays.isNotEmpty) ...[
           const SizedBox(height: 20),
           const Center(child: CircularProgressIndicator()),
         ],

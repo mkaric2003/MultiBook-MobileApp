@@ -18,7 +18,7 @@ class MoreMenuTile extends StatelessWidget {
             height: 40,
             width: 40,
             decoration: BoxDecoration(
-              color: const Color(0xFF3F3375),
+              color: AppColors.primary.withValues(alpha: .18),
               borderRadius: BorderRadius.circular(11),
             ),
             child: Icon(item.icon, color: AppColors.primary, size: 20),
@@ -41,12 +41,15 @@ class MoreMenuTile extends StatelessWidget {
               ),
               child: Text(
                 '${item.badgeCount}',
-                style: const TextStyle(fontWeight: FontWeight.w800),
+                style: const TextStyle(
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             const SizedBox(width: 8),
           ],
-          const Icon(Icons.chevron_right, color: AppColors.muted, size: 24),
+          Icon(Icons.chevron_right, color: context.appPalette.muted, size: 24),
         ],
       ),
     ),

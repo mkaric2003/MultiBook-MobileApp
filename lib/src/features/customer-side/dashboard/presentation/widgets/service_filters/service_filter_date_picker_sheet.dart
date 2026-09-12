@@ -18,7 +18,7 @@ class ServiceFilterDatePickerSheet extends HookWidget {
     final selectedDate = useState(effectiveInitialDate);
 
     return Material(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       child: SafeArea(
         top: false,
         bottom: false,
@@ -30,8 +30,10 @@ class ServiceFilterDatePickerSheet extends HookWidget {
               Container(
                 height: 56,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: AppColors.border)),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: context.appPalette.border),
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,8 +64,8 @@ class ServiceFilterDatePickerSheet extends HookWidget {
               ),
               Expanded(
                 child: CupertinoTheme(
-                  data: const CupertinoThemeData(
-                    brightness: Brightness.dark,
+                  data: CupertinoThemeData(
+                    brightness: Theme.of(context).brightness,
                     primaryColor: AppColors.primary,
                   ),
                   child: CupertinoDatePicker(
@@ -71,7 +73,7 @@ class ServiceFilterDatePickerSheet extends HookWidget {
                     initialDateTime: effectiveInitialDate,
                     minimumDate: today,
                     maximumDate: today.add(const Duration(days: 730)),
-                    backgroundColor: AppColors.surface,
+                    backgroundColor: context.appPalette.surface,
                     onDateTimeChanged: (value) => selectedDate.value = value,
                   ),
                 ),

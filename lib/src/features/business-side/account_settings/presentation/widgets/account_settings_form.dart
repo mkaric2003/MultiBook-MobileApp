@@ -4,6 +4,7 @@ import 'package:multibook/src/global_widgets/custom_textfield.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class AccountSettingsForm extends HookWidget {
   const AccountSettingsForm({super.key, this.user, this.onChanged});
@@ -40,7 +41,7 @@ class AccountSettingsForm extends HookWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(context.l10n.firstNameRequired, style: _labelStyle),
+        Text(context.l10n.firstNameRequired, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: firstNameController,
@@ -48,11 +49,11 @@ class AccountSettingsForm extends HookWidget {
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 20),
-        Text(context.l10n.currency, style: _labelStyle),
+        Text(context.l10n.currency, style: _labelStyle(context)),
         const SizedBox(height: 10),
         DropdownButtonFormField<CurrencyCode>(
           initialValue: currency.value,
-          dropdownColor: const Color(0xFF1D1B2A),
+          dropdownColor: context.appPalette.surface,
           items: CurrencyCode.values
               .map(
                 (value) => DropdownMenuItem(
@@ -68,7 +69,7 @@ class AccountSettingsForm extends HookWidget {
           },
         ),
         const SizedBox(height: 20),
-        Text(context.l10n.lastNameRequired, style: _labelStyle),
+        Text(context.l10n.lastNameRequired, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: lastNameController,
@@ -76,7 +77,7 @@ class AccountSettingsForm extends HookWidget {
           onChanged: (_) => notifyChanges(),
         ),
         const SizedBox(height: 20),
-        Text(context.l10n.emailAddressRequired, style: _labelStyle),
+        Text(context.l10n.emailAddressRequired, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: emailController,
@@ -84,7 +85,7 @@ class AccountSettingsForm extends HookWidget {
           keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 27),
-        Text(context.l10n.phoneNumber, style: _labelStyle),
+        Text(context.l10n.phoneNumber, style: _labelStyle(context)),
         const SizedBox(height: 10),
         CustomTextField(
           controller: phoneController,
@@ -96,8 +97,8 @@ class AccountSettingsForm extends HookWidget {
     );
   }
 
-  static const _labelStyle = TextStyle(
-    color: Colors.white,
+  TextStyle _labelStyle(BuildContext context) => TextStyle(
+    color: context.appPalette.foreground,
     fontSize: 14,
     fontWeight: FontWeight.w600,
   );

@@ -21,7 +21,7 @@ class BookingCounterActionButton extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               padding: EdgeInsets.zero,
               shape: const CircleBorder(),
-              side: const BorderSide(color: AppColors.border),
+              side: BorderSide(color: context.appPalette.border),
             ),
             child: Icon(icon),
           )

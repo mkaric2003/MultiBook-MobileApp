@@ -18,8 +18,8 @@ class AgreeTermsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const baseColor = AppColors.muted;
-    const linkColor = Color(0xFF7C3AED);
+    final baseColor = context.appPalette.muted;
+    const linkColor = AppColors.primary;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +27,7 @@ class AgreeTermsTile extends StatelessWidget {
         Checkbox(
           value: value,
           onChanged: (v) => onChanged(v ?? false),
-          side: const BorderSide(color: Colors.white, width: 1.5),
+          side: BorderSide(color: context.appPalette.border, width: 1.5),
           activeColor: linkColor,
           checkColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -38,11 +38,7 @@ class AgreeTermsTile extends StatelessWidget {
         Expanded(
           child: Text.rich(
             TextSpan(
-              style: const TextStyle(
-                color: baseColor,
-                fontSize: 16,
-                height: 1.35,
-              ),
+              style: TextStyle(color: baseColor, fontSize: 16, height: 1.35),
               children: [
                 TextSpan(text: context.l10n.agreeToPrefix),
                 WidgetSpan(

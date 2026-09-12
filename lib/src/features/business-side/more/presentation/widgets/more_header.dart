@@ -17,8 +17,10 @@ class MoreHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.fromLTRB(20, 16, 16, 14),
-    decoration: const BoxDecoration(
-      border: Border(bottom: BorderSide(color: AppColors.surfaceHighlight)),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: context.appPalette.surfaceHighlight),
+      ),
     ),
     child: Row(
       children: [
@@ -50,7 +52,7 @@ class MoreHeader extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 178),
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF172554),
+              color: context.appPalette.surface,
               borderRadius: BorderRadius.circular(11),
             ),
             child: Row(

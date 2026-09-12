@@ -1,20 +1,20 @@
 import 'dart:async';
 
-import 'package:multibook/src/core/errors/result.dart';
-import 'package:multibook/src/data/models/business_model.dart';
-import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
-import 'package:multibook/src/data/models/business_review_model.dart';
-import 'package:multibook/src/core/services/saved_business_updates_service.dart';
-import 'package:multibook/src/domain/use_cases/saved/is_business_saved_use_case.dart';
-import 'package:multibook/src/domain/use_cases/saved/save_business_use_case.dart';
-import 'package:multibook/src/domain/use_cases/saved/remove_saved_business_use_case.dart';
-import 'package:multibook/src/domain/use_cases/recently_viewed/record_recently_viewed_use_case.dart';
-import 'package:multibook/src/core/services/recently_viewed_updates_service.dart';
-import 'package:multibook/src/domain/use_cases/reviews/get_business_reviews_use_case.dart';
-import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
-import 'package:multibook/src/features/customer-side/service_detail/cubit/service_detail_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:multibook/src/core/errors/result.dart';
+import 'package:multibook/src/core/services/recently_viewed_updates_service.dart';
+import 'package:multibook/src/core/services/saved_business_updates_service.dart';
+import 'package:multibook/src/data/models/business_model.dart';
+import 'package:multibook/src/data/models/business_review_model.dart';
+import 'package:multibook/src/domain/use_cases/customer_discovery/get_business_detail_use_case.dart';
+import 'package:multibook/src/domain/use_cases/recently_viewed/record_recently_viewed_use_case.dart';
+import 'package:multibook/src/domain/use_cases/reviews/get_business_reviews_use_case.dart';
+import 'package:multibook/src/domain/use_cases/saved/is_business_saved_use_case.dart';
+import 'package:multibook/src/domain/use_cases/saved/remove_saved_business_use_case.dart';
+import 'package:multibook/src/domain/use_cases/saved/save_business_use_case.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_listing.dart';
+import 'package:multibook/src/features/customer-side/service_detail/cubit/service_detail_state.dart';
 
 @injectable
 class ServiceDetailCubit extends Cubit<ServiceDetailState> {

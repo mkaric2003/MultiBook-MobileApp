@@ -22,8 +22,10 @@ class StayGuestReviewsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(22),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.surfaceHighlight)),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: context.appPalette.surfaceHighlight),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +60,7 @@ class StayGuestReviewsSection extends StatelessWidget {
             CustomButton(
               buttonName: context.l10n.seeAllReviews,
               color: Colors.transparent,
-              borderColor: AppColors.border,
+              borderColor: context.appPalette.border,
               onPressed: onViewAll,
             ),
         ],

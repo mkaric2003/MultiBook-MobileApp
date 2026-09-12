@@ -28,7 +28,7 @@ class ExploreServiceCollections extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: Material(
-            color: AppColors.surface,
+            color: context.appPalette.surface,
             child: InkWell(
               onTap: () => onSelected(collection),
               child: Column(
@@ -55,8 +55,8 @@ class ExploreServiceCollections extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           collection.subtitle,
-                          style: const TextStyle(
-                            color: AppColors.muted,
+                          style: TextStyle(
+                            color: context.appPalette.muted,
                             fontSize: 12,
                           ),
                         ),

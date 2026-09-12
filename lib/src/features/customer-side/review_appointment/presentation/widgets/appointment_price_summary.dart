@@ -29,9 +29,9 @@ class AppointmentPriceSummary extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
       ),
       child: Column(
         children: [
@@ -52,7 +52,7 @@ class AppointmentPriceSummary extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(color: AppColors.surfaceHighlight),
+          Divider(color: context.appPalette.surfaceHighlight),
           const SizedBox(height: 8),
           if (discount > 0) ...[
             AppointmentSummaryRow(

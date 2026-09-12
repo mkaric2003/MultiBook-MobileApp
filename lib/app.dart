@@ -62,6 +62,9 @@ import 'package:multibook/src/features/shared/notifications/presentation/views/n
 import 'package:multibook/src/features/shared/localization/cubit/locale_cubit.dart';
 import 'package:multibook/src/features/shared/localization/cubit/locale_state.dart';
 import 'package:multibook/src/features/shared/localization/presentation/views/language_currency_view.dart';
+import 'package:multibook/src/features/shared/theme/cubit/theme_cubit.dart';
+import 'package:multibook/src/features/shared/theme/cubit/theme_state.dart';
+import 'package:multibook/src/features/shared/theme/presentation/views/appearance_view.dart';
 import 'package:multibook/src/features/shared/legal/domain/enums/legal_document_type.dart';
 import 'package:multibook/src/features/shared/legal/domain/enums/legal_document_audience.dart';
 import 'package:multibook/src/features/shared/legal/presentation/views/legal_document_view.dart';
@@ -74,6 +77,7 @@ import 'package:multibook/src/features/customer-side/payment_methods/presentatio
 import 'package:multibook/src/features/customer-side/payment_methods/presentation/views/add_payment_method_view.dart';
 import 'package:multibook/src/features/business-side/promotions/presentation/views/create_promotion_view.dart';
 import 'package:multibook/src/features/business-side/promotions/presentation/views/promotions_view.dart';
+import 'package:multibook/src/global_widgets/app_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -124,22 +128,29 @@ class App extends HookWidget {
       );
       return null;
     }, const []);
-    return BlocProvider.value(
-      value: getIt<LocaleCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: getIt<LocaleCubit>()),
+        BlocProvider.value(value: getIt<ThemeCubit>()),
+      ],
       child: BlocBuilder<LocaleCubit, LocaleState>(
-        builder: (context, state) => MaterialApp.router(
-          routerConfig: router,
-          onGenerateTitle: (context) => context.l10n.appName,
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.dark,
-          locale: state.locale,
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
+        builder: (context, localeState) => BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, themeState) => MaterialApp.router(
+            routerConfig: router,
+            onGenerateTitle: (context) => context.l10n.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeState.themeMode,
+            locale: localeState.locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+          ),
         ),
       ),
     );

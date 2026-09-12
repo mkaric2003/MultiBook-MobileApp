@@ -12,7 +12,7 @@ class AppointmentCalendarWeekdayLabel extends StatelessWidget {
       child: Text(
         label,
         textAlign: TextAlign.center,
-        style: const TextStyle(color: AppColors.muted, fontSize: 12),
+        style: TextStyle(color: context.appPalette.muted, fontSize: 12),
       ),
     );
   }

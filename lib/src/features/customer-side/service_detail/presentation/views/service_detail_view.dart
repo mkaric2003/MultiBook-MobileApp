@@ -8,6 +8,7 @@ import 'package:multibook/src/features/customer-side/service_detail/cubit/servic
 import 'package:multibook/src/features/customer-side/service_detail/cubit/service_detail_state.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_about_section.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_detail_hero.dart';
+import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_detail_skeleton.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_gallery_section.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_location_section.dart';
 import 'package:multibook/src/features/customer-side/service_detail/presentation/widgets/service_overview.dart';
@@ -31,9 +32,7 @@ class ServiceDetailView extends StatelessWidget {
       child: BlocBuilder<ServiceDetailCubit, ServiceDetailState>(
         builder: (context, state) {
           if (state.isLoading) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
+            return ServiceDetailSkeleton(onBack: () => context.pop());
           }
           if (state.business == null) {
             return Scaffold(
@@ -48,7 +47,6 @@ class ServiceDetailView extends StatelessWidget {
           final business = state.business!;
           final listing = ServiceListing.fromBusiness(business);
           return Scaffold(
-            backgroundColor: AppColors.background,
             body: SafeArea(
               top: false,
               child: SingleChildScrollView(
@@ -100,7 +98,7 @@ class ServiceDetailView extends StatelessWidget {
                         reviews: state.reviews,
                         onViewAll: () async => showModalBottomSheet<void>(
                           context: context,
-                          backgroundColor: AppColors.background,
+                          backgroundColor: context.appPalette.background,
                           isScrollControlled: true,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(

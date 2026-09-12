@@ -28,7 +28,7 @@ class CustomerAppointmentCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -43,10 +43,12 @@ class CustomerAppointmentCard extends StatelessWidget {
                   width: 74,
                   height: 74,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const SizedBox(
+                  errorBuilder: (_, _, _) => SizedBox(
                     width: 74,
                     height: 74,
-                    child: ColoredBox(color: AppColors.surfaceHighlight),
+                    child: ColoredBox(
+                      color: context.appPalette.surfaceHighlight,
+                    ),
                   ),
                 ),
               ),
@@ -67,8 +69,8 @@ class CustomerAppointmentCard extends StatelessWidget {
                       '${appointment.serviceNames.join(', ')} – ${context.l10n.serviceDuration(duration)}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 15,
                       ),
                     ),
@@ -77,16 +79,16 @@ class CustomerAppointmentCard extends StatelessWidget {
                       appointment.providerName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 15,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '${DateFormat('MMM d').format(appointment.date)}, ${DateFormat('h:mm a').format(start)}',
-                      style: const TextStyle(
-                        color: AppColors.muted,
+                      style: TextStyle(
+                        color: context.appPalette.muted,
                         fontSize: 15,
                       ),
                     ),

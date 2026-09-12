@@ -11,6 +11,7 @@ import 'package:multibook/src/features/business-side/availability_calendar/domai
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_legend.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_mode_button.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_skeleton.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/todays_booking_card.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/todays_bookings_empty_state.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/views/service_availability_calendar_view.dart';
@@ -48,13 +49,13 @@ class AvailabilityCalendarView extends HookWidget {
                 CustomAppBar(title: context.l10n.availabilityAndCalendar),
                 Expanded(
                   child: state.isLoading
-                      ? const Center(child: CircularProgressIndicator())
+                      ? const AvailabilityCalendarSkeleton()
                       : state.business == null
-                      ? const Center(
+                      ? Center(
                           child: Text(
                             'Select a business to view availability.',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: AppColors.muted),
+                            style: TextStyle(color: context.appPalette.muted),
                           ),
                         )
                       : state.business!.type == BusinessType.services
@@ -70,7 +71,7 @@ class AvailabilityCalendarView extends HookWidget {
                               Container(
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
-                                  color: AppColors.surface,
+                                  color: context.appPalette.surface,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Row(

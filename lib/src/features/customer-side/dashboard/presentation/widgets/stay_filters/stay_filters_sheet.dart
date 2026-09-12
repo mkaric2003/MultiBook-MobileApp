@@ -60,7 +60,7 @@ class StayFiltersSheet extends HookWidget {
     }
 
     return Material(
-      color: AppColors.background,
+      color: context.appPalette.background,
       child: SafeArea(
         top: false,
         child: Column(
@@ -68,9 +68,11 @@ class StayFiltersSheet extends HookWidget {
             Container(
               height: 70,
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(color: AppColors.surfaceHighlight),
+                  bottom: BorderSide(
+                    color: context.appPalette.surfaceHighlight,
+                  ),
                 ),
               ),
               child: Stack(
@@ -102,7 +104,7 @@ class StayFiltersSheet extends HookWidget {
                       onPressed: () => Navigator.of(context).pop(),
                       icon: const Icon(Icons.close_rounded),
                       style: IconButton.styleFrom(
-                        backgroundColor: AppColors.surface,
+                        backgroundColor: context.appPalette.surface,
                       ),
                     ),
                   ),
@@ -135,11 +137,11 @@ class StayFiltersSheet extends HookWidget {
                         ),
                       ],
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     FilterSectionHeader(
@@ -164,11 +166,11 @@ class StayFiltersSheet extends HookWidget {
                       onChanged: (value) => filters.value = filters.value
                           .copyWith(children: value),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     FilterSectionHeader(
@@ -182,11 +184,11 @@ class StayFiltersSheet extends HookWidget {
                       onChanged: (city) => filters.value = filters.value
                           .copyWith(city: city, clearCity: city == null),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     FilterSectionHeader(
@@ -206,11 +208,11 @@ class StayFiltersSheet extends HookWidget {
                         );
                       },
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     FilterSectionHeader(
@@ -227,11 +229,11 @@ class StayFiltersSheet extends HookWidget {
                               inventoryType: inventoryType,
                             ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     FilterSectionHeader(
@@ -250,11 +252,11 @@ class StayFiltersSheet extends HookWidget {
                             maxPrice: values.end,
                           ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     FilterSectionHeader(
@@ -267,11 +269,11 @@ class StayFiltersSheet extends HookWidget {
                       onChanged: (value) => filters.value = filters.value
                           .copyWith(minimumRating: value),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
                       child: Divider(
                         height: 1,
-                        color: AppColors.surfaceHighlight,
+                        color: context.appPalette.surfaceHighlight,
                       ),
                     ),
                     FilterSectionHeader(
@@ -297,9 +299,9 @@ class StayFiltersSheet extends HookWidget {
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(22, 12, 22, 20),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: AppColors.surfaceHighlight),
+                  top: BorderSide(color: context.appPalette.surfaceHighlight),
                 ),
               ),
               child: Column(
@@ -311,7 +313,7 @@ class StayFiltersSheet extends HookWidget {
                         context.l10n.filtersApplied(
                           filters.value.appliedFiltersCount,
                         ),
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                       TextButton(
                         onPressed: () => filters.value = const StayFilters(),

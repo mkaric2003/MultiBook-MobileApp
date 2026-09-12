@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 
 class MarketingTile extends StatelessWidget {
   const MarketingTile({
@@ -14,14 +15,13 @@ class MarketingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textColor = Color(0xFFE5E7EB);
     return Row(
       children: [
         Checkbox(
           value: value,
           onChanged: (v) => onChanged(v ?? false),
-          side: const BorderSide(color: Colors.white, width: 1.5),
-          activeColor: Color(0xFF7C3AED),
+          side: BorderSide(color: context.appPalette.border, width: 1.5),
+          activeColor: AppColors.primary,
           checkColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -31,8 +31,8 @@ class MarketingTile extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
-              color: textColor,
+            style: TextStyle(
+              color: context.appPalette.foreground,
               fontSize: 16,
               height: 1.35,
             ),

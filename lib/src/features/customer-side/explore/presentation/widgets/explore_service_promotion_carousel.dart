@@ -59,6 +59,7 @@ class ExploreServicePromotionCarousel extends HookWidget {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
+                            color: AppColors.white,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -67,6 +68,7 @@ class ExploreServicePromotionCarousel extends HookWidget {
                           style: const TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
+                            color: AppColors.white,
                           ),
                         ),
                       ],

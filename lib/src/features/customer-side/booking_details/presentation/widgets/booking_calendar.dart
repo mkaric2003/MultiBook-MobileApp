@@ -36,7 +36,7 @@ class BookingCalendar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -45,7 +45,7 @@ class BookingCalendar extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 17,
-                backgroundColor: AppColors.surfaceHighlight,
+                backgroundColor: context.appPalette.surfaceHighlight,
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: onPreviousMonth,
@@ -64,7 +64,7 @@ class BookingCalendar extends StatelessWidget {
               ),
               CircleAvatar(
                 radius: 17,
-                backgroundColor: AppColors.surfaceHighlight,
+                backgroundColor: context.appPalette.surfaceHighlight,
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: onNextMonth,
@@ -80,7 +80,10 @@ class BookingCalendar extends StatelessWidget {
               for (final day in ['M', 'T', 'W', 'T', 'F', 'S', 'S'])
                 Text(
                   day,
-                  style: TextStyle(color: AppColors.muted, fontSize: 12),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 12,
+                  ),
                 ),
             ],
           ),
@@ -120,13 +123,16 @@ class BookingCalendar extends StatelessWidget {
                           : between
                           ? AppColors.primary.withValues(alpha: .25)
                           : unavailable
-                          ? AppColors.surfaceHighlight
+                          ? context.appPalette.surfaceHighlight
                           : null,
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: Text(
                       '${date.day}',
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        color: selected ? AppColors.white : null,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),

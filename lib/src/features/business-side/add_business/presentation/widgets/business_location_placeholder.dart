@@ -11,7 +11,7 @@ class BusinessLocationPlaceholder extends StatelessWidget {
       height: 178,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
@@ -21,7 +21,7 @@ class BusinessLocationPlaceholder extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             context.l10n.tapToPlacePin,
-            style: const TextStyle(color: AppColors.muted, fontSize: 15),
+            style: TextStyle(color: context.appPalette.muted, fontSize: 15),
           ),
         ],
       ),

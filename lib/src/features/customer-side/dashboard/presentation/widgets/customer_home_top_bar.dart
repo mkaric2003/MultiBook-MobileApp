@@ -9,12 +9,15 @@ class CustomerHomeTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final logo = Theme.of(context).brightness == Brightness.light
+        ? Assets.images.multibookLight
+        : Assets.images.multibook;
     return Row(
       children: [
         Expanded(
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Assets.images.multibook.image(
+            child: logo.image(
               height: 50,
               width: 170,
               fit: BoxFit.fitWidth,

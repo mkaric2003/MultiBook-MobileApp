@@ -44,8 +44,8 @@ class BusinessPhotosUpload extends StatelessWidget {
                 height: 86,
                 width: 86,
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  border: Border.all(color: AppColors.border),
+                  color: context.appPalette.surface,
+                  border: Border.all(color: context.appPalette.border),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
@@ -74,7 +74,7 @@ class BusinessPhotosUpload extends StatelessWidget {
       const SizedBox(height: 6),
       Text(
         context.l10n.addPhotosUpToSeven,
-        style: TextStyle(color: AppColors.muted, fontSize: 12),
+        style: TextStyle(color: context.appPalette.muted, fontSize: 12),
       ),
     ],
   );

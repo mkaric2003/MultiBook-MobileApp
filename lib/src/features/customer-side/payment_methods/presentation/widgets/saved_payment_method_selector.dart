@@ -35,12 +35,12 @@ class SavedPaymentMethodSelector extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: context.appPalette.surface,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: selectedMethod?.id == method.id
                         ? AppColors.primary
-                        : AppColors.surfaceHighlight,
+                        : context.appPalette.surfaceHighlight,
                     width: selectedMethod?.id == method.id ? 1.5 : 1,
                   ),
                 ),
@@ -60,7 +60,7 @@ class SavedPaymentMethodSelector extends StatelessWidget {
                           : Icons.radio_button_unchecked,
                       color: selectedMethod?.id == method.id
                           ? AppColors.primary
-                          : AppColors.muted,
+                          : context.appPalette.muted,
                     ),
                   ],
                 ),

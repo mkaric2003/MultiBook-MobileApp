@@ -52,11 +52,15 @@ class CustomTextField extends StatelessWidget {
         filled: true,
         fillColor: colorScheme.surface,
         hintText: hintText,
-        hintStyle: const TextStyle(color: AppColors.muted, fontSize: 16),
+        hintStyle: TextStyle(color: context.appPalette.muted, fontSize: 16),
         prefixIcon: prefixIcon != null
             ? Padding(
                 padding: const EdgeInsetsDirectional.only(start: 12, end: 8),
-                child: Icon(prefixIcon, size: 20, color: AppColors.muted),
+                child: Icon(
+                  prefixIcon,
+                  size: 20,
+                  color: context.appPalette.muted,
+                ),
               )
             : null,
         prefixIconConstraints: const BoxConstraints(
@@ -67,7 +71,11 @@ class CustomTextField extends StatelessWidget {
             ? IconButton(
                 onPressed: onSuffixTap,
                 splashRadius: 20,
-                icon: Icon(suffixIcon, size: 20, color: AppColors.muted),
+                icon: Icon(
+                  suffixIcon,
+                  size: 20,
+                  color: context.appPalette.muted,
+                ),
               )
             : null,
         contentPadding: const EdgeInsets.symmetric(

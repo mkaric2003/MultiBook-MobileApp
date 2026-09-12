@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
@@ -8,10 +12,6 @@ import 'package:multibook/src/features/business-side/more/domain/models/more_men
 import 'package:multibook/src/features/business-side/more/presentation/widgets/more_header.dart';
 import 'package:multibook/src/features/business-side/more/presentation/widgets/more_menu_section.dart';
 import 'package:multibook/src/global_widgets/custom_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 
 class MoreView extends HookWidget {
   const MoreView({super.key, required this.onLogout});
@@ -45,7 +45,7 @@ class MoreView extends HookWidget {
               ),
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
                   children: [
                     MoreMenuSection(
                       title: context.l10n.businessManagement,
@@ -125,6 +125,11 @@ class MoreView extends HookWidget {
                               context.push(AppRoutes.LANGUAGE_CURRENCY),
                         ),
                         MoreMenuItem(
+                          label: context.l10n.appearance,
+                          icon: Icons.palette_outlined,
+                          onTap: () => context.push(AppRoutes.APPEARANCE),
+                        ),
+                        MoreMenuItem(
                           label: context.l10n.helpAndSupport,
                           icon: Icons.help_rounded,
                           onTap: () => context.push(AppRoutes.HELP_CENTER),
@@ -146,9 +151,8 @@ class MoreView extends HookWidget {
                     const SizedBox(height: 30),
                     CustomButton(
                       buttonName: context.l10n.logOut,
-                      color: Colors.transparent,
-                      textColor: const Color(0xFFFF4B4B),
-                      borderColor: const Color(0xFFFF4B4B),
+                      color: const Color(0xFFDC2626),
+                      textColor: Colors.white,
                       leadingIcon: const Icon(Icons.logout_rounded),
                       height: 48,
                       fontSize: 15,

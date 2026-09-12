@@ -45,7 +45,6 @@ class AppointmentDetailsView extends StatelessWidget {
         }
       },
       builder: (context, state) => Scaffold(
-        backgroundColor: AppColors.background,
         body: SafeArea(
           child: Column(
             children: [
@@ -132,7 +131,7 @@ class AppointmentDetailsView extends StatelessWidget {
                             final submitted = await showModalBottomSheet<bool>(
                               context: context,
                               isScrollControlled: true,
-                              backgroundColor: AppColors.background,
+                              backgroundColor: context.appPalette.background,
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(24),

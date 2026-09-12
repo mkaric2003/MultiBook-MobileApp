@@ -7,6 +7,7 @@ import 'package:multibook/src/features/shared/chat/cubit/chat_list_cubit.dart';
 import 'package:multibook/src/features/shared/chat/cubit/chat_list_state.dart';
 import 'package:multibook/src/features/shared/chat/domain/models/chat_conversation_arguments.dart';
 import 'package:multibook/src/features/shared/chat/presentation/widgets/chat_conversation_tile.dart';
+import 'package:multibook/src/features/shared/chat/presentation/widgets/chat_list_skeleton.dart';
 import 'package:multibook/src/global_widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,6 @@ class ChatListView extends HookWidget {
     return BlocProvider(
       create: (_) => getIt<ChatListCubit>()..load(),
       child: Scaffold(
-        backgroundColor: AppColors.background,
         body: SafeArea(
           child: Column(
             children: [
@@ -35,7 +35,7 @@ class ChatListView extends HookWidget {
                     if (state.isLoading ||
                         currentUser.connectionState ==
                             ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const ChatListSkeleton();
                     }
                     if (state.errorMessage != null) {
                       return Center(child: Text(state.errorMessage!));
@@ -44,7 +44,7 @@ class ChatListView extends HookWidget {
                       return Center(
                         child: Text(
                           context.l10n.noMessagesYet,
-                          style: const TextStyle(color: AppColors.muted),
+                          style: TextStyle(color: context.appPalette.muted),
                         ),
                       );
                     }

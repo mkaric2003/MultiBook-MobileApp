@@ -95,7 +95,7 @@ class SignUpForm extends HookWidget {
     double strengthValue;
     if (pwd.isEmpty) {
       strengthText = '';
-      strengthColor = AppColors.muted;
+      strengthColor = context.appPalette.muted;
       strengthValue = 0.0;
     } else if (score <= 1) {
       strengthText = context.l10n.passwordWeak;
@@ -182,7 +182,10 @@ class SignUpForm extends HookWidget {
           children: [
             Text(
               context.l10n.passwordStrength,
-              style: GoogleFonts.inter(fontSize: 14, color: AppColors.muted),
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: context.appPalette.muted,
+              ),
             ),
             Text(
               strengthText.isEmpty ? ' ' : strengthText,
@@ -203,7 +206,7 @@ class SignUpForm extends HookWidget {
                 child: LinearProgressIndicator(
                   value: animated,
                   minHeight: 10,
-                  backgroundColor: const Color(0xFF2F3540),
+                  backgroundColor: context.appPalette.surfaceHighlight,
                   color: strengthColor,
                 ),
               );

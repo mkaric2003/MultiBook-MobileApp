@@ -28,6 +28,7 @@ class CustomerBookingsBody extends HookWidget {
 
     return BlocBuilder<CustomerBookingsCubit, CustomerBookingsState>(
       builder: (context, state) => SafeArea(
+        bottom: false,
         child: Column(
           children: [
             const CustomerBookingsHeader(),

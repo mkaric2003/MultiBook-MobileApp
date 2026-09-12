@@ -13,9 +13,9 @@ class HelpCenterContactCard extends StatelessWidget {
     width: double.infinity,
     padding: const EdgeInsets.all(18),
     decoration: BoxDecoration(
-      color: AppColors.surface,
+      color: context.appPalette.surface,
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: AppColors.surfaceHighlight),
+      border: Border.all(color: context.appPalette.surfaceHighlight),
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,8 +29,8 @@ class HelpCenterContactCard extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           context.l10n.helpCenterContactBody,
-          style: const TextStyle(
-            color: AppColors.muted,
+          style: TextStyle(
+            color: context.appPalette.muted,
             fontSize: 14,
             height: 1.4,
           ),

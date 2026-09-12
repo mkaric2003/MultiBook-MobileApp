@@ -13,16 +13,16 @@ class HelpCenterSearchField extends StatelessWidget {
     style: const TextStyle(fontSize: 15),
     decoration: InputDecoration(
       hintText: context.l10n.helpCenterSearchHint,
-      prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+      prefixIcon: Icon(Icons.search, color: context.appPalette.muted),
       filled: true,
-      fillColor: AppColors.surface,
+      fillColor: context.appPalette.surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.surfaceHighlight),
+        borderSide: BorderSide(color: context.appPalette.surfaceHighlight),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.surfaceHighlight),
+        borderSide: BorderSide(color: context.appPalette.surfaceHighlight),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),

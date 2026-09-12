@@ -23,7 +23,7 @@ class StayInventoryTypeSelector extends StatelessWidget {
         onSelected: (_) => onChanged(StayInventoryType.singleUnit),
         selectedColor: AppColors.primary,
         checkmarkColor: AppColors.white,
-        side: const BorderSide(color: AppColors.border),
+        side: BorderSide(color: context.appPalette.border),
       ),
       FilterChip(
         label: Text(context.l10n.roomOrUnit),
@@ -31,7 +31,7 @@ class StayInventoryTypeSelector extends StatelessWidget {
         onSelected: (_) => onChanged(StayInventoryType.multipleUnits),
         selectedColor: AppColors.primary,
         checkmarkColor: AppColors.white,
-        side: const BorderSide(color: AppColors.border),
+        side: BorderSide(color: context.appPalette.border),
       ),
     ],
   );

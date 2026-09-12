@@ -798,4 +798,7 @@
   ,"passwordsDoNotMatch": "Les mots de passe ne correspondent pas."
   ,"passwordMinimumLength": "Utilisez au moins 6 caractères."
   ,"passwordChangedSuccessfully": "Mot de passe modifié avec succès."
+  ,"appearance": "Apparence"
+  ,"lightTheme": "Thème clair"
+  ,"lightThemeDescription": "Utiliser des couleurs claires dans l’application"
 }

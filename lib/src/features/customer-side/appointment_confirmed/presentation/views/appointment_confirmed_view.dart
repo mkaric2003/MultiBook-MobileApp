@@ -16,7 +16,6 @@ class AppointmentConfirmedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: AppColors.background,
     body: SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(22, 30, 22, 22),
@@ -38,7 +37,7 @@ class AppointmentConfirmedView extends StatelessWidget {
             const SizedBox(height: 18),
             CustomButton(
               buttonName: context.l10n.backToHome,
-              color: AppColors.surfaceHighlight,
+              color: context.appPalette.surfaceHighlight,
               onPressed: () => context.go(AppRoutes.CUSTOMER_HOME),
             ),
           ],

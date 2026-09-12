@@ -713,4 +713,7 @@
   ,"passwordsDoNotMatch": "Passwords do not match."
   ,"passwordMinimumLength": "Use at least 6 characters."
   ,"passwordChangedSuccessfully": "Password changed successfully."
+  ,"appearance": "Appearance"
+  ,"lightTheme": "Light theme"
+  ,"lightThemeDescription": "Use light colors throughout the app"
 }

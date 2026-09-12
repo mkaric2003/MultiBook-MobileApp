@@ -22,7 +22,7 @@ class ProfileImageSourcePickerSheet extends StatelessWidget {
             height: 4,
             width: 40,
             decoration: BoxDecoration(
-              color: AppColors.border,
+              color: context.appPalette.border,
               borderRadius: BorderRadius.circular(99),
             ),
           ),

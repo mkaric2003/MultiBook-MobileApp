@@ -96,7 +96,6 @@ class RescheduleAppointmentView extends HookWidget {
                     ) &&
                     !rescheduleState.isSubmitting;
                 return Scaffold(
-                  backgroundColor: AppColors.background,
                   body: SafeArea(
                     child: Column(
                       children: [
@@ -117,8 +116,8 @@ class RescheduleAppointmentView extends HookWidget {
                                 const SizedBox(height: 4),
                                 Text(
                                   '${arguments.appointment.providerName} · $durationMinutes min',
-                                  style: const TextStyle(
-                                    color: AppColors.muted,
+                                  style: TextStyle(
+                                    color: context.appPalette.muted,
                                   ),
                                 ),
                                 const SizedBox(height: 26),
@@ -166,7 +165,9 @@ class RescheduleAppointmentView extends HookWidget {
                                 if (provider == null)
                                   Text(
                                     context.l10n.providerNoLongerAvailable,
-                                    style: TextStyle(color: AppColors.muted),
+                                    style: TextStyle(
+                                      color: context.appPalette.muted,
+                                    ),
                                   )
                                 else if (availabilityState.isLoading)
                                   const Center(
@@ -195,10 +196,10 @@ class RescheduleAppointmentView extends HookWidget {
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(22, 16, 22, 22),
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             border: Border(
                               top: BorderSide(
-                                color: AppColors.surfaceHighlight,
+                                color: context.appPalette.surfaceHighlight,
                               ),
                             ),
                           ),

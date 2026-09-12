@@ -30,7 +30,7 @@ class ServiceSlotBlockSheet extends StatelessWidget {
               height: 4,
               width: 42,
               decoration: BoxDecoration(
-                color: AppColors.muted,
+                color: context.appPalette.muted,
                 borderRadius: BorderRadius.circular(99),
               ),
             ),
@@ -45,14 +45,16 @@ class ServiceSlotBlockSheet extends StatelessWidget {
             isBlocked
                 ? '$timeLabel is manually blocked and cannot be booked.'
                 : 'Prevent customers from booking $timeLabel.',
-            style: const TextStyle(color: AppColors.muted),
+            style: TextStyle(color: context.appPalette.muted),
           ),
           const SizedBox(height: 24),
           CustomButton(
             buttonName: isBlocked
                 ? context.l10n.unblockSlot
                 : context.l10n.blockSlot,
-            color: isBlocked ? AppColors.surfaceHighlight : AppColors.primary,
+            color: isBlocked
+                ? context.appPalette.surfaceHighlight
+                : AppColors.primary,
             onPressed: () => _submit(context),
           ),
         ],

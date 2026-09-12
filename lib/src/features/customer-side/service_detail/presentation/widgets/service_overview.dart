@@ -58,7 +58,10 @@ class ServiceOverview extends StatelessWidget {
               Expanded(
                 child: Text(
                   '${service.location.isEmpty ? business.location.address : service.location} · 0.5 km ${context.l10n.away}',
-                  style: const TextStyle(color: AppColors.muted, fontSize: 16),
+                  style: TextStyle(
+                    color: context.appPalette.muted,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],

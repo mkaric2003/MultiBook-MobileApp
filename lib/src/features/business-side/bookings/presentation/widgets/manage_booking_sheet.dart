@@ -30,8 +30,8 @@ class ManageBookingSheet extends StatelessWidget {
         (booking.status == BookingStatus.confirmed ||
             booking.status == BookingStatus.completed);
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF1A1A2E),
+      decoration: BoxDecoration(
+        color: context.appPalette.background,
         borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
       child: SafeArea(
@@ -57,16 +57,16 @@ class ManageBookingSheet extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(),
                     icon: const Icon(Icons.close),
                     style: IconButton.styleFrom(
-                      backgroundColor: AppColors.surfaceHighlight,
+                      backgroundColor: context.appPalette.surfaceHighlight,
                     ),
                   ),
                 ],
               ),
-              const Divider(height: 26, color: AppColors.surfaceHighlight),
+              Divider(height: 26, color: context.appPalette.surfaceHighlight),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF172554),
+                  color: context.appPalette.surface,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Column(
@@ -81,7 +81,10 @@ class ManageBookingSheet extends StatelessWidget {
                               ? null
                               : NetworkImage(booking.customerAvatarUrl!),
                           child: (booking.customerAvatarUrl ?? '').isEmpty
-                              ? const Icon(Icons.person, color: AppColors.muted)
+                              ? Icon(
+                                  Icons.person,
+                                  color: context.appPalette.muted,
+                                )
                               : null,
                         ),
                         const SizedBox(width: 12),
@@ -125,8 +128,8 @@ class ManageBookingSheet extends StatelessWidget {
                       padding: EdgeInsets.only(left: 31, top: 3),
                       child: Text(
                         'Stay reservation',
-                        style: const TextStyle(
-                          color: AppColors.muted,
+                        style: TextStyle(
+                          color: context.appPalette.muted,
                           fontSize: 12,
                         ),
                       ),
@@ -156,7 +159,7 @@ class ManageBookingSheet extends StatelessWidget {
                               Text(
                                 context.l10n.checkInOutTimes,
                                 style: TextStyle(
-                                  color: AppColors.muted,
+                                  color: context.appPalette.muted,
                                   fontSize: 12,
                                 ),
                               ),
@@ -236,20 +239,20 @@ class ManageBookingSheet extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top: 1),
                           child: Icon(
                             Icons.info_outline,
                             size: 15,
-                            color: AppColors.muted,
+                            color: context.appPalette.muted,
                           ),
                         ),
                         const SizedBox(width: 6),
                         Expanded(
                           child: Text(
                             context.l10n.noShowEarningsHint,
-                            style: const TextStyle(
-                              color: AppColors.muted,
+                            style: TextStyle(
+                              color: context.appPalette.muted,
                               fontSize: 11,
                             ),
                           ),
@@ -285,7 +288,7 @@ class ManageBookingSheet extends StatelessWidget {
               ],
               CustomButton(
                 buttonName: context.l10n.messageCustomer,
-                color: AppColors.surfaceHighlight,
+                color: context.appPalette.surfaceHighlight,
                 height: 52,
                 onPressed: () {
                   Navigator.of(context).pop();

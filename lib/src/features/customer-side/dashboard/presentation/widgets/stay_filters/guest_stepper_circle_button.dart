@@ -19,8 +19,10 @@ class GuestStepperCircleButton extends StatelessWidget {
       onPressed: enabled ? onTap : null,
       style: IconButton.styleFrom(
         fixedSize: const Size(42, 42),
-        side: const BorderSide(color: AppColors.border),
-        foregroundColor: enabled ? AppColors.white : AppColors.iconMuted,
+        side: BorderSide(color: context.appPalette.border),
+        foregroundColor: enabled
+            ? context.appPalette.foreground
+            : context.appPalette.iconMuted,
       ),
       icon: Icon(icon, size: 20),
     );

@@ -23,9 +23,9 @@ class AppointmentDetailsBusinessCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: context.appPalette.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.surfaceHighlight),
+        border: Border.all(color: context.appPalette.surfaceHighlight),
       ),
       child: Row(
         children: [
@@ -36,10 +36,10 @@ class AppointmentDetailsBusinessCard extends StatelessWidget {
               width: 66,
               height: 66,
               fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => const SizedBox(
+              errorBuilder: (_, _, _) => SizedBox(
                 width: 66,
                 height: 66,
-                child: ColoredBox(color: AppColors.surfaceHighlight),
+                child: ColoredBox(color: context.appPalette.surfaceHighlight),
               ),
             ),
           ),
@@ -62,7 +62,7 @@ class AppointmentDetailsBusinessCard extends StatelessWidget {
                       : AppointmentDetailsFormatters.businessCategory(
                           business!.categoryId,
                         ),
-                  style: const TextStyle(color: AppColors.muted),
+                  style: TextStyle(color: context.appPalette.muted),
                 ),
                 const SizedBox(height: 7),
                 Text(

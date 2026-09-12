@@ -9,7 +9,7 @@ class UserLocationPermissionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.surface,
+      backgroundColor: context.appPalette.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: Row(
         children: [
@@ -20,7 +20,7 @@ class UserLocationPermissionDialog extends StatelessWidget {
       ),
       content: Text(
         context.l10n.locationPermissionDescription,
-        style: const TextStyle(color: AppColors.muted, height: 1.4),
+        style: TextStyle(color: context.appPalette.muted, height: 1.4),
       ),
       actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
       actions: [

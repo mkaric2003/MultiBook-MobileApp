@@ -16,10 +16,10 @@ class AmenitiesSection extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(22),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: AppColors.surfaceHighlight),
-          bottom: BorderSide(color: AppColors.surfaceHighlight),
+          top: BorderSide(color: context.appPalette.surfaceHighlight),
+          bottom: BorderSide(color: context.appPalette.surfaceHighlight),
         ),
       ),
       child: Column(

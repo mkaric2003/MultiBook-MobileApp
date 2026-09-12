@@ -18,19 +18,19 @@ class CustomerServiceSearchResultsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (query.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'Search by a business name or city.',
-          style: TextStyle(color: AppColors.muted, fontSize: 16),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 16),
         ),
       );
     }
     if (isLoading) return const Center(child: CircularProgressIndicator());
     if (services.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No services found.',
-          style: TextStyle(color: AppColors.muted, fontSize: 16),
+          style: TextStyle(color: context.appPalette.muted, fontSize: 16),
         ),
       );
     }

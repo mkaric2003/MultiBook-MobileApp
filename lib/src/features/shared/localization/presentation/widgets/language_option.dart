@@ -27,10 +27,12 @@ class LanguageOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary.withValues(alpha: .14)
-              : AppColors.surface,
+              : context.appPalette.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.surfaceHighlight,
+            color: isSelected
+                ? AppColors.primary
+                : context.appPalette.surfaceHighlight,
             width: isSelected ? 1.5 : 1,
           ),
         ),

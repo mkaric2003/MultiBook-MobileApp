@@ -2207,4 +2207,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get passwordChangedSuccessfully => 'Mot de passe modifié avec succès.';
+
+  @override
+  String get appearance => 'Apparence';
+
+  @override
+  String get lightTheme => 'Thème clair';
+
+  @override
+  String get lightThemeDescription =>
+      'Utiliser des couleurs claires dans l’application';
 }

@@ -101,7 +101,6 @@ class AppointmentPaymentView extends HookWidget {
           }
         },
         child: Scaffold(
-          backgroundColor: AppColors.background,
           body: SafeArea(
             child: Column(
               children: [
@@ -235,8 +234,8 @@ class AppointmentPaymentView extends HookWidget {
                                 padding: const EdgeInsets.only(top: 11),
                                 child: Text(
                                   context.l10n.agreeToTermsAndPrivacy,
-                                  style: const TextStyle(
-                                    color: AppColors.muted,
+                                  style: TextStyle(
+                                    color: context.appPalette.muted,
                                   ),
                                 ),
                               ),
@@ -247,49 +246,55 @@ class AppointmentPaymentView extends HookWidget {
                     ),
                   ),
                 ),
-                BlocBuilder<AppointmentPromotionCubit, AppointmentPromotionState>(
+                BlocBuilder<
+                  AppointmentPromotionCubit,
+                  AppointmentPromotionState
+                >(
                   builder: (context, promotionState) => Container(
                     padding: const EdgeInsets.fromLTRB(22, 12, 22, 22),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       border: Border(
-                        top: BorderSide(color: AppColors.surfaceHighlight),
+                        top: BorderSide(
+                          color: context.appPalette.surfaceHighlight,
+                        ),
                       ),
                     ),
-                    child: BlocBuilder<
-                      AppointmentPaymentCubit,
-                      AppointmentPaymentState
-                    >(
-                      builder: (context, state) => CustomButton(
-                          buttonName: state.isProcessing
-                              ? context.l10n.processingPayment
-                              : isCashPayment
-                              ? context.l10n.confirmBooking
-                              : context.l10n.confirmAndPay(
-                                  context.l10n.formatCurrency(
-                                    arguments.totalWithPromotion(
-                                      promotionState.promotion,
+                    child:
+                        BlocBuilder<
+                          AppointmentPaymentCubit,
+                          AppointmentPaymentState
+                        >(
+                          builder: (context, state) => CustomButton(
+                            buttonName: state.isProcessing
+                                ? context.l10n.processingPayment
+                                : isCashPayment
+                                ? context.l10n.confirmBooking
+                                : context.l10n.confirmAndPay(
+                                    context.l10n.formatCurrency(
+                                      arguments.totalWithPromotion(
+                                        promotionState.promotion,
+                                      ),
                                     ),
                                   ),
-                                ),
-                          enabled: canPay && !state.isProcessing,
-                          onPressed: () =>
-                              context.read<AppointmentPaymentCubit>().confirm(
-                                arguments: arguments,
-                                request: AppointmentPaymentRequest(
-                                  customerName: name.text,
-                                  customerEmail: email.text,
-                                  customerPhone: phone.text,
-                                  paymentType: paymentType.value,
-                                  paymentMethod: _paymentMethod(
-                                    paymentType.value,
-                                    cardNumber.text,
-                                    selectedMethod.value,
+                            enabled: canPay && !state.isProcessing,
+                            onPressed: () =>
+                                context.read<AppointmentPaymentCubit>().confirm(
+                                  arguments: arguments,
+                                  request: AppointmentPaymentRequest(
+                                    customerName: name.text,
+                                    customerEmail: email.text,
+                                    customerPhone: phone.text,
+                                    paymentType: paymentType.value,
+                                    paymentMethod: _paymentMethod(
+                                      paymentType.value,
+                                      cardNumber.text,
+                                      selectedMethod.value,
+                                    ),
                                   ),
+                                  promoCode: promoCode.text,
                                 ),
-                                promoCode: promoCode.text,
-                              ),
-                      ),
-                    ),
+                          ),
+                        ),
                   ),
                 ),
               ],

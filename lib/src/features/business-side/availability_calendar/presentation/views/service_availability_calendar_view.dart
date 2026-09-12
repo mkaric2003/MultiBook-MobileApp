@@ -17,6 +17,7 @@ import 'package:multibook/src/features/business-side/availability_calendar/domai
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_legend.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_mode_button.dart';
+import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/availability_calendar_skeleton.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/service_day_slots.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/service_provider_selector.dart';
 import 'package:multibook/src/features/business-side/availability_calendar/presentation/widgets/todays_appointment_card.dart';
@@ -97,21 +98,21 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                           first.startMinutes.compareTo(second.startMinutes),
                     );
               return state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const AvailabilityCalendarSkeleton()
                   : state.errorMessage != null
                   ? Center(
                       child: Text(
                         state.errorMessage!,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     )
                   : providers.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         'Add a service provider to manage appointment availability.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: AppColors.muted),
+                        style: TextStyle(color: context.appPalette.muted),
                       ),
                     )
                   : SingleChildScrollView(
@@ -134,7 +135,7 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                           Container(
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: AppColors.surface,
+                              color: context.appPalette.surface,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Row(
@@ -156,7 +157,7 @@ class ServiceAvailabilityCalendarView extends HookWidget {
                           Text(
                             context.l10n.selectDayForSlots,
                             style: TextStyle(
-                              color: AppColors.muted,
+                              color: context.appPalette.muted,
                               fontSize: 14,
                             ),
                           ),
