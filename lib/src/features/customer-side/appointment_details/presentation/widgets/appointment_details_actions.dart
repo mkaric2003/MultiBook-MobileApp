@@ -25,6 +25,7 @@ class AppointmentDetailsActions extends StatelessWidget {
       CustomButton(
         buttonName: context.l10n.cancelAppointment,
         color: Colors.redAccent,
+        textColor: AppColors.white,
         enabled: !isCancelling,
         onPressed: () => onCancel(),
       ),

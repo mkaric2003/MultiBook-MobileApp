@@ -61,8 +61,10 @@ class AppointmentTimeGrid extends StatelessWidget {
             child: Text(
               _formatTime(time),
               style: TextStyle(
-                color: isBookableStart || isSelected
-                    ? Colors.white
+                color: isSelected
+                    ? AppColors.white
+                    : isBookableStart
+                    ? context.appPalette.foreground
                     : context.appPalette.muted,
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

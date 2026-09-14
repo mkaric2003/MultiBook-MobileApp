@@ -71,6 +71,7 @@ class ClientBookingsList extends StatelessWidget {
             appointment: appointment,
             onManage: () => showModalBottomSheet<void>(
               context: context,
+              useRootNavigator: true,
               isScrollControlled: true,
               backgroundColor: Colors.transparent,
               builder: (sheetContext) => ManageAppointmentSheet(
@@ -87,6 +88,7 @@ class ClientBookingsList extends StatelessWidget {
                 onReschedule: () async {
                   final business = state.selectedBusiness;
                   if (business == null) return;
+                  if (sheetContext.mounted) Navigator.pop(sheetContext);
                   final updated = await context.push<AppointmentModel>(
                     AppRoutes.RESCHEDULE_APPOINTMENT,
                     extra: RescheduleAppointmentArguments(
@@ -98,7 +100,6 @@ class ClientBookingsList extends StatelessWidget {
                     context.read<ClientBookingsCubit>().updateAppointment(
                       updated,
                     );
-                    if (sheetContext.mounted) Navigator.pop(sheetContext);
                   }
                 },
               ),

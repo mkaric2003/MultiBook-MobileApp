@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:multibook/app.dart';
 import 'package:multibook/l10n/l10n.dart';
 import 'package:multibook/src/core/injectable/injectable.dart';
@@ -5,18 +8,15 @@ import 'package:multibook/src/features/customer-side/create_appointment/domain/m
 import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_cubit.dart';
 import 'package:multibook/src/features/customer-side/dashboard/bloc/customer_dashboard_state.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/enums/customer_home_tab.dart';
-import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
 import 'package:multibook/src/features/customer-side/dashboard/domain/models/service_filters.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_filters.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_tab_selector.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/customer_home_top_bar.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/destination_search_field.dart';
-import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/services_content.dart';
-import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stays_content.dart';
-import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_filters_sheet.dart';
 import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/service_filters/service_filters_sheet.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/services_content.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stay_filters/stay_filters_sheet.dart';
+import 'package:multibook/src/features/customer-side/dashboard/presentation/widgets/stays_content.dart';
 
 class CustomerDashboardView extends StatelessWidget {
   const CustomerDashboardView({super.key});
@@ -59,6 +59,7 @@ class CustomerDashboardView extends StatelessWidget {
                             final filters =
                                 await showModalBottomSheet<StayFilters>(
                                   context: context,
+                                  useRootNavigator: true,
                                   isScrollControlled: true,
                                   backgroundColor: Colors.transparent,
                                   builder: (_) => FractionallySizedBox(
@@ -79,6 +80,7 @@ class CustomerDashboardView extends StatelessWidget {
                           final filters =
                               await showModalBottomSheet<ServiceFilters>(
                                 context: context,
+                                useRootNavigator: true,
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
                                 builder: (_) => FractionallySizedBox(

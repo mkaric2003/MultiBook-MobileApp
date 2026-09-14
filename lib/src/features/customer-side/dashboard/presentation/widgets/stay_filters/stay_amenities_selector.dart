@@ -19,14 +19,20 @@ class StayAmenitiesSelector extends StatelessWidget {
     runSpacing: 8,
     children: StayAmenity.values
         .map(
-          (amenity) => FilterChip(
-            label: Text(context.l10n.stayAmenity(amenity)),
-            selected: selectedAmenities.contains(amenity),
-            onSelected: (_) => onChanged(amenity),
-            selectedColor: AppColors.primary,
-            checkmarkColor: AppColors.white,
-            side: BorderSide(color: context.appPalette.border),
-          ),
+          (amenity) {
+            final isSelected = selectedAmenities.contains(amenity);
+            return FilterChip(
+              label: Text(context.l10n.stayAmenity(amenity)),
+              labelStyle: TextStyle(
+                color: isSelected ? AppColors.white : null,
+              ),
+              selected: isSelected,
+              onSelected: (_) => onChanged(amenity),
+              selectedColor: AppColors.primary,
+              checkmarkColor: AppColors.white,
+              side: BorderSide(color: context.appPalette.border),
+            );
+          },
         )
         .toList(),
   );

@@ -38,6 +38,7 @@ class CustomerBookingActions extends StatelessWidget {
         CustomButton(
           buttonName: context.l10n.cancelBooking,
           color: const Color(0xFFDC2626),
+          textColor: AppColors.white,
           onPressed: onCancel,
           enabled: !isCancelling,
         ),

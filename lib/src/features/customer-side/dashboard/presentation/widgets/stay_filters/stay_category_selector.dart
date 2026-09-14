@@ -36,14 +36,20 @@ class StayCategorySelector extends StatelessWidget {
     runSpacing: 8,
     children: _categories
         .map(
-          (category) => FilterChip(
-            label: Text(context.l10n.businessCategoryName(category.id)),
-            selected: selectedCategoryIds.contains(category.id),
-            onSelected: (_) => onChanged(category.id),
-            selectedColor: AppColors.primary,
-            checkmarkColor: AppColors.white,
-            side: BorderSide(color: context.appPalette.border),
-          ),
+          (category) {
+            final isSelected = selectedCategoryIds.contains(category.id);
+            return FilterChip(
+              label: Text(context.l10n.businessCategoryName(category.id)),
+              labelStyle: TextStyle(
+                color: isSelected ? AppColors.white : null,
+              ),
+              selected: isSelected,
+              onSelected: (_) => onChanged(category.id),
+              selectedColor: AppColors.primary,
+              checkmarkColor: AppColors.white,
+              side: BorderSide(color: context.appPalette.border),
+            );
+          },
         )
         .toList(),
   );

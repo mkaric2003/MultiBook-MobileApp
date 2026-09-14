@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
 import 'package:multibook/src/features/business-side/dashboard/presentation/widgets/dashboard_earnings_legend_item.dart';
 
 class DashboardEarningsLegend extends StatelessWidget {
@@ -20,15 +21,15 @@ class DashboardEarningsLegend extends StatelessWidget {
     children: [
       DashboardEarningsLegendItem(
         label: totalLabel,
-        color: const Color(0xFF24E5C5),
+        color: AppColors.earningsTotal,
       ),
       DashboardEarningsLegendItem(
         label: onlineLabel,
-        color: const Color(0xFF8B5CF6),
+        color: AppColors.earningsOnline,
       ),
       DashboardEarningsLegendItem(
         label: cashLabel,
-        color: const Color(0xFFF59E0B),
+        color: AppColors.earningsCash,
       ),
     ],
   );

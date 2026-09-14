@@ -145,7 +145,9 @@ class EarningsView extends HookWidget {
                                     ? grossEarnings
                                     : metrics?.onlineRevenueMinor ?? 0,
                               ),
-                              valueColor: const Color(0xFFF59E0B),
+                              valueColor: isProviderFilterActive
+                                  ? AppColors.earningsTotal
+                                  : AppColors.earningsOnline,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -159,7 +161,9 @@ class EarningsView extends HookWidget {
                                     ? metrics?.staffEarningsMinor ?? 0
                                     : metrics?.cashRevenueMinor ?? 0,
                               ),
-                              valueColor: AppColors.success,
+                              valueColor: isProviderFilterActive
+                                  ? AppColors.success
+                                  : AppColors.earningsCash,
                             ),
                           ),
                         ],
