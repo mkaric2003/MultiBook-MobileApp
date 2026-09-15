@@ -1,0 +1,81 @@
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:flutter/material.dart';
+
+class AgreeTermsTile extends StatelessWidget {
+  const AgreeTermsTile({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    required this.onTapTerms,
+    required this.onTapPrivacy,
+  });
+
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final VoidCallback onTapTerms;
+  final VoidCallback onTapPrivacy;
+
+  @override
+  Widget build(BuildContext context) {
+    final baseColor = context.appPalette.muted;
+    const linkColor = AppColors.primary;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Checkbox(
+          value: value,
+          onChanged: (v) => onChanged(v ?? false),
+          side: BorderSide(color: context.appPalette.border, width: 1.5),
+          activeColor: linkColor,
+          checkColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: VisualDensity.compact,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text.rich(
+            TextSpan(
+              style: TextStyle(color: baseColor, fontSize: 16, height: 1.35),
+              children: [
+                TextSpan(text: context.l10n.agreeToPrefix),
+                WidgetSpan(
+                  baseline: TextBaseline.alphabetic,
+                  alignment: PlaceholderAlignment.baseline,
+                  child: InkWell(
+                    onTap: onTapTerms,
+                    child: Text(
+                      context.l10n.termsOfService,
+                      style: TextStyle(
+                        color: linkColor,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
+                TextSpan(text: '${context.l10n.and}\n'),
+                WidgetSpan(
+                  baseline: TextBaseline.alphabetic,
+                  alignment: PlaceholderAlignment.baseline,
+                  child: InkWell(
+                    onTap: onTapPrivacy,
+                    child: Text(
+                      context.l10n.privacyPolicy,
+                      style: TextStyle(
+                        color: linkColor,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            softWrap: true,
+          ),
+        ),
+      ],
+    );
+  }
+}

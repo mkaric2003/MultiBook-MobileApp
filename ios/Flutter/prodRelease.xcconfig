@@ -1,0 +1,8 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
+#include "Generated.xcconfig"
+#include? "Secrets-prod.xcconfig"
+
+ASSET_PREFIX=prod
+BUNDLE_NAME=MultiBook
+BUNDLE_DISPLAY_NAME=MultiBook
+FLUTTER_TARGET=lib/entry_points/main_prod.dart

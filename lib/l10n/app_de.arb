@@ -1,0 +1,804 @@
+{
+  "@@locale": "de",
+  "appName": "MultiBook",
+  "language": "Sprache",
+  "currency": "Währung",
+  "languageAndLocalization": "Sprache und Lokalisierung",
+  "languageAndCurrency": "Sprache und Währung",
+  "selectLanguage": "Sprache auswählen",
+  "bosnian": "Bosnisch",
+  "english": "Englisch",
+  "cancel": "Stornieren",
+  "done": "Erledigt",
+  "save": "Speichern",
+  "profile": "Profil",
+  "editProfile": "Profil bearbeiten",
+  "account": "Konto",
+  "myBookings": "Meine Buchungen",
+  "saved": "Gespeichert",
+  "paymentMethods": "Zahlungsmethoden",
+  "notifications": "Benachrichtigungen",
+  "messages": "Nachrichten",
+  "support": "Unterstützung",
+  "helpCenter": "Hilfecenter",
+  "contactUs": "Kontaktieren Sie uns",
+  "termsOfService": "Nutzungsbedingungen",
+  "privacyPolicy": "Datenschutzrichtlinie",
+  "logOut": "Abmelden",
+  "signInTitle": "Melden Sie sich bei MultiBook an",
+  "signInDescription": "Greifen Sie auf Ihre Buchungen und Favoriten zu\nDienstleistungen sofort.",
+  "signIn": "anmelden",
+  "forgotPassword": "Passwort vergessen?",
+  "continueWithApple": "Weiter mit Apple",
+  "continueWithGoogle": "Weiter mit Google",
+  "dontHaveAccount": "Sie haben noch kein Konto?",
+  "createOne": "Erstellen Sie eins",
+  "appleSignInSoon": "Die Apple-Anmeldung wird in Kürze verfügbar sein.",
+  "signUpTitle": "Erstellen Sie Ihr MultiBook-Konto",
+  "signUpDescription": "Entdecken Sie gemeinsam mit Tausenden von Benutzern ihre Lieblingsaufenthalte und -dienste.",
+  "createAccount": "Benutzerkonto erstellen",
+  "alreadyHaveAccount": "Sie haben bereits ein Konto?",
+  "skip": "Überspringen",
+  "getStarted": "Fangen Sie an",
+  "onboardingFirstTitle": "Verwalten Sie Ihre Aufenthalte &\nDienstleistungen an einem Ort",
+  "onboardingFirstDescription": "Steuern Sie Ihre Hotels, Apartments und Dienstleistungsbetriebe ganz einfach über eine App.",
+  "onboardingSecondTitle": "Verfolgen Sie Buchungen und\nEinnahmen leicht",
+  "onboardingSecondDescription": "Behalten Sie den Überblick über Ihre Reservierungen und überwachen Sie Ihr Einkommen in Echtzeit.",
+  "onboardingThirdTitle": "Verbinde dich mit deinem\nKunden direkt",
+  "onboardingThirdDescription": "Erhalten Sie sofortige Benachrichtigungen, verwalten Sie Buchungen und chatten Sie mit Ihren Kunden an einem Ort.",
+  "businessManagement": "Unternehmensführung",
+  "financials": "Finanzen",
+  "notificationsAndCommunication": "Benachrichtigungen und Kommunikation",
+  "settings": "Einstellungen",
+  "businessProfile": "Unternehmensprofil",
+  "manageStaysAndServices": "Verwalten Sie Aufenthalte und Dienstleistungen",
+  "availabilityAndCalendar": "Verfügbarkeit und Kalender",
+  "promotionsAndDiscounts": "Sonderangebote und Rabatte",
+  "payoutMethods": "Auszahlungsmethoden",
+  "transactionHistory": "Transaktionsverlauf",
+  "invoicesAndTaxInformation": "Rechnungen und Steuerinformationen",
+  "accountSettings": "Kontoeinstellungen",
+  "helpAndSupport": "Hilfe und Support",
+  "orContinueWith": "oder weitermachen",
+  "selectCity": "Stadt auswählen",
+  "searchCities": "Städte suchen",
+  "allCities": "Alle Städte",
+  "noCitiesFound": "Keine Städte gefunden",
+  "useCity": "Verwenden Sie „{city}“",
+  "@useCity": {
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "emailAddressRequired": "E-Mail-Adresse*",
+  "enterYourEmail": "Geben Sie Ihre E-Mail-Adresse ein",
+  "passwordRequired": "Passwort*",
+  "enterYourPassword": "Geben Sie Ihr Passwort ein",
+  "firstNameRequired": "Vorname*",
+  "lastName": "Nachname",
+  "confirmPasswordRequired": "Passwort bestätigen*",
+  "passwordStrength": "Passwortstärke",
+  "passwordWeak": "Schwach",
+  "passwordFair": "Gerecht",
+  "passwordGood": "Gut",
+  "passwordStrong": "Stark",
+  "atLeastEightCharacters": "Mindestens 8 Zeichen",
+  "oneUppercaseLetter": "Ein Großbuchstabe",
+  "oneNumber": "Eine Nummer",
+  "oneSymbol": "Ein Symbol",
+  "agreeToPrefix": "Ich stimme dem zu",
+  "and": "Und",
+  "useYourLocation": "Nutzen Sie Ihren Standort",
+  "locationPermissionDescription": "Erlauben Sie MultiBook, Ihren aktuellen Standort zu verwenden, damit wir Ihre Stadt speichern und relevante Aufenthalte und Dienstleistungen in der Nähe anzeigen können.",
+  "useCurrentLocation": "Aktuellen Standort verwenden",
+  "notNow": "Nicht jetzt",
+  "locationUnavailable": "Standort nicht verfügbar",
+  "openSettings": "Einstellungen",
+  "ok": "OK",
+  "userTypeTitle": "Wie werden Sie MultiBook verwenden?",
+  "userTypeDescription": "Wählen Sie das Erlebnis, das am besten zu Ihnen passt. Sie können dies später ändern.",
+  "ownBusiness": "Ich besitze ein Unternehmen",
+  "ownBusinessDescription": "Verwalten Sie Aufenthalte oder Dienstleistungen, Buchungen und Einnahmen.",
+  "customer": "Ich bin Kunde",
+  "customerDescription": "Buchen Sie Aufenthalte und planen Sie Leistungen an einem Ort.",
+  "continueLabel": "Weitermachen",
+  "writeMessage": "Nachricht schreiben",
+  "seen": "Gesehen",
+  "isTyping": "{name} tippt",
+  "@isTyping": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noMessagesYet": "Noch keine Nachrichten.",
+  "noNotificationsYet": "Sie haben noch keine Benachrichtigungen.",
+  "now": "Jetzt",
+  "minutesAgo": "Vor {count}m",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "Vor {count}h",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "Vor {count}d",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "home": "Heim",
+  "bookings": "Buchungen",
+  "explore": "Erkunden",
+  "stays": "Bleibt",
+  "services": "Dienstleistungen",
+  "whereTo": "Wohin?",
+  "findAService": "Finden Sie einen Dienst",
+  "searchResults": "Suchergebnisse",
+  "noStaysMatchFilters": "Keine Aufenthalte entsprechen Ihren Filtern.",
+  "noServicesMatchFilters": "Keine Dienste entsprechen Ihren Filtern.",
+  "continueBooking": "Weiter buchen",
+  "continueAppointment": "Termin fortsetzen",
+  "popularNearYou": "Beliebt in Ihrer Nähe",
+  "recommendedForYou": "Für Sie empfohlen",
+  "exploreMoreServices": "Entdecken Sie weitere Dienste",
+  "today": "Heute",
+  "weekend": "Wochenende",
+  "featured": "Hervorgehoben",
+  "perNight": "/Nacht",
+  "fromPrice": "Von {price}",
+  "@fromPrice": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "appointmentDuration": "{minutes} min. Termin",
+  "@appointmentDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "guests": "{count} Gäste",
+  "@guests": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "resume": "Wieder aufnehmen",
+  "withProvider": "Mit {name}",
+  "@withProvider": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "browseByCategory": "Nach Kategorie durchsuchen",
+  "featuredCollections": "Ausgewählte Sammlungen",
+  "trendingNearYou": "Trend in Ihrer Nähe",
+  "recentlyViewed": "Kürzlich angesehen",
+  "viewAllCategories": "Alle Kategorien anzeigen",
+  "showFewerCategories": "Weniger Kategorien anzeigen",
+  "noServicesAvailableInCity": "In dieser Stadt sind noch keine Dienste verfügbar.",
+  "autumnGetaways": "Herbstausflüge",
+  "saveUpToThirtyPercent": "Sparen Sie bis zu 30 %",
+  "weekendEscapes": "Wochenendausflüge",
+  "nextBreakCloser": "Ihre nächste Pause ist näher als Sie denken",
+  "beachfrontStays": "Aufenthalte direkt am Strand",
+  "wakeUpToOceanViews": "Wachen Sie mit Meerblick auf",
+  "topRatedServices": "Bestbewertete Dienstleistungen",
+  "bookInstantlyBestPrices": "Buchen Sie sofort · Beste Preise",
+  "lastMinuteAvailability": "Last-Minute-Verfügbarkeit",
+  "findOpeningToday": "Finden Sie eine offene Stelle für heute",
+  "trustedLocalExperts": "Vertrauenswürdige Experten vor Ort",
+  "verifiedProvidersNearYou": "Verifizierte Anbieter in Ihrer Nähe",
+  "romanticGetaways": "Romantische Kurzurlaube",
+  "perfectForCouples": "Perfekt für Paare",
+  "familyFriendly": "Familienfreundlich",
+  "kidApprovedStays": "Für Kinder geeignete Aufenthalte",
+  "quickCityBreaks": "Schnelle Städtereisen",
+  "oceanViewsIncluded": "Meerblick inklusive",
+  "petFriendlyStays": "Haustierfreundliche Aufenthalte",
+  "bringYourBestFriend": "Bringen Sie Ihren besten Freund mit",
+  "poolStays": "Pool bleibt",
+  "makeASplash": "Für Furore sorgen",
+  "mountainEscapes": "Bergfluchten",
+  "freshAirAndViews": "Frische Luft und atemberaubende Ausblicke",
+  "cityBreaks": "Städtereisen",
+  "stayCloseToAction": "Bleiben Sie nah am Geschehen",
+  "wellnessAndSpa": "Wellness & Spa",
+  "relaxAndRejuvenate": "Entspannen und regenerieren",
+  "beautyAndGrooming": "Schönheit und Pflege",
+  "lookYourBest": "Sehen Sie gut aus",
+  "homeRepairs": "Reparaturen zu Hause",
+  "fixItRight": "Repariere es richtig",
+  "autoServices": "Autodienste",
+  "keepMoving": "Bleiben Sie in Bewegung",
+  "healthAndCare": "Gesundheitspflege",
+  "feelYourBest": "Fühlen Sie sich am besten",
+  "learnAndGrow": "Lernen und wachsen",
+  "buildNewSkills": "Bauen Sie neue Fähigkeiten auf",
+  "petCare": "Haustierpflege",
+  "careForEveryCompanion": "Kümmere dich um jeden Begleiter",
+  "professionalServices": "Professionelle Dienstleistungen",
+  "expertSupportWhenNeeded": "Kompetente Unterstützung bei Bedarf",
+  "upcoming": "Demnächst",
+  "past": "Vergangenheit",
+  "noBookingsYet": "Noch keine Buchungen.",
+  "noServiceBookingsYet": "Noch keine Servicebuchungen.",
+  "bookAgain": "Buchen Sie erneut",
+  "viewDetails": "Details anzeigen",
+  "confirmed": "Bestätigt",
+  "declined": "Abgelehnt",
+  "cancelled": "Abgesagt",
+  "completed": "Vollendet",
+  "adults": "{count, plural, =1{# adult} other{# adults}}",
+  "@adults": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "children": "{count, plural, =1{# child} other{# children}}",
+  "@children": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "serviceDuration": "{minutes} min",
+  "@serviceDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "bookingDetails": "Buchungsdetails",
+  "saveBookingDraft": "Buchungsentwurf speichern?",
+  "continueBookingLater": "Sie können diese Buchung später von zu Hause aus fortsetzen.",
+  "discard": "Verwerfen",
+  "saveDraft": "Entwurf speichern",
+  "selectDates": "Wählen Sie Daten aus",
+  "checkIn": "Einchecken",
+  "checkOut": "Kasse",
+  "guestSelection": "Gäste",
+  "adult": "Erwachsene",
+  "ages13Plus": "Ab 13 Jahren",
+  "child": "Kinder",
+  "ages2To12": "Alter 2–12",
+  "infant": "Kleinkinder",
+  "under2": "Unter 2",
+  "bookingSummary": "Buchungsübersicht",
+  "dates": "Termine",
+  "nights": "{count, plural, =1{# night} other{# nights}}",
+  "@nights": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "serviceFee": "Servicegebühr",
+  "serviceCost": "Dienstleistungskosten",
+  "discountApplied": "Rabatt angewendet",
+  "taxes": "Steuern",
+  "total": "Gesamt",
+  "appointmentDetails": "Termindetails",
+  "cancelAppointmentQuestion": "Termin absagen?",
+  "cannotBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden.",
+  "keepAppointment": "Termin einhalten",
+  "cancelAppointment": "Termin absagen",
+  "rescheduleAppointment": "Termin verschieben",
+  "messageProvider": "Nachrichtenanbieter",
+  "appointmentInformation": "Termininformationen",
+  "service": "Service",
+  "provider": "Anbieter",
+  "dateAndTime": "Datum und Uhrzeit",
+  "status": "Status",
+  "reference": "Referenz",
+  "filters": "Filter",
+  "reset": "Zurücksetzen",
+  "clearAll": "Alles löschen",
+  "showResults": "Ergebnisse anzeigen",
+  "filtersApplied": "{count}-Filter angewendet",
+  "@filtersApplied": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "city": "Stadt",
+  "propertyType": "Immobilientyp",
+  "stayType": "Bleib-Typ",
+  "priceRange": "Preisklasse",
+  "rating": "Bewertung",
+  "amenities": "Ausstattung",
+  "date": "Datum",
+  "time": "Zeit",
+  "anyDate": "Beliebiges Datum",
+  "anyTime": "Jederzeit",
+  "businessCategory": "Kategorie „Unternehmen“.",
+  "category": "Kategorie",
+  "allCategories": "Alle Kategorien",
+  "sortBy": "Sortieren nach",
+  "checkInDate": "Check-in-Datum",
+  "checkOutDate": "Abreisedatum",
+  "stayUnavailable": "Dieser Aufenthalt ist nicht verfügbar.",
+  "removedFromSaved": "Aus gespeichert entfernt",
+  "addedToSaved": "Zum Gespeicherten hinzugefügt",
+  "availableRooms": "Verfügbare Zimmer",
+  "aboutThisStay": "Über diesen Aufenthalt",
+  "checkAvailability": "Verfügbarkeit prüfen",
+  "guestReviews": "Gästebewertungen",
+  "seeAllReviews": "Alle Bewertungen ansehen",
+  "location": "Standort",
+  "locationOnRequest": "Standort auf Anfrage verfügbar",
+  "openInMaps": "In Karten öffnen",
+  "unableToOpenMaps": "Google Maps kann nicht geöffnet werden.",
+  "cityCentre": "Stadtzentrum",
+  "reviews": "Bewertungen von {count}",
+  "@reviews": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "roomGuestsAndSize": "{guests} Gäste · {size}m²",
+  "@roomGuestsAndSize": {
+    "placeholders": {
+      "guests": {
+        "type": "int"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "book": "Buch",
+  "serviceUnavailable": "Dieser Dienst ist nicht verfügbar.",
+  "about": "Um",
+  "gallery": "Galerie",
+  "servicesOffered": "Angebotene Dienstleistungen",
+  "customerReviews": "Kundenrezensionen",
+  "perSession": "pro Sitzung",
+  "away": "weg",
+  "inCity": "{title} in {city}",
+  "@inCity": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "noCategoryAvailable": "Es sind keine {category} verfügbar.",
+  "@noCategoryAvailable": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "noCategoryAvailableInCity": "In {city} sind keine {category} verfügbar.",
+  "@noCategoryAvailableInCity": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      },
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "payment": "Zahlung",
+  "creditDebitCard": "Kredit-/Debitkarte",
+  "cardNumber": "Kartennummer",
+  "cardNumberExample": "1234 5678 9012 3456",
+  "expiry": "Ablauf",
+  "expiryExample": "MM/JJ",
+  "cvv": "CVV",
+  "cvvExample": "123",
+  "nameOnCard": "Name auf Karte",
+  "cardholderNameExample": "John Doe",
+  "fullName": "Vollständiger Name",
+  "enterFullName": "Geben Sie Ihren vollständigen Namen ein",
+  "email": "E-Mail",
+  "emailExample": "your.email@example.com",
+  "phoneNumber": "Telefonnummer",
+  "phoneNumberExample": "+1 (555) 123-4567",
+  "billingAddress": "Rechnungsadresse",
+  "enterBillingAddress": "Geben Sie Ihre Rechnungsadresse ein",
+  "firstName": "Vorname",
+  "lastNameRequired": "Nachname*",
+  "emailAddress": "E-Mail-Adresse",
+  "chooseFromLibrary": "Wählen Sie aus der Bibliothek",
+  "takePhoto": "Machen Sie ein Foto",
+  "enterAddress": "Geben Sie Ihre Adresse ein",
+  "searchCountry": "Land suchen",
+  "dateOfBirth": "Geburtsdatum",
+  "dateOfBirthExample": "DD. MM. JJJJ.",
+  "cityOptional": "Stadt (optional)",
+  "enterCity": "Geben Sie Ihre Stadt ein",
+  "addressOptional": "Adresse (optional)",
+  "saveAppointmentDraft": "Terminentwurf speichern?",
+  "saveSelectedExtras": "Ihre ausgewählten Extras werden ebenfalls gespeichert.",
+  "addExtras": "Fügen Sie Extras hinzu",
+  "totalPaid": "Insgesamt bezahlt",
+  "entirePlace": "Ganzer Ort",
+  "roomOrUnit": "Raum oder Einheit",
+  "day": "Tag",
+  "businessName": "Firmenname",
+  "enterBusinessName": "Geben Sie den Firmennamen ein",
+  "enterPricePerNight": "Geben Sie den Preis pro Nacht ein",
+  "enterBusinessAddress": "Geben Sie die Geschäftsadresse ein",
+  "roomNameExample": "z.B. Deluxe-Zimmer",
+  "unitNameExample": "z.B. Deluxe-Zimmer oder Gartenhütte",
+  "maxGuests": "Max Gäste",
+  "sizeSquareMeters": "Größe m²",
+  "pricePerNight": "Preis pro Nacht",
+  "roomsAvailable": "Zimmer verfügbar",
+  "unitsAvailable": "Einheiten verfügbar",
+  "providerNameExample": "Anbietername, z.B. Sarah Johnson",
+  "serviceNameExample": "z.B. Haarschnitt, Zahnaufhellung, elektrische Inspektion",
+  "durationExample": "60",
+  "priceExample": "50",
+  "describeService": "Beschreiben Sie kurz diesen Service",
+  "providerNameHint": "Name der Person, die die Dienstleistung erbringt",
+  "couldNotDeclineBooking": "Wir konnten diese Buchung nicht ablehnen.",
+  "amenityWifi": "W-lan",
+  "amenityParking": "Parken",
+  "amenityPool": "Pool",
+  "amenitySpa": "Spa",
+  "amenityPetFriendly": "Haustierfreundlich",
+  "amenityGym": "Fitnessstudio",
+  "amenityAirConditioning": "Klimaanlage",
+  "amenityHeating": "Heizung",
+  "amenityKitchen": "Küche",
+  "amenityWasher": "Waschmaschine",
+  "amenityBalcony": "Balkon",
+  "amenitySeaView": "Meerblick",
+  "amenityMountainView": "Bergblick",
+  "amenityWorkspace": "Arbeitsplatz",
+  "amenityElevator": "Aufzug",
+  "amenitySkiInSkiOut": "Ski-in/Ski-out",
+  "amenitySkiStorage": "Skiaufbewahrung",
+  "amenitySkiRental": "Skiverleih",
+  "amenitySkiShuttle": "Ski-Shuttle",
+  "selectCategory": "Kategorie auswählen",
+  "singleUnit": "Einzelgerät",
+  "oneBookableStay": "Ein buchbarer Aufenthalt",
+  "multipleUnits": "Mehrere Einheiten",
+  "roomsOrUnits": "Räume oder Einheiten",
+  "categoryHotel": "Hotel",
+  "categoryApartment": "Wohnung",
+  "categoryVilla": "Villa",
+  "categoryBeachVilla": "Strandvilla",
+  "categoryPoolVilla": "Poolvilla",
+  "categoryCabin": "Kabine",
+  "categoryMountainCabin": "Berghütte",
+  "categoryCottage": "Ferienhaus / Wochenendhaus",
+  "categoryResort": "Resort",
+  "categoryGuesthouse": "Gästehaus",
+  "categoryHostel": "Herberge",
+  "categoryAparthotel": "Aparthotel",
+  "categoryGlamping": "Glamping",
+  "categoryVacationHome": "Ferienhaus",
+  "categoryHairSalon": "Friseursalon",
+  "categoryBarbershop": "Friseurladen",
+  "categoryBeautySalon": "Schönheitssalon",
+  "categoryNailSalon": "Nagel- und Pediküresalon",
+  "categoryDentalClinic": "Zahnklinik",
+  "categoryMedicalClinic": "Medizinische Klinik",
+  "categoryPhysiotherapy": "Physiotherapie",
+  "categoryMassageSpa": "Massage & Spa",
+  "categoryMassageTherapy": "Massagetherapie",
+  "categorySpaWellness": "Spa & Wellness",
+  "categoryPersonalTraining": "Persönliches Training",
+  "categoryTutoring": "Nachhilfe & Unterricht",
+  "categoryElectrician": "Elektriker",
+  "categoryPlumber": "Klempner",
+  "categoryCleaningService": "Reinigungsservice",
+  "categoryAutomotiveService": "Kfz-Service",
+  "categoryCarWashDetailing": "Autowäsche und -aufbereitung",
+  "categoryTattooPiercing": "Tattoo- und Piercingstudio",
+  "categoryVeterinaryPetCare": "Veterinär- und Haustierpflege",
+  "categoryPhotographyVideography": "Fotografie und Videografie",
+  "categoryLocksmith": "Schlosser",
+  "categoryHvacService": "Heizung und Klimaanlage",
+  "categoryPainterDecorator": "Maler und Dekorateur",
+  "categoryLegalConsultation": "Rechtsberatung",
+  "categoryAccountingConsultation": "Buchhaltungsberatung",
+  "categoryProfessionalService": "Professionelle Dienstleistungen",
+  "noSavedStaysYet": "Noch keine gespeicherten Aufenthalte.",
+  "createAppointment": "Termin erstellen",
+  "continueAppointmentLater": "Sie können diesen Termin später von zu Hause aus fortsetzen.",
+  "selectService": "Wählen Sie einen Dienst aus",
+  "selectProvider": "Anbieter auswählen",
+  "noServiceProvidersAvailable": "Es sind noch keine Dienstleister verfügbar.",
+  "selectDate": "Datum auswählen",
+  "availableTimes": "Verfügbare Zeiten",
+  "noAppointmentSlotsAvailable": "Für diesen Termin sind keine Terminplätze verfügbar.",
+  "updateProfileImage": "Profilbild aktualisieren",
+  "myBusinesses": "Meine Unternehmen",
+  "selectBusinessToManage": "Wählen Sie ein Unternehmen aus, das Sie verwalten möchten, oder fügen Sie ein neues hinzu.",
+  "noBusinessesYet": "Noch keine Unternehmen",
+  "createBusinessToStart": "Erstellen Sie ein Unternehmen, um Buchungen und Einnahmen zu verwalten.",
+  "appointmentCustomer": "Terminkunde",
+  "todaysBookings": "Heutige Buchungen",
+  "todaysAppointments": "Die heutigen Termine",
+  "serviceProvider": "Dienstleister",
+  "selectDayForSlots": "Wählen Sie einen Tag aus, um zu prüfen, welche Termine frei oder gebucht sind.",
+  "slotColorsExplanation": "Lila Slots sind gebucht oder gesperrt. Dunkle Slots sind verfügbar.",
+  "noProviderHoursSelectedDay": "Dieser Anbieter hat am ausgewählten Tag keine Arbeitszeiten.",
+  "personalInformation": "Persönliche Informationen",
+  "security": "Sicherheit",
+  "addBusinessImage": "Fügen Sie ein Geschäftsimage hinzu",
+  "addEveryBookableService": "Fügen Sie jeden Service hinzu, den Ihre Kunden buchen können.",
+  "serviceProvidersDescription": "Fügen Sie jede Person hinzu, die Termine wahrnimmt, und konfigurieren Sie ihre eigene wiederkehrende Verfügbarkeit.",
+  "recurringSlotsDescription": "Erstellen Sie Ihre wiederkehrenden wöchentlichen Slots. Kunden sehen nur verfügbare Termine.",
+  "endTimeAfterStart": "Die Endzeit muss nach der Startzeit liegen.",
+  "addPhotosUpToSeven": "Fügen Sie bis zu 7 JPG- oder PNG-Fotos hinzu.",
+  "businessLogo": "Firmenlogo",
+  "coverPhoto": "Titelbild",
+  "customerInformation": "Kundeninformationen",
+  "confirmationDetails": "Bestätigungsdetails",
+  "confirmationCode": "Bestätigungscode",
+  "showCodeToProvider": "Zeigen Sie diesen Code Ihrem Anbieter vor",
+  "quickInfo": "Kurzinfo",
+  "priceBreakdown": "Preisaufschlüsselung",
+  "billingInformation": "Abrechnungsdaten",
+  "selectNewDate": "Wählen Sie ein neues Datum",
+  "providerNoLongerAvailable": "Dieser Anbieter ist nicht mehr verfügbar.",
+  "availableAddOns": "Verfügbare Add-ons",
+  "autumnDiscounts": "🍂 Herbstrabatte bis zu 30 %",
+  "selectTime": "Wählen Sie die Uhrzeit aus",
+  "bookingInformation": "Buchungsinformationen",
+  "checkInOutTimes": "Check-in: 15:00 Uhr • Check-out: 11:00 Uhr",
+  "priceSummary": "Preisübersicht",
+  "duration": "Dauer",
+  "pricePerSession": "Preis pro Sitzung",
+  "addNewBusiness": "Neues Unternehmen hinzufügen",
+  "backToHome": "Zurück nach Hause",
+  "confirmAndPay": "Bestätigen und bezahlen Sie {total}",
+  "@confirmAndPay": {
+    "placeholders": {
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "saveChanges": "Änderungen speichern",
+  "manage": "Verwalten",
+  "contactCustomer": "Kontaktieren Sie den Kunden",
+  "declineBooking": "Buchung ablehnen",
+  "messageCustomer": "Nachricht an den Kunden",
+  "declineAppointment": "Termin ablehnen",
+  "rescheduleBooking": "Buchung verschieben",
+  "proceedToPayment": "Fahren Sie mit der Zahlung fort",
+  "cancelBooking": "Buchung stornieren",
+  "seedDemoStays": "Seed 20 Demo-Aufenthalte",
+  "seedDemoServices": "Seed 29 Demodienste",
+  "createBusiness": "Geschäft gründen",
+  "addService": "Dienst hinzufügen",
+  "addProvider": "Anbieter hinzufügen",
+  "addAvailabilitySlot": "Verfügbarkeitsslot hinzufügen",
+  "reviewAppointment": "Besichtigungstermin",
+  "blockSlot": "Blockschlitz",
+  "unblockSlot": "Steckplatz entsperren",
+  "processingPayment": "Zahlung wird bearbeitet...",
+  "rescheduling": "Umplanung...",
+  "confirmReschedule": "Bestätigen Sie die Neuplanung",
+  "agreeToTermsAndPrivacy": "Ich stimme den Nutzungsbedingungen und Datenschutzbestimmungen zu",
+  "acceptTermsToContinue": "Akzeptieren Sie die Bedingungen, um fortzufahren.",
+  "german": "Deutsch",
+  "spanish": "Spanisch",
+  "french": "Französisch",
+  "italian": "Italienisch",
+  "addressRequired": "Adresse*",
+  "addBusiness": "Geschäft hinzufügen",
+  "addBusinessIntro": "Beginnen Sie mit der Einrichtung Ihrer Aufenthalte oder Dienstleistungen.",
+  "describeYourBusinessServices": "Beschreiben Sie Ihre Unternehmensdienstleistungen...",
+  "describeYourBusiness": "Beschreiben Sie Ihr Unternehmen...",
+  "tapMapToPlacePin": "Tippen Sie auf die Karte, um die Stecknadel zu platzieren",
+  "optionalExtras": "Optionale Extras",
+  "businessImages": "Geschäftsbilder",
+  "shortDescription": "Kurze Beschreibung",
+  "businessType": "Geschäftstyp",
+  "addYourFirstBusiness": "Fügen Sie Ihr erstes Unternehmen hinzu",
+  "businessNameRequired": "Firmenname*",
+  "businessPhotos": "Geschäftsfotos",
+  "cityRequired": "Stadt*",
+  "stayBusinessExamples": "Hotels, Apartments, Hütten",
+  "serviceBusinessExamples": "Salons, Kliniken, Fachleute",
+  "priceRequired": "Preis*",
+  "descriptionOptional": "Beschreibung (optional)",
+  "oneTimeCharge": "Einmalige Gebühr",
+  "serviceTypeRequired": "Servicetyp*",
+  "bookableUnits": "Buchbare Einheiten",
+  "servicesOfferedRequired": "Angebotene Leistungen*",
+  "tapToPlacePin": "Tippen Sie, um eine Stecknadel auf der Karte zu platzieren",
+  "durationRequired": "Dauer (Min.)*",
+  "chargedPerHour": "Wird pro Stunde berechnet",
+  "chargedPerNight": "Wird pro Nacht berechnet",
+  "businessCategoryRequired": "Unternehmenskategorie*",
+  "pricePerNightRequired": "Preis pro Nacht*",
+  "stayInventoryRequired": "Aufenthaltsbestand*",
+  "to": "Zu",
+  "from": "Aus",
+  "businessPhotosCount": "Geschäftsfotos ({count}/{max})",
+  "extraBreakfast": "Frühstück",
+  "extraParking": "Parken",
+  "firstUnitTypeRequired": "Erster Einheitentyp*",
+  "logoFormatHint": "JPG, PNG bis zu 5 MB",
+  "serviceProvidersRequired": "Dienstleister*",
+  "availabilityRequired": "Verfügbarkeit*",
+  "uploadLogo": "Logo hochladen",
+  "coverPhotoFormatHint": "JPG, PNG bis zu 10 MB",
+  "uploadCoverPhoto": "Titelbild hochladen",
+  "firstRoomTypeRequired": "Erster Zimmertyp*",
+  "addPhotos": "Fügen Sie Fotos hinzu",
+  "serviceProviderRequired": "Dienstleister*",
+  "extraSpaAccess": "Zugang zum Spa",
+  "extraLateCheckout": "Später Check-out",
+  "extraAirportTransfer": "Flughafentransfer",
+  "extraHikingGuide": "Privater Wanderführer",
+  "extraBoatTour": "Private Bootstour",
+  "extraBed": "Zustellbett",
+  "extraGuidedTour": "Lokale Führung",
+  "extraPetStay": "Haustieraufenthalt",
+  "extraQuadBikeRental": "Quad-Verleih",
+  "extraLaundryService": "Wäscheservice",
+  "@businessPhotosCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "leaveReview": "Bewertung schreiben",
+  "rateYourExperience": "Bewerte deine Erfahrung",
+  "howWasYourExperience": "Wie war deine Erfahrung?",
+  "writeReviewOptional": "Bewertung schreiben (optional)",
+  "shareYourExperience": "Teile deine Erfahrung...",
+  "submitReview": "Bewertung absenden",
+  "couldNotSubmitReview": "Deine Bewertung konnte nicht gesendet werden. Bitte versuche es erneut.",
+  "allReviews": "Alle Bewertungen",
+  "activeBookings": "Aktive Buchungen",
+  "activeAppointments": "Aktive Termine",
+  "earningsThisMonth": "Einnahmen diesen Monat",
+  "averageRating": "Durchschnittliche Bewertung",
+  "earningsTrend": "Einnahmentrend",
+  "bookingsTrend": "Buchungstrend",
+  "appointmentsTrend": "Termintrend",
+  "week": "Woche {count}",
+  "@week": {"placeholders": {"count": {"type": "int"}}},
+  "switchBusiness": "Business wechseln",
+  "appointments": "Termine",
+  "earnings": "Einnahmen",
+  "totalEarningsThisMonth": "Gesamteinnahmen diesen Monat",
+  "pendingPayouts": "Ausstehende Auszahlungen",
+  "completedPayouts": "Abgeschlossene Auszahlungen",
+  "earningsLoadFailed": "Einnahmen konnten nicht geladen werden.",
+  "selectBusiness": "Business auswählen",
+  "payWithCash": "Bar zahlen",
+  "confirmBooking": "Buchung bestätigen",
+  "validCardDetailsRequired": "Gib eine gültige 16-stellige Kartennummer, MM/JJ und CVV ein.",
+  "onlineEarnings": "Online-Einnahmen",
+  "cashEarnings": "Bareinnahmen",
+  "markAsCompleted": "Als abgeschlossen markieren",
+  "cash": "Barzahlung",
+  "cashPaymentDue": "Barzahlung bei Ankunft",
+  "markAsNoShow": "Als nicht erschienen markieren",
+  "noShow": "Nicht erschienen",
+  "noShowEarningsHint": "Bei einer Markierung als nicht erschienen wird dieser Betrag aus Einnahmen und Statistiken entfernt."
+  ,"earningsPeriod": "Zeitraum"
+  ,"currentWeek": "Diese Woche"
+  ,"previousWeek": "Letzte Woche"
+  ,"currentMonth": "Dieser Monat"
+  ,"previousMonth": "Letzter Monat"
+  ,"currentYear": "Dieses Jahr"
+  ,"previousYear": "Letztes Jahr"
+  ,"customRange": "Benutzerdefinierter Zeitraum"
+  ,"selectDateRange": "Zeitraum auswählen"
+  ,"startDate": "Startdatum"
+  ,"endDate": "Enddatum"
+  ,"providerCommissionRateHint": "Mitarbeiterprovision (%)"
+  ,"providerCommissionRateDescription": "Prozentsatz des Servicepreises, den der Mitarbeiter für jeden abgeschlossenen Kunden erhält."
+  ,"providerCommissionRateRangeHint": "0 - 100"
+  ,"allEmployees": "Alle Mitarbeiter"
+  ,"grossEarnings": "Bruttoeinnahmen"
+  ,"providerEarnings": "Mitarbeitereinnahmen"
+  ,"privacyPolicyContent": "DATENSCHUTZERKLÄRUNG\n\nMultiBook verarbeitet Daten nur, um eine App zum Finden und Buchen von Unterkünften und Dienstleistungen bereitzustellen.\n\n1. Erhobene Daten\nWir erfassen die von Ihnen angegebenen Kontodaten, Buchungs- und Termindaten, Nachrichten, gespeicherte Anzeigen, Bewertungen sowie technische Daten zur Sicherheit der App.\n\n2. Standort\nWir verwenden Ihren Standort nur mit Ihrer Zustimmung. Stadt und Adresse helfen uns, passende Anzeigen, Karten und Suchen in der Nähe anzuzeigen.\n\n3. Nutzung und Weitergabe\nWir verwenden Daten für Buchungen, Termine, Zahlungen, Kommunikation, Benachrichtigungen, Sicherheit und die Verbesserung der App. Bei einer Buchung erhält das Unternehmen nur die nötigen Daten: Name, Kontaktdaten, gewählte Zeit oder Daten und relevante Wünsche. Wir verkaufen keine personenbezogenen Daten.\n\n4. Zahlungen und Sicherheit\nUnternehmen erhalten keine vollständigen Kartendaten. Wir speichern nur Zahlungsstatus und Transaktionsbestätigung. Firebase wird für Authentifizierung, Datenbank, Bildspeicher und Benachrichtigungen genutzt.\n\n5. Ihre Rechte\nSie können Ihr Profil bearbeiten, gespeicherte Anzeigen entfernen, Standortfreigaben verwalten und über den Support die Löschung Ihres Kontos anfordern.\n\n6. Änderungen\nWir können diese Erklärung bei Weiterentwicklung der App aktualisieren und informieren Sie in der App über wesentliche Änderungen."
+  ,"termsOfServiceContent": "NUTZUNGSBEDINGUNGEN\n\nMit der Nutzung von MultiBook akzeptieren Sie diese Bedingungen. MultiBook verbindet Kunden mit unabhängigen Unternehmen für Unterkünfte und Dienstleistungen.\n\n1. Ihr Konto\nSie müssen korrekte Angaben machen und den Zugriff auf Ihr Konto schützen. Die Nutzung fremder Konten, unerwünschte Nachrichten, das Umgehen von Sicherheitsmaßnahmen und Missbrauch der App sind untersagt.\n\n2. Buchungen und Termine\nPrüfen Sie vor der Bestätigung Daten, Uhrzeit, Gästezahl, gewähltes Zimmer oder Service und Gesamtpreis. Eine bestätigte Buchung oder ein Termin ist eine Vereinbarung zwischen Ihnen und dem Unternehmen.\n\n3. Zahlung, Stornierung und Änderungen\nJe nach Angebot erfolgt die Zahlung online oder bar. Stornierungsregeln, Umbuchungen und Verfügbarkeit hängen vom Unternehmen und der Reservierungsart ab. Sagen Sie rechtzeitig ab, wenn Sie nicht teilnehmen können.\n\n4. Unternehmen und Qualität\nUnternehmen sind unabhängige Anbieter und für Angaben, Verfügbarkeit, Qualität und Leistung verantwortlich. MultiBook bietet Bewertungen und Support, garantiert aber keine bestimmte Erfahrung.\n\n5. Bewertungen und Verhalten\nVerfassen Sie ehrliche und respektvolle Bewertungen. Beleidigungen, Fake-Buchungen, Betrug, Diskriminierung und schädigendes Verhalten sind verboten.\n\n6. Änderungen\nWir können diese Bedingungen wegen neuer Funktionen, Sicherheit oder rechtlicher Anforderungen ändern. Die weitere Nutzung bedeutet Zustimmung."
+  ,"supportRequests": "Supportanfragen"
+  ,"noSupportRequests": "Sie haben noch keine Supportanfragen."
+  ,"newSupportRequest": "Neue Anfrage"
+  ,"supportRequestDescription": "Senden Sie uns die Details Ihres Problems; unser Team prüft Ihre Anfrage."
+  ,"selectSupportTopic": "Thema auswählen"
+  ,"supportSubject": "Betreff"
+  ,"supportSubjectHint": "Beschreiben Sie das Problem kurz"
+  ,"supportMessage": "Nachricht"
+  ,"supportMessageHint": "Fügen Sie möglichst viele hilfreiche Details hinzu..."
+  ,"sendSupportRequest": "Anfrage senden"
+  ,"supportRequestSent": "Ihre Anfrage wurde erfolgreich gesendet."
+  ,"supportRequestFailed": "Die Anfrage konnte nicht gesendet werden."
+  ,"supportCategoryAccount": "Konto und Profil"
+  ,"supportCategoryBooking": "Unterkunftsbuchung"
+  ,"supportCategoryAppointment": "Servicetermin"
+  ,"supportCategoryPayment": "Zahlung"
+  ,"supportCategoryTechnical": "Technisches Problem"
+  ,"supportCategoryOther": "Sonstiges"
+  ,"supportStatusOpen": "Offen"
+  ,"supportStatusInProgress": "In Bearbeitung"
+  ,"supportStatusResolved": "Gelöst"
+  ,"savedPaymentMethods": "Gespeicherte Zahlungsmethoden"
+  ,"savedPaymentMethodsDescription": "Wählen Sie eine Standardkarte für schnellere Zahlungen."
+  ,"noSavedPaymentMethods": "Sie haben noch keine gespeicherten Karten."
+  ,"addPaymentMethod": "Karte hinzufügen"
+  ,"defaultPaymentMethod": "Standard"
+  ,"setAsDefault": "Als Standard festlegen"
+  ,"activePromotions": "Aktive Aktionen"
+  ,"noPromotions": "Sie haben noch keine Aktionen erstellt."
+  ,"createPromotion": "Aktion erstellen"
+  ,"promotionName": "Name der Aktion"
+  ,"promotionNameHint": "z. B. Sommerrabatt"
+  ,"discountType": "Rabattart"
+  ,"discountValue": "Rabattwert"
+  ,"discountValueHint": "z. B. 10"
+  ,"promoCodeOptional": "Aktionscode (optional)"
+  ,"promoCodeHint": "z. B. SOMMER10"
+  ,"startsOn": "Beginnt"
+  ,"endsOn": "Endet"
+  ,"minimumBookingValue": "Mindestbuchungswert"
+  ,"minimumNights": "Mindestnächte"
+  ,"usageLimitOptional": "Nutzungslimit (optional)"
+  ,"percentageDiscount": "Prozentsatz"
+  ,"fixedDiscount": "Fester Betrag"
+  ,"couponDiscount": "Gutscheincode"
+  ,"promotionActive": "Aktiv"
+  ,"promotionInactive": "Inaktiv"
+  ,"promotion": "Rabatt"
+  ,"providerPrivacyPolicyContent": "DATENSCHUTZRICHTLINIE FÜR ANBIETER\n\nMultiBook verarbeitet Konto- und Unternehmensdaten von Anbietern, um Aufenthalte oder Dienstleistungen zu veröffentlichen und zu verwalten. Dazu gehören Unternehmensprofil, Standort, Fotos, Preise, Verfügbarkeit, Mitarbeitende, Aktionen, Buchungen, Termine, Einnahmen und Nachrichten mit Kunden.\n\n1. Kundendaten\nBei bestätigten Reservierungen erhalten Sie nur Daten, die zur Erbringung des Aufenthalts oder der Dienstleistung erforderlich sind: Name, Kontaktdaten, Datum/Uhrzeit, gewählte Leistung und relevante Reservierungsdaten. Verwenden Sie diese Daten nur für diese Reservierung und nicht für unerwünschtes Marketing.\n\n2. Sicherheit und Aufzeichnungen\nSchützen Sie den Zugang zum Anbieterkonto und beschränken Sie den Zugriff auf befugte Mitarbeitende. Fragen Sie im Chat niemals nach Passwörtern, CVV-Codes oder vollständigen Kartendaten. Nachrichten, Bewertungen, Stornierungen, No-Show-Einträge und Transaktionsdaten können für Support, Betrugsprävention, Streitfälle, Finanzberichte und gesetzliche Pflichten gespeichert werden.\n\n3. Ihre Wahlmöglichkeiten\nUnternehmensdaten können Sie unter Aufenthalte und Dienstleistungen verwalten ändern. Wenden Sie sich für Kontolöschung, Datenauskunft oder Datenschutzfragen an den MultiBook-Support."
+  ,"providerTermsOfServiceContent": "NUTZUNGSBEDINGUNGEN FÜR ANBIETER\n\nMit dem Betrieb eines Unternehmens auf MultiBook akzeptieren Sie diese Anbieterbedingungen. MultiBook stellt unabhängigen Unternehmen Werkzeuge zur Veröffentlichung von Aufenthalten oder Dienstleistungen, zur Verwaltung der Verfügbarkeit und zur Kommunikation mit Kunden bereit.\n\n1. Korrekte Inserate\nHalten Sie Unternehmensdaten, Preise, Verfügbarkeit, Ausstattung, Mitarbeitende und Leistungsbeschreibungen korrekt. Veröffentlichen Sie keine irreführenden Fotos, Angebote oder Verfügbarkeiten.\n\n2. Reservierungen und Zahlungen\nEine bestätigte Buchung oder ein Termin ist eine Vereinbarung zwischen Ihrem Unternehmen und dem Kunden. Erfüllen Sie diese, sofern kein berechtigter Ausnahmegrund vorliegt. Nutzen Sie Ablehnungs-, Stornierungs-, Umbuchungs- und Cash-No-Show-Funktionen korrekt. Für Steuern, Rechnungen, Rückerstattungen und gesetzliche Pflichten bleiben Sie verantwortlich.\n\n3. Verhalten\nVerwenden Sie Kundendaten nur für die gebuchte Leistung. Diskriminierung, Belästigung, Spam, Bewertungsmanipulation und Zahlungsaufforderungen außerhalb der vorgesehenen Abläufe sind verboten. Wir können Inserate oder Konten bei Missbrauch einschränken."
+  ,"providerTermsOfServiceContent": "NUTZUNGSBEDINGUNGEN FÜR ANBIETER\n\nMit dem Betrieb eines Unternehmens auf MultiBook akzeptieren Sie diese Anbieterbedingungen. MultiBook stellt unabhängigen Unternehmen Werkzeuge zur Veröffentlichung von Aufenthalten oder Dienstleistungen, zur Verwaltung der Verfügbarkeit und zur Kommunikation mit Kunden bereit.\n\n1. Korrekte Inserate\nHalten Sie Unternehmensdaten, Preise, Verfügbarkeit, Ausstattung, Mitarbeitende und Leistungsbeschreibungen korrekt. Veröffentlichen Sie keine irreführenden Fotos, Angebote oder Verfügbarkeiten.\n\n2. Reservierungen und Zahlungen\nEine bestätigte Buchung oder ein Termin ist eine Vereinbarung zwischen Ihrem Unternehmen und dem Kunden. Erfüllen Sie diese, sofern kein berechtigter Ausnahmegrund vorliegt. Nutzen Sie Ablehnungs-, Stornierungs-, Umbuchungs- und Cash-No-Show-Funktionen korrekt. Für Steuern, Rechnungen, Rückerstattungen und gesetzliche Pflichten bleiben Sie verantwortlich.\n\n3. Verhalten\nVerwenden Sie Kundendaten nur für die gebuchte Leistung. Diskriminierung, Belästigung, Spam, Bewertungsmanipulation und Zahlungsaufforderungen außerhalb der vorgesehenen Abläufe sind verboten. Wir können Inserate oder Konten bei Missbrauch einschrken."
+  ,"changePassword": "Passwort ändern"
+  ,"currentPassword": "Aktuelles Passwort"
+  ,"newPassword": "Neues Passwort"
+  ,"confirmNewPassword": "Neues Passwort bestätigen"
+  ,"passwordsDoNotMatch": "Die Passwörter stimmen nicht überein."
+  ,"passwordMinimumLength": "Verwenden Sie mindestens 6 Zeichen."
+  ,"passwordChangedSuccessfully": "Passwort erfolgreich geändert."
+  ,"appearance": "Darstellung"
+  ,"lightTheme": "Helles Design"
+  ,"lightThemeDescription": "Helle Farben in der App verwenden"
+}

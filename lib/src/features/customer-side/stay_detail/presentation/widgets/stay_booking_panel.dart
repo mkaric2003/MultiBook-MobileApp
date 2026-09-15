@@ -1,0 +1,61 @@
+import 'package:multibook/app.dart';
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/customer-side/booking_details/domain/models/booking_details_arguments.dart';
+import 'package:multibook/src/features/customer-side/dashboard/domain/models/stay_listing.dart';
+import 'package:multibook/src/features/customer-side/stay_detail/presentation/widgets/stay_booking_field.dart';
+import 'package:multibook/src/global_widgets/custom_button.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class StayBookingPanel extends StatelessWidget {
+  const StayBookingPanel({super.key, required this.stay});
+
+  final StayListing stay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: context.appPalette.surface,
+        border: Border(top: BorderSide(color: context.appPalette.border)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: StayBookingField(
+                  label: context.l10n.checkIn,
+                  value: 'Mar 15',
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: StayBookingField(
+                  label: context.l10n.checkOut,
+                  value: 'Mar 17',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          StayBookingField(
+            label: context.l10n.guestSelection,
+            value: '2 adults · 1 child',
+          ),
+          const SizedBox(height: 18),
+          CustomButton(
+            buttonName: context.l10n.checkAvailability,
+            onPressed: () async => context.push(
+              AppRoutes.BOOKING_DETAILS,
+              extra: BookingDetailsArguments(stay: stay),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

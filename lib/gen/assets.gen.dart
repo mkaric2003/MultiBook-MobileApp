@@ -14,22 +14,62 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
-  /// File path: assets/icons/logo.ico
-  String get logo => 'assets/icons/logo.ico';
+  /// File path: assets/icons/apple.svg
+  String get apple => 'assets/icons/apple.svg';
+
+  /// File path: assets/icons/google.svg
+  String get google => 'assets/icons/google.svg';
+
+  /// File path: assets/icons/multibook_logo _v2.png
+  AssetGenImage get multibookLogoV2 =>
+      const AssetGenImage('assets/icons/multibook_logo _v2.png');
+
+  /// File path: assets/icons/multibook_logo.png
+  AssetGenImage get multibookLogo =>
+      const AssetGenImage('assets/icons/multibook_logo.png');
 
   /// List of all assets
-  List<String> get values => [logo];
+  List<dynamic> get values => [apple, google, multibookLogoV2, multibookLogo];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/aquabook_logo.png
-  AssetGenImage get aquabookLogo =>
-      const AssetGenImage('assets/images/aquabook_logo.png');
+  /// File path: assets/images/first-intro-images.svg
+  String get firstIntroImages => 'assets/images/first-intro-images.svg';
+
+  /// File path: assets/images/first-intro.png
+  AssetGenImage get firstIntro =>
+      const AssetGenImage('assets/images/first-intro.png');
+
+  /// File path: assets/images/multibook-light.png
+  AssetGenImage get multibookLight =>
+      const AssetGenImage('assets/images/multibook-light.png');
+
+  /// File path: assets/images/multibook.png
+  AssetGenImage get multibook =>
+      const AssetGenImage('assets/images/multibook.png');
+
+  /// File path: assets/images/second-intro.png
+  AssetGenImage get secondIntroPng =>
+      const AssetGenImage('assets/images/second-intro.png');
+
+  /// File path: assets/images/second-intro.svg
+  String get secondIntroSvg => 'assets/images/second-intro.svg';
+
+  /// File path: assets/images/third-intro-image.svg
+  String get thirdIntroImage => 'assets/images/third-intro-image.svg';
 
   /// List of all assets
-  List<AssetGenImage> get values => [aquabookLogo];
+  List<dynamic> get values => [
+    firstIntroImages,
+    firstIntro,
+    multibookLight,
+    multibook,
+    secondIntroPng,
+    secondIntroSvg,
+    thirdIntroImage,
+  ];
 }
 
 class Assets {

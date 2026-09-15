@@ -1,1 +1,61 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"aquabook-dev-cdd4f","appId":"1:113851119343:android:5120317d666115fadd0d1a","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"aquabook-dev-cdd4f","appId":"1:113851119343:ios:4761d82a07d4cde2dd0d1a","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"aquabook-dev-cdd4f","configurations":{"android":"1:113851119343:android:5120317d666115fadd0d1a","ios":"1:113851119343:ios:4761d82a07d4cde2dd0d1a"}}}}}}
+{
+  "$schema": "https://raw.githubusercontent.com/firebase/firebase-tools/master/schema/firebase-config.json",
+  "flutter": {
+    "platforms": {
+      "android": {
+        "buildConfigurations": {
+          "src/dev": {
+            "projectId": "aquabook-dev-cdd4f",
+            "appId": "1:113851119343:android:5c46d45b573377c9dd0d1a",
+            "fileOutput": "android/app/src/dev/google-services.json"
+          }
+        }
+      },
+      "ios": {
+        "buildConfigurations": {
+          "Debug-dev": {
+            "projectId": "aquabook-dev-cdd4f",
+            "appId": "1:113851119343:ios:5cb51b2edd42907fdd0d1a",
+            "uploadDebugSymbols": false,
+            "fileOutput": "ios/Runner/dev/GoogleService-Info.plist"
+          },
+          "Profile-dev": {
+            "projectId": "aquabook-dev-cdd4f",
+            "appId": "1:113851119343:ios:5cb51b2edd42907fdd0d1a",
+            "uploadDebugSymbols": false,
+            "fileOutput": "ios/Runner/dev/GoogleService-Info.plist"
+          },
+          "Release-dev": {
+            "projectId": "aquabook-dev-cdd4f",
+            "appId": "1:113851119343:ios:5cb51b2edd42907fdd0d1a",
+            "uploadDebugSymbols": false,
+            "fileOutput": "ios/Runner/dev/GoogleService-Info.plist"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "multibook",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ]
+}

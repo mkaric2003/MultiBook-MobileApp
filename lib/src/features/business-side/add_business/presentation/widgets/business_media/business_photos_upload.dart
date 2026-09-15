@@ -1,0 +1,81 @@
+import 'package:multibook/l10n/l10n.dart';
+import 'package:multibook/src/core/theme/app_colors.dart';
+import 'package:multibook/src/features/business-side/add_business/presentation/widgets/business_media/business_photo_thumbnail.dart';
+import 'package:flutter/material.dart';
+
+class BusinessPhotosUpload extends StatelessWidget {
+  const BusinessPhotosUpload({
+    super.key,
+    required this.imagePaths,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  static const maxPhotos = 7;
+
+  final List<String> imagePaths;
+  final VoidCallback onAdd;
+  final ValueChanged<String> onRemove;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        context.l10n.businessPhotosCount(imagePaths.length, maxPhotos),
+        style: const TextStyle(fontWeight: FontWeight.w600),
+      ),
+      const SizedBox(height: 12),
+      Wrap(
+        spacing: 15,
+        runSpacing: 10,
+        children: [
+          ...imagePaths.map(
+            (imagePath) => BusinessPhotoThumbnail(
+              imagePath: imagePath,
+              onRemove: () => onRemove(imagePath),
+            ),
+          ),
+          if (imagePaths.length < maxPhotos)
+            InkWell(
+              onTap: onAdd,
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                height: 86,
+                width: 86,
+                decoration: BoxDecoration(
+                  color: context.appPalette.surface,
+                  border: Border.all(color: context.appPalette.border),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.add_photo_alternate_outlined,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      context.l10n.addPhotos,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+      const SizedBox(height: 6),
+      Text(
+        context.l10n.addPhotosUpToSeven,
+        style: TextStyle(color: context.appPalette.muted, fontSize: 12),
+      ),
+    ],
+  );
+}

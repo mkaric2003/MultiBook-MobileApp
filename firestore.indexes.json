@@ -1,0 +1,427 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "averageRating",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "averageRating",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "location.cityLowercase",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "averageRating",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "location.cityLowercase",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "categoryId",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "categoryId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "averageRating",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "location.cityLowercase",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "averageRating",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "categoryId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "averageRating",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "featuredCollectionIds",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "categoryId",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "featuredCollectionIds",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "averageRating",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "reviewCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "nameLowercase",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "location.cityLowercase",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "businesses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "featuredCollectionIds",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "location.cityLowercase",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "categoryId",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "appointments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "appointment_slots",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "service_availability_blocks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "bookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "customerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "bookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "checkIn",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "checkOut",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "bookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessOwnerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "bookings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessOwnerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "appointments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessOwnerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "reviews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
